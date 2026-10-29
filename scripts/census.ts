@@ -1,8 +1,8 @@
 // DB census: prints the resolved database path + per-model counts, and
 // compares them against the seed contract.
 //
-// Why this exists (session-53, S53-P2 — the N-53b lesson, pinned by
-// tests/db-census.test.ts):
+// Why this exists (session-53, S53-P2 — the N-53b lesson; the path
+// resolution it depends on is pinned by tests/db-path.test.ts):
 //   • a raw `new PrismaClient()` run from the repo root opens the WRONG
 //     file under both node (relative `file:` resolves against the CWD)
 //     and bun (which absolutizes the .env value against the .env

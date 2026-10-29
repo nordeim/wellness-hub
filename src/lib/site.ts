@@ -1,12 +1,13 @@
-// Canonical site origin seam (contract pinned by tests/metadata.test.ts
-// and tests/pwa-metadata.test.ts).
+// Canonical site origin seam (contract pinned by tests/wellness-theme.test.ts
+// — the metadata factory: titles/OG/PWA metas/siteUrl — and tests/boot-env.test.ts
+// — the NEXT_PUBLIC_SITE_URL known-var set).
 //
 // NEXT_PUBLIC_SITE_URL is consumed by every metadata surface (the root
-// layout's metadataBase + OG/Twitter cards, app/sitemap.ts, app/robots.ts)
-// so the documented contract stays true. Per-route canonical/OG/Twitter
-// rides the pageMetadata() factory: og:title "<Page> | Wellness Hub",
-// og:url origin+route, og:description "<Page> on Wellness Hub. " + the
-// root paragraph.
+// layout's metadataBase + OG/Twitter cards, src/app/sitemap.xml/route.ts,
+// src/app/robots.txt/route.ts) so the documented contract stays true.
+// Per-route canonical/OG/Twitter rides the pageMetadata() factory:
+// og:title "<Page> | Wellness Hub", og:url origin+route,
+// og:description "<Page> on Wellness Hub. " + the root paragraph.
 //
 // NEXT_PUBLIC_* values are INLINED AT BUILD TIME by Next — set the
 // variable before `bun run build` in production (docs/DEPLOYMENT.md).

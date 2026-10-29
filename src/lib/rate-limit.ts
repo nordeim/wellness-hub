@@ -10,9 +10,11 @@
 // session-164 sweepRateLimits form extended to the rateLimit path, the
 // module's own injectable precedent. PURELY ADDITIVE: the default is the
 // wall clock, every call site (the 7 rate-limited routes) rides
-// unchanged, and the fixed-window arithmetic became property-testable
-// (tests/property.test.ts P-n…P-q — the crossing, the retryAfter
-// ceiling, and the remaining monotonicity over a generated space).
+// unchanged, and the fixed-window arithmetic is pinned with plain
+// deterministic cases by tests/rate-limit.test.ts — the window
+// crossings, the retryAfter ceiling, and the monotonic sweep (the
+// fast-check property battery it replaced was retired with the package
+// at WH-3; the census pin keeps the tree property-test-free).
 
 interface Bucket {
   count: number;

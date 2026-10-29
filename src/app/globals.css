@@ -16,7 +16,7 @@
    computes rgba(23,23,23,0.8). The override restores the reference's
    v3 semantics family-wide (the fourth member of the v4
    shadow/blur/space-y re-pin family; pinned by
-   tests/profile-family-parity.test.ts). */
+   tests/wellness-theme.test.ts). */
 @custom-variant hover (&:hover);
 
 /* ---------------------------------------------------------------------------
@@ -142,14 +142,14 @@
      The fifth member of the v4 re-pin family (shadow-sm s9 → blur-sm
      s10 → space-y s11/s14 → the hover-variant un-wrap s80 → the
      palette s88). The S15-P12 hazard retires family-wide. Pinned by
-     tests/contacts-family-parity.test.ts. Session-90 (S90-P0): the
+     tests/wellness-theme.test.ts. Session-90 (S90-P0): the
      block extends with red-400 #f87171 + purple-400 #c084fc — the
      stat-card bar color maps' bg-CLASS pairs (the reference's
      compiled .bg-red-400 rgb(248 113 113) / .bg-purple-400
      rgb(192 132 252) — the (family, step) pairs the s88 sweep never
      covered: our bars rode inline hexes, so the classes were never
      used in src/ before the s90 mirror). Pinned by
-     tests/statcard-family-parity.test.ts. */
+     tests/wellness-theme.test.ts. */
   --color-amber-50: #fffbeb;
   --color-amber-100: #fef3c7;
   --color-amber-200: #fde68a;

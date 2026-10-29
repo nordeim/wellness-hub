@@ -68,7 +68,9 @@ and Tailwind v4 CSS-first theming.
   chains inside `@theme`). Keep the pinned fixes: `@custom-variant hover`,
   `--shadow-sm`, `--blur-sm` re-pins.
 - **Zod ^4**: every mutating route validates through `parseBody()` +
-  `src/lib/schemas.ts`. URL-param GETs use the `asString`/`asDate` helpers.
+  `src/lib/schemas.ts`. No route parses URL params (the CRM-era
+  `asString`/`asDate` family retired at WH-6 — `tests/src-census.test.ts`
+  pins the api export surface).
 - **Prisma**: SQLite via `DATABASE_URL="file:../db/custom.db"` — resolved
   against `prisma/schema.prisma` by `src/lib/db-path.ts` (never against
   `process.cwd()`). Tag/step/benefit arrays are JSON string columns decoded
@@ -97,7 +99,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 | `bun run start` | Boot the standalone server |
 | `bun run lint` | ESLint (`--max-warnings 0`) |
 | `bun run typecheck` | `tsc --noEmit` |
-| `bun run test` | Vitest unit suite (328 checks) |
+| `bun run test` | Vitest unit suite (331 checks) |
 | `bun run test:e2e` | Playwright (42 checks; build first) |
 | `bun run gate` | The full chain in one command |
 
@@ -105,10 +107,11 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 
 ### Test Pyramid
 
-- **Unit (Vitest, 328 checks / 20 suites)**: pure seams — auth helpers,
+- **Unit (Vitest, 331 checks / 21 suites)**: pure seams — auth helpers,
   db-path contract, wellness math (streaks/points/badges), schemas,
   theme engine, formatters, the dead-dependency census, the route/ui
-  module census, the signup role pin, the docs-counts lockstep pin.
+  module census, the signup role pin, the docs-counts lockstep pin,
+  the src-surface census pin.
 - **E2E (Playwright, 42 checks — 5 specs + the auth setup project)**: the
   real UI in Chromium against the
   production standalone server — auth ladder, mobile drawer battery, shell

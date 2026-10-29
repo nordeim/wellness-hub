@@ -30,7 +30,6 @@ export async function POST(req: Request) {
       data: { ...body, userId: guard.user.id }
     });
     return ok(row);
-    return ok(row);
   } catch {
     return ERR.INTERNAL();
   }

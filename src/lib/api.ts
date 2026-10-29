@@ -210,100 +210,12 @@ export async function parseBody<S extends z.ZodTypeAny>(
   return { ok: true, data: parsed.data };
 }
 
-// ---- hand-rolled validation helpers (the query-param GET family + the -----
-// behavior battery — the CRUD body-guard forms RETIRED at session-166:
-// the twelve body routes ride parseBody/safeParse against
-// src/lib/schemas.ts now; asString/asDate survive on the URL-param
-// surfaces — events' from/to windows, the reports/export/search
-// period+q parses — and the isBad*/asFKId/asNumber/asInt predicates
-// stay exported for their pure-function battery,
-// tests/coercion-guards.test.ts, the living record of the semantics
-// the schema field-builders recast)
-
-export function asString(v: unknown, { max = 500, optional = false } = {}): string | undefined {
-  if (v === undefined || v === null) return optional ? undefined : "";
-  if (typeof v !== "string") return optional ? undefined : "";
-  const s = v.trim();
-  if (s.length === 0) return optional ? undefined : "";
-  return s.slice(0, max);
-}
-
-/** Session-37 (S37-P3): a PRESENT FK payload must be a string (or an
- *  explicit null). Non-string values used to ride asString's optional
- *  coercion to `undefined` → `null` — a SILENT FK clear on PUT. Routes
- *  pair this with a 400 ("Invalid company/owner/contact selection"). */
-export function isBadFK(v: unknown): boolean {
-  return v !== undefined && v !== null && typeof v !== "string";
-}
-
-/** Session-37 (S37-P3): FK id parse — null/""/whitespace → null (the
- *  explicit clear), a string → the trimmed id. Guard with isBadFK first:
- *  this helper silently clears non-strings by design (the asString
- *  semantics the selects' "" emissions rely on). */
-export function asFKId(v: unknown): string | null {
-  return asString(v, { optional: true }) ?? null;
-}
-
-/** Session-40 (S40-P1): the general present-non-string predicate —
- *  isBadFK's class, named for the non-FK fields it guards (email, phone,
- *  notes, status…). A PRESENT non-string used to ride asString's
- *  optional coercion to undefined → `?? null` — a SILENT field clear
- *  on PUT. Routes pair this with a 400 ("Invalid <thing>"). */
-export function isBadString(v: unknown): boolean {
-  return v !== undefined && v !== null && typeof v !== "string";
-}
-
-/** Session-40 (S40-P1): dates have a parseable shape, so the guard is
- *  stricter than isBadString — an UNPARSEABLE string is bad too
- *  (asDate("garbage") → undefined → `?? null` silently cleared the
- *  field). "" stays the explicit clear (the asFKId convention); a
- *  parseable string (ISO, date-only) passes. */
-export function isBadDate(v: unknown): boolean {
-  if (v === undefined || v === null || v === "") return false;
-  if (typeof v !== "string") return true;
-  return Number.isNaN(new Date(v).getTime());
-}
-
-/** Session-40 (S40-P1): Number()'s truthy/array edges are the hazard —
- *  Number(true)=1, Number([5])=5, Number([])=0, Number(" ")=0 — so a
- *  JSON boolean/array payload silently stored a number. Accepted: a
- *  finite number, or a numeric string (the UI's Number()/parseFloat
- *  shapes serialize through JSON as strings only when hand-written).
- *  "" stays absent (asNumber's own special case); a whitespace-only
- *  string is BAD (it would silently store 0). */
-export function isBadNumber(v: unknown): boolean {
-  if (v === undefined || v === null || v === "") return false;
-  if (typeof v === "number") return !Number.isFinite(v);
-  if (typeof v === "string") return v.trim() === "" || !Number.isFinite(Number(v));
-  return true;
-}
-
-/** Session-42 (S42-P2): the strict-bool silent-clear family —
- *  `data.isKey = body.isKey === true` silently stored FALSE for a
- *  present non-boolean ({"isKey":"yes"} → 200 + false) and silently
- *  CLEARED an existing true on PUT (a key account de-keyed without an
- *  error — LIVE-proven). The isBadString shape one type over: only a
- *  PRESENT non-boolean is bad; absent/null keep the false-default
- *  (POST) and no-change (PUT) semantics. The UI writers are real
- *  checkbox booleans (Radix onCheckedChange) or absent — the surface
- *  is API-only. */
-export function isBadBool(v: unknown): boolean {
-  return v !== undefined && v !== null && typeof v !== "boolean";
-}
-
-export function asNumber(v: unknown): number | undefined {
-  if (v === undefined || v === null || v === "") return undefined;
-  const n = Number(v);
-  return Number.isFinite(n) ? n : undefined;
-}
-
-export function asInt(v: unknown): number | undefined {
-  const n = asNumber(v);
-  return n === undefined ? undefined : Math.trunc(n);
-}
-
-export function asDate(v: unknown): Date | undefined {
-  if (typeof v !== "string" || !v) return undefined;
-  const d = new Date(v);
-  return Number.isNaN(d.getTime()) ? undefined : d;
-}
+// ---- hand-rolled coercion helpers: RETIRED at WH-6 -------------------------
+// The CRM-era query-param family (asString/asDate/asNumber/asInt/asFKId and
+// the isBad* predicates, ~97 lines) shipped five rounds with ZERO importers:
+// every JSON body rides parseBody + the zod seam above, and no wellness
+// route parses URL params at all (the events/reminders/dashboard GETs read
+// plain findMany rows; the last URL-param consumers were the CRM-era
+// reports/export/search routes, retired at WH-1/WH-4). The src-census pin
+// (tests/src-census.test.ts) owns this module's export surface — an export
+// returns only consciously, in the same commit as its consumer.

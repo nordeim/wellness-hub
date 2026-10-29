@@ -57,10 +57,10 @@ const CANONICAL = {
   layoutComponents: 7, // modules under src/components/layout/
   tsxFiles: 45, // src/**/*.tsx
   clientFiles: 26, // .tsx files headed "use client"
-  unitSuites: 20, // tests/*.test.ts (INCLUDING this suite)
+  unitSuites: 21, // tests/*.test.ts (INCLUDING this suite)
   e2eSpecs: 5, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 328, // `bun run test` total (WH-5: 319 + this pin's 9)
+  unitChecks: 331, // `bun run test` total (WH-6: 328 + the src-census pin's 3)
   e2eChecks: 42, // `CI=1 bun run test:e2e` total
   smokeChecks: 14, // scripts/smoke-test.sh ladder
 } as const;
