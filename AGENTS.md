@@ -19,8 +19,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (313 checks) | `bun run test` | Vitest, node-safe seams |
-| Browser E2E (41 checks) | `bun run test:e2e` | Needs `bun run build` first |
+| Unit tests (314 checks) | `bun run test` | Vitest, node-safe seams |
+| Browser E2E (42 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
 | The full gate in one command | `bun run gate` | lint → tsc → test → build → smoke → e2e |
@@ -29,8 +29,9 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (313) → `bun run build` → `bun run smoke` →
-`CI=1 bun run test:e2e` (41) — or the one-command `bun run gate`. There is
+`bun run test` (314) → `bun run build` → `bun run smoke` →
+`CI=1 bun run test:e2e` (42: 5 specs + the auth setup project) — or the
+one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
 is NOT set — a type error fails `bun run build`, and the explicit
 `typecheck` step stays in the chain as the faster signal. `bun audit` runs

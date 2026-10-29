@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { pageMetadata, pageOgDescription, PWA_META, siteUrl } from "@/lib/site";
@@ -91,5 +91,30 @@ describe("the metadata factory (Wellness Hub)", () => {
     const layout = read("src/app/layout.tsx");
     expect(layout).toContain('"Wellness Hub"');
     expect(layout).not.toContain("NEO CRM");
+  });
+
+  it("WH-2 (F-1): every page/route source in src/app is NEO-CRM-free", () => {
+    // The rebrand pin: the WH-1 domain replacement missed the signup
+    // page's metadata title ("Sign up | NEO CRM" — live <title> drift,
+    // curl-verified 2026-10-29). This scan is broader than the root-layout
+    // pin above so NO route-layer file can reintroduce the CRM brand.
+    // It reads the live .tsx sources (comments included) — the route
+    // layer must not carry the old brand even in prose, because stale
+    // comments are how the live string survived the first rebrand sweep.
+    const appDir = path.resolve(import.meta.dirname, "..", "src", "app");
+    const offenders: string[] = [];
+    const walk = (dir: string) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        // The route layer only: pages, layouts, error/not-found shells,
+        // and their collocated handlers. The (app) group's page shells
+        // ride it; skills/ and node_modules never do.
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (entry.isFile() && entry.name.endsWith(".tsx"))
+          if (readFileSync(full, "utf8").includes("NEO CRM")) offenders.push(full);
+      }
+    };
+    walk(appDir);
+    expect(offenders, `NEO CRM residue in: ${offenders.join(", ")}`).toEqual([]);
   });
 });

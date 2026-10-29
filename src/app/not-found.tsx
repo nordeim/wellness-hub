@@ -10,13 +10,13 @@ export default function NotFound() {
 // The pathname interpolation lives in the client body (usePathname).
 //
 // Session-194 (D-194a4): the s12 ABSOLUTE title
-// ("This Page Does Not Exist | NEO CRM") is a PRE-DRIFT decode — the
+// ("This Page Does Not Exist | Wellness Hub") is a PRE-DRIFT decode — the
 // reference's CURRENT build (bundle 46bc2d9c, live-verified at both
-// contexts, 3s settles) ships bare "NEO CRM" on its 404, and the title
-// machinery is byte-equal on every real route (both ship bare "NEO CRM"
-// on /dashboard — the s10 pins stand; "Accounts | NEO CRM" on /accounts;
-// "About | NEO CRM" on /about). The metadata export RETIRES: the root
-// layout's title.default "NEO CRM" renders, byte-equal two-app.
+// contexts, 3s settles) ships bare "Wellness Hub" on its 404, and the title
+// machinery is byte-equal on every real route (both ship bare "Wellness Hub"
+// on /dashboard — the s10 pins stand; "Accounts | Wellness Hub" on /accounts;
+// "About | Wellness Hub" on /about). The metadata export RETIRES: the root
+// layout's title.default "Wellness Hub" renders, byte-equal two-app.
 //
 // Session-194 (D-194a5): the 404 is SESSION-INDEPENDENT by design — no
 // session resolution, no redirect. The reference's auth-first client-router

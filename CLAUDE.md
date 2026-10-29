@@ -97,18 +97,19 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 | `bun run start` | Boot the standalone server |
 | `bun run lint` | ESLint (`--max-warnings 0`) |
 | `bun run typecheck` | `tsc --noEmit` |
-| `bun run test` | Vitest unit suite (313 checks) |
-| `bun run test:e2e` | Playwright (41 checks; build first) |
+| `bun run test` | Vitest unit suite (314 checks) |
+| `bun run test:e2e` | Playwright (42 checks; build first) |
 | `bun run gate` | The full chain in one command |
 
 ## Testing Strategy
 
 ### Test Pyramid
 
-- **Unit (Vitest, 313 checks / 16 suites)**: pure seams — auth helpers,
+- **Unit (Vitest, 314 checks / 16 suites)**: pure seams — auth helpers,
   db-path contract, wellness math (streaks/points/badges), schemas,
   theme engine, formatters.
-- **E2E (Playwright, 41 checks)**: the real UI in Chromium against the
+- **E2E (Playwright, 42 checks — 5 specs + the auth setup project)**: the
+  real UI in Chromium against the
   production standalone server — auth ladder, mobile drawer battery, shell
   nav (both route-case families), and a CRUD cycle through every module.
 

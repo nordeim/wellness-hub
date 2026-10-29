@@ -308,8 +308,8 @@ wellness-hub/
 │   │   ├── wellness-store.ts # ALL server state; call() envelope client
 │   │   └── theme-store.ts    # CSS-variable writer + UserPrefs sync
 │   └── types/               # shared domain types
-├── tests/                   # Vitest *.test.ts (16 suites, 313 checks)
-│   └── e2e/                 # Playwright *.spec.ts (41 checks) + setups
+├── tests/                   # Vitest *.test.ts (16 suites, 314 checks)
+│   └── e2e/                 # Playwright *.spec.ts (42 checks) + setups
 ├── scripts/
 │   ├── smoke-test.sh        # 14-check ladder against the standalone artifact
 │   └── prisma-env.ts  census.ts
@@ -601,9 +601,10 @@ No queues, workers or cron. Utility services worth naming:
 | E2E — auth ladder (login wall, lockout, reset funnel, revocation) | 1 spec | 11 | `tests/e2e/auth.spec.ts` | Playwright |
 | E2E — mobile drawer battery | 1 spec | 6 | `tests/e2e/mobile-navigation.spec.ts` | Playwright |
 | E2E — shell (nav, dual-case routes, quick actions) | 1 spec | 6 | `tests/e2e/shell.spec.ts` | Playwright |
+| E2E — auth setup project (one-time demo login; shares the cookie via storageState) | 1 setup | 1 | `tests/e2e/auth.setup.ts` | Playwright |
 | E2E — CRUD cycles + reset-password funnel | 2 specs | 18 | `tests/e2e/wellness-crud.spec.ts`, `reset-password.spec.ts` | Playwright |
 
-Totals: **313 unit checks / 16 Vitest suites + 41 e2e checks / 5 specs**.
+Totals: **314 unit checks / 16 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
 
 ### 8.2 Test Patterns
 
@@ -629,10 +630,10 @@ docs, not just the code.
 
 - `bun run lint` → 0 warnings
 - `bun run typecheck` → clean
-- `bun run test` → 313/313
+- `bun run test` → 314/314
 - `bun run build` → succeeds (the type gate)
 - `bun run smoke` → 14/14
-- `CI=1 bun run test:e2e` → 41/41
+- `CI=1 bun run test:e2e` → 42/42
 - `bun audit` (periodic, outside the gate) → re-triaged in §11
 - Screenshot/parity pass if ANY visual surface changed
 
@@ -752,6 +753,7 @@ No CRITICAL or HIGH issues are open.
 | `prisma/schema.prisma` | ~300 | The 14-model domain |
 | `prisma/seed.ts` | ~500 | Idempotent content + demo-user seed |
 | `scripts/smoke-test.sh` | ~200 | The 14-check standalone-artifact ladder |
+| `tests/wellness-theme.test.ts` | ~120 | Theme/rebrand pins — incl. the WH-2 src/app NEO-CRM-free scan |
 | `tests/e2e/mobile-navigation.spec.ts` | ~150 | The drawer battery |
 | `docs/plans/2026-10-29-wellness-hub-build.md` | — | The build plan (reference intelligence + decisions) |
 | `worklog.md` | — | The session-by-session engineering log |
