@@ -60,7 +60,7 @@ const CANONICAL = {
   unitSuites: 21, // tests/*.test.ts (INCLUDING this suite)
   e2eSpecs: 5, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 314, // `bun run test` total (WH-9: 312 + the component-prop census + the theme-store member census)
+  unitChecks: 315, // `bun run test` total (WH-10: 314 + the §8.1 row-arithmetic check)
   e2eChecks: 42, // `CI=1 bun run test:e2e` total
   smokeChecks: 14, // scripts/smoke-test.sh ladder
 } as const;
@@ -73,6 +73,12 @@ const CANONICAL = {
 const FORBIDDEN_FORMS = [
   "14 models", // the schema never had 14 — the WH-1-era miscount
   "Fourteen models", // the same claim, spelled out (PAD §4.1's heading)
+  "14-model domain", // the same claim, compound-adjective form (PAD §3.2/§12
+  // — the WH-10 round: the hyphenated spelling escaped both the WH-5 cure
+  // and this list for five rounds). Pinned at the full drift PHRASE, not
+  // the bare "14-model" prefix: the SKILL's own history legitimately says
+  // "the 14-models count" (the WH-5 cure narration), and this scan is a
+  // flat substring match — the form must not collide with history.
   "button (variants", // PAD §5.3's dead-primitive enumeration (WH-4 retired)
   "topbar z-40", // AGENTS' stale z-map row — no z-40 class exists in src
   "dropdown portals z-[60]", // the dropdown module retired at WH-4
@@ -194,6 +200,51 @@ for (const doc of DOCS) {
     ).toEqual([]);
   });
 }
+
+// ---- PAD §8.1's distribution table carries row arithmetic --------------------
+
+// WH-10 (F-2/F-3): the §8.1 test-distribution table's rows are the
+// table's entire content, and only the TOTALS were pinned — the WH-7
+// retirement decremented the total (331→309, lockstep-enforced) while
+// the unpinned infra row above it kept its stale count, and four
+// subsequent rounds hand-incremented the wrong base (121→130→133→
+// [WH-7's −22 never applied]→136→138 against a truth of 116). A
+// distribution table whose rows don't sum is a lie with a true bottom
+// line. The check parses the rows and asserts the SUMS — arithmetic,
+// not per-row presence, so a legitimate category redistribution (a
+// test file moving between rows) never trips it; only arithmetic
+// falsehood and total moves (the count-ladder rule) do.
+
+/** A table row's bare-number cells (`| N |` with digits only — the
+ * e2e rows' spec-count cells carry words: "1 spec", "1 setup").
+ * Split-on-pipe, not a consuming regex: adjacent `| N | M |` cells
+ * share a pipe, so `\| (\d+) \|` loses every second cell. */
+function bareNumberCells(line: string): number[] {
+  return line
+    .split("|")
+    .map((cell) => cell.trim())
+    .filter((cell) => /^\d+$/.test(cell))
+    .map(Number);
+}
+
+it("WH-10: PAD §8.1's test-distribution rows sum to the canonical totals", () => {
+  const pad = readDoc("Project_Architecture_Document.md");
+
+  const unitRows = pad.match(/^\| Unit —.*$/gm) ?? [];
+  expect(unitRows.length, "§8.1 unit rows (auth / wellness / infra)").toBe(3);
+  const unitFiles = unitRows.reduce((sum, row) => sum + (bareNumberCells(row)[0] ?? 0), 0);
+  const unitChecks = unitRows.reduce((sum, row) => sum + (bareNumberCells(row)[1] ?? 0), 0);
+  expect(unitFiles, "§8.1 unit rows' files sum (must equal the suite count)").toBe(CANONICAL.unitSuites);
+  expect(
+    unitChecks,
+    "§8.1 unit rows' checks sum — the rows must add up to the canonical total (a row that kept a retired count's base is exactly the WH-10 F-2 drift)",
+  ).toBe(CANONICAL.unitChecks);
+
+  const e2eRows = pad.match(/^\| E2E —.*$/gm) ?? [];
+  expect(e2eRows.length, "§8.1 e2e rows").toBe(5);
+  const e2eChecks = e2eRows.reduce((sum, row) => sum + (bareNumberCells(row)[0] ?? 0), 0);
+  expect(e2eChecks, "§8.1 e2e rows' checks sum").toBe(CANONICAL.e2eChecks);
+});
 
 // ---- no doc carries a known-wrong form ---------------------------------------
 

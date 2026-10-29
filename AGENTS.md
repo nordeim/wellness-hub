@@ -19,7 +19,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (314 checks) | `bun run test` | Vitest, node-safe seams |
+| Unit tests (315 checks) | `bun run test` | Vitest, node-safe seams |
 | Browser E2E (42 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
@@ -29,7 +29,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (314) → `bun run build` → `bun run smoke` →
+`bun run test` (315) → `bun run build` → `bun run smoke` →
 `CI=1 bun run test:e2e` (42: 5 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
@@ -162,7 +162,13 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   live-tense count claims under the unit gate — a stale count anywhere
   fails `bun run test`. When a total moves (a test added/retired, a
   model, a route family), update the pin's CANONICAL literals AND every
-  doc site in the SAME commit; the pin is the lockstep enforcer.
+  doc site in the SAME commit; the pin is the lockstep enforcer. The
+  WH-10 extension: PAD §8.1's test-distribution rows must SUM to the
+  canonical totals (a retirement that decrements the total but not a
+  row trips the arithmetic — recompute the row, don't hand-increment),
+  and the forbidden-forms list covers the compound spellings (pinned at
+  the drift PHRASE — a doc cannot quote a forbidden form, so history
+  narrates it without spelling it).
 - The src-surface census pin (`tests/src-census.test.ts`) keeps the app
   tree's hygiene under the unit gate: every `tests/*.test.ts` file cited
   in src/scripts/prisma comments must exist (a comment defending code

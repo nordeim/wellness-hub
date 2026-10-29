@@ -55,7 +55,7 @@ evaluated against both.
 | Styling | Tailwind CSS | 4.3 | CSS-first `@theme` — matches the reference's computed token system; no config JS |
 | Primitives | Radix UI | 1.3–2.4 | Dialog/Sheet drawer, dropdown, select, popover, tabs — the reference's own component genus (shadcn-style) |
 | State | Zustand | 5.15 | One store, no React Query/SWR — the app's read pattern is "hydrate once, mutate, refresh slice" |
-| ORM | Prisma | 6.19 | Typed SQLite access; schema-as-code for the 14-model domain |
+| ORM | Prisma | 6.19 | Typed SQLite access; schema-as-code for the 15-model domain |
 | Database | SQLite | — | Zero-config local parity with the reference; absolute-path swap for production |
 | Validation | Zod | 4.6 | One seam (`parseBody`) for every body boundary — the reference's inline validation replaced with a pinned contract |
 | Icons | lucide-react | 0.525 | The reference's own icon set (bundle-decoded pin) |
@@ -305,7 +305,7 @@ wellness-hub/
 │   │   ├── wellness-store.ts # ALL server state; call() envelope client
 │   │   └── theme-store.ts    # CSS-variable writer + UserPrefs sync
 │   └── types/               # shared domain types
-├── tests/                   # Vitest *.test.ts (21 suites, 314 checks)
+├── tests/                   # Vitest *.test.ts (21 suites, 315 checks)
 │   └── e2e/                 # Playwright *.spec.ts (42 checks) + setups
 ├── scripts/
 │   ├── smoke-test.sh        # 14-check ladder against the standalone artifact
@@ -600,14 +600,14 @@ No queues, workers or cron. Utility services worth naming:
 |----------|-------|--------|----------|-----------|
 | Unit — auth seams (password, verification, reset, contract, rate limit, boot-env) | 6 | 109 | `tests/auth*.test.ts`, `password-seam`, `rate-limit`, `boot-env` | Vitest |
 | Unit — wellness domain (streaks, points, badges, codecs, schemas, stats, helpers, theme) | 5 | 89 | `tests/wellness-*.test.ts` | Vitest |
-| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep, src-surface census + store/ui-export + component-prop/theme-member censuses) | 10 | 138 | `tests/*.test.ts` | Vitest |
+| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member censuses) | 10 | 117 | `tests/*.test.ts` | Vitest |
 | E2E — auth ladder (login wall, lockout, reset funnel, revocation) | 1 spec | 11 | `tests/e2e/auth.spec.ts` | Playwright |
 | E2E — mobile drawer battery | 1 spec | 6 | `tests/e2e/mobile-navigation.spec.ts` | Playwright |
 | E2E — shell (nav, dual-case routes, quick actions) | 1 spec | 6 | `tests/e2e/shell.spec.ts` | Playwright |
 | E2E — auth setup project (one-time demo login; shares the cookie via storageState) | 1 setup | 1 | `tests/e2e/auth.setup.ts` | Playwright |
 | E2E — CRUD cycles + reset-password funnel | 2 specs | 18 | `tests/e2e/wellness-crud.spec.ts`, `reset-password.spec.ts` | Playwright |
 
-Totals: **314 unit checks / 21 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
+Totals: **315 unit checks / 21 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
 
 ### 8.2 Test Patterns
 
@@ -634,7 +634,7 @@ docs, not just the code.
 
 - `bun run lint` → 0 warnings
 - `bun run typecheck` → clean
-- `bun run test` → 314/314
+- `bun run test` → 315/315
 - `bun run build` → succeeds (the type gate)
 - `bun run smoke` → 14/14
 - `CI=1 bun run test:e2e` → 42/42
@@ -755,7 +755,7 @@ No CRITICAL or HIGH issues are open.
 | `src/stores/theme-store.ts` | ~200 | CSS-variable theming + UserPrefs sync |
 | `src/components/layout/mobile-nav.tsx` | ~200 | The Sheet drawer (e2e-pinned battery) |
 | `src/app/globals.css` | ~400 | @theme tokens, dark overrides, the Tailwind v4 pins |
-| `prisma/schema.prisma` | ~300 | The 14-model domain |
+| `prisma/schema.prisma` | ~300 | The 15-model domain |
 | `prisma/seed.ts` | ~500 | Idempotent content + demo-user seed |
 | `scripts/smoke-test.sh` | ~200 | The 14-check standalone-artifact ladder |
 | `tests/wellness-theme.test.ts` | ~120 | Theme/rebrand pins — incl. the WH-2 src/app NEO-CRM-free scan |
