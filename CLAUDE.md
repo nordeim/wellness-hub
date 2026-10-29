@@ -13,7 +13,7 @@ reference offers — dashboard, routine templates, exercise tracking, a mood
 journal, assignments, an events calendar, study resources, reminders, a
 learning center and a gamified goals/achievements engine — plus a deliberate
 functional superset: real email-verification and password-reset flows, a
-live theming engine, CSV/PDF export and a full test battery. Maintained by
+live theming engine and a full test battery. Maintained by
 nordeim; pushes go to `git@github.com:nordeim/wellness-hub.git` (main only,
 via `docs/ssh_git_wrapper_v3.py`).
 
@@ -97,7 +97,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 | `bun run start` | Boot the standalone server |
 | `bun run lint` | ESLint (`--max-warnings 0`) |
 | `bun run typecheck` | `tsc --noEmit` |
-| `bun run test` | Vitest unit suite (314 checks) |
+| `bun run test` | Vitest unit suite (316 checks) |
 | `bun run test:e2e` | Playwright (42 checks; build first) |
 | `bun run gate` | The full chain in one command |
 
@@ -105,9 +105,9 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 
 ### Test Pyramid
 
-- **Unit (Vitest, 314 checks / 16 suites)**: pure seams — auth helpers,
+- **Unit (Vitest, 316 checks / 17 suites)**: pure seams — auth helpers,
   db-path contract, wellness math (streaks/points/badges), schemas,
-  theme engine, formatters.
+  theme engine, formatters, the dead-dependency census.
 - **E2E (Playwright, 42 checks — 5 specs + the auth setup project)**: the
   real UI in Chromium against the
   production standalone server — auth ladder, mobile drawer battery, shell

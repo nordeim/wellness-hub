@@ -117,15 +117,10 @@
   --radius-button: 0.5rem;
   --radius-pill: 9999px;
 
-  /* Chart palette (display tokens; the working hex lives in
-     src/lib/constants.ts — CHART_COLORS / *_META — and is DOM-pinned by
-     tests/constants.test.ts: Proposal = yellow-500, Won = grey-400). */
-  --color-chart-1: #3b82f6;
-  --color-chart-2: #06b6d4;
-  --color-chart-3: #eab308;
-  --color-chart-4: #f97316;
-  --color-chart-5: #9ca3af;
-  --color-chart-6: #ef4444;
+  /* WH-3 (F-1): the chart palette tokens retired with recharts — the
+     chart library never shipped a live import in the wellness tree
+     (CRM-chassis residue; the reference carries no charts either), so
+     the six --color-chart-* tokens carried zero consumers. */
 
   /* Session-88 (M-88c1): THE V3 PALETTE RE-PIN. Tailwind v4's default
      palette is NOT v3's palette expressed in oklch — it was re-derived,
@@ -376,13 +371,9 @@
   }
 }
 
-/* Recharts focus outlines are noisy in dialogs */
-@utility chart-no-outline {
-  & .recharts-wrapper:focus,
-  & .recharts-surface:focus {
-    outline: none;
-  }
-}
+/* WH-3 (F-1): the chart-no-outline utility retired with recharts — it
+   targeted .recharts-* focus surfaces, and the chart library never
+   shipped a live import in the wellness tree (zero consumers). */
 
 /* Native date/datetime inputs inherit the app control look */
 @utility input-base {

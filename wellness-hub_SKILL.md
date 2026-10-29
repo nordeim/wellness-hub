@@ -1,9 +1,9 @@
 ---
 name: wellness-hub
-description: "Complete engineering skill for the Wellness Hub codebase: Next.js 16 App Router + React 19 + TypeScript strict + Tailwind CSS 4 (CSS-first @theme) + Radix/shadcn primitives + one Zustand store + Prisma 6/SQLite at the repo root + Zod-4-validated API + scrypt/HMAC cookie auth + a three-tier test suite and a single-command quality gate. Distilled from the WH-1 domain replacement (the NEO CRM chassis became the EvolveWell wellness clone) and the WH-2 audit round. Every rule traces to a verified fact on the 2026-10-29 tree."
-version: 1.0.0
+description: "Complete engineering skill for the Wellness Hub codebase: Next.js 16 App Router + React 19 + TypeScript strict + Tailwind CSS 4 (CSS-first @theme) + Radix/shadcn primitives + one Zustand store + Prisma 6/SQLite at the repo root + Zod-4-validated API + scrypt/HMAC cookie auth + a three-tier test suite and a single-command quality gate. Distilled from the WH-1 domain replacement (the NEO CRM chassis became the EvolveWell wellness clone), the WH-2 audit round and the WH-3 dead-dep census round. Every rule traces to a verified fact on the 2026-10-29 tree."
+version: 1.1.0
 last_updated: 2026-10-29
-provenance: "Supersedes neo-crm_SKILL.md (the chassis-era distillate, kept at the repo root as provenance for the inherited engineering). Distilled per skills/to-distill-project-into-skill + skills/distill-codebase-skill at the WH-2 ship state: commit 5c3de25 + the WH-2 remediation, gate green at lint 0/0 · tsc 0 · 314/314 unit (16 suites) · build OK · smoke 14/14 · e2e 42/42 (5 specs + 1 setup, 6 files)."
+provenance: "Supersedes neo-crm_SKILL.md (the chassis-era distillate, kept at the repo root as provenance for the inherited engineering). Distilled per skills/to-distill-project-into-skill + skills/distill-codebase-skill at the WH-2 ship state (commit 5c3de25 + the WH-2 remediation, gate green at lint 0/0 · tsc 0 · 314/314 unit [16 suites] · build OK · smoke 14/14 · e2e 42/42). Re-validated at WH-3 (2026-10-29): the dead-dep census round — six zero-import packages (jspdf, recharts, html2canvas-pro, fast-check, axe-core, tw-animate-css) + the orphaned dompurify override + the dead chart CSS retired with the TDD pin `tests/dead-deps.test.ts`; gate green at lint 0/0 · tsc 0 · 316/316 unit (17 suites) · build OK · smoke 14/14 · e2e 42/42."
 ---
 
 # Wellness Hub — Complete Engineering Skill
@@ -43,14 +43,13 @@ provenance: "Supersedes neo-crm_SKILL.md (the chassis-era distillate, kept at th
 | State | Zustand | 5.0.15 | ONE store (`wellness-store`) + the theme-store writer |
 | ORM / DB | Prisma / SQLite | 6.19.3 | `DATABASE_URL="file:../db/custom.db"` — RELATIVE, resolved against `prisma/schema.prisma` by `src/lib/db-path.ts` (pinned by `tests/db-path.test.ts`); `db/` at the repo root, git-ignored |
 | Validation | Zod | 4.6.7 | Every API body boundary via `parseBody()`; enums from `src/lib/constants.ts` |
-| Charts | recharts | 3.10.1 | Defaults kept; real charts render at zero data |
+| Charts | — | — | The app renders NO charts — the reference's dashboard carries stat tiles + lists only (live-probed at WH-1 and WH-3); recharts shipped three rounds as a zero-import CRM residue and was retired at WH-3 |
 | Icons | lucide-react | 0.525.0 | The reference's own bundle-decoded version — a PARITY pin; nav icons h-5 w-5 stroke-2, content h-4 w-4 |
-| PDF | jspdf | 4.2.1 | Its transitive dompurify is override-pinned to 3.4.17 (the one runtime advisory chain, cured) |
-| Unit tests | Vitest | 5.0.5 | Node env; `*.test.ts` only; `@` alias; 314 checks / 16 suites |
+| Unit tests | Vitest | 5.0.5 | Node env; `*.test.ts` only; `@` alias; 316 checks / 17 suites (incl. the dead-dep census pin) |
 | E2E | @playwright/test | 1.64.1 | Production standalone server, isolated port, PINNED `db/e2e.db`; 42 checks (5 specs + the auth setup project) |
 | Runtime | Bun | 1.3.14 | All scripts run from the repo root |
 
-**Dependency discipline:** every dep carries a live import (`bun pm ls` + rg to verify); dead deps get retired. The `overrides.dompurify = "3.4.17"` pin in `package.json` must NEVER be removed (the WH-1 audit's only critical, cured by exactly this mechanism).
+**Dependency discipline:** every dep carries a live import (`bun pm ls` + rg to verify); dead deps get retired — `tests/dead-deps.test.ts` ENFORCES it (every package.json entry needs a quoted reference in the scanned roots or a TOOLCHAIN-whitelist reason). WH-3 history: the `overrides.dompurify = "3.4.17"` pin (the WH-1-era cure for jspdf's transitive chain) was retired WITH jspdf — the package was never imported by the wellness tree, so removing it removed the advisory chain entirely; the census pin now guards the whole dep tree.
 
 ## §3 Bootstrapping & Configuration
 
@@ -95,7 +94,7 @@ The full contract lives in `@theme` in `src/app/globals.css` (verified hex-for-h
 
 **Radius:** card `0.75rem` · button `0.5rem` · pill `9999px`. **Shadows:** `--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05)` (the v4 re-pin — see §9). **Blur:** `--blur-sm: 4px` (the v4 re-pin).
 
-**Keyframes (2):** `fade-in` (0.2s ease-out — Radix enter) and `slide-in-right` (0.25s cubic-bezier(0.32,0.72,0,1) — the mobile drawer). `tw-animate-css` carries the rest of the Radix pairs.
+**Keyframes (2):** `fade-in` (0.2s ease-out — Radix enter) and `slide-in-right` (0.25s cubic-bezier(0.32,0.72,0,1) — the mobile drawer). The VENDORED `src/app/vendor/tw-animate.css` (imported by globals.css) carries the rest of the Radix pairs — the `tw-animate-css` npm package itself was a zero-import residue retired at WH-3; add animation utilities to the vendored file, never the package.
 
 **THE V3 PALETTE RE-PIN (session-88 family):** v4's default palette is NOT v3's in oklch — 56 of 118 literal classes diverged visibly. `@theme` re-pins EVERY literal (family, step) pair used in src/ to the v3 values (amber-50 `#fffbeb` … yellow-800 `#854d0e`, ~60 entries). Never delete this block; adding a new literal color class requires adding its v3 value here.
 
@@ -151,7 +150,7 @@ This codebase has NO custom hooks directory — the reactive seams are the two Z
 - **Reduced motion:** the `@media (prefers-reduced-motion: reduce)` block collapses ALL animations/transitions to 0.01ms — plus the `animationLevel` pref (full/subtle/none) gates the app's own animation classes server- AND client-side.
 - **Touch targets:** 44px minimum on mobile (the drawer trigger is h-10 w-10 + padding, the nav pills are full-height rows).
 - **ARIA:** Radix primitives carry their own roles/states (dialog, listbox, tabs); the drawer is a Radix Sheet with `data-state` + focus-trap + escape + scroll-lock (e2e-pinned); toasts ride the aria-live region.
-- **E2E teeth:** axe-core is a devDependency; the mobile-nav battery pins keyboard operability (escape-close, focus restore) — if you touch the drawer, run `tests/e2e/mobile-navigation.spec.ts` explicitly.
+- **E2E teeth:** the mobile-nav battery pins keyboard operability (escape-close, focus restore) — if you touch the drawer, run `tests/e2e/mobile-navigation.spec.ts` explicitly. (axe-core shipped as a devDep from the chassis but was never imported — retired at WH-3 by the dead-dep census; the keyboard pins are Playwright-native, not axe-driven.)
 
 ## §9 Anti-Patterns & Common Bugs
 
@@ -194,7 +193,7 @@ This codebase has NO custom hooks directory — the reactive seams are the two Z
 ```bash
 bun run lint          # 0 warnings, ALWAYS first
 bun run typecheck     # tsc --noEmit — the fast signal
-bun run test          # 314/314 (16 suites)
+bun run test          # 316/316 (17 suites)
 bun run build         # the type gate + the standalone artifact
 bun run smoke         # 14/14 (the standalone boot + ladder on db/smoke.db)
 CI=1 bun run test:e2e # 42/42 (5 specs + the setup project, db/e2e.db)
@@ -203,7 +202,7 @@ bun audit             # OUTSIDE the gate (network dep); re-triage in the PAD led
 ```
 
 - One command: `bun run gate` (lint → typecheck → test → build → smoke → CI=1 e2e). There is no hosted CI — the local gate is the only gate.
-- Before push: `git status` clean; `.env`/`db/*.db`/`*.key` NEVER in the tree; screenshots refreshed if any visual surface moved; the five docs' counts re-verified (`rg "314|42" README.md AGENTS.md CLAUDE.md Project_Architecture_Document.md wellness-hub_SKILL.md`).
+- Before push: `git status` clean; `.env`/`db/*.db`/`*.key` NEVER in the tree; screenshots refreshed if any visual surface moved; the five docs' counts re-verified (`rg "316|42" README.md AGENTS.md CLAUDE.md Project_Architecture_Document.md wellness-hub_SKILL.md`).
 - Push ONLY via `docs/ssh_git_wrapper_v3.py` (dry-run, then push, then verify the remote ref; the key lives OUTSIDE the repo and is shredded after). Main branch only — no new branches, ever.
 
 ## §12 Lessons Learnt & How to Avoid Them
@@ -213,8 +212,9 @@ bun audit             # OUTSIDE the gate (network dep); re-triage in the PAD led
 3. **Rebrand sweeps need filesystem-scan pins (WH-2/A-6).** The signup title survived a whole-domain rebrand because no test scanned for it. → Pin the INVARIANT ("src/app contains no NEO CRM string"), not the instances.
 4. **Count the things (WH-2).** The docs said 41 e2e; the tree ran 42 (the setup project was never counted). → When a count changes, `rg "<old>"` the whole doc set in the same commit.
 5. **The chassis was the right call (WH-1).** Replacing the CRM's domain on its auth/envelope/db-path/shell chassis (457 files, +9,147/−105,780) shipped in one round precisely because the infra was already pinned. → Port battle-tested seams; don't rewrite them.
-6. **The override mechanism beats the update for transitive advisories (s198, inherited).** `bun update dompurify` hoisted the root AND left a nested vulnerable copy; `overrides.dompurify` in `package.json` + a clean reinstall reproduced the lockfile exactly. → Transitive fixes ride overrides + pins, never ad-hoc updates.
+6. **The override mechanism beats the update for transitive advisories (s198, inherited).** `bun update dompurify` hoisted the root AND left a nested vulnerable copy; `overrides.dompurify` in `package.json` + a clean reinstall reproduced the lockfile exactly. → Transitive fixes ride overrides + pins, never ad-hoc updates. (WH-3 coda: when the chain's root consumer turned out to be a dead dep, the override retired WITH it — the deeper rule is the census: no package without a live import, then the override question never arises.)
 7. **Rate limits shape test architecture (A-8).** The per-IP login limiter forced the storageState doctrine. → Design test fixtures around your own security posture, not against it.
+8. **A dependency is a doc claim (WH-3).** Six packages shipped three rounds with zero imports while five docs claimed their features (charts, PDF export, property tests, axe teeth) — the WH-1 domain replacement deleted the CRM's csv/pdf-export seams but left their packages, and every doc inherited the claim. → The census pin (`tests/dead-deps.test.ts`) makes the dependency tree a TESTED contract: a package without a live import fails the gate, and its doc claims die with it. Never write a feature row for a package the tree does not import.
 
 ## §13 Pitfalls to Avoid
 
@@ -367,7 +367,7 @@ Every hex below was verified against `src/app/globals.css` at distillation. **Fo
 | `--color-warning` / `-soft` | `#f59e0b` / `#fffbeb` | Caution states |
 | `--color-danger` / `-soft` | `#ef4444` / `#fef2f2` | Destructive states |
 | `--color-info` / `-soft` | `#06b6d4` / `#ecfeff` | Neutral accent states |
-| Chart palette 1–6 | `#3b82f6` `#06b6d4` `#eab308` `#f97316` `#9ca3af` `#ef4444` | recharts series |
+| Chart palette | — | RETIRED at WH-3 with recharts — the app renders no charts; the six `--color-chart-*` tokens carried zero consumers and left `globals.css` in the same stroke |
 
 Plus the ~60-entry v3 palette re-pin block (amber-50 `#fffbeb` → yellow-800 `#854d0e`) — the full list lives in `globals.css`; the CONTRACT is "every literal (family, step) used in src/ is re-pinned to its v3 value".
 

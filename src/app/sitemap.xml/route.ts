@@ -7,15 +7,15 @@ import { siteUrl } from "@/lib/site";
 // handler because Next's sitemap.ts serializer DROPS the number
 // formatting ("1.0" serializes as "1") — and its MetadataRoute type
 // spells the field changeFrequency, easy to mis-pin. One deliberate fix:
-// the reference's locs are CAPITALIZED (/Accounts…) — its platform routes
-// case-insensitively; our router is case-sensitive (the documented s14
-// decision, /Profile as the one aliased casing), so this sitemap lists
-// the real lowercase routes the router actually serves.
-// Session-142 (D-142a3): + /about + /contact (the reference's two new
-// marketing-layer app pages — its URL surface now includes them; ours
-// mirrors at the lowercase canonicals). `/` stays 1.0 — it is now the
-// PUBLIC landing page (the reference's own root), still the highest-
-// priority crawlable route.
+// the reference's locs are CAPITALIZED (/Dashboard…) — its platform routes
+// case-insensitively; our router is case-sensitive, so this sitemap lists
+// the real lowercase canonical routes the router actually serves (the
+// capitalized aliases re-export them — ADR-005).
+// WH-3 (F-3): the CRM-era session-142 note (the /about + /contact
+// marketing pages and the "public landing page" root) retired — the
+// wellness root is the LOGIN-WALL redirect (src/app/page.tsx); the
+// marketing layer never shipped in this domain. `/` keeps priority 1.0
+// as the root route the reference's own sitemap ranks highest.
 export const dynamic = "force-static";
 
 const ROUTES: Array<{ path: string; priority: string }> = [

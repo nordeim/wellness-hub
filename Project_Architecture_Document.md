@@ -38,7 +38,7 @@ companion for students covering exercise tracking, a mood journal,
 assignments, events, study resources, reminders, routine templates, a
 learning center and a gamified goals/achievements engine — rebuilt as one
 Next.js application with an intentional functional superset over the
-reference (real auth ladder, live theming, CSV/PDF export, SEO, tests).
+reference (real auth ladder, live theming, SEO, tests).
 
 Use this PAD when onboarding, debugging, reviewing tech choices, or
 extending a module. The reference-parity contract (visual) and the
@@ -58,9 +58,7 @@ evaluated against both.
 | ORM | Prisma | 6.19 | Typed SQLite access; schema-as-code for the 14-model domain |
 | Database | SQLite | — | Zero-config local parity with the reference; absolute-path swap for production |
 | Validation | Zod | 4.6 | One seam (`parseBody`) for every body boundary — the reference's inline validation replaced with a pinned contract |
-| Charts | recharts | 3.10 | The reference's chart genus; default theme at zero data |
 | Icons | lucide-react | 0.525 | The reference's own icon set (bundle-decoded pin) |
-| PDF | jspdf | 4.2 | Export superset; its transitive dompurify is override-pinned to 3.4.17 (see §11) |
 | Unit tests | Vitest | 5.0 | Node-fast, alias-aware (`@/`), matches `*.test.ts` only |
 | E2E tests | Playwright | 1.64 | Drives the PRODUCTION standalone build — validate what ships |
 | Runtime | Bun | 1.3 | Install + script runner; the reference's toolchain genus |
@@ -301,14 +299,14 @@ wellness-hub/
 │   │   ├── theme tokens in globals.css / theme-store.ts
 │   │   ├── login-reset.ts   # the auth card's view-machine (pinned)
 │   │   ├── page-layout.ts   # per-page layout contracts
-│   │   ├── format.ts  csv (pdf-export)  uploads.ts  chunk-recovery.ts
+│   │   ├── format.ts  uploads.ts  chunk-recovery.ts
 │   │   ├── boot-env.ts      # the production AUTH_SECRET gate
 │   │   └── site.ts          # canonical origin for SEO metadata
 │   ├── stores/
 │   │   ├── wellness-store.ts # ALL server state; call() envelope client
 │   │   └── theme-store.ts    # CSS-variable writer + UserPrefs sync
 │   └── types/               # shared domain types
-├── tests/                   # Vitest *.test.ts (16 suites, 314 checks)
+├── tests/                   # Vitest *.test.ts (17 suites, 316 checks)
 │   └── e2e/                 # Playwright *.spec.ts (42 checks) + setups
 ├── scripts/
 │   ├── smoke-test.sh        # 14-check ladder against the standalone artifact
@@ -323,7 +321,7 @@ wellness-hub/
 ├── skills/                  # the operator's skill catalog (ESLint-ignored)
 ├── AGENTS.md  CLAUDE.md  README.md  Project_Architecture_Document.md
 ├── worklog.md               # the session-by-session engineering log
-└── package.json             # bun scripts; overrides.dompurify = "3.4.17"
+└── package.json             # bun scripts; the dead-dep census pin guards the dep tree
 ```
 
 ### 3.3 Critical Code Patterns
@@ -540,9 +538,9 @@ WCAG AA in light mode; dark mode inverts via the `.dark` overrides in
 | Public auth routes rate-limited | per-IP/15-min sliding windows — login 10, signup 10, resend 5, verify 20, forgot 10, reset 10, uploads 20 (`rate-limit.ts`) |
 | Proxy IP keying is explicit | `NEO_PROXY_HOPS` declares trusted depth; unparsable fails closed to 1 |
 | Production boots refuse weak secrets | `instrumentation.ts` → `boot-env.ts`: missing/short `AUTH_SECRET` = no serve |
-| Uploads ownership-checked + traversal-guarded | `uploads.ts` resolves and rejects escapes; only the owner reads |
+| Uploads served as public capability URLs | POST sessioned + rate-limited (20/IP/15min, Content-Length pre-gated); GET serves content-random 32-hex names (128-bit unguessable) — charset-pinned by `UPLOAD_NAME_RE` (no traversal surface), image content types only, immutable cache — deliberate parity with the reference's public CDN `file_urls` |
 | CSRF posture | Cookie is SameSite=Lax; mutating routes are POST-only JSON with the content-type gate (the e2e CSRF probe pins it) |
-| Dependency advisories triaged | `overrides.dompurify = "3.4.17"` cures the jspdf chain; the audit posture is re-triaged pre-ship |
+| Dependency advisories triaged | Re-triaged each ship round (2026-10-29, WH-3): all remaining advisories dev-toolchain transitive, zero runtime request-path exposure; the never-imported jspdf (and its dompurify chain) retired at WH-3 — the dead-dep census pin (`tests/dead-deps.test.ts`) keeps the tree free of zero-import packages |
 
 ### 6.2 Security Utilities
 
@@ -570,8 +568,8 @@ revoke) · `src/lib/rate-limit.ts` · `src/lib/verification.ts` +
 | Session theft | 7-day TTL + `tokenVersion` revocation on reset; HttpOnly cookie |
 | User enumeration | No-enumeration forgot-password 200; ownership mismatch = 404 |
 | OTP brute force | Hashed code + attempt counter with lockout ladder |
-| XSS in exports/uploads | Uploaded files served with safe content types; PDF export never interpolates unescaped HTML |
-| Path traversal | `uploads.ts` prefix-checks the resolved path |
+| XSS in uploads | Uploaded files served with pinned image content types only (no HTML/SVG execution surface) |
+| Path traversal | `UPLOAD_NAME_RE` charset-pins served names (`[0-9a-f]{32}.(jpg|png|webp|gif)` — a mismatch is a 404 before any filesystem lookup) |
 | Spoofed gamification | Badges/points award only server-side |
 
 ---
@@ -597,14 +595,14 @@ No queues, workers or cron. Utility services worth naming:
 |----------|-------|--------|----------|-----------|
 | Unit — auth seams (password, verification, reset, rate limit, boot-env) | 6 | ~140 | `tests/auth*.test.ts`, `password-seam`, `rate-limit`, `boot-env` | Vitest |
 | Unit — wellness domain (streaks, points, badges, codecs, schemas, stats, helpers, theme) | 8 | ~150 | `tests/wellness-*.test.ts` | Vitest |
-| Unit — infra (db-path, format, login-reset views, chunk-recovery, login views) | 4 | ~23 | `tests/*.test.ts` | Vitest |
+| Unit — infra (db-path, format, login-reset views, chunk-recovery, login views, dead-dep census) | 5 | ~26 | `tests/*.test.ts` | Vitest |
 | E2E — auth ladder (login wall, lockout, reset funnel, revocation) | 1 spec | 11 | `tests/e2e/auth.spec.ts` | Playwright |
 | E2E — mobile drawer battery | 1 spec | 6 | `tests/e2e/mobile-navigation.spec.ts` | Playwright |
 | E2E — shell (nav, dual-case routes, quick actions) | 1 spec | 6 | `tests/e2e/shell.spec.ts` | Playwright |
 | E2E — auth setup project (one-time demo login; shares the cookie via storageState) | 1 setup | 1 | `tests/e2e/auth.setup.ts` | Playwright |
 | E2E — CRUD cycles + reset-password funnel | 2 specs | 18 | `tests/e2e/wellness-crud.spec.ts`, `reset-password.spec.ts` | Playwright |
 
-Totals: **314 unit checks / 16 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
+Totals: **316 unit checks / 17 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
 
 ### 8.2 Test Patterns
 
@@ -615,8 +613,9 @@ Totals: **314 unit checks / 16 Vitest suites + 42 e2e checks / 5 specs + 1 setup
 - Storage-state auth: sign in once in the `setup` project; every spec
   reuses the cookie (the per-IP limiter makes per-test logins flaky by
   design — the suite structure is the mitigation).
-- fast-check property tests ride the pure seams where a generator exists
-  (streak math, codecs).
+- fast-check property testing is NOT used — the devDep was retired at WH-3
+  as a zero-import CRM residue (the census pin guards the tree); the unit
+  layer pins seams with plain deterministic cases instead.
 
 ### 8.3 Coverage Thresholds
 
@@ -630,7 +629,7 @@ docs, not just the code.
 
 - `bun run lint` → 0 warnings
 - `bun run typecheck` → clean
-- `bun run test` → 314/314
+- `bun run test` → 316/316
 - `bun run build` → succeeds (the type gate)
 - `bun run smoke` → 14/14
 - `CI=1 bun run test:e2e` → 42/42
@@ -726,8 +725,8 @@ spec `CI=1 bunx playwright test tests/e2e/<file>`.
 
 | Priority | Issue | Impact | Status |
 |----------|-------|--------|--------|
-| — | jspdf → dompurify advisory chain | none at runtime — cured by `overrides.dompurify = "3.4.17"` (lockfile-pinned, dormancy-pinned: `pdf.html()` is never called) | Closed (pinned) |
-| LOW | Remaining `bun audit` advisories | dev-toolchain transitive only; zero runtime request-path exposure; re-triage each ship round (no mid-rotation bumps posture) | Accepted posture |
+| — | ~~jspdf → dompurify advisory chain~~ | RETIRED at WH-3 — jspdf was a zero-import CRM residue (no PDF export ever shipped in the wellness tree; the reference carries no export UI either — live-probed); removing it removed the chain entirely, and `tests/dead-deps.test.ts` pins the dep tree | Closed (retired) |
+| LOW | Remaining `bun audit` advisories | 9 (4 high / 4 moderate / 1 low — re-triaged 2026-10-29), ALL dev-toolchain transitive (prisma CLI, vitest/vite, eslint plugins, postcss); zero runtime request-path exposure; re-triage each ship round (no mid-rotation bumps posture) | Accepted posture |
 | LOW | Google OAuth button | Visible for parity but reports "not configured on this deployment" — no OAuth credentials ship by design | Intentional |
 | LOW | "Watch Video" links open placeholder URLs | The reference's own tutorial/video URLs are placeholders (`example-*`); we open them in a new tab with identical behavior | Intentional parity |
 | LOW | Reference's empty-state data | The demo account ships empty lists (the reference's fresh account is also empty); `db:seed --demo` can populate sample rows for exploration | Intentional |
