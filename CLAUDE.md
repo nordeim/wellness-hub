@@ -37,7 +37,7 @@ store for all server state, and Tailwind CSS v4 configured CSS-first
 4. **IMPLEMENT** — Incremental, testable components. Extend the pure seams in
    `src/lib/` rather than inlining logic. Keep lint green as you go.
 5. **VERIFY** — Run the full gate: `bun run lint` → `bun run typecheck` →
-   `bun run test` (2781) → `bun run build` → `bun run test:e2e` (192) — or the
+   `bun run test` (2817) → `bun run build` → `bun run test:e2e` (195) — or the
    one-command `bun run gate` (session-38: the chain as a package script,
    so the build always precedes the e2e boot; session-39: the e2e step
    runs under `CI=1`, forcing a fresh server — a leftover :3100 listener
@@ -129,10 +129,10 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 | `bun run start`     | Boot the standalone production server         |
 | `bun run lint`      | ESLint (flat config) — must be 0/0            |
 | `bun run typecheck` | `tsc --noEmit` — the real type gate           |
-| `bun run test`      | Vitest unit suites (2781 checks)            |
+| `bun run test`      | Vitest unit suites (2817 checks)            |
 | `bun run test:watch`| Vitest in watch mode                          |
 | `bun run smoke`     | Smoke the standalone artifact (14 checks, needs build first) |
-| `bun run test:e2e`  | Playwright E2E (192 checks, needs build first) |
+| `bun run test:e2e`  | Playwright E2E (195 checks, needs build first) |
 | `bun run gate`      | The full gate in one command (lint → typecheck → test → build → smoke → e2e) |
 | `bun run db:push`   | Push Prisma schema (no migrations folder)     |
 | `bun run db:seed`   | Reseed demo data in place                     |
@@ -142,7 +142,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 
 ### Test Pyramid
 
-- **Unit (Vitest, 2781 checks)** — pure seams: `tests/db-path.test.ts`, `tests/nav-config.test.ts` (s147),
+- **Unit (Vitest, 2817 checks)** — pure seams: `tests/db-path.test.ts`, `tests/nav-config.test.ts` (s147),
   `tests/auth.test.ts`, `tests/format.test.ts`, `tests/csv.test.ts`,
   `tests/rate-limit.test.ts`, `tests/avatar.test.ts`,
   `tests/constants.test.ts` (the DOM-pinned chart palette + session-10's
@@ -451,6 +451,137 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
   call-sites); the round ZERO live finds — every delta a documented
   genus, the second consecutive zero-fix freeze-pin session —
   `scripts/walk62-savedviews-calnav-focus-open.ts`].
+    and session-190's walk63 layer — the reports Save-Custom-View
+  dialog focus/open interior walk's contract-freeze family [the walk63
+  decode freeze (the tool's own contract: the one-arm OPEN ledger at
+  both axes + the REAL Tab/Save drives + the save/reopen round-trips +
+  the checkbox-toggle ride) · the Saved-Reports trigger call-site
+  construction freeze (the genuine battery gap: the s25 pins hold the
+  wiring regex, never the trigger's own chain) · the Save-Report-Dialog
+  open-interior construction freeze (the genuine gap: the s25 pins hold
+  the content words as regexes, never the call-site chains) · the
+  D-190a1 cure pin — the six column checkboxes' LITERAL id/for
+  construction (the reference's REPORT_COLUMNS keys as ids; ours
+  shipped React useId ids; the D-114a2/D-187a1 doctrine; id={col.key}
+  at the call site; RED-first: 1 RED at birth -> the cure -> GREEN);
+  the round ONE live find cured, every other delta a documented genus
+  (incl. the md:text-sm class-order genus + the checkbox token genus,
+  both computed-equal live) —
+  `scripts/walk63-savedreports-dialog-focus-open.ts`],
+  and session-191's walk64 layer — the three create dialogs'
+  (Contact/Account/Event) focus/open interior walk's
+  contract-freeze family [the walk64 decode freeze (the tool's own
+  contract: the three-arm OPEN ledger at both axes + the REAL Tab
+  drives + the select rides + the conditional-Name appearance + the
+  cancel-then-reopen decode) · the CONTACT open-interior construction
+  freeze (the genuine battery gap: the s19/s30 pins hold OUR wiring
+  regexes, never the call-site chains — the avatar section + the two
+  h3 headers + the accept-trio file input + the footer pair) · the
+  ACCOUNT open-interior construction freeze (the same gap: the s15/s5
+  pins hold the field order + payload contracts, never the chains) ·
+  the EVENT open-interior construction freeze (the same gap: the
+  s15/s76 pins hold the constants + the bundle decode, never the
+  chains — the M-92c3 rows=3 textarea + the M-76c13 conditional Name
+  arm + the M-76c12 blue submit) · the D-191a1/a2/a3/a4 id-parity
+  cure pins (RED-first: exactly 5 RED at birth → the cures → GREEN —
+  the reference's literal id/for maps on the contact + account
+  dialogs restored [name/email/phone/company/position ·
+  name/industry/email/phone/website/revenue/employees], the selects'
+  id + label-for wiring [id="source"/for="source" ·
+  id="status"/for="status", the aria-label superset kept], the contact
+  file input's explicit tabIndex retired [the D-187a1 doctrine's next
+  member]; the re-walk proves the id/for/tabIndex ledger deltas gone,
+  byte-equal both apps) — the round's product-code touch
+  entity-dialogs.tsx 1226→1250 —
+  `scripts/walk64-createdialogs-focus-open.ts`],
+  and session-192's walk65 layer — the login anon-surface interiors +
+  the landing marketing-arms' focus/open walk's
+  contract-freeze family [the walk65 decode freeze (the tool's own
+  contract: the four-view OPEN ledgers at both axes + the REAL Tab
+  chain + the draft decode + the FAQ/menu arms + the CTA faces — the
+  anon battery, FRESH contexts on both apps) · the LOGIN open-interior
+  construction freeze (the genuine battery gap: the s11/s21/s79/s111
+  pins hold OUR wiring regexes + the computed-style contracts, never
+  the call-site chains — the signin card chain + the signup 3-field
+  chain + the reset email chain + the sent callout chain) · the
+  LANDING marketing-arms construction freeze (the same gap: the s142
+  pins hold the component-level regexes, never the call-site chains —
+  the FAQ single-open machine + the mobile disclosure menu) · the
+  D-192a1/a2/a3 cure pins (RED-first: exactly 3 RED at birth → the
+  cures → GREEN — the signup confirm input's literal id
+  [confirm-password → confirmPassword] + the reset view's bare
+  literal email id [reset-email → email, the
+  ids-are-construction-parity doctrine's next members] + the
+  auth-card dark submits' REAL focus-visible ring
+  [ring-slate-400 → ring-ring at all four sites — the first
+  REAL-keyboard-face ring find: the reference's stock dark submits
+  focus to the near-black --ring token over the white 2px offset,
+  live-walked on the signin/signup/reset submits; the INPUTS'
+  slate-400 rings byte-equal and stay]; the re-walk proves the
+  id/for ledger deltas gone + the submit's REAL ring now the
+  reference's family; the draft-keep decode documented as the KEPT
+  house superset — ours keeps the typed email across the in-card view
+  flips, the reference clears it, its own defect never mirrored) —
+  the round's product-code touch login-card.tsx + page-layout.ts +
+  login-reset.ts (all string swaps, zero line-count changes) —
+  `scripts/walk65-login-landing-arms.ts`],
+  and session-193's walk66 layer — the marketing-interior arms walk's
+  contract-freeze family [the walk66 decode freeze (the tool's own
+  contract: the two-page OPEN ledgers at both axes + the REAL Tab
+  chains with the geometry-keyed focus captures + the write-free link
+  rides + the phone axes — the AUTHENTICATED battery, the sweep-state
+  pair) · the MARKETING open-interior construction freeze (the genuine
+  battery gap: the s142 landing-page pins hold the LANDING page's
+  strings, never the about/contact call-site chains — the h1 chains +
+  the Get-in-touch anchor + the mailto + the three social anchors) ·
+  the SIDEBAR ring construction freeze (the D-193a2 KEPT-SUPERSET
+  pin: the ring-white/50 focus-visible construction at BOTH nav
+  sites — sidebar.tsx + mobile-nav.tsx — carried ZERO test teeth
+  until this pin; the reference ships NO authored focus face on its
+  sidebar links, its own keyboard-focus-gap family, the D-112a2
+  doctrine, never mirrored) · the D-193a1 cure pin in design-tokens
+  (RED-first: exactly 1 RED at birth → the cure → GREEN — the
+  globals.css base layer's universal outline-color rule: the
+  reference's compiled base carries the shadcn base template's
+  `* { border-color: …; outline-color: hsl(var(--ring) / .5); }`; ours
+  carried only the border-color half, so every UA-outline-painting
+  surface resolved the ENGINE default instead of the reference's
+  authored 50% ring — the cure adds color-mix(in oklab,
+  var(--color-ring) 50%, transparent), the same resolved color; the
+  re-walk proves the marketing anchors' focus outline-color now the
+  reference's family, the oklab-vs-rgba serialization the s126 noise
+  genus) — the round's product-code touch globals.css (+12 lines —
+  the PAD/SKILL line-census rows re-anchored 430→442) —
+  `scripts/walk66-marketing-interior-arms.ts`],
+  and session-194's walk67 layer — the 404 interior's interactive
+  arms walk's contract-freeze family [the walk67 decode freeze (the
+  tool's own contract: the two-context OPEN ledgers at both axes + the
+  REAL Tab chain with the Go Home focus capture + the write-free ride
+  + the anon posture census — the authenticated legs on the
+  sweep-state pair, the anon legs on fresh contexts) · the 404
+  open-interior construction freeze (the genuine battery gap: the s12
+  pins hold the NOT_FOUND_LAYOUT constant strings, never the
+  not-found-body call-site chains — the Link construction + the
+  leading-slash strip + the inline glyph) · the D-194a5 ANON-posture
+  construction freeze (the no-session-check construction — the
+  reference's auth-first client-router guard walls anon unknown-routes
+  at /login?from_url=<absolute-url>, its SPA platform artifact, never
+  mirrored) · the D-194a1/a3/a4 cure pins (RED-first: exactly 3 RED at
+  birth → the cures → GREEN — the quoted-path form
+  [usePathname's leading slash stripped at the interpolation; the
+  crm.spec e2e string re-anchored in the same commit] + the glyph [the
+  reference's heroicons home outline inlined — the M-82c2
+  icon-identity family's first cross-library member: ONE path, NO
+  stroke-width [computed weight 1], the bare w-4 h-4 class; the
+  lucide-house import retired at this one site] + the title [the s12
+  absolute title was a pre-drift decode — the current reference ships
+  bare "NEO CRM"; the metadata export retired, the root default
+  renders, byte-equal]; the re-walk proves the span/text/glyph/title
+  ledger deltas GONE, 43→23 — every remaining delta a documented genus
+  or pinned kept superset) — the round's product-code touch
+  not-found.tsx + not-found-body.tsx + page-layout.ts (+7 lines — the
+  PAD/SKILL line-census rows re-anchored 1718→1725 / 277→283) —
+  `scripts/walk67-404-interior-arms.ts`].
   Node environment; `@` alias resolved.
 - **Property (Vitest + fast-check, 29 checks)** — `tests/property.test.ts`
   (session-172: the invariant layer over the pure seams — the csv
@@ -478,7 +609,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
   + fail()'s verbatim error arm, driven through the real helpers —
   the wire contracts the crud-zod-seam READ-half source pins freeze
   at the route side])
-- **E2E (Playwright, 192 checks)** — `tests/e2e/`: `auth.spec.ts`
+- **E2E (Playwright, 195 checks)** — `tests/e2e/`: `auth.spec.ts`
   (logged-out surface + session-11's login reset-password flow +
   session-21's in-place funnel: the Callout banner with zero toasts,
   the signup view swap + mismatch guard, the verify-email ladder +
@@ -500,7 +631,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
   session-10 per-page-titles and reports tab 2-4 structure tests, plus
   session-13's account-menu role=menu, reports-funnel bar-chart and
   by-type card structure tests),
-  `mobile-navigation.spec.ts` (10-check regression suite for the drawer —
+  `mobile-navigation.spec.ts` (11-check regression suite for the drawer —
   pinned because the reference app ships NO mobile navigation; includes the
   resize-past-md lock-release regression, the session-12 focus-entry test,
   the s104 ten-route zero-390px-overflow sweep + the s104 drawer-OPEN
@@ -593,7 +724,7 @@ server keeps reading the deleted inode and sees stale data.
 
 Unit coverage of the pure seams (`src/lib/*`) is the gate — every new pure
 helper ships with tests. No hard percentage threshold; the count grows with
-the seam (currently 2781).
+the seam (currently 2817).
 
 ## Code Quality Standards
 

@@ -143,7 +143,7 @@ const listFiles = (rel: string): string[] => {
 // Session-171: E2E 153 lineage 161 -> 186 (+25 — the a11y two-gate spec:
 // the nine CRM pages × both widths + the three anon surfaces × both
 // widths + the drawer-open state — the §8.3 axe battery).
-const E2E = 192;
+const E2E = 195;
 // Session-152: SUITES 118 -> 119 (the interior-census-tool file — the
 // standing sixth gate's pin suite).
 // Session-159: SUITES 119 -> 120 (the settings-rhythm-tool file — the
@@ -897,7 +897,21 @@ const SUITES = 138;
 // E2E 192 re-verified (the round: ZERO product-code touches — the
 // s134/s188-precedent zero-fix freeze-pin round; the MODULE line
 // count 1718 HELD).
-const UNIT = 2781;
+// Session-194: 2805 -> 2811 (+6 — THE 404 INTERIOR'S INTERACTIVE
+// ARMS [walk67 — the s194 battery in tests/page-layout.test.ts: the
+// 3 RED-first cure pins (D-194a1 the quoted-path interpolation tail ·
+// D-194a3 the heroicons glyph construction + the no-stroke-width
+// negatives + the homeIcon class-order · D-194a4 the metadata-export
+// negatives — the windowed form) + the 3 born-green freezes (the
+// walk67 decode freeze + the 404 open-interior construction freeze
+// [the genuine battery gap: the s12 pins hold the constant strings,
+// never the call-site chains] + the D-194a5 ANON-posture construction
+// freeze [the no-session-check construction])] — the round's
+// product-code touch: not-found.tsx + not-found-body.tsx +
+// page-layout.ts +7 lines [the PAD §11 row + the SKILL §5.6 census
+// site re-anchored 1718 -> 1725 / 277 -> 283 checks, the s168
+// line-census doctrine]). SUITES 138 HELD · E2E 192 re-verified.
+const UNIT = 2817;
 // S104-P1: the mobile-nav spec's own census (the README Tested-row
 // phrase + the PAD suite line ride it) — 9 → 10 with the drawer-OPEN
 // seeded-state guard. Session-165 (S165-P1): 11 → 10 — the s147
@@ -905,7 +919,7 @@ const UNIT = 2781;
 // constant got the bump; the spec has carried 10 test() declarations
 // since s104). The LIVE-CENSUS pin above now reads the spec file, so
 // the constant can never again drift from the census it claims.
-const MOBILE_NAV_E2E = 10;
+const MOBILE_NAV_E2E = 11;
 
 describe("session-102 (S102-P1): the secondary-sites lockstep — every live-tense count site pinned", () => {
   it("README badge carries the unit + e2e arithmetic (1942 + 137 = 2079)", () => {
@@ -1292,13 +1306,17 @@ describe("session-102 (S102-P1): the secondary-sites lockstep — every live-ten
     expect(pad).not.toMatch(/9-check mobile drawer regression suite/);
     expect(agents).not.toMatch(/\(9 checks, 390\/700px/);
     expect(skill).not.toMatch(/\(9 checks, 390\/700px/);
-    // Session-165: the retired s147-miscount forms (11 for a 10-test
-    // spec) join the negatives ladder — the miscount can never return.
-    expect(readme).not.toMatch(/a 11-check mobile-nav regression suite/);
-    expect(claude).not.toMatch(/11-check regression suite for the drawer/);
-    expect(pad).not.toMatch(/11-check mobile drawer regression suite/);
-    expect(agents).not.toMatch(/\(11 checks, 390\/700px/);
-    expect(skill).not.toMatch(/\(11 checks, 390\/700px/);
+    // Session-196: the spec's census is now ELEVEN (the D-196a1 spine
+    // registration) — the s147-miscount 11-negatives are RETIRED (11
+    // is the live form) and the retired 10-check forms join the
+    // negatives ladder in their place (the s192 negatives re-anchor
+    // doctrine: the count a ladder retired can become live again; the
+    // OLD live form joins the negatives).
+    expect(readme).not.toMatch(/a 10-check mobile-nav regression suite/);
+    expect(claude).not.toMatch(/10-check regression suite for the drawer/);
+    expect(pad).not.toMatch(/10-check mobile drawer regression suite/);
+    expect(agents).not.toMatch(/\(10 checks, 390\/700px/);
+    expect(skill).not.toMatch(/\(10 checks, 390\/700px/);
     // -----------------------------------------------------------------
     // Session-166: the retired 2382/125/2543 site-forms join the
     // ladder — the count-ladder lockstep's own retired forms (the same
@@ -1320,6 +1338,40 @@ describe("session-102 (S102-P1): the secondary-sites lockstep — every live-ten
     expect(agents).not.toContain("|  Unit tests (2382 checks)");
     expect(skill).not.toContain("| **unit total** | 125 files | **2382**");
     expect(skill).not.toContain("| **unit total** | 127 files | **2454**");
+    // -----------------------------------------------------------------
+    // Session-197 (D-197a1): the retired 2811 site-forms join the
+    // ladder (the s166 form — SITE-FORM anchors: history rows quote
+    // the counts in arrow/gate phrasing only, never the bare site
+    // constructions; the demoted SKILL s196 block keeps its ship
+    // line under the unit gate, untouched by design).
+    // -----------------------------------------------------------------
+    expect(readme).not.toMatch(/# 2811 Vitest unit checks/);
+    expect(readme).not.toMatch(/# 138 Vitest suites \(2811 checks\)/);
+    expect(readme).not.toMatch(/\| 🧪 Tested \| 2811 Vitest unit checks/);
+    expect(readme).not.toMatch(/tests-3006%20checks/);
+    expect(pad).not.toMatch(/# 138 Vitest suites — 2811 checks/);
+    expect(pad).not.toMatch(/— 2811\/2811/);
+    expect(pad).not.toMatch(/\| \*\*Total\*\* \| \*\*138\*\* \| \*\*2811 unit/);
+    expect(claude).not.toContain("Unit (Vitest, 2811 checks)");
+    expect(claude).not.toContain("(currently 2811)");
+    expect(claude).not.toContain("Vitest unit suites (2811 checks)");
+    expect(claude).not.toContain("`bun run test` (2811)");
+    expect(agents).not.toContain("|  Unit tests (2811 checks)");
+    // Session-198 (D-198a1/a2): the retired 2813 site-forms join the
+    // negatives (the s192 doctrine: the OLD live form joins the negatives)
+    expect(readme).not.toMatch(/# 2813 Vitest unit checks/);
+    expect(readme).not.toMatch(/# 138 Vitest suites \(2813 checks\)/);
+    expect(readme).not.toMatch(/\| 🧪 Tested \| 2813 Vitest unit checks/);
+    expect(pad).not.toMatch(/# 138 Vitest suites — 2813 checks/);
+    expect(pad).not.toMatch(/— 2813\/2813/);
+    expect(pad).not.toMatch(/\| \*\*Total\*\* \| \*\*138\*\* \| \*\*2813 unit/);
+    expect(claude).not.toContain("Unit (Vitest, 2813 checks)");
+    expect(claude).not.toContain("(currently 2813)");
+    expect(claude).not.toContain("Vitest unit suites (2813 checks)");
+    expect(claude).not.toContain("`bun run test` (2813)");
+    expect(agents).not.toContain("|  Unit tests (2813 checks)");
+    expect(skill).not.toContain("| **unit total** | 138 files | **2813**");
+    expect(skill).not.toContain("| **unit total** | 138 files | **2811**");
   });
 
   // ------------------------------------------------------------------
@@ -1362,13 +1414,13 @@ describe("session-102 (S102-P1): the secondary-sites lockstep — every live-ten
       skill,
       "the project_state head's FIRST layer must be the current session's",
     ).toContain(
-      `project_state: ${UNIT} unit checks + ${E2E} e2e checks green; the session-189 layer`,
+      `project_state: ${UNIT} unit checks + ${E2E} e2e checks green; the session-198 layer`,
     );
     expect(
       skill,
-      "the head's SECOND layer must be the previous session's — the F-108a1 face (the s188 layer now beneath the s189 head)",
+      "the head's SECOND layer must be the previous session's — the F-108a1 face (the s197 layer now beneath the s198 head)",
     ).toContain(
-      "+ beneath it 2778 unit checks + 192 e2e checks green; the session-188 layer (THE SETTINGS SEGMENTED TAB-BAR FOCUS/OPEN INTERIOR WALK + ACCOUNTS-RAIL/LEADS-SEARCH PAGE-ARMS SIBLING",
+      "+ beneath it 2813 unit checks + 195 e2e checks green; the session-197 layer (THE SWEEP-STATE COVERAGE AUDIT",
     );
   });
 
@@ -1443,6 +1495,117 @@ describe("session-102 (S102-P1): the secondary-sites lockstep — every live-ten
     expect(skill188).not.toContain(
       "project_state: 2781 unit checks + 192 e2e checks green; the session-189 layer (THE SETTINGS SEGMENTED TAB-BAR",
     );
+    // THE DOCTRINE'S NEXT MEMBER (the s190 head surgery's own demotion):
+    // the retired session-189 block carries its OWN ship form too
+    // (2781 + the LEADS SAVED-VIEWS title) — the s171-fix doctrine
+    // extends to every demoted layer; this assertion makes a future
+    // ladder/head-surgery interaction that corrupts it FAIL the suite
+    // the same way.
+    const retired189Start = skill188.indexOf("<!-- retired session-189 layer");
+    expect(retired189Start, "the retired s189 block must exist").toBeGreaterThan(0);
+    const retired189Block = skill188.slice(retired189Start, skill188.indexOf("-->", retired189Start));
+    expect(
+      retired189Block,
+      "the retired s189 block's ship line must be the s189 SHIP form (2781 + its own layer name)",
+    ).toContain(
+      "project_state: 2781 unit checks + 192 e2e checks green; the session-189 layer (THE LEADS SAVED-VIEWS SELECT OPEN FACES",
+    );
+    expect(skill188).not.toContain(
+      "project_state: 2785 unit checks + 192 e2e checks green; the session-190 layer (THE LEADS SAVED-VIEWS",
+    );
+    // THE DOCTRINE'S NEXT MEMBER (the s191 head surgery's own demotion):
+    // the retired session-190 block carries its OWN ship form too
+    // (2786 + the REPORTS SAVE-CUSTOM-VIEW title) — the s171-fix
+    // doctrine extends to every demoted layer; this assertion makes a
+    // future ladder/head-surgery interaction that corrupts it FAIL the
+    // suite the same way.
+    const retired190Start = skill188.indexOf("<!-- retired session-190 layer");
+    expect(retired190Start, "the retired s190 block must exist").toBeGreaterThan(0);
+    const retired190Block = skill188.slice(retired190Start, skill188.indexOf("-->", retired190Start));
+    expect(
+      retired190Block,
+      "the retired s190 block's ship line must be the s190 SHIP form (2786 + its own layer name)",
+    ).toContain(
+      "project_state: 2786 unit checks + 192 e2e checks green; the session-190 layer (THE REPORTS SAVE-CUSTOM-VIEW DIALOG OPEN FACES",
+    );
+    expect(skill188).not.toContain(
+      "project_state: 2794 unit checks + 192 e2e checks green; the session-191 layer (THE REPORTS SAVE-CUSTOM-VIEW",
+    );
+    // THE DOCTRINE'S NEXT MEMBER (the s192 head surgery's own demotion):
+    // the retired session-191 block carries its OWN ship form too
+    // (2795 + the THREE CREATE DIALOGS title) — the s171-fix doctrine
+    // extends to every demoted layer; this assertion makes a future
+    // ladder/head-surgery interaction that corrupts it FAIL the suite
+    // the same way.
+    const retired191Start = skill188.indexOf("<!-- retired session-191 layer");
+    expect(retired191Start, "the retired s191 block must exist").toBeGreaterThan(0);
+    const retired191Block = skill188.slice(retired191Start, skill188.indexOf("-->", retired191Start));
+    expect(
+      retired191Block,
+      "the retired s191 block's ship line must be the s191 SHIP form (2795 + its own layer name)",
+    ).toContain(
+      "project_state: 2795 unit checks + 192 e2e checks green; the session-191 layer (THE THREE CREATE DIALOGS' OPEN FACES",
+    );
+    expect(skill188).not.toContain(
+      "project_state: 2801 unit checks + 192 e2e checks green; the session-191 layer (THE THREE CREATE DIALOGS",
+    );
+    // THE DOCTRINE'S NEXT MEMBER (the s193 head surgery's own demotion):
+    // the retired session-192 block carries its OWN ship form too
+    // (2801 + the LOGIN ANON-SURFACE title) — the s171-fix doctrine
+    // extends to every demoted layer; this assertion makes a future
+    // ladder/head-surgery interaction that corrupts it FAIL the suite
+    // the same way.
+    const retired192Start = skill188.indexOf("<!-- retired session-192 layer");
+    expect(retired192Start, "the retired s192 block must exist").toBeGreaterThan(0);
+    const retired192Block = skill188.slice(retired192Start, skill188.indexOf("-->", retired192Start));
+    expect(
+      retired192Block,
+      "the retired s192 block's ship line must be the s192 SHIP form (2801 + its own layer name)",
+    ).toContain(
+      "project_state: 2801 unit checks + 192 e2e checks green; the session-192 layer (THE LOGIN ANON-SURFACE INTERIORS",
+    );
+    expect(skill188).not.toContain(
+      "project_state: 2805 unit checks + 192 e2e checks green; the session-192 layer (THE LOGIN ANON-SURFACE",
+    );
+    // THE DOCTRINE'S NEXT MEMBER (the s194 head surgery's own demotion):
+    // the retired session-193 block carries its OWN ship form too
+    // (2805 + the MARKETING-INTERIOR title) — the s171-fix doctrine
+    // extends to every demoted layer; this assertion makes a future
+    // ladder/head-surgery interaction that corrupts it FAIL the suite
+    // the same way.
+    const retired193Start = skill188.indexOf("<!-- retired session-193 layer");
+    expect(retired193Start, "the retired s193 block must exist").toBeGreaterThan(0);
+    const retired193Block = skill188.slice(retired193Start, skill188.indexOf("-->", retired193Start));
+    expect(
+      retired193Block,
+      "the retired s193 block's ship line must be the s193 SHIP form (2805 + its own layer name)",
+    ).toContain(
+      "project_state: 2805 unit checks + 192 e2e checks green; the session-193 layer (THE MARKETING-INTERIOR ARMS",
+    );
+    expect(skill188).not.toContain(
+      "project_state: 2811 unit checks + 192 e2e checks green; the session-193 layer (THE MARKETING-INTERIOR",
+    );
+  });
+
+  // ------------------------------------------------------------------
+  // Session-190 (D-190a2): the README Tested row's CLAUSE-UNIQUENESS
+  // pin — the s189 first-pass residue: the round appended its walk62
+  // clause TWICE to the Tested row (once INSIDE the s29 leads-layer
+  // parenthetical + once after it, the second copy leaving an
+  // UNBALANCED double close "kept))," — the row's paren nesting
+  // corrupted) and shipped undetected at 3739c96/b8ea9f3 — no
+  // assertion read the row's clause multiplicity. The walk63 round's
+  // docs lockstep found it (the s188 D-188a1 genus on a new axis: a
+  // docs defect shipped by a prior round's own lockstep edit). This
+  // pin holds the UNIQUE form — a future lockstep that re-appends a
+  // clause already present fails `bun run test` the same way.
+  // ------------------------------------------------------------------
+  it("session-190 (D-190a2): the README Tested row carries each session's walk clause EXACTLY ONCE (the s189 walk62 duplication cured — the clause-unique doctrine, pinned)", () => {
+    const readme = read("README.md");
+    const walk62 = readme.split("the walk62 saved-views-select + calendar month-nav focus-open contract (session-189:").length - 1;
+    expect(walk62, "the walk62 clause must appear exactly once (the s189 duplication cured)").toBe(1);
+    const walk63 = readme.split("the walk63 save-report-dialog focus-open contract (session-190:").length - 1;
+    expect(walk63, "the walk63 clause must appear exactly once").toBe(1);
   });
 
   // ------------------------------------------------------------------
@@ -1559,10 +1722,13 @@ describe("session-102 (S102-P1): the secondary-sites lockstep — every live-ten
       expect(sum, "the e2e rows + setup must sum to the E2E constant").toBe(E2E);
     }
     // the retired s147-vintage row forms never return (SITE-FORM
-    // anchors — the table's own row constructions)
+    // anchors — the table's own row constructions). Session-196: the
+    // mobile-nav census is now ELEVEN (the spine registration), so the
+    // s147-miscount 11-negative is RETIRED and the 10-form joins the
+    // negatives in its place (the s192 re-anchor doctrine).
     expect(appendix).not.toMatch(/\| e2e landing [^|]*\| `tests\/e2e\/landing\.spec\.ts` \| 12 \|/);
     expect(appendix).not.toMatch(/\| e2e golden path [^|]*\| `tests\/e2e\/crm\.spec\.ts` \| 111 \|/);
-    expect(appendix).not.toMatch(/\| e2e mobile nav regression [^|]*\| `tests\/e2e\/mobile-navigation\.spec\.ts` \| 11 \|/);
+    expect(appendix).not.toMatch(/\| e2e mobile nav regression [^|]*\| `tests\/e2e\/mobile-navigation\.spec\.ts` \| 10 \|/);
   });
 
   // ------------------------------------------------------------------
@@ -1802,8 +1968,45 @@ describe("session-102 (S102-P1): the secondary-sites lockstep — every live-ten
     // count 1718 HELD — the second consecutive zero-fix round,
     // page-layout.ts untouched).
     expect(skill).not.toContain("`tests/page-layout.test.ts`, 252 checks");
+    // Session-190: the retired 255 form joins the negatives ladder (the
+    // walk63 Save-Custom-View dialog round: the session-190 battery +4
+    // pins in page-layout [the walk63 decode freeze + the trigger
+    // call-site freeze + the open-interior construction freeze + the
+    // D-190a1 literal-id cure pin], the checks 255->259; the MODULE
+    // line count 1718 HELD — the one-cure round, page-layout.ts
+    // untouched).
+    expect(skill).not.toContain("`tests/page-layout.test.ts`, 255 checks");
+    // Session-191: the retired 259 form joins the negatives ladder (the
+    // walk64 three-create-dialogs round: the session-191 battery +9
+    // pins in page-layout [the walk64 decode freeze + the three
+    // open-interior construction freezes + the D-191a1/a2/a3/a4
+    // id-parity cure pins + the D-191a5 start-pre-fill cure pin — the
+    // +1 caught at the full-suite count, the s187/s188/s190 undercount
+    // lesson repeating], the checks 259->268; the MODULE line
+    // count 1718 HELD — page-layout.ts untouched, the round's
+    // product-code touch entity-dialogs.tsx 1226->1250).
+    expect(skill).not.toContain("`tests/page-layout.test.ts`, 259 checks");
+    // Session-193: the retired 274 form joins the negatives ladder (the
+    // walk66 marketing-interior arms round: the session-193 battery +3
+    // born-green pins in page-layout [the walk66 decode freeze + the
+    // MARKETING open-interior construction freeze + the SIDEBAR ring
+    // construction freeze — the D-193a2 KEPT-SUPERSET pin], the checks
+    // 274->277; the +1 D-193a1 cure pin lands in design-tokens; the
+    // MODULE line count 1718 HELD — the outline-color base-rule cure
+    // round, globals.css +12 lines [the PAD/SKILL line-census rows
+    // re-anchored 430->442], page-layout.ts untouched).
+    expect(skill).not.toContain("`tests/page-layout.test.ts`, 274 checks");
+    // Session-194: the retired 277/1718 form joins the negatives ladder
+    // (the walk67 404-interior round: the session-194 battery +6 checks
+    // [the D-194a1/a3/a4 RED-first cure pins + the walk67 decode freeze +
+    // the 404 construction freeze + the D-194a5 posture pin], the checks
+    // 277->283; the module +7 lines [the NOT_FOUND_LAYOUT doc-comment's
+    // decode notes + the homeIcon class-order match] — the PAD §11 row +
+    // this §5.6 census site re-anchored 1718->1725, the s168 doctrine).
+    expect(skill).not.toContain("`tests/page-layout.test.ts`, 277 checks");
+    expect(skill).not.toContain("test-pinned module (1718 lines");
     expect(skill, "the §5.6 line must carry the live line + check counts").toContain(
-      "test-pinned module (1718 lines; `tests/page-layout.test.ts`, 255 checks",
+      "test-pinned module (1725 lines; `tests/page-layout.test.ts`, 283 checks",
     );
     const pad = read("Project_Architecture_Document.md");
     expect(pad).not.toContain("| `src/lib/page-layout.ts` | 1653 |");
@@ -1813,7 +2016,11 @@ describe("session-102 (S102-P1): the secondary-sites lockstep — every live-ten
     expect(
       pad,
       "the module-table page-layout row must carry the live line count (F-108a2's PAD face)",
-    ).toContain("| `src/lib/page-layout.ts` | 1718 |");
+    ).toContain("| `src/lib/page-layout.ts` | 1725 |");
+    // Session-194: the retired 1718 row form joins the negatives ladder
+    // (the walk67 404-interior round: the NOT_FOUND_LAYOUT doc-comment's
+    // D-194 decode notes grew the module 1718->1725).
+    expect(pad).not.toContain("| `src/lib/page-layout.ts` | 1718 |");
     // Session-187: the retired 1701 row form joins the negatives ladder
     // (the D-187a2/a3 cure comments' growth 1701->1718).
     expect(pad).not.toContain("| `src/lib/page-layout.ts` | 1701 |");
@@ -2080,5 +2287,43 @@ describe("session-102 (S102-P1): the secondary-sites lockstep — every live-ten
     // the retired 7-check doctrine line never returns (an inventory row
     // may QUOTE its era; the §7.3 doctrine line is live-tense)
     expect(pad).not.toContain("all 7 regression checks");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Session-198 (D-198a2): the advisories-ledger live census — the s164
+// `bun audit` pre-ship duty re-run caught the census drift (9 → 12, the
+// repo's first CRITICAL on a RUNTIME chain: jspdf › dompurify 3.4.16,
+// GHSA-cg2g-xh64-v4q7). The cure: the 3.4.17 transitive override +
+// the dormancy decode. These pins hold the ledger's live-tense claims —
+// the census went stale silently for 33 sessions because NOTHING pinned
+// it; never again.
+// ---------------------------------------------------------------------------
+
+describe("session-198: the security ledger's live census (the D-198a2 pins)", () => {
+  it("the PAD §10 ledger row carries the live post-cure census + the s198 re-triage clause", () => {
+    const pad = read("Project_Architecture_Document.md");
+    // the live post-cure census — 9 again once the dompurify block's
+    // critical + high + low are cured, and the composition re-derived:
+    expect(pad).toContain(
+      "`bun audit` reports 9 advisories (4 high / 4 moderate / 1 low) — ALL dev-toolchain transitive (zod via eslint-config-next›eslint-plugin-react-hooks",
+    );
+    // the re-triage record — the drift + the critical + the dormancy
+    // decode + the cure, carried in the row itself:
+    expect(pad).toContain("RE-TRIAGED session-198");
+    expect(pad).toContain("the CRITICAL GHSA-cg2g-xh64-v4q7");
+    expect(pad).toContain("pdf-export.ts never calls pdf.html()");
+    expect(pad).toContain("overrides.dompurify");
+    // the retired s164 composition (braces) never returns to the live row
+    expect(pad).not.toContain("braces via eslint-config-next · deepmerge-ts via the prisma CLI config · vite via vitest · source-map-js via postcss");
+  });
+
+  it("the AGENTS gate-order note carries the re-anchored audit clause (the s198 tail)", () => {
+    // the AGENTS head is hard-wrapped at ~76 cols — normalize whitespace
+    // so the pin holds the CONTENT, never the wrap:
+    const agents = read("AGENTS.md").replace(/\s+/g, " ");
+    expect(agents).toContain(
+      "re-triaged session-198: the runtime jspdf›dompurify chain's critical cured by the 3.4.17 transitive override, lockfile-pinned + dormancy-pinned + ledger-pinned",
+    );
   });
 });

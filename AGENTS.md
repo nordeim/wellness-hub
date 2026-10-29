@@ -17,9 +17,9 @@ remote via `docs/ssh_git_wrapper_v3.py`.
 | Production server               | `bun run start`                        |
 | Lint                            | `bun run lint`                         |
 | Type check                      | `bun run typecheck`                    |
-|  Unit tests (2781 checks)      | `bun run test`                         |
+|  Unit tests (2817 checks)      | `bun run test`                         |
 |  Unit tests (watch mode)        | `bun run test:watch`                   |
-|  Browser E2E (192 checks)        | `bun run test:e2e` (needs build first) |
+|  Browser E2E (195 checks)        | `bun run test:e2e` (needs build first) |
 | Smoke the standalone artifact   | `bun run smoke` (needs build first)    |
 | DB census (path + counts)       | `bun run db:census`                    |
 | The full gate in one command    | `bun run gate`                         |
@@ -33,10 +33,10 @@ remote via `docs/ssh_git_wrapper_v3.py`.
 | The gate + the six drift gates  | `bun run gate:full`                    |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (2781) → `bun run build` → `bun run smoke` (the standalone
+`bun run test` (2817) → `bun run build` → `bun run smoke` (the standalone
 boot + the 14-check ladder, session-170: the web-app-foundation §13.4/§14
 leg — the boot-gate + artifact-hygiene assertions ride it) →
-`bun run test:e2e` (192) — or the one-command `bun run gate` (session-38:
+`bun run test:e2e` (195) — or the one-command `bun run gate` (session-38:
 the same chain as a package script, so the build always precedes the e2e
 boot; session-39: the e2e step runs under `CI=1`, so
 `reuseExistingServer` evaluates false and the gate ALWAYS boots the
@@ -53,7 +53,9 @@ adds the skill §14 pre-ship step: run `bun audit` periodically (NOT
 inside the gate — it is a network dependency and the gate must stay
 offline-runnable, the probe doctrine); the current state is triaged in
 the PAD known-issues ledger (9 advisories, all dev-toolchain transitive,
-zero runtime request-path exposure).
+zero runtime request-path exposure — re-triaged session-198: the runtime
+jspdf›dompurify chain's critical cured by the 3.4.17 transitive
+override, lockfile-pinned + dormancy-pinned + ledger-pinned).
 
 First-run setup: `bun install && cp .env.example .env && bun run db:push &&
 bun run db:seed && bun run dev`. Demo login: `sepnetflix2023@outlook.com` /
@@ -211,7 +213,7 @@ bun run db:seed && bun run dev`. Demo login: `sepnetflix2023@outlook.com` /
   hidden` element SILENTLY NO-OPS (keyboard users Tabbed through the
   background behind the aria-modal dialog). The panel also uses
   `h-dvh` (not `h-full`) so it tracks the dynamic viewport on mobile
-  browsers. `tests/e2e/mobile-navigation.spec.ts` (10 checks, 390/700px
+  browsers. `tests/e2e/mobile-navigation.spec.ts` (11 checks, 390/700px
   viewports — the focus-entry test + the ten-route zero-overflow sweep
   included) is the
   regression suite — do not weaken it.
@@ -11446,3 +11448,1284 @@ census MATCH · probe:ref STABLE · the walk62 Saved-Views + month-nav
 arms byte-equal on both axes · the REAL Tab chains structurally
 identical (the select at stop 5 both; the nav at stop 15 both) · the
 captures: the round's ours+ref faces.
+
+### Session-190 — THE REPORTS SAVE-CUSTOM-VIEW DIALOG OPEN FACES (walk63) (2026-10-27)
+
+The post-189 audit rotation. Its rotation trigger THE OWNER'S NEWEST
+COMMIT (`b8ea9f3` — the session_400/401 transcripts, the s189 round's
+own execution record). The s400 close's named next-rotation candidates,
+adjudicated by the discovery probe (`scripts/discover-190.ts` + the
+two micro-probes): the reports SAVE-CUSTOM-VIEW dialog **LIVE on BOTH
+apps, rich arms** — the s25-era construction (the "Saved Reports (N)"
+outline button → the wide Radix dialog → the localStorage
+`crm_saved_reports` seam, the L-74c8 state contract, the F-123a4
+BLACK-pair Save): the trigger byte-equal at `1216,113 192x36`, the
+OPEN dialog byte-equal at `384,240 672x420` (radius 8), the title +
+the name input byte-equal (placeholder + the COMPUTED font 14px/400
+line 20px — the `md:text-sm` a CLASS-ORDER genus, the reference
+appending it at the chain's end, decoded), the 6-column checkbox grid
+vocabulary identical with the checkbox faces computed-EQUAL (the
+`border-neutral-900` vs `border-primary` token-selection genus,
+decoded), the Current-Filters summary box + the footer identical (the
+disabled-Save resting face byte-equal), the SAVE round-trip + the
+post-save REOPEN identical (the L-74c8 clear + the one-item
+saved-list) · the dashboard FOLLOW-UP-ROWS checkbox arms **KILLED**
+(the reference's zero-data state persists — 0 checkboxes on the Lead
+Sources card [the empty container, the S9-10 contract] + the
+"No upcoming activities" empty-state paragraph; the rows ride DATA
+rows that do not exist on the reference — the same doctrine as the
+s189 Insights kill; the candidate STAYS suspended) · the activities
+COMPLETED-TAB row-action buttons **KILLED** (the reference's
+Completed tab renders its empty panel at the zero-data state —
+checkButtons=0; the same suspension doctrine) · the topbar-search
+gate **KILLED again** (`populated=0` on both — the s32 dead-stub
+doctrine stands) · the standing Edit-family re-check still zero-row
+(suspended).
+
+The baseline gate GREEN at the exact s189 ship state on a FRESH
+CLONE: lint 0/0 · tsc 0 · **138/2781** · build · smoke **14/14** ·
+e2e **192/192** (clean first run, 5.7m) · probe:ref STABLE
+(`46bc2d9c`) · db census MATCH (15/24/10/23/12 + 4 users at
+`<repo>/db/custom.db`) · sitemap 11 routes + robots + manifest 200 ·
+recharts latest 3.10.1 verified live (the 4.0 gate killed).
+
+**THE WALK** (`scripts/walk63-savedreports-dialog-focus-open.ts`, the
+walk53-62 ledger form over the LIVE arm at BOTH axes): Phase A the
+OPEN dialog census — the trigger's resting face + the click-open ride
++ the root geometry + the DFS ledger + the title + the input's FULL
+chain + computed face + the checkbox grid + the summary + the footer
+trio + the close X + the mount focus (the input, on BOTH); Phase B
+the REAL keyboard Tab drive through the OPEN dialog — the chain
+**STRUCTURALLY IDENTICAL (10 stops: the mount input → 6 checkboxes →
+Cancel → Close → the input wrap; the Save NEVER in the fresh-open
+chain — disabled buttons are not focusable; the post-type drive
+captures its REAL face)** + the REAL :focus-visible faces byte-equal
+on the VISIBLE layers (the 1px near-black ring); Phase C the
+interactive arms — the type-flip + the SAVE round-trip (the
+localStorage seam, the browser context discarding it) + the post-save
+REOPEN (the L-74c8 name-clear byte-equal) + the saved-list arm (the
+p-3 bg-gray-50 rows + the Load outline-sm + the bookmark glyph; the
+name + the locale date identical) + the cancel-then-reopen decode
+(the L-74c7 keep — "Keep Me" survives a cancel on both) + the
+checkbox-toggle ride (the unchecked faces identical); Phase D the
+phone axis 390×844 — the root `0,184 390x476` + the input
+`25,287 340x36` at 16px/400 (the s9 below-md doctrine) + the
+checkbox[0] + the footer byte-equal.
+
+**THE LIVE FINDS — TWO CURED**: **D-190a1 THE SIX COLUMN CHECKBOXES'
+LITERAL ID/FOR CONSTRUCTION**: the reference's checkboxes carry the literal
+REPORT_COLUMNS keys as ids (`id="name"` … `id="wonDate"`,
+`for="name"` … `for="wonDate"` — live-walked on its DOM); ours
+shipped React useId ids. The D-114a2/D-187a1 ids-are-construction-
+parity doctrine. THE CURE: `id={col.key}` at the call site (the
+component's `id ?? generated` seam carrying it to the htmlFor); the
+re-walk PROVES the id/for ledger deltas GONE, byte-equal both apps.
+and **D-190a2 THE README TESTED ROW'S DUPLICATED WALK62 CLAUSE** (the
+s189 first-pass residue: the round appended its clause TWICE — once
+inside the s29 leads-layer parenthetical + once after it, the second
+copy leaving an UNBALANCED double close — shipped undetected at
+3739c96/b8ea9f3; caught by this round's docs lockstep; THE CURE: the
+s29 paren restored + the single standalone clause + the balanced
+pares + the D-190a2 CURE PIN in docs-counts [RED-first: exactly 1 RED
+at birth → the cure → GREEN — the clause-unique doctrine]).
+Every remaining delta a documented genus: the box-shadow SLOT-COUNT
+(every VISIBLE layer byte-equal) · the outline VERSION FORM + both
+sub-forms + the COLOR-CARRIER sub-form (zero visible pixels on both)
+· the s129 ring-offset white zero-extent slot · the token-selection
+M-81c2 pairs (border-line/bg-surface/text-ink/muted-ink/line-soft/
+neutral-900 vs border-input/bg-background/muted-foreground/accent/
+primary — computed-equal on every face) · the class-order genus · the
+React useId format · the DANGLING aria-describedby genus (walk54: the
+reference's own dead pointer, not mirrored) · our aria-hidden svg
+superset (kept).
+
+**THE TDD LEDGER**: the pin survey first (the s25 saved-reports
+content regexes + the s68 wide wiring + the s74 state contracts + the
+s83 Load outline-sm + the s123 BLACK-pair + the s10
+INPUT_BASE/CHECKBOX.control pins), then the battery: 3 born-green pins
+(the walk63 decode freeze · the Saved-Reports TRIGGER call-site
+construction freeze — the genuine gap: the s25 pins hold the wiring
+regex, never the trigger's own chain · the Save-Report-Dialog
+open-interior construction freeze — the genuine gap: the content
+words as regexes, never the call-site chains) + THE D-190a1 CURE PIN
+(RED-first: exactly 1 RED at birth → the cure → GREEN).
+**MUTATION-PROOF**: the `id={col.key}` regression replanted → exactly
+1 RED → restored → GREEN, no residual. **STASH-PROOF**: the round's
+test block stashed → exactly **138/2781** (the s189 ship state) →
+restored → **138/2785** (the page-layout battery) — the D-190a2 pin's
++1 caught at the full-suite count lands the TRUE total **138/2786**
+(the s187/s188 undercount lesson repeating, as the worklog predicted).
+The walk re-run STABLE (the delta report byte-identical).
+
+The count ladder 2781 → **2786** (+5 — 4 walk63 pins + the NEW D-190a2
+pin in docs-counts; the first pass carried +4/2785 before the pin's +1
+was caught at the full-suite count, the s187/s188 undercount lesson
+repeating as the worklog predicted; the corrected count-ladder-190.py
+accepts both intermediate forms) ·
+SUITES 138 HELD · E2E 192 re-verified (the round's product-code touch:
+save-report-dialog.tsx +8 lines [the D-190a1 cure + its comment] — the
+MODULE line count 1718 HELD, page-layout.ts untouched) · badge 2973 →
+**2978** + skill-head-190.py (the SKILL **v1.187.0**, the s189 layer
+demoted at its ship counts 2781/192, the s190 layer live, idempotent —
+the head surgery BEFORE the ladder, the retired s189 ship line PINNED
+by the generalized D-188a1 doctrine's next member in docs-counts) +
+count-ladder-190.py: assert-first, idempotent — the re-run a verified
+0-flip no-op) + the docs lockstep (the AGENTS Session-190 section ·
+the PAD session-190 inventory row · the CLAUDE page-layout bullet's
+walk63 tail · the README Tested row's walk63 clause + the badge ·
+session_402.md + the plan's execution record + the worklog entry
+[Task ID 190]).
+
+The operator's round-shaped asks all verified standing (the session
+record's own ledger): the `.env` DATABASE_URL
+`file:../db/custom.db` with the `db/` folder at the repo root (census
+MATCH at `<repo>/db/custom.db` — the ambient `DATABASE_URL` shadow
+scrubbed with `env -u` on every DB-touching command, the F-123a1
+doctrine) · the vitest + playwright config files verified standing
+(138/2786 unit + the 192-check e2e battery re-verified this session) ·
+the sitemap + SEO surface re-verified (the 11-route sitemap.xml +
+robots.txt with its Sitemap line + the installable manifest.json —
+smoke check 12 carries the 200s) · the mobile-nav comparison
+re-verified (probe:ref TRUE-390 STANDING — the reference's own menu
+button live; OURS the Radix Sheet superset) · **the Tailwind v4 state
+— the walk63 decode CLEAN on every arm** (every delta root-caused
+against the standing genus register; the v3-semantics lineage
+[s11/s96/s98/s123/M-92c1/D-187a3] re-checked at the dialog's arms —
+all byte-equal) · the `.env.example` verified against the six-knob
+contract and included in this round's commit.
+
+**THE VERIFICATION**: lint 0/0 · tsc 0 · **138/2786** unit · build
+(the type-gate artifact) · smoke **14/14** · e2e **192/192** · db
+census MATCH · probe:ref STABLE · the walk63 Save-Custom-View dialog
+arm byte-equal on both axes (post-cure) · the REAL Tab chains
+structurally identical (10 stops both) · the captures: the round's
+ours+ref faces.
+
+### Session-191 — THE THREE CREATE DIALOGS' OPEN FACES (walk64) (2026-10-27)
+
+The post-190 audit rotation. Its rotation trigger THE OWNER'S NEWEST
+COMMIT (`968736a` — the session_402/403 transcripts, the s190 round's
+own execution record). The s402 close's named candidates are ALL
+conditional, and the discovery (`scripts/discover-191.ts`) re-checked
+every leg: the reference's zero-data state persists (the Edit-family
+census rows=1 the empty-state row alone, rowMenus=0, zero calendar
+chips — the discover-184..191 standing census), the topbar-search
+dropdown still `populated=0` on both (the s32 dead-stub doctrine
+stands), the dashboard follow-up-rows checkbox arms + the activities
+Completed-tab row actions stay KILLED at the reference's empty panels;
+probe:ref STABLE (`46bc2d9c`) kills the fresh-bundle candidate, the
+registry's `latest` 3.10.1 (verified live) kills the recharts 4.0
+gate. The round material = the discovery's NEW adjudication: **the
+THREE CREATE DIALOGS the walk54/58 family never opened two-app** — the
+CONTACT (the s15/s30 avatar + photo-upload construction), the ACCOUNT
+(the s15 8-field 2-col grid), the EVENT (the s15/s76 WIDE family) —
+all LIVE on BOTH apps, byte-equal at the census level, their OPEN
+interiors + REAL focus faces genuinely unwalked (the a11y dialog-open
+family pins OURS only; walk54's family chrome freezes are OURS-only
+source pins).
+
+THE WALK (`scripts/walk64-createdialogs-focus-open.ts`, the walk61
+multi-arm form over the THREE dialogs at BOTH axes): Phase A per
+dialog the OPEN census — the triggers byte-equal (`1255,115 153x36` /
+`1274,103 134x32` / `1269,113 139x36`) + the OPEN roots byte-equal
+(`464,45 512x810` / `384,214 672x472` / `384,133 672x634`) + the DFS
+ledger + the FULL inputs id map + the labels wiring map + the
+comboboxes + the contact's file input + the footer Cancel/Create pairs
++ the mount focus (the camera button on the contact, the first input
+on the account/event — byte-equal behavior on both); Phase B the REAL
+keyboard Tab drives — the chains STRUCTURALLY IDENTICAL (19/12/19
+stops; the datetime segments' native 7-tab cycles identical on both
+apps) + the REAL :focus-visible faces byte-equal on the VISIBLE layers
+(the 1px near-black ring); Phase C the interactive arms — the
+meet-select ride (the 5 emoji options + the listbox `489,623 464x170`
+byte-equal) + the status ride (the 3-option set + the listbox
+`728,613 305x106` byte-equal) + the EVENT related-to pick (the
+M-76c13 conditional Name field LIVE on BOTH apps: the placeholder
+"Enter Contact name" + the box `728,638 303x36` + the comboTexts flip,
+byte-equal) + the cancel-then-reopen state decode (ours clears via
+the S71-P1 epoch — the pinned fresh-per-open contract; the reference
+keeps its draft — the KEPT house superset, dialog-mount-contract) —
+the Create submits NEVER fired on either app; Phase D the phone axes
+byte-equal (`0,42 390x760` / `0,168 390x508` / `0,99 390x646`). The
+walk re-run STABLE (the delta report byte-identical modulo the cures).
+
+**FIVE LIVE FINDS CURED — four the id-parity family** (all one doctrine —
+the D-114a2/D-187a1/D-190a1 ids-are-construction-parity lineage, the
+full DFS id map live-walked on the reference's DOM):
+
+- **D-191a1 THE CONTACT DIALOG'S LITERAL ID/FOR MAP**: the reference
+  carries `id="name"`/`"email"`/`"phone"`/`"company"`/`"position"` with
+  `for=` the same; ours shipped `ct-*`. THE CURE: the literal ids
+  restored at every call site (the ct-* prefixes retired; the s19
+  pwa-metadata ct-phone source pin re-anchored to `id="phone"`).
+- **D-191a2 THE ACCOUNT DIALOG'S LITERAL ID/FOR MAP**: the reference
+  carries `id="name"`/`"industry"`/`"email"`/`"phone"`/`"website"`/
+  `"revenue"`/`"employees"`; ours shipped `acc-*`. THE CURE: the
+  literal ids restored.
+- **D-191a3 THE SELECTS' ID + LABEL-FOR WIRING**: the reference's
+  meet-select carries `button id="source"` + `label for="source"` and
+  its account Status `button id="status"` + `label for="status"`;
+  ours shipped bare labels + aria-label triggers. THE CURE: the id/for
+  wiring restored while KEEPING the aria-label superset (aria-label
+  wins the accessible-name computation — the a11y pin's name contract
+  unchanged).
+- **D-191a4 THE CONTACT FILE INPUT'S EXPLICIT tabIndex**: ours shipped
+  `tabIndex={-1}`, the reference carries NO tabIndex attribute — the
+  D-187a1 retirement's next member (both inert — `className="hidden"`
+  removes the input from the layout AND the tab chain). THE CURE: the
+  explicit attribute retired.
+- **D-191a5 THE EVENT CREATE-DIALOG'S START-DATE PRE-FILL**: the
+  reference's fresh-open create form ships the start date EMPTY
+  (live-walked — the VLM battery's catch on the ours+ref pair, the
+  value-blind census's gap; the micro-probe confirmed OURS
+  '2026-10-27T04:00' vs REF ''); ours pre-filled NOW
+  (`toLocalInputValue(defaultStart ?? new Date())`). THE CURE: only the
+  no-default path empties — the day-cell dblclick flow keeps its OWN
+  defaultStart (the s54 decode, untouched); the submit gate's
+  empty-start toast stays (our superset).
+
+
+The re-walk PROVES the id/for/tabIndex ledger deltas GONE (the id map
+byte-equal both apps). Every remaining delta a documented genus or a
+kept superset (the box-shadow SLOT-COUNT with every VISIBLE layer
+byte-equal · the outline VERSION FORM + both sub-forms + the
+COLOR-CARRIER sub-form · the M-81c2 token pairs — border-line/
+bg-surface vs border/bg-background, computed-equal · the md:text-sm
+COMPOSITION genus — the COMPUTED font 14px/500 byte-equal both apps,
+the reference inheriting what ours classes · the aria-label supersets
+[kept] · our aria-hidden svg + Radix placeholder-`<option>` supersets
+[kept] · the reference's own Radix artifacts — the stale aria-controls
+at rest + the DANGLING aria-describedby genus [walk54: the reference's
+own dead pointer, not mirrored] · the React useId format · the KEPT
+s172 label-wiring superset on the event dialog — the reference's bare
+labels + id-less inputs are its own defect, never mirrored).
+
+THE TDD LEDGER: the pin survey first (the s15/s19/s28/s30/s50/s76/s92/
+s112/s172 dialog pin families + the walk53-63 decode freezes), then the
+battery — 4 born-green pins (the walk64 decode freeze · the CONTACT
+open-interior construction freeze [the genuine gap: the s19/s30 pins
+hold OUR wiring regexes, never the call-site chains] · the ACCOUNT
+open-interior construction freeze [the same gap: the s15/s5 pins hold
+the field order + payload contracts, never the chains] · the EVENT
+open-interior construction freeze [the same gap: the s15/s76 pins hold
+the constants + the bundle decode, never the chains]) + THE FOUR CURE
+PINS (RED-first: exactly 5 RED at birth — the contact freeze rides the
+cured file-input string — → the cures → GREEN). **MUTATION-PROOF**
+(the `id="phone"` regression replanted → exactly 1 RED → restored →
+GREEN, no residual) · **STASH-PROOF** (the round's page-layout block
+stashed → exactly **138/2786** [the s190 ship state] → restored →
+138/2794 [the +8 first pass]; the D-191a5 pin's +1 caught at the full-suite count lands the TRUE 2795).
+
+The count ladder 2786 → **2795** (+9 — 4 the walk64 freezes + 5 the
+cure pins; the first pass carried +8/2794 before the D-191a5 pin's +1
+was caught at the full-suite count, the s187/s188/s190 undercount
+lesson repeating; the corrected ladder accepts both intermediate
+forms) · SUITES 138 HELD ·
+E2E 192 re-verified (the round's product-code touch:
+entity-dialogs.tsx 1226 → 1250 [the five cure comment blocks] — the
+PAD §11 row + the SKILL line-count census re-anchored, page-layout.ts
+untouched at 1718) · badge 2978 → **2987** (the unit+e2e arithmetic:
+2795+192) + skill-head-191.py (the SKILL **v1.188.0**, the s190 layer
+demoted at its ship counts 2786/192, the s191 layer live, idempotent —
+the head surgery BEFORE the ladder, the retired s190 ship line PINNED
+by the generalized D-188a1 doctrine's next member in docs-counts) +
+count-ladder-191.py: assert-first, idempotent. The docs lockstep (the
+AGENTS Session-191 section · the PAD session-191 inventory row · the
+CLAUDE page-layout bullet's walk64 tail · the README Tested row's
+walk64 clause + the badge · session_404.md + the plan's execution
+record + the worklog entry [Task ID 191]).
+
+The operator's round-shaped asks all verified standing: the `.env`
+DATABASE_URL `file:../db/custom.db` with the `db/` folder at the repo
+root (census MATCH at `<repo>/db/custom.db`) · the vitest + playwright
+config files verified standing (138/2795 unit + the 192-check e2e
+battery re-verified this session) · the sitemap + SEO surface
+re-verified (the 11-route sitemap.xml + robots.txt with its Sitemap
+line + the installable manifest.json — smoke check 12 carries the
+200s) · the mobile-nav comparison re-verified (probe:ref TRUE-390
+STANDING — the reference's own menu button live; OURS the Radix Sheet
+superset) · **the Tailwind v4 state — the walk64 decode CLEAN on
+every arm** (every delta root-caused against the standing genus
+register; the v3-semantics lineage [s11/s96/s98/s123/M-92c1/D-187a3]
+re-checked at the three dialogs' arms — all byte-equal) · the
+`.env.example` verified against the six-knob contract and included in
+this round's commit.
+
+**THE VERIFICATION**: lint 0/0 · tsc 0 · **138/2795** unit · build
+(the type-gate artifact) · smoke **14/14** · e2e **192/192** · db
+census MATCH · probe:ref STABLE · the three create-dialog arms
+byte-equal on both axes (post-cure) · the REAL Tab chains structurally
+identical (19/12/19 stops both) · the captures: the round's ours+ref
+faces.
+
+### Session-192 — THE LOGIN ANON-SURFACE INTERIORS + THE LANDING MARKETING ARMS (walk65) (2026-10-27)
+
+The post-191 audit rotation. Its rotation trigger THE OWNER'S NEWEST
+COMMIT (`26d542e` — the session_404/405 transcripts, the s191 round's
+own execution record). The s404 close's named candidates are ALL
+conditional, and the discovery (`scripts/discover-192.ts`) re-checked
+every leg: the reference's zero-data state persists (the Edit-family
+census rows=1 the empty-state row alone, rowMenus=0 — the
+discover-184..192 standing census), the topbar-search dropdown still
+`populated=0` on both (the s32 dead-stub doctrine stands), the
+dashboard follow-up-rows checkbox arms + the activities Completed-tab
+row actions stay KILLED at the reference's empty panels; probe:ref
+STABLE (`46bc2d9c`) kills the fresh-bundle candidate, the registry's
+`latest` 3.10.1 (verified live) kills the recharts 4.0 gate. The
+round material = the s404 close's own naming: **the LOGIN PAGE'S
+ANON-SURFACE INTERIORS** (the signin resting card + the view
+machine's OPEN interiors — signup/reset/sent; last walked at the
+s111/s126 computed-style censuses, never at the walk53-64 OPEN-LEDGER
+level, never under the ids-are-construction-parity doctrine, stale
+through the s163 auth retrofit's sent-view change) + **the LANDING
+PAGE'S MARKETING ARMS** (the FAQ single-open accordion + the mobile
+disclosure menu — the s143/s155 walks censused the anatomy + the
+four-axis geometry, never the OPEN-state interiors) — all LIVE on
+BOTH apps, byte-equal at the census level.
+
+- **192-a**: the baseline gate GREEN at the exact s191 ship state (the
+  fresh clone at `26d542e`, tree clean): lint 0/0 · tsc 0 ·
+  **138/2795** unit · build (the type-gate artifact) · smoke **14/14**
+  · e2e **192/192** (clean first run, 5.6m — after the fresh-sandbox
+  playwright chromium-1248 install) · probe:ref STABLE (`46bc2d9c`) ·
+  db census MATCH (15/24/10/23/12 + 4 users at `<repo>/db/custom.db`,
+  the ambient `DATABASE_URL` shadow scrubbed with `env -u` on every
+  DB-touching command — the F-123a1 doctrine) · sitemap 11 routes +
+  robots + manifest 200 · the Tailwind v4 state clean.
+
+- **THE WALK (walk65)**: `scripts/walk65-login-landing-arms.ts` (the
+  walk61 multi-arm form over the TWO surfaces at BOTH axes on FRESH
+  contexts — the anon battery, no login, no storageState on either
+  app): Phase A per view the OPEN census — the card roots byte-equal
+  at `496,95 448x710 / 16,73 358x650` (signin) + `496,215 448x470 /
+  16,187 358x422` (signup) + `496,263 448x374 / 16,243 358x310`
+  (reset) + `496,251 448x398 / 16,221 358x354` (sent) + the DFS ledger
+  + the FULL inputs id map + the labels wiring map + the google button
+  + the submit/back faces + the mount focus (body on BOTH) + the
+  back-nav round-trips byte-equal; Phase B the REAL keyboard Tab drive
+  through the signin card — the chains STRUCTURALLY IDENTICAL through
+  the card (7 stops: the google button → `email#email` →
+  `password#password` → Sign in → Forgot password? → Need an account?;
+  the 7th stop's escape differs only in the landing target — ours
+  body, the reference its own platform badge-close button, the s149
+  platform-pill genus) + the REAL :focus-visible faces — the email
+  input's ring byte-equal on the VISIBLE layers (white 2px +
+  slate-400 4px both apps), the google button byte-equal (the UA
+  default); Phase C the view-flip draft decode [OURS KEEPS the typed
+  email across the reset flip + the back flip — the reference CLEARS
+  it; the KEPT house superset — the reference's clear-on-flip loses a
+  typed email on an in-place flip, its own defect, never mirrored];
+  the sent-view ride write-free [the nonexistent-email
+  forgot-password POST, the no-enumeration 200 family — the
+  reference's own forgot-password is client-side theater, never a
+  network call]; Phase D the phone axes byte-equal; Phase E the FAQ
+  single-open ride [Q1 open by default + the Q2/Q3 rides flip the
+  single open item + the chevron rotate-180 byte-equal + the section
+  `1440x677` + the max-w-3xl container byte-equal; OURS the
+  aria-expanded a11y superset — the standing s142 DEVIATION pin,
+  KEPT]; Phase F the mobile disclosure menu ride @390 [the hamburger
+  `342,16 32x32` + the OPEN panel `0,64 390x229` + the 6-link
+  vocabulary + the menu-x icon swap + the re-toggle close — all
+  byte-equal]; Phase G the CTA faces [the hero pair + the pricing tier
+  buttons byte-equal modulo the brand-token genus — the reference's
+  `rgb(36,99,235)` vs ours the working blue `rgb(37,99,235)`].
+
+- **THE LIVE FINDS — THREE cured**: **D-192a1 THE SIGNUP VIEW'S
+  CONFIRM INPUT LITERAL ID**: the reference's confirm carries
+  `id="confirmPassword"` + `for="confirmPassword"` (live-walked on its
+  DOM); ours shipped the kebab-case `id="confirm-password"`. THE CURE:
+  the literal id restored (matching the reset-password page's own
+  confirmPassword family). **D-192a2 THE RESET VIEW'S EMAIL INPUT
+  LITERAL ID**: the reference's reset view carries the bare literal
+  `id="email"` + `for="email"`; ours shipped `id="reset-email"`. THE
+  CURE: the bare literal restored (the views never render
+  simultaneously, no collision with the signin view's own
+  `id="email"`). **D-192a3 THE AUTH-CARD DARK SUBMITS' REAL
+  FOCUS-VISIBLE RING**: the reference's stock dark submits focus to
+  the near-black `--ring` token (`rgb(9,9,11)` over the white 2px
+  offset — live-walked on the signin/signup/reset submits' REAL
+  keyboard faces via walk65 Phase B +
+  `scripts/micro-probe-192-submit-faces.ts`); ours shipped
+  `ring-slate-400` (the s10-era authoring assumption, never
+  live-probed on the submit). THE CURE:
+  `focus-visible:ring-slate-400` → `focus-visible:ring-ring` at all
+  four dark-submit sites (LOGIN_LAYOUT.submit + the
+  LOGIN_RESET_LAYOUT.send + the LOGIN_SIGNUP_LAYOUT.submit + the
+  LOGIN_VERIFY_LAYOUT.submit — the verify arm write-gated, its cure
+  rides the family doctrine); the INPUTS' slate-400 rings byte-equal
+  and STAY. The re-walk PROVES the id/for ledger deltas GONE + the
+  submit's REAL ring now the reference's family (`rgb(10,10,10)` vs
+  `rgb(9,9,11)` — the documented 1-unit L-126c6 residue). Every
+  remaining delta a documented genus (the box-shadow SLOT-COUNT with
+  every VISIBLE layer byte-equal · the outline VERSION FORM · the
+  oklab/rgba serialization noise [s126] · the zinc-vs-neutral residue
+  [L-126c6] · the class-order genus · the text-card-foreground token
+  genus · OUR aria-hidden superset [the s19 family, KEPT] · the
+  brand-mark logo genus [the reference's `<img>` brand asset vs ours
+  the CSS-built mark] · the lucide svg-internal path-order genus ·
+  the v3-semantics `[&>*+*]:mt-1.5` vs `space-y-1.5` lineage
+  [computed-equal] · the stock-label inert-arms genus · the body-bg
+  invisible axis [the F-119c2/L-126c5 doctrine] · the reference's
+  base44 platform artifacts [the badge-close button — never
+  mirrored]).
+
+- **THE TDD LEDGER**: the pin survey first (the s11/s21/s79/s111
+  login pin families + the s142 landing pins + the walk53-64 decode
+  freezes), then the battery: 3 born-green pins in the page-layout
+  suite (the walk65 decode freeze · the LOGIN open-interior
+  construction freeze — the genuine battery gap: the s11/s21/s79/s111
+  pins hold OUR wiring regexes + the computed-style contracts, never
+  the call-site chains · the LANDING marketing-arms construction
+  freeze — the same gap) + THE THREE CURE PINS (RED-first: **exactly
+  3 RED at birth** → the cures → GREEN) + the collateral re-anchors
+  (the s79 login-family-parity submit/send ring pins + the s11
+  login-reset send record — `ring-slate-400` → `ring-ring` in the
+  same commit as the cure).
+
+- **MUTATION-PROOF**: the `id="confirmPassword"` regression replanted
+  → exactly 1 RED → restored → GREEN, no residual. **STASH-PROOF**: the
+  round's page-layout block stashed → exactly **138/2795** (the s191
+  ship state) → restored → 138/2801 — no undercount this round.
+
+- **THE COUNT LADDER**: 2795 → **2801** (+6 — 3 the walk65 freezes +
+  3 the cure pins) · SUITES 138 HELD · E2E 192 re-verified (the
+  round's product-code touch: login-card.tsx + page-layout.ts +
+  login-reset.ts — all string swaps, zero line-count changes) · badge
+  2987 → **2993** (the unit+e2e arithmetic: 2801+192) +
+  skill-head-192.py (the SKILL **v1.189.0**, the s191 layer demoted at
+  its ship counts 2795/192, the s192 layer live, idempotent — the
+  head surgery BEFORE the ladder, the retired s191 ship line PINNED
+  by the generalized D-188a1 doctrine's next member in docs-counts) +
+  count-ladder-192.py (assert-first, idempotent). The docs lockstep
+  (the AGENTS Session-192 section · the PAD session-192 inventory row
+  · the CLAUDE page-layout bullet's walk65 tail · the README Tested
+  row's walk65 clause + the badge · session_406.md + the plan's
+  execution record + the worklog entry [Task ID 192]).
+
+The operator's round-shaped asks all verified standing: the `.env`
+DATABASE_URL `file:../db/custom.db` with the `db/` folder at the repo
+root (census MATCH at `<repo>/db/custom.db`) · the vitest + playwright
+config files verified standing (138/2801 unit + the 192-check e2e
+battery re-verified this session) · the sitemap + SEO surface
+re-verified (the 11-route sitemap.xml + robots.txt with its Sitemap
+line + the installable manifest.json — smoke check 12 carries the
+200s) · the mobile-nav comparison re-verified (probe:ref TRUE-390
+STANDING — the reference's own menu button live; OURS the Radix Sheet
+superset) · **the Tailwind v4 state — the walk65 decode CLEAN on
+every arm** (every delta root-caused against the standing genus
+register; the v3-semantics lineage [s11/s96/s98/s123/M-92c1/D-187a3]
+re-checked at the login card's space-y arms + the landing's marketing
+stacks — all byte-equal) · the `.env.example` verified against the
+six-knob contract and included in this round's commit.
+
+**THE VERIFICATION**: lint 0/0 · tsc 0 · **138/2801** unit · build
+(the type-gate artifact) · smoke **14/14** · e2e **192/192** · db
+census MATCH · probe:ref STABLE · the four login views + both landing
+arms byte-equal on both axes (post-cure) · the REAL Tab chains
+structurally identical (7 stops both) · the select rides + the
+conditional-Name appearance byte-equal · the captures: the round's
+ours+ref faces.
+
+### Session-193 — THE MARKETING-INTERIOR ARMS (walk66) (2026-10-27)
+
+The post-192 audit rotation. Its rotation trigger THE OWNER'S NEWEST
+COMMIT (`5aa406a` — the session_406/407 transcripts, the s192 round's
+own execution record). The s406 close's named suspended candidates are
+ALL conditional, and the discovery (`scripts/discover-193.ts`)
+re-checked every leg: the reference's zero-data state persists (the
+Edit-family census rows=1 the empty-state row alone, rowMenus=0 — the
+discover-184..193 standing census), the topbar-search dropdown still
+`populated=0` on both (the s32 dead-stub doctrine stands), the
+dashboard follow-up-rows checkbox arms + the activities Completed-tab
+row actions stay KILLED at the reference's empty panels; probe:ref
+STABLE (`46bc2d9c`) kills the fresh-bundle candidate, the registry's
+`latest` 3.10.1 (verified live) kills the recharts 4.0 gate. The
+round material = the s406 close's own naming: **the /ABOUT + /CONTACT
+AUTHENTICATED INTERIORS' INTERACTIVE ARMS** (the marketing pair inside
+the AppShell chrome — censused at s142, the guest funnel walked at
+s144, the 156-c interior-census legs holding the mainH geometry, the
+sweep holding the pixels — never walked at the walk53-65 OPEN-LEDGER
+level: no DFS ledger, no anchor inventory, no REAL keyboard Tab
+chain, no REAL :focus-visible face, no link-ride decode; the family 48
+sessions stale) — LIVE on BOTH apps, byte-equal at the census level.
+
+The baseline gate GREEN at the exact s192 ship state (the fresh clone
+at `5aa406a`, tree clean): lint 0/0 · tsc 0 · **138/2801** unit ·
+build (the type-gate artifact) · smoke **14/14** · e2e **192/192**
+(clean first run, 5.6m — after the fresh-sandbox playwright
+chromium-1248 install) · probe:ref STABLE · db census MATCH
+(15/24/10/23/12 + 4 users at `<repo>/db/custom.db`, the ambient
+`DATABASE_URL` shadow scrubbed with `env -u` on every DB-touching
+command — the F-123a1 doctrine) · sitemap 11 routes + robots +
+manifest 200 (smoke check 12).
+
+THE WALK (`scripts/walk66-marketing-interior-arms.ts`, the walk61/65
+multi-arm form over the TWO pages at BOTH axes on the sweep-state
+pair — the authenticated battery): Phase A per page the OPEN census —
+the main roots byte-equal at 256,69 1184x831 + els 46/46 (about) +
+33/33 (contact) + the h1 faces + the h2 vocabularies + the FULL
+anchor inventories (every href/target/rel byte-equal — the
+Get-in-touch link → /Contact, the mailto:hello@example.com, the
+LinkedIn/X/GitHub trio target=_blank rel="noopener noreferrer") + the
+footer pair + the 256px 8-link nav; Phase B the REAL keyboard Tab
+drive through /about — the chains STRUCTURALLY IDENTICAL at **15
+stops both** (the 8 sidebar links → the search input → Messages →
+Notifications → the account trigger → the Get-in-touch anchor → the
+footer pair; the REF's chain adds only the 16th stop — its base44
+badge-close button, the s149 platform-pill genus, never mirrored) +
+the REAL :focus-visible faces at the six geometry-keyed stops; Phase C
+the link rides write-free (the Get-in-touch round-trip /about→
+/contact + the footer rides — byte-equal landings both apps); Phase D
+the phone axes byte-equal (the main 0,69 390x775 + the h1 16,117
+358x36 + the drawer triggers 16,16 36x36 aria="Open navigation" + the
+footer stacks); the EXTERNAL navigations NEVER fired (the mailto/
+social rides stay census-only).
+
+**TWO LIVE FINDS — ONE CURED, ONE PINNED:**
+
+**D-193a1 THE BASE LAYER'S UNIVERSAL OUTLINE-COLOR RULE (CURED)** —
+the alpha-color carrier family's PAINTING member. The walk53/61
+resting faces had decoded OURS currentColor/adaptive near-black vs
+the reference's fixed rgba(10,10,10,0.5) with outline-style none
+(zero pixels — the documented genus); the walk66 FOCUS faces found
+the same carrier PAINTING (1px auto) on the marketing anchors —
+near-black OPAQUE rgb(16,16,16) vs the reference's authored 50% ring
+— and the micro-probe (`scripts/micro-probe-193-outline-carrier.ts`)
+root-caused it via the CSSOM walk: the reference's compiled base
+carries `* { border-color: hsl(var(--border)); outline-color:
+hsl(var(--ring) / .5); }` — the shadcn base template's universal
+line; OURS carried only the border-color half (the s7 base import).
+THE CURE: the outline-color half added at the same `*` rule —
+`color-mix(in oklab, var(--color-ring) 50%, transparent)`, the v4
+idiom over our `--color-ring` #0a0a0a, resolving to the same 50%
+near-black. The re-walk PROVES every outline-color now the
+reference's family (OURS the oklab serialization `oklab(0.144787
+0.00000661612 0.00000289828 / 0.5)`, the REF rgba(10,10,10,0.5) —
+the same color in the two forms, the s126 noise genus; every authored
+focus face unaffected — outline-style none on both).
+
+**D-193a2 THE SIDEBAR LINKS' REAL FOCUS-VISIBLE RING (the KEPT
+SUPERSET, PINNED)** — OURS paints `focus-visible:ring-2
+focus-visible:ring-white/50` (the oklab white/50 2px shadow carrier)
+at every sidebar stop; the reference ships NO authored focus face on
+its sidebar links — the bare UA outline (1px auto rgba(10,10,10,0.5)),
+its own keyboard-focus-gap family (the D-112a2 doctrine), never
+mirrored. The construction dates to session-7 with its "deliberate
+a11y superset" comment, was re-verified INVISIBLE at the s177 walk50
+resting face, had never been walk-proven at the REAL keyboard face,
+and carried ZERO test teeth until this round's pin (sidebar.tsx +
+mobile-nav.tsx — both navs in lockstep under the freeze).
+
+Every remaining delta a documented genus: the token-selection
+bg-background/bg-gray-50 pair (computed-equal #f9fafb — the M-81c2
+family) · the box-shadow SLOT-COUNT (every VISIBLE layer byte-equal —
+the s129 doctrine) · the outline VERSION FORM + both sub-forms (1px
+none vs 2px solid transparent — zero visible pixels both, the walk51
+decode) · OUR aria-hidden svg superset (the s19 family, KEPT) · OUR
+aria-label superset on the topbar arms (the s88-c9 family, KEPT) ·
+the reference's platform badge-close 16th Tab stop (the s149 genus,
+never mirrored).
+
+THE TDD LEDGER: the pin survey first (the s142 landing pins + the
+NAV_LAYOUT pins + the s177 drawer pins), then the battery — 3
+born-green pins in page-layout (the walk66 decode freeze + the
+MARKETING open-interior construction freeze [the genuine battery gap:
+the s142 pins hold the LANDING page's strings, never the about/
+contact call-site chains] + the SIDEBAR ring construction freeze
+[the same gap: the ring-white/50 construction at BOTH nav sites
+carried zero test teeth]) + THE D-193a1 CURE PIN in design-tokens
+(RED-first: exactly 1 RED at birth → the cure → GREEN — the
+globals.css base-layer contract, the windowed-slice form: the rule's
+own comment quotes the reference's closing brace, so a rule-body
+regex would stop inside it). MUTATION-PROOF (the planted
+outline-color regression 50%→90% → exactly 1 RED → restored → GREEN,
+no residual; the planted sidebar ring regression white/50→white/40 →
+exactly 1 RED → restored → GREEN — both pins' unique teeth proven) ·
+STASH-PROOF (the round's test blocks stashed → exactly 138/2801
+checks [the s192 ship state] with the 2 line-census collateral pins
+reading the CURED globals.css against the stale docs rows [the
+same-commit docs-lockstep dependency — the PAD §11 row + the SKILL
+census site re-anchored 430→442 in this round's commit, the s168
+line-census doctrine] → restored → **138/2805** — the TRUE count
+verified at the full-suite count, no undercount).
+
+The count ladder 2801 → **2805** (+4: 3 the walk66 freezes + 1 the
+cure pin) · SUITES 138 HELD · E2E 192 re-verified (the round's
+product-code touch: globals.css +12 lines — the PAD/SKILL line-census
+rows re-anchored) · badge 2993 → **2997** (the unit+e2e arithmetic:
+2805+192) + skill-head-193.py (the SKILL **v1.190.0**, the s192 layer
+demoted at its ship counts 2801/192, the s193 layer live, idempotent
+— the head surgery BEFORE the ladder, the retired s192 ship line
+PINNED by the generalized D-188a1 doctrine's next member in
+docs-counts) + count-ladder-193.py (assert-first, idempotent — 21
+flips). The docs lockstep (the AGENTS Session-193 section · the PAD
+session-193 inventory row · the CLAUDE page-layout bullet's walk66
+tail · the README Tested row's walk66 clause + the badge ·
+session_408.md + the plan's execution record + the worklog entry
+[Task ID 193]).
+
+The operator's round-shaped asks all verified standing: the `.env`
+DATABASE_URL `file:../db/custom.db` with the `db/` folder at the repo
+root (census MATCH at `<repo>/db/custom.db`) · the vitest + playwright
+config files verified standing (138/2805 unit + the 192-check e2e
+battery re-verified this session) · the sitemap + SEO surface
+re-verified (the 11-route sitemap.xml + robots.txt with its Sitemap
+line + the installable manifest.json — smoke check 12 carries the
+200s) · the mobile-nav comparison re-verified (probe:ref TRUE-390
+STANDING — the reference's own menu button live; OURS the Radix Sheet
+superset) · **the Tailwind v4 state — the walk66 decode CLEAN on
+every arm** (every delta root-caused against the standing genus
+register; the v3-semantics lineage re-checked at the marketing
+stacks — all byte-equal) · the `.env.example` verified against the
+six-knob contract and included in this round's commit.
+
+**THE VERIFICATION**: lint 0/0 · tsc 0 · **138/2805** unit · build
+(the type-gate artifact) · smoke **14/14** · e2e **192/192** · db
+census MATCH · probe:ref STABLE · the two marketing interiors
+byte-equal on the census + the rides + the phone axes (post-cure) ·
+the REAL Tab chains structurally identical (15 stops both + the
+reference's platform badge) · the outline-color family now the
+reference's authored 50% ring on every UA-outline face · the
+captures: the round's ours+ref faces.
+
+### Session-194 — THE 404 INTERIOR'S INTERACTIVE ARMS (walk67) (2026-10-27)
+
+The post-193 audit rotation. Its rotation trigger THE OWNER'S NEWEST
+COMMIT (`8349d01` — the session_409 transcript, the s193 round's own
+execution record). The s408 close's named suspended candidates are ALL
+conditional, and the discovery (`scripts/discover-194.ts`) re-checked
+every leg: the reference's zero-data state persists (the Edit-family
+census rows=1 the empty-state row alone, rowMenus=0 — the
+discover-184..194 standing census), the topbar-search dropdown still
+`populated=0` on both (the s32 dead-stub doctrine stands), the
+dashboard follow-up-rows checkbox arms + the activities Completed-tab
+row actions stay KILLED at the reference's empty panels; probe:ref
+STABLE (`46bc2d9c`) kills the fresh-bundle candidate, the registry's
+`latest` 3.10.1 (verified live) kills the recharts 4.0 gate. The
+round material = the s408 close's own naming: **THE 404 INTERIOR'S
+INTERACTIVE ARMS** (the error-boundary pair OUR-ONLY — the s170
+scandihaven ports, source-pinned; the reference cannot be
+crash-walked; the 404 LIVE on BOTH apps) — the designed 404 view the
+s12 construction built (NOT_FOUND_LAYOUT + the crm.spec render test
+hold the strings) but NEVER walked at the walk53-66 OPEN-LEDGER
+level, 180+ sessions stale against the reference's CURRENT build.
+
+The baseline gate GREEN at the exact s193 ship state (the pull to
+`8349d01`, tree clean): lint 0/0 · tsc 0 · **138/2805** unit · build
+(the type-gate artifact) · smoke **14/14** · e2e **192/192** (clean
+first run, 5.7m) · probe:ref STABLE · db census MATCH (15/24/10/23/12
++ 4 users at `<repo>/db/custom.db`, the ambient `DATABASE_URL` shadow
+scrubbed with `env -u` on every DB-touching command — the F-123a1
+doctrine) · sitemap 11 routes + robots + manifest 200 (smoke check
+12).
+
+THE WALK (`scripts/walk67-404-interior-arms.ts`, the walk66 form over
+the ONE surface at BOTH contexts on the sweep-state pair + fresh anon
+contexts): Phase A the OPEN census at 1440×900 — the DFS ledger from
+the min-h-screen page root (the platform artifacts excluded, the s149
+doctrine) + the h1/h2/p/span faces + the Go Home arm inventory + the
+glyph decode + the title + the http status; Phase B the REAL keyboard
+Tab drive — OURS 2 stops, the REF 3 with its platform badge-close
+(the s149 genus) + the REAL :focus-visible face at the Go Home stop;
+Phase C the Go Home ride write-free — both apps land at the landing
+`/` (the byte-equal h1 + CTA); Phase D the phone axes byte-equal
+post-cure (card 24,278 342x288 + h1 24,278 342x72 + arm 133,528
+123x38 + span 106,431 103x19); Phase E the anon posture census —
+OURS the 404 at the unknown URL (http 404) vs the REF the redirect to
+`/login?from_url=<absolute-url>` (the genus decode, never fixed); the
+destructive arms NEVER fired.
+
+**FIVE FINDS — THREE CURED, TWO PINNED:**
+
+**D-194a1 THE QUOTED-PATHNAME FORM (CURED)** — OURS interpolated
+`usePathname()` verbatim: `The page "/x" could not be found…` (the
+LEADING SLASH inside the quotes; the span 601,459 108x19); the
+reference interpolates its router path WITHOUT it: `The page "x" …`
+(the span 604,459 103x19). THE CURE:
+`pathname.replace(/^\//, "")` at the interpolation — the deep-path
+form "/a/b" → "a/b" matches the reference's router path on both; the
+crm.spec e2e string re-anchored in the same commit.
+
+**D-194a3 THE GO HOME GLYPH (CURED)** — the M-82c2 icon-identity
+family's first CROSS-LIBRARY member (the D-186a1 pen-cure precedent):
+OURS shipped lucide `house` (2 paths — the house + the door;
+stroke-width 2; the `lucide lucide-house` class prefix; the
+width/height attrs); the reference ships the HEROICONS home outline
+(exactly ONE path, NO stroke-width attr → computed weight 1, NO
+width/height attrs, the bare `w-4 h-4 mr-2` class) — its 404 view's
+platform-template origin, the one non-lucide icon family in its tree.
+THE CURE: the reference's exact svg inlined at the Go Home site (the
+lucide Home import retired there; OUR aria-hidden kept — the s19
+superset family); the `NOT_FOUND_LAYOUT.homeIcon` pin re-anchored
+h-4 w-4 → w-4 h-4 (the reference's exact class order).
+
+**D-194a4 THE 404 TITLE (CURED)** — OURS shipped the s12 absolute
+title `This Page Does Not Exist | NEO CRM` (decoded from the
+reference's PRE-DRIFT build, 180+ sessions and every bundle rotation
+ago); the CURRENT reference ships bare `NEO CRM` (live-verified at
+BOTH contexts, 3s settles — and the title machinery byte-equal on
+every real route: both ship bare `NEO CRM` on /dashboard, `Accounts |
+NEO CRM` on /accounts, `About | NEO CRM` on /about — the s10/s13 pins
+stand; only the 404 differed). THE CURE: the metadata export retired
+in `not-found.tsx` — the root layout's `title.default "NEO CRM"`
+renders, byte-equal.
+
+**D-194a2 THE GO HOME TAG (the KEPT SUPERSET, PINNED)** — OURS
+renders `<Link href="/">` (an anchor — role=link, the href
+affordances, the WCAG-correct link semantics for a navigation
+affordance); the reference renders a `<button>` with NO href (its SPA
+JS-router idiom). Every VISIBLE layer byte-equal (box 658,556 123x38
+· color · bg · border · radius · font · padding) and the rides
+byte-equal (both land at the landing `/`) — the D-112a2
+a11y-superset doctrine's next member; the reference's own gap never
+mirrored; the construction carried ZERO test teeth on the TAG
+identity until this round's freeze.
+
+**D-194a5 THE ANON UNKNOWN-ROUTE POSTURE (the PLATFORM GENUS,
+PINNED)** — the reference's auth-first client-router guard redirects
+anon unknown-routes to `/login?from_url=<absolute-url>` (its designed
+404 appears only PAST the guard — it never adjudicates routability
+for anon visitors, everything anon → the wall; its SPA also never
+ships a real HTTP 404 status at all — 200 everywhere); OURS renders
+the designed 404 AT the unknown URL with the true HTTP 404
+(routability adjudicated first — the route-group architecture: known
+guarded routes → the wall; unknown routes → the 404,
+session-independent). The reference's posture is its SPA platform
+artifact (the s149 family) — never mirrored; the no-session-check
+construction PINNED.
+
+Every remaining walk67 delta a documented genus: the outline-color
+serialization (oklab vs rgba — the s126 noise genus, the D-193a1
+cure's own family, zero visible pixels) · the box-shadow SLOT-COUNT
+(every VISIBLE layer byte-equal — white 2px + slate-500 4px, the
+s129 doctrine) · the outline VERSION FORM (ours v4 1px none vs the
+reference's v3-era 2px solid transparent — zero visible pixels both,
+the walk51 decode) · the reference's platform badge-close Tab stop
+(the s149 genus, never mirrored) · OUR aria-hidden superset (the s19
+family, KEPT) · the p text-node-split artifact (the p's full text
+content + the p/span boxes byte-equal — zero visible delta).
+
+THE TDD LEDGER: the pin survey first (the s12 NOT_FOUND_LAYOUT pins +
+the route-case capital-404 pins), then the battery — 3 RED-first CURE
+PINS (D-194a1 the interpolation tail — the windowed form: the file's
+own docstring quotes the bare expression, so the pin guards the
+`}&quot;` interpolation tail only the construction carries · D-194a3
+the glyph construction + the no-stroke-width negatives + the
+homeIcon class-order · D-194a4 the metadata-export negatives — the
+windowed form: the file's own comment quotes the retired title as
+decode history, so the pin guards the construction, never the prose)
++ 3 born-green freezes (the walk67 decode freeze + the 404
+open-interior construction freeze [the genuine battery gap: the s12
+pins hold the constant strings, never the call-site chains] + the
+D-194a5 ANON-posture construction freeze). MUTATION-PROOF (the
+planted strip regression → 2 RED [the D-194a1 pin + the construction
+freeze's designed overlap — both hold the interpolation chain] →
+restored → GREEN · the planted stroke-width regression → exactly 1
+RED → restored → GREEN · the planted metadata-export regression →
+exactly 1 RED → restored → GREEN · the planted button-tag regression
+→ exactly 1 RED [the construction freeze's anchor teeth] → restored
+→ GREEN · the planted session-redirect regression → exactly 1 RED →
+restored → GREEN — every pin's unique teeth proven) · STASH-PROOF
+(the round's test block stashed → exactly **138/2805** checks [the
+s193 ship state], ZERO collateral this round [the PAD §11 row + the
+SKILL §5.6 census site re-anchored 1718→1725 / 277→283 checks in the
+same stroke, the s168 line-census doctrine] → restored →
+**138/2811** — the TRUE count verified at the full-suite count, no
+undercount).
+
+The count ladder 2805 → **2811** (+6: 3 the cure pins + 3 the
+freezes) · SUITES 138 HELD · E2E 192 re-verified (the round's
+product-code touch: not-found.tsx + not-found-body.tsx +
+page-layout.ts +7 lines — the PAD/SKILL line-census rows
+re-anchored) · badge 2997 → **3003** (the unit+e2e arithmetic:
+2811+192) + skill-head-194.py (the SKILL **v1.191.0**, the s193 layer
+demoted at its ship counts 2805/192, the s194 layer live, idempotent
+— the head surgery BEFORE the ladder, the retired s193 ship line
+PINNED by the generalized D-188a1 doctrine's next member in
+docs-counts) + count-ladder-194.py (assert-first, idempotent — 17
+flips). The docs lockstep (the AGENTS Session-194 section · the PAD
+session-194 inventory row + the §708/§1321 404 census rows
+re-anchored · the CLAUDE page-layout bullet's walk67 tail · the
+README Tested row's walk67 clause + the badge · the SKILL §"The
+custom 404" census site re-anchored · session_410.md + the plan's
+execution record + the worklog entry [Task ID 194]).
+
+The operator's round-shaped asks all verified standing: the `.env`
+DATABASE_URL `file:../db/custom.db` with the `db/` folder at the repo
+root (census MATCH at `<repo>/db/custom.db`) · the vitest +
+playwright config files verified standing (138/2811 unit + the
+192-check e2e battery re-verified this session) · the sitemap + SEO
+surface re-verified (the 11-route sitemap.xml + robots.txt with its
+Sitemap line + the installable manifest.json — smoke check 12
+carries the 200s) · the mobile-nav comparison re-verified (probe:ref
+TRUE-390 STANDING — the reference's own menu button live; OURS the
+Radix Sheet superset) · **the Tailwind v4 state — the walk67 decode
+CLEAN on every arm** (every delta root-caused against the standing
+genus register; the 404's space-y-2/3/6 stacks — the family's home
+turf — re-decoded live, byte-equal) · the `.env.example` verified
+against the six-knob contract and included in the round's commit.
+
+**THE VERIFICATION**: lint 0/0 · tsc 0 · **138/2811** unit · build
+(the type-gate artifact) · smoke **14/14** · e2e **192/192** · db
+census MATCH · probe:ref STABLE · the 404 interior byte-equal on the
+census + the ride + the phone axes (post-cure) · the REAL Tab chains
+structurally identical (2/3 stops — the REF's platform badge the
+difference) · the re-walk STABLE (43→23 deltas, every residual a
+documented genus or pinned superset) · the captures: the round's
+ours+ref faces.
+
+### Session-195 — THE 404 GATE-COVERAGE PINS (2026-10-28)
+
+The post-194 audit rotation. Its rotation trigger THE OWNER'S NEWEST
+COMMIT (`facdd56` — the session_411 transcript, the s194 round's own
+execution record). The round is the TWO-SKILL AUDIT round: the
+`skills/web-application` SKILL.md v1.2.0 rubric applied over the
+s193/s194 product-code changes (not-found.tsx · not-found-body.tsx ·
+page-layout.ts · globals.css · the error boundaries) AND the
+operator's named standing surfaces (the mobile navigation · the
+Tailwind v4 setup · the vitest/playwright configs · the sitemap/SEO
+surfaces · the env contract) — the audit disposition **0 CRITICAL /
+0 HIGH / 0 MEDIUM / 5 LOW / 5 INFORMATIONAL**, every finding
+triaged under the parity doctrine (the documented-genera and
+pinned-superset families are never "fixed"; the declined items are
+recorded considered-and-declined in the plan with their rationale:
+the sitemap's `/login`+`/signup` omission [byte-verified reference
+parity, double test-pinned] · the shell root's `h-screen`
+[reference-parity pinned] · the `bg-gradient-to-*` v3 alias spelling
+[compiles identically in v4] · the boundaries' omitted console.error
+[the leak posture correct — only the digest rendered] · the
+probe-script knobs outside `.env.example` [tooling, not the app
+contract] · the robots allow-all [byte-verified parity] · the
+nav-landmark shape [the documented per-family contract]).
+
+The baseline gate GREEN at the exact s194 ship state (the clone to
+`facdd56`, tree clean): lint 0/0 · tsc 0 · **138/2811** unit · build
+(the type-gate artifact) · smoke **14/14** · e2e **192/192** (clean
+first run, 5.7m — the fresh-sandbox Playwright chromium install an
+environment gap, never source debt) · probe:ref STABLE
+(`46bc2d9c` — the bundle md5 unchanged, the demo data still ZERO,
+the desktop census 256px/8 links STANDING, the TRUE-390 census
+STANDING with the reference's own 1 menu button, the landing census
+STANDING) · db census MATCH (15/24/10/23/12 + 4 users at
+`<repo>/db/custom.db`) · sitemap 11 routes + robots + manifest 200
+(smoke check 12) · the sweeps CLEAN (desktop + TRUE-390 + the
+interior census, baselines held, seed restored).
+
+**THREE CURES — the gate-teeth round** (the round's material was
+the GATE TEETH, not the product — every shipped s193/s194 change
+verified clean on every rubric axis):
+
+- **D-195a1 — THE TRUE-HTTP-404 WIRE FREEZE** (Audit A L-1): the
+  D-194a5 ship claim — OURS renders the designed 404 AT the unknown
+  URL with the TRUE HTTP 404 — carried ZERO gate teeth (the e2e
+  render test's `page.goto()` tolerates any status, no smoke leg
+  hits an unknown route, the unit posture pin source-string only; a
+  future catch-all route would have kept every gate green while
+  falsifying the contract). THE CURE: the response status asserted
+  inside the existing S12-P2 e2e test — `page.goto`'s response +
+  the authenticated `request.get` arm (the both-contexts census
+  form). Born-green (the s194 doctrine for a genuine battery gap).
+  MUTATION-PROVEN: the planted `[...catchall]/page.tsx` redirect
+  flipped the pin RED exactly at the status line (Expected 404 /
+  Received 200) — the shape every visibility pin survives — then
+  restored GREEN; the in-boundary `redirect()` mutation found the
+  404 status ALREADY committed at the render (the audit's L-1
+  adjudicated at the catch-all shape).
+- **D-195a2 — THE TWO-GATE'S 404 REGISTRATIONS** (Audit A L-2): the
+  one anon-reachable page the 31-registration register never
+  adjudicated (its display heading ≈1.42:1 — pure reference
+  parity). THE CURE: +2 EXPLICIT registrations (desktop 1280×800 +
+  phone 390×844, the anon-surface form — the 404 is
+  session-independent by design, D-194a5) + the sanctioned
+  color-contrast matcher with its citation (the navy-chip
+  precedent's exact form; the axe target form the BARE `h1` selector
+  — the surface's only h1, the s171 substring-match doctrine; the
+  class arm held for the selector form). GATE 1 structural ZERO at
+  both widths (the D-194a2 Link superset's named arm live).
+  MUTATION-PROVEN: the neutralized matcher arms tripped GATE 2
+  exactly once per registration ("cites no sanctioned matcher"),
+  then restored GREEN.
+- **D-195a3 — THE CHILD-ENV KILL-SWITCH SCRUBBING** (Audit B L-2):
+  the playwright webServer's `...process.env` spread would let a
+  polluted parent shell's `NEO_DISABLE_IN_APP_OTP`/`RESET` silently
+  hide the OTP/reset payloads the ladder tests assert (the N-69a
+  dev-server-lies family on the env axis). THE CURE: both pinned to
+  the empty string in the child env beside `DATABASE_URL`/
+  `AUTH_SECRET` — deterministic e2e regardless of shell state, no
+  existing pin weakened.
+
+- **D-195a4 — THE STARVED-READ FLAKE HARDENING** (the final-gate
+  catch): the final full-battery gate caught the settings Defaults-tab
+  geometry test RED twice in a row (the s164 starved-read class: the
+  visibility pre-waits green, the bare boundingBox() read null — a
+  re-render falling between the two reads), then four clean isolation
+  runs confirmed the flake window rather than a regression. THE CURE:
+  the house expect.poll idiom (the s15 New Lead hardening, the s28
+  zoom-in-95 precedent) applied to the box reads themselves — the
+  geometry poll retries until BOTH boxes resolve with the vertical
+  order intact, the assertion semantics unchanged, no pin weakened.
+
+The operator's round-shaped asks all verified standing: the `.env`
+DATABASE_URL `file:../db/custom.db` with the `db/` folder at the
+repo root (census MATCH at `<repo>/db/custom.db`) · the vitest +
+playwright config files verified standing (138/2811 unit + the
+**194-check** e2e battery this round's own census) · the sitemap +
+SEO surface re-verified (the 11-route sitemap.xml + robots.txt with
+its Sitemap line + the installable manifest.json — smoke check 12
+carries the 200s) · the mobile-nav comparison re-verified LIVE (the
+reference's own login + dashboard + menu walked: the plain login
+lands at `/` on BOTH apps — the from_url round-trip form; the
+reference's drawer opened/rode; the VLM battery 3/3 "Structural
+Differences: None" on the dashboard-desktop + dashboard-mobile-390
++ menu-open pairs — the sole residual the s149 platform badge
+genus; OURS the Radix Sheet superset, the drawer opened/rode/closed
+at 390×844 on the dev server — the link ride /Contacts lands, the
+menu closes, the trigger re-collapses; the auto-close query holds
+at 768px matching the `md:hidden` trigger) · **the Tailwind v4
+state — the audit's zero-finding form** (all five §12 traps
+mitigated: literal-hex `@theme`, no `tailwind.config.*`, the
+vendored tw-animate, the `@utility` cascade law, the
+`--shadow-sm`/`--blur-sm` re-pins) · the `.env.example` verified
+bidirectional (every knob consumed, every consumer documented) and
+included in the round's commit.
+
+**THE COUNT LADDER + THE LOCKSTEP**: E2E 192 → **194** (+2: the two
+404 registrations) · SUITES 138 HELD · UNIT 2811 HELD · badge
+3003 → **3005** (the unit+e2e arithmetic: 2811+194). skill-head-195.py
+ran FIRST (the SKILL v1.192.0, the s194 layer comment-demoted at its
+ship counts 2811/192, the s195 layer live at 2811/194, idempotent);
+count-ladder-195.py (assert-first, idempotent, unique-anchor — 19
+flips: the docs-counts E2E constant · the README badge + Tested
+row + tree + commands · the AGENTS commands + gate-order · the
+CLAUDE gate-order + commands + pyramid · the PAD tree + Total +
+HEAD + checklist + commands · the SKILL commands + Appendix B e2e
+total + wall-clock + the a11y row 31 → 33). The three test-side
+re-anchors in the same stroke: the docs-counts layer-axis (first =
+s195, second = s194) · the login-family negatives ladder (the
+retired `**E2E (Playwright, 192 checks)**` joins its negatives, the
+live positive re-anchored 194) · the PAD §11 a11y row's line census
+407 → 436. The docs lockstep: this AGENTS Session-195 section ·
+session_412.md · the PAD §7.1 s195 inventory row · the README
+walk-contracts paragraph's s195 clause · the plan's execution
+record · the worklog entry {Task ID 195}.
+
+**THE VERIFICATION**: lint 0/0 · tsc 0 · **138/2811** unit · build
+(the type-gate artifact) · smoke **14/14** · e2e **194/194** (the
+full battery, 5.8m) · db census MATCH · probe:ref STABLE · the
+mobile-nav battery 10/10 · the a11y two-gate 33/33 · the VLM parity
+battery 3/3 "Structural Differences: None" · the captures: the
+round's ours-vs-ref dashboard pairs (desktop + 390 + the menu-open
+state) + the dev-server set under `docs/screenshots/`.
+
+### Session-196 — THE DRAWER-OPEN SPINE FREEZE (the re-walk staleness round) (2026-10-28)
+
+The post-195 audit rotation. Its rotation trigger THE OWNER'S NEWEST
+COMMIT (`a3ac674` — the session_413 transcript, the s195 round's own
+execution record). The round is the RE-WALK STALENESS LADDER — the
+session_412 close's own naming ("the re-walk staleness ladder [the
+walk50 drawer + the s144-era marketing exteriors] or the sweep-state's
+own coverage audit"), adjudicated by `scripts/discover-196.ts` BEFORE
+the plan: the standing data-gated re-checks ALL KILLED at the
+reference's unchanged zero-data state (the Edit-family census rows=1
+empty-state rows, rowMenus=0, the topbar-search populated=0 on both,
+the dashboard checkbox arms + the activities Completed-tab empty —
+the discover-184..196 standing census) · the conditional gates KILLED
+(probe:ref STABLE at `46bc2d9c` kills the fresh-bundle re-derivation;
+the registry's latest recharts 3.10.1 kills the 4.0 gate) · the
+s144-era marketing exteriors posture byte-equal STANDING (the guest
+/about + /About + /contact + /Contact login-wall on BOTH apps with the
+identical from_url round-trip form, the landing funnel anchors +
+rides identical — the s147 F-147c2 contract, 49 sessions later, no
+walk material there).
+
+THE RE-WALK (the walk50 re-run at the current tree, 19 sessions after
+the s177 original): the verdict **STABLE — ZERO NEW DELTAS**. OURS 61
+rows vs REF 53 (the 8 `span.truncate` label wrappers — the
+s177-adjudicated KEPT superset, the row-count difference's own root
+cause, standing); after spine alignment every disagreement maps to
+the s177 adjudications: the s173/s177 **mb-0 cure holding** (the
+header 80/80 · the h2 24,24 240×32 both · the nav 0,80 288×332 both ·
+the footer 0,428 288×61 both — the post-cure spine byte-equal two-app)
+· the genera standing (the `bg-sidebar` token vs the reference's
+`bg-[#2563eb]` literal — computed-equal rgb(37,99,235) · the Close
+button's stock-version class drift — both dead variants · lucide's
+`aria-hidden` — the version genus · the React 19 `useId` format ·
+the icon class order `h-5 w-5 shrink-0` · the nav `aria-label`s +
+`aria-current` + the focus-visible ring — the KEPT supersets · the
+lucide-users icon's internal child order — the same shapes in a
+different DOM order, zero visual delta, lucide-react 0.525.0
+unchanged since before s177 · the sr-only `<p>`'s y-delta 23-vs-32 —
+the mb-0 cure's own mechanism fingerprint, zero visible pixels). The
+19 sessions of changes since s177 — the s193a1 outline-color
+base-layer rule included — introduced zero drift.
+
+**ONE CURE — D-196a1 THE DRAWER-OPEN SPINE FREEZE** (the genuine
+battery gap): the s177 spine cure + decode carried only SOURCE-STRING
+pins (`MOBILE_NAV_SHEET.title`'s `mb-0` + the header literal in
+`tests/page-layout.test.ts`), the 10-check e2e battery pinned
+BEHAVIOR (the locks, the focus, the rides, the overflow), the a11y
+gate violations, the sweeps the CLOSED pixels (the interior census
+carries zero drawer-open runs — the s177 coverage-gap finding,
+standing). The s177 defect's own shape — a computed-margin regression
+(a Tailwind upgrade's space-y semantics, a base-layer margin rule, an
+h2 line-height change) shifting the header 80→88 and cascading to
+every link + the footer — would keep every gate green while
+falsifying the walk50-verified contract. THE CURE: the born-green
+e2e registration — the s195a1 wire-freeze doctrine's next member —
+pinning the rendered drawer-open spine at the walk50 ledger's own
+boxes at TRUE 390×844: the content 288×844 · the header 0,0 288×80
+(the cure's own face) · the h2 24,24 240×32 · the nav 0,80 288×332 ·
+the 7-link 12,80 264×44 with the 48px pitch · the footer 0,428
+288×61 · the Close 256,16 16×16 — the expect.poll starved-read idiom
+(s164 → s195a4) on the box reads. MUTATION-PROVEN: the planted `mb-2`
+regression (the s177 defect's exact shape — the h2's `:where()`
+margin re-entering the flex-column layout) → build → the pin RED
+exactly at the header box (Expected 80 / Received 88) → restored →
+GREEN, the tree clean.
+
+**THE COUNT LADDER + THE LOCKSTEP**: E2E 194 → **195** (+1: the spine
+registration) · the mobile-nav spec census 10 → **11**
+(MOBILE_NAV_E2E re-anchored, the live-census pin) · SUITES 138 HELD ·
+UNIT 2811 HELD · badge 3005 → **3006** (the unit+e2e arithmetic:
+2811+195). skill-head-196.py ran FIRST (the SKILL v1.193.0, the s195
+layer comment-demoted at its ship counts 2811/194, the s196 layer
+live at 2811/195, idempotent); count-ladder-196.py (assert-first,
+idempotent, unique-anchor — 28 flips: the docs-counts E2E + the
+MOBILE_NAV_E2E constants · the README badge + Tested row + tree +
+commands + the two 10-check mobile-nav sites · the AGENTS commands +
+gate-order + the architecture-facts mobile-nav line · the CLAUDE
+gate-order + commands + pyramid + the mobile-nav suite line · the PAD
+tree + Total + HEAD + checklist + commands + the mobile-nav spec line
++ the §11 census-table row · the SKILL commands + Appendix B e2e
+total + wall-clock + the mobile-nav spec line + the Bug #1 line + the
+Appendix B mobile-nav row). The test-side re-anchors in the same
+stroke: the docs-counts layer-axis (first = s196, second = s195 at
+its ship 194) · the login-family negatives ladder (the retired
+`**E2E (Playwright, 194 checks)**` joins its negatives, the live
+positive re-anchored 195) · the s147-miscount 11-negatives RETIRED
+(the 11-form is the live census now — the 10-check forms join the
+negatives on both the docs-counts s165 block and the Appendix B row
+negative, the s192 re-anchor doctrine) · the inventory-census
+Bug #1 checks pin 10 → 11 + the PAD §11 line-census row 284 → 364.
+The docs lockstep: this AGENTS Session-196 section · session_414.md ·
+the PAD §7.1 s196 inventory row · the README walk-contracts
+paragraph's s196 clause · the plan's execution record · the worklog
+entry {Task ID 196}.
+
+**THE VERIFICATION**: lint 0/0 · tsc 0 · **138/2811** unit · build
+(the type-gate artifact) · smoke **14/14** · e2e **195/195** · db
+census MATCH · probe:ref STABLE · the mobile-nav battery 11/11 · the
+captures: the round's drawer-open set (ours + the reference pair) +
+the dev-server set under `docs/screenshots/`.
+
+### Session-197 — THE SWEEP-STATE COVERAGE AUDIT (the 404 drift-gate registration) (2026-10-28)
+
+The post-196 audit rotation. Its rotation trigger THE OWNER'S NEWEST
+COMMIT (`769ba13` — the session_415 transcript, the s196 round's own
+execution record). The round is THE SWEEP-STATE'S OWN COVERAGE AUDIT —
+the s412 close's OTHER named standing material ("the re-walk staleness
+ladder … or the sweep-state's own coverage audit" — the drawer member
+walked at s196, this round takes the other naming), adjudicated by
+`scripts/discover-197.ts` BEFORE the plan with the s120-era
+interactive-table candidate adjudicated in the same pass: the standing
+data-gated re-checks ALL KILLED at the reference's unchanged zero-data
+state (the Edit-family census rows=1 empty-state rows, rowMenus=0, the
+topbar-search populated=0 on both, the dashboard checkbox arms + the
+activities Completed-tab empty — the discover-184..197 standing
+census) · the conditional gates KILLED (probe:ref STABLE at `46bc2d9c`
+kills the fresh-bundle re-derivation; the registry's latest recharts
+3.10.1 kills the 4.0 gate) · the s120-era interactive-table candidate
+KILLED by evidence (the leads family source-frozen since s113 — 84
+sessions; the deps frozen; the family's only computed-style change
+vector since s120 the s193a1 outline-color rule, decoded + gated — a
+re-walk re-derives the s196 verdict). THE COVERAGE AUDIT: the app's
+renderable routes vs. the drift-gate inventories (the sweep PAGES 13 ·
+the census 12+1 · the fullpage 1 = the landing only) — /signup +
+/reset-password OURS-ONLY supersets outside the two-app sweep (the REF
+has no such routes: its /signup renders its own 404, its
+/reset-password a blank shell), THE 404 the only two-app-renderable
+surface with ZERO drift-gate coverage, the D-197a1 maiden measuring
+the pair byte-identical at all four bands (0.01/0.04/0.01/0.01
+badge-closed — no genus at any band; the anon posture re-verified
+STANDING: OURS the 404 at the unknown URL with the true 404, the REF
+the wall redirect with the from_url round-trip).
+
+**TWO CURES — the coverage round** (the round's material was the GATE
+TEETH, not the product):
+
+- **D-197a1 — THE 404 SWEEP REGISTRATION.** The designed 404 is the
+  only two-app-renderable surface the drift-gate family did not carry:
+  the s194 walk67 decoded its faces, the s195 pins hold its render +
+  its TRUE-404 status + its a11y registrations — no gate held its
+  PIXELS (a future pixel regression on the surface would have kept
+  every gate green). THE CURE: the 404 joins the standing sweep — the
+  14th PAGES entry `{ name: "not-found", path:
+  "/no-such-sweep-route", waitFor: "heading-404" }` with the per-page
+  capture-wait override (the bare 404 renders with NO main — the
+  sweep's shell-wait soft-falls its full 15s burn per capture; the h1
+  "404" heading is the content-wait anchor instead, present on BOTH
+  apps' designed 404s) + the STANDING_BASELINES entries at all four
+  bands (0.1 the family floor — the maiden measured
+  0.01/0.04/0.01/0.01) + the sweep-tool pins (the PAGES census
+  re-anchored 13 → 14 + the waitFor override pin + the not-found
+  baselines pin). Born-green at all four bands (0.01-0.03% clean, the
+  seed restored after every run). MUTATION-PROVEN ×2: the planted
+  `text-8xl` h1 regression (the D-194a4 palette's own face) → the
+  sweep DRIFT trip exactly at not-found (1.12% > baseline 0.1 +
+  margin 0.5 = allowed 0.60%, exit 1) → restored → 0.01% clean; the
+  removed desktop baseline → exactly 2 unit REDs (the new baselines
+  pin + the standing coverage-loop pin), zero collateral → restored →
+  GREEN.
+- **D-197a2 — THE SWEEP HEADER'S OWN STALE PAGE CENSUS.** The
+  s91-era count-anchored comments ("the ten pages") survived three
+  page additions (s96/s142/s144) — and the s98 F-98a1 guard's own live
+  face went stale WITH them, pinning the stale count as "the corrected
+  phrasing" (the `toMatch(/ten pages|ten-page/)` assertion — the
+  guard's teeth had been pointing at a corpse since s144). THE CURE:
+  the sweep header + the suite's own two comments re-anchored to the
+  count-proof NAME form ("the PAGES list" / "the full PAGES sweep" —
+  a name never goes stale when a page joins); the F-98a1/N-97a1 guards
+  re-anchored — the negatives grow the retired ten-forms (the s192
+  doctrine: the OLD live form joins the negatives), the live faces
+  move to the NAME form.
+
+**DECLINED** (recorded considered-and-declined in the plan): the
+census 404 registration (a third collector for one page — speculative
+scaffolding; the element ledger walk-frozen + source-pinned) ·
+/signup + /reset-password in the sweep (OURS-ONLY, e2e-pinned
+already) · the s120-era re-walk (KILLED by the discovery evidence).
+
+**THE COUNT LADDER + THE LOCKSTEP**: UNIT 2811 → **2813** (+2: the
+waitFor pin + the baselines pin, the sweep-tool suite) · SUITES 138
+HELD · E2E 195 HELD · badge 3006 → **3008** (the unit+e2e arithmetic:
+2813+195). skill-head-197.py ran FIRST (the SKILL v1.194.0, the s196
+layer comment-demoted at its ship counts 2811/195, the s197 layer
+live at 2813/195 + the beneath-it tail, idempotent; the surgery's own
+live catch: the H1 flip's bare-substring guard was fooled by the new
+layer text mentioning "the SKILL v1.194.0" — the H1 flipped directly
++ the script hardened to the exact-H1 form); count-ladder-197.py
+(assert-first, idempotent, unique-anchor — 18 flips: the docs-counts
+UNIT constant · the README badge + Tested row + tree + commands ·
+the AGENTS commands + gate-order · the CLAUDE gate-order + commands
++ pyramid + the coverage seam · the PAD tree + Total + HEAD +
+checklist + commands · the SKILL commands + Appendix B unit total).
+The test-side re-anchors in the same stroke: the docs-counts
+layer-axis (first = s197 at 2813/195, second = s196 at its ship
+2811/195) · the unit negatives ladder (the retired 2811 site-forms
+join the negatives on the docs-counts s166 block) · the
+dialog-geometry-parity F-92a3 ladder (the four CLAUDE live positives
+re-anchored 2813 + the 2811 forms join the negatives). The docs
+lockstep: this AGENTS Session-197 section · `docs/session_416.md` ·
+the PAD §7.1 s197 inventory row · the README walk-contracts
+paragraph's s197 clause · the plan's execution record · the worklog
+entry {Task ID 197}.
+
+**THE VERIFICATION**: lint 0/0 · tsc 0 · **138/2813** unit · build
+(the type-gate artifact) · smoke **14/14** · e2e **195/195** · the
+not-found sweep leg GREEN at all four bands (`--fail-on-drift`: 0.01
+desktop · 0.03 phone · 0.02 tablet · 0.02 landscape) · db census
+MATCH · probe:ref STABLE · the captures: the round's 404 pair (ours +
+the reference) + the dev-server set under `docs/screenshots/`.
+
+### Session-198 — THE ADVISORIES RE-TRIAGE (the runtime-chain critical cured + the security-ledger lockstep) (2026-10-29)
+
+The post-197 audit rotation. Its rotation trigger THE OWNER'S NEWEST
+COMMIT (`ba30355` — the session_417 transcript, the s197 round's own
+execution record). The round is THE STANDING PRE-SHIP DUTY'S OWN
+CATCH — the s164 `bun audit` doctrine ("re-run each pre-ship")
+re-run live by `scripts/discover-198.ts` BEFORE the plan found the
+advisories census DRIFTED: 9 → **12 (1 critical / 5 high / 4 moderate /
+2 low)** — the repo's first CRITICAL on a RUNTIME dependency chain
+(`jspdf@4.2.1`, the direct runtime dep behind the reports PDF export,
+ships the optional `dompurify` at **3.4.16**, INSIDE the vulnerable
+range `>=3.4.4 <=3.4.16` — critical GHSA-cg2g-xh64-v4q7 + high
+GHSA-mrv2-3pqr-j5jr + low GHSA-c6gr-qvv4-5v3f). The
+security-and-hardening triage ladder applied: "Is the vulnerable
+function actually called in your code path?" — **NO** — dompurify
+executes only inside jsPDF's `html()` plugin and `pdf-export.ts` never
+calls `.html(` (grep-verified: DORMANT, shipped). The other discovery
+legs: the standing data-gated re-checks ALL KILLED at the reference's
+unchanged zero-data state (probe:ref STABLE at `46bc2d9c` — the demo
+data still ZERO; the Edit-family census rows=1 empty-state rows,
+rowMenus=0, the topbar-search populated=0 — the discover-184..198
+standing census) · the conditional gates KILLED (probe:ref STABLE
+kills the fresh-bundle re-derivation; the registry's latest recharts
+3.10.1 kills the 4.0 gate) · the s120-era re-walk kill STANDING (the
+leads family source-frozen since s113 — 85 sessions; the deps locked
+at the s196 census; the bundle STABLE — the kill condition unmoved).
+
+**TWO CURES — the security-ledger round** (the round's material was
+the ADVISORIES LEDGER, not the pixels):
+
+- **D-198a1 — THE RUNTIME CHAIN'S CRITICAL.** THE CURE: the 3.4.17
+  transitive override (`overrides.dompurify` in package.json — the
+  first update attempt's live catch: `bun update dompurify` hoisted
+  the root while a NESTED `jspdf/dompurify@3.4.16` SURVIVED on disk,
+  the failure mode that hardened the pin to scan EVERY resolution) +
+  THE PINS (both in the pdf-export suite, the one-suite doctrine):
+  the exhaustive lockfile pin (every `dompurify@x.y.z` resolution
+  asserted outside the vulnerable range — RED-first at birth against
+  the shipping 3.4.16 → the cure → GREEN) + the dormancy freeze
+  (`pdf-export.ts` NEVER calls `.html(` — adopting jsPDF's html()
+  plugin becomes a conscious act that trips the pin). MUTATION-PROVEN
+  ×2: the lockfile flip → exactly 1 RED → restored → GREEN; the
+  planted `.html(` call → exactly 1 RED → restored → GREEN. The
+  post-cure audit: **9 advisories (4 high / 4 moderate / 1 low)** —
+  the critical GONE, zero runtime chains, the documented posture
+  restored at the tree level.
+- **D-198a2 — THE SECURITY LEDGER'S OWN STALE CENSUS.** The PAD §10
+  ledger row + the AGENTS gate-order note both carried the s164
+  census verbatim — ZERO test teeth on either claim (the census went
+  stale silently for 33 sessions). THE CURE: the PAD row rewritten at
+  the live post-cure census (9: 4h/4m/1l — ALL dev-toolchain again:
+  zod via eslint-config-next›eslint-plugin-react-hooks · deepmerge-ts
+  via the prisma CLI · vite + launch-editor via vitest · source-map-js
+  via postcss) + the dormancy decode carried in the row + the s198
+  re-triage clause + the AGENTS note re-anchored + THE PINS (both in
+  the docs-counts suite): the PAD-ledger pin (the live census + the
+  re-triage record + the retired braces-composition negative) + the
+  AGENTS-note pin (whitespace-normalized — the pin holds the content,
+  never the wrap). MUTATION-PROVEN ×2: the stale re-plant → 1 RED
+  each → restored → GREEN.
+
+**DECLINED** (recorded considered-and-declined in the plan): the
+dev-toolchain members' bumps (deepmerge-ts 8 · vite 8.3.3 · the
+eslint-zod floor · source-map-js 1.2.2 — the s164 no-mid-rotation
+TOOLCHAIN posture stands: every member build/lint/CLI-only, zero
+runtime request-path) · the registry majors (lucide-react 1.63.0 vs
+our 0.525 PARITY pin — the reference's own bundle-decoded version,
+probe:ref STABLE re-verified; prisma 7.10.1 vs our 6.19.3; next 16.4.3
+vs our 16.4.2; zustand 5.0.16 vs our 5.0.15 — their own rotations,
+never mid-rotation, none carries an audit advisory on our locked
+versions) · the e2e/a11y extensions for the advisories axis (no page
+surface changed — the battery 195/195 + the four-band sweep are the
+cure's inertness proof, not new coverage).
+
+**THE COUNT LADDER + THE LOCKSTEP**: UNIT 2813 → **2817** (+4: the
+lockfile pin + the dormancy pin in pdf-export · the PAD-ledger pin +
+the AGENTS-note pin in docs-counts) · SUITES **138 HELD** (the
+one-suite doctrine — both pin pairs ride EXISTING suites) · E2E 195
+HELD · badge 3008 → **3012** (the unit+e2e arithmetic: 2817+195).
+skill-head-198.py ran FIRST (the SKILL v1.195.0, the s197 layer
+comment-demoted at its ship counts 2813/195, the s198 layer live at
+2817/195 + the beneath-it tail, idempotent, the s197 exact-H1 guard
+form); count-ladder-198.py (assert-first, idempotent, unique-anchor —
+18 doc flips + the test-side re-anchors in the same stroke: the
+docs-counts UNIT constant + the layer-axis [first = s198 at 2817/195,
+second = s197 at its ship 2813/195] + the 2813 negatives joining the
+s166 block + the dialog-geometry-parity F-92a3 ladder [the four CLAUDE
+live positives re-anchored 2817 + the 2813 forms join the negatives]).
+The docs lockstep: this AGENTS Session-198 section ·
+`docs/session_418.md` · the PAD §7.1 s198 inventory row + the §10
+ledger row (the D-198a2 cure site) · the README walk-contracts
+paragraph's s198 clause · the plan's execution record · the worklog
+entry {Task ID 198}.
+
+**THE VERIFICATION**: lint 0/0 · tsc 0 · **138/2817** unit · build
+(the type-gate artifact) · smoke **14/14** · e2e **195/195** · the
+four-band sweep GREEN (the cure's baseline-inertness proof — no
+pixel-bearing surface touched) · `bun audit` post-cure (9, all
+dev-toolchain, the documented posture restored) · db census MATCH ·
+probe:ref STABLE · the captures: the reports pair (ours + the
+reference — the PDF-export surface whose dependency chain carried
+the critical) + the dev-server set under `docs/screenshots/`.

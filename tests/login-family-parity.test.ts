@@ -307,13 +307,13 @@ describe("session-79: the submit chrome family (N-79c12)", () => {
   it("the signin submit carries the disabled + keyboard-ring stock arms", async () => {
     const L = await loginLayout();
     expect(L.submit).toContain("disabled:opacity-50");
-    expect(L.submit).toContain("focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2");
+    expect(L.submit).toContain("focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2");
   });
 
   it("the shared send record carries the same chrome (reset/signup/verify)", async () => {
     const L = await resetLayout();
     expect(L.send).toContain("disabled:opacity-50");
-    expect(L.send).toContain("focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2");
+    expect(L.send).toContain("focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2");
   });
 });
 
@@ -399,7 +399,16 @@ describe("session-79: the CLAUDE.md e2e count carriers (N-79b1)", () => {
     // marketing-mobile spec — the internal-scroller scroll model).
     // session-163 lockstep carry-forward: 153 -> 161 (the reset-password
     // spec — the digma reset-funnel port's 8 checks).
-    expect(src).toContain("**E2E (Playwright, 192 checks)**");
+    // session-195 lockstep carry-forward: 192 -> 194 (the s195 two-gate
+    // 404 registrations — the desktop + phone scans of the one
+    // anon-reachable surface the register never adjudicated; the retired
+    // form joins its negatives, the doctrine unchanged).
+    // session-196 lockstep carry-forward: 194 -> 195 (the D-196a1
+    // drawer-open spine registration — the rendered interior-geometry
+    // freeze, the walk50 re-walk's genuine battery gap; the retired
+    // form joins its negatives, the doctrine unchanged).
+    expect(src).not.toContain("**E2E (Playwright, 194 checks)**");
+    expect(src).toContain("**E2E (Playwright, 195 checks)**");
   });
 });
 

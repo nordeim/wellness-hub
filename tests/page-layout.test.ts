@@ -1250,12 +1250,14 @@ describe("session-12: custom 404 page (S12-P2)", () => {
     // text-slate-700 bg-white border border-slate-200 rounded-lg
     // hover:bg-slate-50 hover:border-slate-300 transition-colors
     // duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2
-    // focus:ring-slate-500` with a lucide Home icon (w-4 h-4 mr-2),
-    // navigating to `/`.
+    // focus:ring-slate-500` navigating to `/`. Session-194 (D-194a3):
+    // the icon is the reference's heroicons home OUTLINE inlined — the
+    // bare `w-4 h-4 mr-2` class (the reference's exact w/h order, the
+    // lucide-house prefix retired at this one site).
     expect(NOT_FOUND_LAYOUT.homeButton).toContain("bg-white border border-slate-200 rounded-lg");
     expect(NOT_FOUND_LAYOUT.homeButton).toContain("text-slate-700");
     expect(NOT_FOUND_LAYOUT.homeButton).toContain("focus:ring-slate-500");
-    expect(NOT_FOUND_LAYOUT.homeIcon).toBe("h-4 w-4 mr-2");
+    expect(NOT_FOUND_LAYOUT.homeIcon).toBe("w-4 h-4 mr-2");
     expect(NOT_FOUND_LAYOUT.homeHref).toBe("/");
   });
 });
@@ -4249,5 +4251,777 @@ describe("session-189: the leads Saved-Views select + calendar month-nav focus/o
     expect(src).toContain('className="hidden sm:flex"');
     expect(src).toContain("setCursor(now);");
     expect(src).toContain("setSelectedDay(now);");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Session-190 (walk63): the reports Save-Custom-View dialog open faces
+// interior walk — the s400 close's named candidates (the reports
+// SAVE-CUSTOM-VIEW dialog — the s25-era construction, its open faces
+// never walked under ADR-022 · the dashboard follow-up-rows checkbox
+// arms — the s27-era construction · the activities Completed-tab row
+// actions — the s109-era construction). The discovery
+// (scripts/discover-190.ts + the micro-probes) adjudicated: the
+// dialog LIVE on BOTH apps at every censused face; the dashboard
+// checkbox arms + the Completed-tab row actions KILLED (the
+// reference's zero-data state persists — 0 checkboxes on Lead
+// Sources, the No-upcoming empty state, the empty Completed panel);
+// the topbar-search gate KILLED again (populated=0). The walk's
+// verdict: ONE live find — D-190a1 THE SIX COLUMN CHECKBOXES'
+// LITERAL ID/FOR CONSTRUCTION (the reference's checkboxes carry the
+// literal REPORT_COLUMNS keys as ids — id="name" … id="wonDate",
+// for="name" … for="wonDate" — ours shipped React useId ids; the
+// D-114a2/D-187a1 ids-are-construction-parity doctrine; THE CURE:
+// id={col.key} at the call site, the component's id ?? generated
+// seam carrying it to the htmlFor). The byte-equal ledger: the
+// trigger `1216,113 192x36` + the OPEN dialog `384,240 672x420` +
+// the input `409,343 622x36` (placeholder + the COMPUTED font
+// 14px/400 line 20px byte-equal — the md:text-sm a class-order
+// genus, the reference appending it at the chain's end) + the
+// checkbox[0] `409,423 16x16` + the summary `409,521 622x46` + the
+// footer Cancel `792,599 81x36` / Save `882,599 149x36` / Close
+// `1023,257 16x16` — all byte-equal at BOTH axes (the phone root
+// `0,184 390x476`, the phone input 16px/400 — the s9 below-md
+// doctrine); the REAL-keyboard chain STRUCTURALLY IDENTICAL (10
+// stops: the mount input → 6 checkboxes → Cancel → Close → the
+// input wrap — the Save NEVER in the chain at the fresh-open state,
+// disabled buttons are not focusable; the post-type drive captures
+// its REAL face); the REAL :focus-visible faces byte-equal on the
+// VISIBLE layers (the 1px near-black ring); the interactive arms
+// byte-equal (the type-flip + the save round-trip `Saved Reports
+// (1)` + the L-74c8 post-save clear + the L-74c7 cancel-keep + the
+// saved row name/date + the Load token genus + the checkbox-toggle
+// faces); every remaining delta a documented genus (the slot-count
+// with every VISIBLE layer byte-equal · the outline VERSION FORM +
+// both sub-forms · the s129 ring-offset white zero-extent slot ·
+// the M-81c2 token pairs — border-line/bg-surface/text-ink/
+// muted-ink/line-soft/neutral-900 vs border-input/bg-background/
+// muted-foreground/accent/primary, computed-equal on every face ·
+// the class-order genus · the React useId format · the DANGLING
+// aria-describedby genus [walk54: the reference's own dead pointer,
+// not mirrored] · the aria-hidden svg superset [kept]).
+// ---------------------------------------------------------------------------
+
+describe("session-190: the reports Save-Custom-View dialog focus/open interior walk (walk63 — one live find cured [D-190a1 the checkbox literal ids]; every other delta a documented genus, both apps byte-equal on every resting + REAL-keyboard face at both axes)", () => {
+  it("the walk63 decode freeze — the one-arm OPEN ledger at both axes + the REAL Tab/Save drives + the save/reopen round-trips + the checkbox-toggle ride (the tool's own contract)", () => {
+    const src = read("scripts/walk63-savedreports-dialog-focus-open.ts");
+    // the two-app pair form (the s162 login consolidation)
+    expect(src).toContain("preflightPairState");
+    expect(src).toContain('const REF_URL = process.env.REF_URL ?? "https://neo-crm-8ab2c17c.base44.app"');
+    // Phase A the OPEN dialog census at BOTH axes — the trigger's
+    // resting face, the click-open ride, the root geometry ledger,
+    // the title, the name input's FULL chain + computed font, the
+    // 6-column checkbox grid, the Current-Filters summary, the
+    // footer pair, the close X, the mount focus
+    expect(src).toContain("dialogPhase");
+    expect(src).toContain("mountFocus");
+    expect(src).toContain("closeAria");
+    expect(src).toContain('{ w: 390, h: 844 }');
+    // Phase B the REAL keyboard Tab drive through the OPEN dialog
+    // (the walk54/58 focus form) + the disabled-Save decode (the
+    // Save NEVER in the fresh-open chain — the post-type drive
+    // captures its REAL face)
+    expect(src).toContain("tabPhase");
+    expect(src).toContain("the Save button is DISABLED at the fresh-open state");
+    expect(src).toContain('await page.keyboard.press("Tab")');
+    // Phase C the interactive arms — the type-flip, the SAVE
+    // round-trip (the localStorage seam), the post-save REOPEN (the
+    // L-74c8 name-clear), the saved-list arm, the cancel-then-reopen
+    // decode (the L-74c7 keep), the checkbox-toggle ride
+    expect(src).toContain("interactivePhase");
+    expect(src).toContain("typeFlipsSave");
+    expect(src).toContain("reopenName");
+    expect(src).toContain("cancelReopenKeepsName");
+    expect(src).toContain("checkboxToggle");
+  });
+
+  it("the Saved-Reports TRIGGER call-site construction — the outline button's own chain (the genuine battery gap: the s25 pins hold the wiring regex, never the trigger's own construction; the walk proves the box byte-equal at 1216,113 192x36 on both apps)", () => {
+    const src = read("src/app/(app)/reports/reports-page.tsx");
+    // the outline variant + the Bookmark glyph + the LIVE count form
+    // (the s25-P4 wiring, now the construction freeze)
+    expect(src).toContain('<Button\n            variant="outline"\n            onClick={() => setSaveDialogOpen(true)}\n          >');
+    expect(src).toContain('<Bookmark className="h-4 w-4 mr-2" /> Saved Reports ({savedCount})');
+  });
+
+  it("the Save-Report-Dialog open-interior construction — the wide shell + the name input + the checkbox grid + the summary box + the footer pair (the genuine gap: the s25 pins hold the content words as regexes, never the call-site chains; the walk proves the root byte-equal at 384,240 672x420 + the input 409,343 622x36 + the checkbox[0] 409,423 16x16 + the summary 409,521 622x46 + Cancel 792,599 81x36 + Save 882,599 149x36 on both apps at BOTH axes)", () => {
+    const src = read("src/components/shared/save-report-dialog.tsx");
+    // the wide shell (the s30-P6 scroll-cap pair — the s68 N-68d wiring)
+    expect(src).toContain('<DialogContent className={DIALOG_CONTENT.wide}>');
+    // the name input: the htmlFor/id pairing + the mt-1 + the exact
+    // placeholder (the walk: the COMPUTED font byte-equal 14px/400)
+    expect(src).toContain('<Label htmlFor="reportName">Report Name</Label>');
+    expect(src).toContain('id="reportName"');
+    expect(src).toContain('className="mt-1"');
+    expect(src).toContain('placeholder="e.g., Q1 Won Deals by Region"');
+    // the six-column checkbox grid: the two-column rhythm
+    expect(src).toContain('<div className="grid grid-cols-2 gap-3">');
+    // the Current-Filters summary box (the three-dimension line)
+    expect(src).toContain('className="bg-blue-50 border border-blue-200 rounded-lg p-3"');
+    // the footer pair: the outline Cancel + the BLACK-pair Save (the
+    // s123 F-123a4 DIALOG_SUBMIT family) with the disabled-until-named
+    // gate + the L-74c8 post-save clear
+    expect(src).toContain('<Button variant="outline" onClick={() => onOpenChange(false)}>');
+    expect(src).toContain('className={DIALOG_SUBMIT.button}');
+    expect(src).toContain("disabled={name.trim().length === 0}");
+    expect(src).toContain('setName("");');
+  });
+
+  it("D-190a1 the six column checkboxes' LITERAL id/for construction — the reference's checkboxes carry the literal REPORT_COLUMNS keys as ids (id=\"name\" … id=\"wonDate\", for=\"name\" … for=\"wonDate\" — live-walked byte-equal on the reference's DOM); ours shipped React useId ids (the D-114a2/D-187a1 ids-are-construction-parity doctrine; the cure: id={col.key} at the call site, the component's id ?? generated seam carrying it to the htmlFor)", () => {
+    const src = read("src/components/shared/save-report-dialog.tsx");
+    // the literal-id cure: every checkbox rides its REPORT_COLUMNS
+    // key as the id (the reference's own construction)
+    expect(src).toContain("<Checkbox");
+    expect(src).toContain("id={col.key}");
+    expect(src).toContain("key={col.key}");
+    // the component seam honors the id (the generated fallback only
+    // when no id passed)
+    const comp = read("src/components/ui/label.tsx")!;
+    expect(comp).toContain("const inputId = id ?? generated;");
+    expect(comp).toContain("htmlFor={inputId}");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Session-191 (walk64): THE THREE CREATE DIALOGS' OPEN FACES — the two-app
+// element-level ledger of the three unwalked members of the create-dialog
+// family (the CONTACT — the s15/s30-era avatar + photo-upload construction ·
+// the ACCOUNT — the s15/s5-era 8-field 2-col grid · the EVENT — the
+// s15/s76 WIDE family), the discovery probe's live adjudication
+// (scripts/discover-191): all LIVE on BOTH apps, byte-equal at the census
+// level — the triggers 1255,115 153x36 / 1274,103 134x32 / 1269,113 139x36
+// byte-equal, the OPEN roots 464,45 512x810 / 384,214 672x472 /
+// 384,133 672x634 byte-equal, the titles byte-equal, the field vocabularies
+// byte-equal (the contact's 6 placeholders + type=tel; the account's 8
+// placeholder-LESS fields; the event's combobox trio + datetime pair +
+// Location placeholder), the footer pairs byte-equal, the mount-focus
+// byte-equal BEHAVIOR (the camera button on the contact; the first input on
+// the account/event), the REAL-TAB chains STRUCTURALLY IDENTICAL (19/12/19
+// stops), the select rides byte-equal (the meet-select's 5 emoji options +
+// the status 3-option set + the listbox boxes), the EVENT related-to pick
+// byte-equal (the M-76c13 conditional Name field — the placeholder "Enter
+// Contact name" + the box 728,638 303x36 + the comboTexts flip), the phone
+// axes byte-equal (0,42 390x760 / 0,168 390x508 / 0,99 390x646).
+// THE WALK'S VERDICT — the live finds, all ONE FAMILY (the ids): D-191a1
+// THE CONTACT DIALOG'S LITERAL ID/FOR MAP (the reference carries
+// id="name"/"email"/"phone"/"company"/"position" with for= the same; ours
+// shipped ct-*) · D-191a2 THE ACCOUNT DIALOG'S LITERAL ID/FOR MAP (the
+// reference: name/industry/email/phone/website/revenue/employees; ours
+// acc-*) · D-191a3 THE SELECTS' ID + LABEL FOR WIRING (the reference's
+// meet-select carries button id="source" + label for="source"; its account
+// Status button id="status" + label for="status"; ours shipped bare labels
+// + aria-label triggers — the cure wires the id/for while KEEPING the
+// aria-label superset, which wins the accessible-name computation) ·
+// D-191a4 THE CONTACT FILE INPUT'S EXPLICIT tabIndex (ours ships
+// tabIndex={-1}; the reference carries none — the D-187a1 retirement's
+// next member; both inert — className="hidden"). The event dialog's
+// id-less reference inputs + bare labels decode as the KEPT s172
+// SUPERSET (our labels wire htmlFor/id — the reference's bare labels are
+// its own defect, never mirrored). The cancel-then-reopen state delta
+// (ours clears via the S71-P1 epoch remount; the reference keeps the
+// draft) decodes as the PINNED house superset (the fresh-per-open
+// contract — dialog-mount-contract.test.ts). Every remaining delta a
+// documented genus (the box-shadow slot-count with every VISIBLE layer
+// byte-equal · the outline VERSION FORM + both sub-forms + the
+// color-carrier sub-form · the M-81c2 token pairs — border-line/
+// bg-surface vs border/bg-background, computed-equal · the md:text-sm
+// composition genus — the COMPUTED font 14px/500 byte-equal both apps ·
+// the aria-label supersets · our aria-hidden svg + Radix placeholder-
+// <option> supersets · the reference's own Radix-version artifacts — the
+// stale aria-controls at rest + the dangling aria-describedby genus ·
+// the React useId format).
+// ---------------------------------------------------------------------------
+
+describe("session-191: the three create dialogs' focus/open interior walk (walk64 — the id-parity family cured [D-191a1/a2 the literal id/for maps + D-191a3 the selects' id/for wiring + D-191a4 the tabIndex retirement]; every other delta a documented genus or kept superset, both apps byte-equal on every resting + REAL-keyboard face at both axes)", () => {
+  it("the walk64 decode freeze — the three-arm OPEN ledger at both axes + the REAL Tab drives + the select rides + the conditional-Name appearance + the cancel-then-reopen decode (the tool's own contract)", () => {
+    const src = read("scripts/walk64-createdialogs-focus-open.ts");
+    // the two-app pair form (the s162 login consolidation)
+    expect(src).toContain("preflightPairState");
+    expect(src).toContain('const REF_URL = process.env.REF_URL ?? "https://neo-crm-8ab2c17c.base44.app"');
+    // the three arms (the walk61 multi-arm form)
+    expect(src).toContain('{ key: "contact", path: "/contacts", trigger: "New Contact", submitText: "Create Contact" }');
+    expect(src).toContain('{ key: "account", path: "/accounts", trigger: "New Account", submitText: "Create Account" }');
+    expect(src).toContain('{ key: "event", path: "/calendar", trigger: "New Event", submitText: "Create Event" }');
+    // Phase A per dialog the OPEN census — the trigger's resting face,
+    // the click-open ride, the root geometry + DFS ledger, the title,
+    // the FULL inputs census (the id map), the labels census (the
+    // wiring map), the comboboxes, the file input, the footer pair, the
+    // mount focus, the Escape round-trip — at BOTH axes
+    expect(src).toContain("dialogPhase");
+    expect(src).toContain("idMapDiff");
+    expect(src).toContain("labelMapDiff");
+    expect(src).toContain("mountFocus");
+    expect(src).toContain('{ w: 390, h: 844 }');
+    // Phase B the REAL keyboard Tab drive through each OPEN dialog
+    // (the walk54/58/63 focus form) + the REAL :focus-visible faces at
+    // the first input + a combobox + the Create submit
+    expect(src).toContain("tabPhase");
+    expect(src).toContain('await page.keyboard.press("Tab")');
+    // Phase C the interactive arms — the select rides (the listbox OPEN
+    // face + the option vocabulary + the REAL data-highlighted face
+    // under ArrowDown) + the EVENT related-to pick ride (the M-76c13
+    // conditional) + the cancel-then-reopen state decode — the submits
+    // NEVER fired on either app
+    expect(src).toContain("selectRidePhase");
+    expect(src).toContain("conditionalRidePhase");
+    expect(src).toContain("cancelReopenPhase");
+    expect(src).toContain("submits NEVER fired on either app");
+  });
+
+  it("the CONTACT open-interior construction freeze — the avatar section + the two h3 headers + the pair groups + the file input + the footer pair (the genuine battery gap: the s19/s30 pins hold OUR wiring regexes, never the call-site chains; the walk proves the root byte-equal at 464,45 512x810 on both apps at both axes)", () => {
+    const src = read("src/components/shared/entity-dialogs.tsx");
+    // the body + the avatar section (the s15/s30 construction)
+    expect(src).toContain('<div className={CONTACT_DIALOG.body}>');
+    expect(src).toContain('<div className={CONTACT_AVATAR.section}>');
+    // the hidden file input (the s30-P2 REAL round-trip; the accept
+    // trio — the reference's explicit MIME list; D-191a4: NO tabIndex)
+    expect(src).toContain('accept="image/jpeg,image/png,image/jpg" className="hidden" onChange={uploadPhoto}');
+    // the two h3 section headers (the L-92c2 nested sections)
+    expect(src).toContain('<h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Contact Details</h3>');
+    expect(src).toContain('<h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Professional Details</h3>');
+    // the meet-select (the s28-P1 raw values + emoji labels)
+    expect(src).toContain("{CONTACT_SOURCE_OPTIONS.map((o) =>");
+    // the footer pair: the outline Cancel + the BLACK-pair submit (the
+    // s123 F-123a4 DIALOG_SUBMIT family)
+    expect(src).toContain('<Button type="button" variant="outline" onClick={() => onOpenChange(false)}>');
+    expect(src).toContain('{pending ? "Creating..." : "Create Contact"}');
+  });
+
+  it("the ACCOUNT open-interior construction freeze — the 8-field 2-col grid + the Status select + the footer pair (the genuine gap: the s15/s5 pins hold the field ORDER + the payload contracts, never the call-site chains; the walk proves the root byte-equal at 384,214 672x472 on both apps at both axes)", () => {
+    const src = read("src/components/shared/entity-dialogs.tsx");
+    // the 2-column grid body (the S15-P10 pairs contract)
+    expect(src).toContain('<div className={ACCOUNT_DIALOG.body}>');
+    // the Status select rides the ACCOUNT_STATUSES vocabulary
+    expect(src).toContain("{ACCOUNT_STATUSES.map((s) =>");
+    // the footer pair + the pending label
+    expect(src).toContain('{pending ? "Creating..." : "Create Account"}');
+    expect(src).toContain("className={DIALOG_SUBMIT.button}");
+  });
+
+  it("the EVENT open-interior construction freeze — the wide family + the bare-field form + the combobox trio + the conditional Name arm + the blue submit (the genuine gap: the s15/s76 pins hold the constants + the bundle decode, never the call-site chains; the walk proves the root byte-equal at 384,133 672x634 + the M-76c13 conditional live on both apps)", () => {
+    const src = read("src/components/shared/entity-dialogs.tsx");
+    // the wide shell + the form rhythm + the two grid pairs
+    expect(src).toContain('<DialogContent className={DIALOG_CONTENT.wide}>');
+    expect(src).toContain('className={EVENT_DIALOG.form}');
+    expect(src).toContain('className={EVENT_DIALOG.pair}');
+    expect(src).toContain('className={EVENT_DIALOG.relatedToAlone}');
+    // the rows=3 textarea (the M-92c3 live decode)
+    expect(src).toContain('<Textarea id="ev-desc" rows={3}');
+    // the combobox trio (the aria-label superset family — the
+    // reference's own triggers are aria-less)
+    expect(src).toContain('<SelectTrigger aria-label="Event Type" className="w-full"><SelectValue /></SelectTrigger>');
+    expect(src).toContain('<SelectTrigger aria-label="Status" className="w-full"><SelectValue /></SelectTrigger>');
+    expect(src).toContain('<SelectTrigger aria-label="Related To" className="w-full"><SelectValue placeholder="Select type" /></SelectTrigger>');
+    // the M-76c13 conditional Name field (the capitalized placeholder —
+    // live-walked byte-equal "Enter Contact name" on both apps)
+    expect(src).toContain('placeholder={`Enter ${form.relatedType.charAt(0).toUpperCase()}${form.relatedType.slice(1)} name`}');
+    // the blue submit (the M-76c12 one-off, BOTH modes)
+    expect(src).toContain("className={EVENT_DIALOG.submit}");
+    expect(src).toContain('{pending ? "Saving..." : event ? "Update Event" : "Create Event"}');
+  });
+
+  it("D-191a5 the EVENT create-dialog's start-date pre-fill retired — the reference's fresh-open start input is EMPTY (live-walked: the VLM battery caught the value-blind census's gap, the micro-probe confirmed OURS '2026-10-27T04:00' vs REF ''); ours pre-filled NOW (toLocalInputValue(defaultStart ?? new Date())) — the D-114a2 construction-parity family's behavioral member; the day-cell dblclick flow keeps its own defaultStart (the s54 decode, untouched by the cure)", () => {
+    const src = read("src/components/shared/entity-dialogs.tsx");
+    // the post-cure form: the create mode pre-fills ONLY the passed
+    // defaultStart (the day-cell flow), NEVER the NOW fallback — the
+    // fresh-open start is EMPTY, matching the reference
+    expect(src).toContain("startAt: event ? toLocalInputValue(event.startAt) : (defaultStart ? toLocalInputValue(defaultStart) : \"\"),");
+    expect(src).not.toContain("toLocalInputValue(defaultStart ?? new Date())");
+    // the submit gate still guards the empty start (the reference's
+    // required-attribute face; our toast superset stays)
+    expect(src).toContain('if (!form.startAt) {');
+    expect(src).toContain('"Start date and time are required"');
+    // the call site: the header "New Event" flow passes NO default
+    // (the reference's own fresh-open face); only the day-cell flows
+    // pass their OWN 09:00 default (the s54 decode)
+    const cal = read("src/app/(app)/calendar/calendar-page.tsx")!;
+    expect(cal).toContain("if (!day) {\n      setEditing(null);\n      setDefaultStart(null);\n      setDialogOpen(true);\n      return;\n    }");
+    expect(cal).toContain("start.setHours(9, 0, 0, 0);");
+    expect(cal).not.toContain("start.setHours(start.getHours() + 1, 0, 0, 0);");
+  });
+
+  it("D-191a1 the CONTACT dialog's LITERAL id/for map — the reference's inputs carry the bare literal ids (id=\"name\"/\"email\"/\"phone\"/\"company\"/\"position\", for= the same — live-walked byte-equal on the reference's DOM); ours shipped ct-* prefixed ids (the D-114a2/D-187a1/D-190a1 ids-are-construction-parity doctrine; the cure: the literal ids restored at every call site)", () => {
+    const src = read("src/components/shared/entity-dialogs.tsx");
+    // the five literal pairs (the reference's own construction)
+    expect(src).toContain('<Label htmlFor="name">Name *</Label>');
+    expect(src).toContain('<Label htmlFor="email">Email *</Label>');
+    expect(src).toContain('<Label htmlFor="phone">Phone</Label>');
+    expect(src).toContain('<Label htmlFor="company">Company</Label>');
+    expect(src).toContain('<Label htmlFor="position">Position</Label>');
+    // the ids themselves (the htmlFor targets)
+    expect(src).toMatch(/id="name"\s*\n/);
+    expect(src).toContain('id="email"');
+    expect(src).toContain('id="phone"');
+    expect(src).toContain('id="company"');
+    expect(src).toContain('id="position"');
+    // the ct-* era is GONE (no prefixed ids remain)
+    expect(src).not.toContain('id="ct-');
+    expect(src).not.toContain('htmlFor="ct-');
+  });
+
+  it("D-191a2 the ACCOUNT dialog's LITERAL id/for map — the reference's inputs carry the bare literal ids (id=\"name\"/\"industry\"/\"email\"/\"phone\"/\"website\"/\"revenue\"/\"employees\", for= the same); ours shipped acc-* prefixed ids (the same doctrine; the cure: the literal ids restored)", () => {
+    const src = read("src/components/shared/entity-dialogs.tsx");
+    // the seven literal pairs
+    expect(src).toContain('<Label htmlFor="name">Account Name *</Label>');
+    expect(src).toContain('<Label htmlFor="industry">Industry</Label>');
+    expect(src).toContain('<Label htmlFor="email">Email</Label>');
+    expect(src).toContain('<Label htmlFor="phone">Phone</Label>');
+    expect(src).toContain('<Label htmlFor="website">Website</Label>');
+    expect(src).toContain('<Label htmlFor="revenue">Annual Revenue</Label>');
+    expect(src).toContain('<Label htmlFor="employees">Employees</Label>');
+    // the ids themselves
+    expect(src).toContain('id="industry"');
+    expect(src).toContain('id="website"');
+    expect(src).toContain('id="revenue"');
+    expect(src).toContain('id="employees"');
+    // the acc-* era is GONE
+    expect(src).not.toContain('id="acc-');
+    expect(src).not.toContain('htmlFor="acc-');
+  });
+
+  it("D-191a3 the create-dialog SELECTS' id + label-for wiring — the reference's meet-select carries button id=\"source\" + label for=\"source\" and its account Status button id=\"status\" + label for=\"status\" (live-walked); ours shipped bare labels + aria-label triggers (the cure: the id/for wiring restored while KEEPING the aria-label superset — aria-label wins the accessible-name computation, so the a11y pin's name contract is unchanged)", () => {
+    const src = read("src/components/shared/entity-dialogs.tsx");
+    // the contact meet-select: the wired label + the id on the trigger
+    expect(src).toContain('<Label htmlFor="source">How did you meet?</Label>');
+    expect(src).toContain('<SelectTrigger id="source" aria-label="How did you meet?"');
+    // the account Status select: the wired label + the id
+    expect(src).toContain('<Label htmlFor="status">Status</Label>');
+    expect(src).toContain('<SelectTrigger id="status" aria-label="Status"');
+  });
+
+  it("D-191a4 the CONTACT file input's explicit tabIndex retirement — the reference's hidden input carries NO tabIndex attribute (live-walked: tabIndex=\"(none)\"); ours shipped tabIndex={-1} (the D-187a1 doctrine's next member — both inert, className=\"hidden\" removes the input from the layout AND the tab chain; the cure: the explicit attribute retired)", () => {
+    const src = read("src/components/shared/entity-dialogs.tsx");
+    // the post-cure construction: accept trio + hidden + onChange, NO
+    // explicit tabIndex anywhere on a file input
+    expect(src).toContain('accept="image/jpeg,image/png,image/jpg" className="hidden" onChange={uploadPhoto}');
+    expect(src).not.toContain("tabIndex={-1}");
+    // the collateral pin: the s19 ct-phone source pin rides the cured
+    // literal id (the D-191a1 rename)
+    const pwa = read("tests/pwa-metadata.test.ts")!;
+    expect(pwa).toMatch(/id="phone"[\s\S]{0,120}type="tel"/);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Session-192 (walk65): THE LOGIN ANON-SURFACE INTERIORS + THE LANDING
+// MARKETING ARMS — the two-app element-level ledger of the two surfaces
+// the s404 close adjudicated as the round material (the discovery
+// probe scripts/discover-192.ts): the login view ladder (signin →
+// signup → reset → sent — the client-state arms only) + the FAQ
+// single-open accordion + the mobile disclosure menu, both apps at
+// 1440×900 + 390×844 on FRESH contexts (the anon battery).
+// ---------------------------------------------------------------------------
+
+describe("session-192: the login anon-surface + landing marketing-arms walk (walk65 — the id-parity family + the REAL focus ring cured [D-192a1 the signup confirm literal id + D-192a2 the reset email literal id + D-192a3 the dark submits' REAL focus-visible ring]; every other delta a documented genus or kept superset, both apps byte-equal on every resting + REAL-keyboard face at both axes)", () => {
+  it("the walk65 decode freeze — the four-view OPEN ledgers + the REAL Tab chain + the draft decode + the FAQ/menu arms + the CTA faces at both axes (the tool's own contract; the anon battery — FRESH contexts, NO storageState on either app)", () => {
+    const src = read("scripts/walk65-login-landing-arms.ts");
+    // the anon battery form (the s162 login consolidation RETIRED for
+    // this battery — the login/landing legs ride FRESH contexts)
+    expect(src).toContain("FRESH contexts on BOTH apps (no login, no storageState)");
+    expect(src).toContain('const REF_URL = process.env.REF_URL ?? "https://neo-crm-8ab2c17c.base44.app"');
+    expect(src).not.toContain("preflightPairState");
+    // the four login views (the walk61 multi-arm form)
+    expect(src).toContain('const VIEWS = ["signin", "signup", "reset", "sent"] as const;');
+    // Phase A per view the OPEN census — the card root geometry + DFS
+    // ledger + heading + the FULL inputs census (the id map) + the
+    // labels wiring map + the google button + the submit face + the
+    // back/footer links + the mount focus — at BOTH axes
+    expect(src).toContain("viewPhase");
+    expect(src).toContain("idMapDiff");
+    expect(src).toContain("labelMapDiff");
+    expect(src).toContain('{ w: 1440, h: 900 }, { w: 390, h: 844 }');
+    // the sent-ride write-free contract: the nonexistent-email POST
+    // (the no-enumeration 200 family — the reference's own
+    // forgot-password is client-side theater, never a network call)
+    expect(src).toContain('await emailInput.fill("walk192probe@example.com")');
+    expect(src).toContain("the signin/signup submits NEVER fired");
+    // Phase B the REAL keyboard Tab drive through the signin card + the
+    // REAL :focus-visible faces at the email input + the google button +
+    // the submit (the programmatic face never the true face)
+    expect(src).toContain("tabPhase");
+    expect(src).toContain('await page.keyboard.press("Tab")');
+    // Phase C the view-flip draft decode (the client-state contract)
+    expect(src).toContain("draftPhase");
+    // Phase E/F the landing arms — the FAQ single-open ride + the mobile
+    // disclosure menu ride + Phase G the CTA faces
+    expect(src).toContain("faqPhase");
+    expect(src).toContain("menuPhase");
+    expect(src).toContain("ctaPhase");
+  });
+
+  it("the LOGIN open-interior construction freeze — the signin card chain + the signup 3-field chain + the reset email chain + the sent callout chain (the genuine battery gap: the s11/s21/s79/s111 pins hold OUR wiring regexes + the computed-style contracts, never the call-site chains at the walk65 level; the walk proves the card root byte-equal at 496,95 448x710 / 16,73 358x650 on both apps at both axes)", () => {
+    const src = read("src/components/layout/login-card.tsx");
+    // the signin view: the h1/subtitle pair + the google button + the
+    // footer link pair (the in-place view machine)
+    expect(src).toContain('<h1 className={LOGIN_LAYOUT.title}>Welcome to NEO CRM</h1>');
+    expect(src).toContain('<p className={LOGIN_LAYOUT.subtitle}>Sign in to continue</p>');
+    expect(src).toContain("Continue with Google");
+    expect(src).toContain('onClick={() => goto("forgot")}');
+    expect(src).toContain('onClick={() => goto("signup")}');
+    // the view machine replaces the login column entirely (the S21-P4
+    // in-place contract — no logo, no google, no divider)
+    expect(src).toContain('{view !== "signin" ? (');
+    // the signup view: the back + the h2 + the 3-field vocabulary
+    expect(src).toContain("<h2 className={LOGIN_SIGNUP_LAYOUT.title}>Create your account</h2>");
+    expect(src).toContain('placeholder="Re-enter password"');
+    expect(src).toContain('{pending ? "Please wait…" : "Create account"}');
+    // the reset view: the back + the h2 + the description + the form
+    expect(src).toContain("<h2 className={LOGIN_RESET_LAYOUT.title}>Reset your password</h2>");
+    expect(src).toContain("Enter your email and we'll send you a link to reset your password");
+    expect(src).toContain("onSubmit={onSendResetLink}");
+    // the sent view: the icon tile + the h2 + the email line + the
+    // callout + the back (the s163 resetUrl rides ONLY when present)
+    expect(src).toContain("<h2 className={LOGIN_RESET_LAYOUT.title}>Check your email</h2>");
+    expect(src).toContain("We've sent password reset instructions to");
+    expect(src).toContain("{resetUrl && (");
+    expect(src).toContain('onClick={() => goto("back")}');
+  });
+
+  it("the LANDING marketing-arms construction freeze — the FAQ single-open accordion chain + the mobile disclosure menu chain (the genuine battery gap: the s142 pins hold the component-level regexes, never the call-site chains; the walk proves the FAQ section byte-equal at 1440x677 with Q1 open by default + the menu panel byte-equal at 0,64 390x229 with the 6-link vocabulary on both apps)", () => {
+    const src = read("src/components/landing/landing-page.tsx");
+    // the FAQ single-open machine: Q1 (index 0) open by default, the
+    // click flips open→-1 (close) or→index (single-open)
+    expect(src).toContain("const [openIndex, setOpenIndex] = React.useState(0);");
+    expect(src).toContain("onClick={() => setOpenIndex(open ? -1 : index)}");
+    // the a11y superset (the reference's toggles carry NO aria — the
+    // standing s142 DEVIATION pin, KEPT)
+    expect(src).toContain("aria-expanded={open}");
+    expect(src).toContain('aria-controls={`faq-answer-${index}`}');
+    // the answer mounts/unmounts with the open item (the walk65
+    // visibleAnswers=1 evidence: exactly ONE answer on any ride)
+    expect(src).toContain("{open && (");
+    expect(src).toContain('id={`faq-answer-${index}`}');
+    // the chevron gains rotate-180 on the open item
+    expect(src).toContain('open && "rotate-180"');
+    // the mobile disclosure menu: the mount/unmount in-flow panel +
+    // the menu↔x icon swap + the in-panel close
+    expect(src).toContain("const [menuOpen, setMenuOpen] = React.useState(false);");
+    expect(src).toContain("{menuOpen && (");
+    expect(src).toContain("{menuOpen ? <X className=\"w-6 h-6\" /> : <Menu className=\"w-6 h-6\" />}");
+    expect(src).toContain('onClick={() => setMenuOpen((v) => !v)}');
+    expect(src).toContain("onClick={() => setMenuOpen(false)}");
+    expect(src).toContain('className="md:hidden text-gray-700 p-1"');
+  });
+
+  it("D-192a1 the SIGNUP view's confirm input LITERAL id — the reference's confirm carries id=\"confirmPassword\" + for=\"confirmPassword\" (live-walked byte-equal on the reference's DOM: the walk65 signup id-map decode); ours shipped the kebab-case id=\"confirm-password\" (the D-114a2/D-187a1/D-190a1/D-191a1/a2 ids-are-construction-parity doctrine; the cure: the literal id restored at the call site — matching the reset-password page's own confirmPassword family)", () => {
+    const src = read("src/components/layout/login-card.tsx");
+    // the post-cure pair (the reference's own construction)
+    expect(src).toContain('<label htmlFor="confirmPassword" className={LOGIN_SIGNUP_LAYOUT.label}>');
+    expect(src).toContain('id="confirmPassword"');
+    // the kebab-case era is GONE
+    expect(src).not.toContain('id="confirm-password"');
+    expect(src).not.toContain('htmlFor="confirm-password"');
+  });
+
+  it("D-192a2 the RESET view's email input LITERAL id — the reference's reset view carries the bare literal id=\"email\" + for=\"email\" (live-walked byte-equal on the reference's DOM: the walk65 reset id-map decode); ours shipped id=\"reset-email\" (the same doctrine; the cure: the bare literal restored — the views never render simultaneously, so no id collision with the signin view's own id=\"email\")", () => {
+    const src = read("src/components/layout/login-card.tsx");
+    // the post-cure pair (the reset branch's own chain — the
+    // LOGIN_LAYOUT.label carrier distinguishes it from the signup
+    // branch's LOGIN_SIGNUP_LAYOUT.label email label)
+    expect(src).toContain('<label htmlFor="email" className={LOGIN_LAYOUT.label}>');
+    expect(src).toContain('className={LOGIN_RESET_LAYOUT.resetInput}');
+    // the reset-email era is GONE
+    expect(src).not.toContain('id="reset-email"');
+    expect(src).not.toContain('htmlFor="reset-email"');
+  });
+
+  it("D-192a3 the auth-card dark submits' REAL focus-visible ring — the reference's stock dark submits focus to the near-black --ring token (rgb(9,9,11) over the white 2px offset — live-walked on the signin/signup/reset submits' REAL keyboard faces: the walk65 Phase B + the micro-probe-192 family check); ours shipped ring-slate-400 (the s10-era authoring assumption, never live-probed on the submit — the INPUTS' slate-400 rings are byte-equal and STAY; the cure: focus-visible:ring-ring at all four submit sites)", () => {
+    const pl = read("src/lib/page-layout.ts")!;
+    const lr = read("src/lib/login-reset.ts")!;
+    // the signin submit (LOGIN_LAYOUT.submit)
+    expect(pl).toContain("focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2");
+    expect(pl).not.toContain("focus-visible:ring-slate-400");
+    // the three one-size-down submits (the reset send + the signup
+    // submit + the verify submit)
+    const submitLines = lr.split("\n").filter((l) => l.includes("bg-slate-900") && l.includes("focus-visible:ring"));
+    expect(submitLines.length).toBeGreaterThanOrEqual(3);
+    for (const line of submitLines) {
+      expect(line).toContain("focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2");
+      expect(line).not.toContain("focus-visible:ring-slate-400");
+    }
+    // the INPUTS keep their byte-equal slate-400 rings (the walk65
+    // evidence: the email input's REAL ring white-2px + slate-400-4px
+    // byte-equal on both apps)
+    expect(lr).toContain("focus:ring-2 focus:ring-slate-400 focus:ring-offset-2");
+  });
+});
+
+// Session-193 (walk66): THE MARKETING-INTERIOR ARMS — the /About +
+// /Contact AUTHENTICATED INTERIORS' interactive arms, the s406 close's
+// own naming, walked two-app at the OPEN-LEDGER level (the family 48
+// sessions stale: the pages censused at s142, the guest funnel at
+// s144, the 156-c interior-census legs hold the mainH geometry, the
+// sweep holds the pixels — never the DFS ledger, the anchor inventory,
+// the REAL Tab chain, the REAL focus faces, or the link rides).
+// [D-193a1 the base layer's universal outline-color rule CURED — the
+// alpha-color carrier family's PAINTING member: the walk53/61/66
+// resting faces decoded OURS currentColor/adaptive near-black vs the
+// reference's fixed rgba(10,10,10,0.5) with style:none (zero pixels —
+// the documented genus); the walk66 FOCUS faces found the same carrier
+// PAINTING (1px auto) on the marketing anchors — near-black OPAQUE vs
+// the reference's authored 50% ring — and the micro-probe-193 CSSOM
+// walk root-caused it: the reference's compiled base carries
+// `* { border-color: hsl(var(--border)); outline-color: hsl(var(--ring) / .5); }`
+// (the shadcn base template's universal line); OURS carried only the
+// border-color half. THE CURE: the outline-color half added at the
+// same * rule (the v4 color-mix idiom over our --color-ring #0a0a0a —
+// the same resolved 50% near-black the reference authors)].
+// [D-193a2 the sidebar links' REAL focus-visible ring — the KEPT
+// SUPERSET, PINNED: OURS paints focus-visible:ring-2 ring-white/50
+// (the s7 "deliberate a11y superset", re-verified invisible at the
+// s177 walk50 resting face — never before walk-proven at the REAL
+// keyboard face, and carrying ZERO test teeth); the reference ships
+// NO authored focus face on its sidebar links — the bare UA outline,
+// its own keyboard-focus-gap family (the D-112a2 doctrine), never
+// mirrored]. Every other walk66 delta a documented genus or kept
+// superset: the token-selection bg-background/bg-gray-50 pair
+// (computed-equal #f9fafb — the M-81c2 family) · the box-shadow
+// SLOT-COUNT (every VISIBLE layer byte-equal) · the outline VERSION
+// FORM + both sub-forms (1px none vs 2px solid transparent — zero
+// visible pixels on both) · OUR aria-hidden svg superset (the s19
+// family, KEPT) · OUR aria-label superset on the topbar arms (the
+// s88-c9 family, KEPT) · the reference's platform badge-close 16th
+// Tab stop (the s149 genus, never mirrored).
+describe("session-193: the marketing-interior arms walk (walk66 — the /About + /Contact authenticated interiors' interactive arms [D-193a1 the universal outline-color base rule cured; D-193a2 the sidebar ring the KEPT SUPERSET, pinned]; the Tab chains structurally identical at 15 stops both, the link rides + the phone axes byte-equal)", () => {
+  it("the walk66 decode freeze — the two-page OPEN ledgers + the REAL Tab chains with the geometry-keyed focus captures + the write-free link rides + the phone axes (the tool's own contract; the AUTHENTICATED battery — the sweep-state pair, the pages render only inside the login-walled chrome)", () => {
+    const src = read("scripts/walk66-marketing-interior-arms.ts");
+    // the authenticated battery form (the s162 pair-state doctrine)
+    expect(src).toContain("preflightPairState");
+    expect(src).toContain('const REF_URL = process.env.REF_URL ?? "https://neo-crm-8ab2c17c.base44.app"');
+    // Phase A per page the OPEN census — the main root + the DFS ledger +
+    // the h1 face + the h2 vocabulary + the FULL anchor inventory + the
+    // footer pair + the nav census
+    expect(src).toContain("pageCensus");
+    expect(src).toContain("LEDGER_JS");
+    expect(src).toContain("ANCHORS_JS");
+    // Phase B the REAL keyboard Tab drive — the chain's stop inventory +
+    // the REAL :focus-visible faces at the six decoded stops; the stub/
+    // trigger captures keyed by GEOMETRY (the REF carries no aria-labels
+    // — its labels are the visible text, so text-matching would miss)
+    expect(src).toContain("tabDrive");
+    expect(src).toContain('await page.keyboard.press("Tab")');
+    expect(src).toContain("stop.x >= 1070");
+    expect(src).toContain("stop.x >= 1180");
+    // Phase C the link rides (write-free client nav) + Phase D the phone axis
+    expect(src).toContain("ridePhase");
+    expect(src).toContain("phoneCensus");
+    expect(src).toContain("{ width: 1440, height: 900 }");
+    expect(src).toContain("{ width: 390, height: 844 }");
+    // the destructive-arm discipline: the EXTERNAL navigations NEVER
+    // fired (the mailto/social rides stay census-only)
+    expect(src).toContain("the EXTERNAL navigations are NEVER fired");
+    // the decode machinery: the anchor + focus-face deltas
+    expect(src).toContain("anchorsDelta");
+    expect(src).toContain("focusDelta");
+  });
+
+  it("the MARKETING open-interior construction freeze — the about page's h1 + the Get-in-touch anchor chain + the contact page's h1 + the mailto + the three social anchors (the genuine battery gap: the s142 landing-page pins hold the LANDING page's strings, never the about/contact call-site chains; the walk proves every anchor href/target/rel byte-equal on both apps, the rides byte-equal, the phone axes byte-equal)", () => {
+    const about = read("src/app/(marketing)/about/page.tsx");
+    const contact = read("src/app/(marketing)/contact/page.tsx");
+    // the about page chains
+    expect(about).toContain('<h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">About NEO CRM</h1>');
+    expect(about).toContain('className="text-blue-600 font-medium hover:underline" href="/Contact"');
+    expect(about).toContain("Get in touch with us →");
+    // the contact page chains — the mailto + the three social anchors
+    // (the walk66 Phase E census: href/target/rel byte-equal both apps)
+    expect(contact).toContain('<h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">Contact Us</h1>');
+    expect(contact).toContain('href="mailto:hello@example.com"');
+    expect(contact).toContain('href="https://www.linkedin.com"');
+    expect(contact).toContain('href="https://x.com"');
+    expect(contact).toContain('href="https://github.com"');
+    expect(contact).toContain('target="_blank"');
+    expect(contact).toContain('rel="noopener noreferrer"');
+  });
+
+  it("D-193a2 the SIDEBAR links' focus-visible ring — the KEPT SUPERSET, pinned (OURS paints focus-visible:ring-2 ring-white/50 at every sidebar stop, walk-proven at the REAL keyboard face: the oklab white/50 2px shadow carrier vs the reference's bare UA outline 1px auto rgba(10,10,10,0.5); the reference ships NO authored focus face on its sidebar links — its own keyboard-focus-gap family, the D-112a2 doctrine, never mirrored; the construction dates to session-7, re-verified invisible at the s177 walk50 RESTING face, and carried ZERO test teeth until this pin — both navs stay in lockstep)", () => {
+    const sidebar = read("src/components/layout/sidebar.tsx");
+    const mobileNav = read("src/components/layout/mobile-nav.tsx");
+    // the desktop sidebar + the drawer's nav — the same construction
+    expect(sidebar).toContain('"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"');
+    expect(mobileNav).toContain('"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"');
+  });
+});
+
+// Session-194 (walk67): THE 404 INTERIOR'S INTERACTIVE ARMS — the
+// designed 404 view the s408 close named ("the 404/error-boundary
+// interiors' interactive arms, if any surface beyond the census gate's
+// coverage"), walked two-app at the OPEN-LEDGER level for the first
+// time (the s12 construction is 180+ sessions stale against the
+// reference's CURRENT build — the SKILL's own standing rule: "treat
+// any s-pin older than the current audit as provisional until
+// re-verified"). The error-boundary pair (error.tsx + global-error.tsx)
+// is OUR-ONLY (the s170 scandihaven ports, source-pinned — the
+// reference cannot be crash-walked); the 404 is LIVE on BOTH apps.
+// [D-194a1 the QUOTED-PATHNAME FORM CURED — OURS interpolated
+// usePathname() verbatim ('The page "/x" could not be found…', the
+// LEADING SLASH inside the quotes); the reference interpolates its
+// router path WITHOUT the leading slash ('The page "x" …' — the span
+// 604,459 103x19 vs our 601,459 108x19 at the walk's maiden decode);
+// THE CURE: pathname.replace(/^\//, "") at the interpolation].
+// [D-194a2 the GO HOME TAG — the KEPT SUPERSET, PINNED: OURS renders
+// <Link href="/"> (an anchor — role=link, the href affordances, the
+// WCAG-correct link semantics for a navigation affordance); the
+// reference renders a <button> with NO href (its SPA JS-router
+// idiom). Every VISIBLE layer byte-equal (box 658,556 123x38 · color
+// · bg · border · radius · font · padding); the rides byte-equal
+// (both land at the landing "/"). The D-112a2 a11y-superset
+// doctrine's next member — the reference's own gap never mirrored;
+// the construction carried ZERO test teeth on the TAG identity until
+// this round's freeze].
+// [D-194a3 the GO HOME GLYPH CURED — the M-82c2 icon-identity
+// family's first CROSS-LIBRARY member (the D-186a1 pen-cure
+// precedent): OURS shipped lucide `house` (2 paths — the house + the
+// door; stroke-width 2; the `lucide lucide-house` class prefix; the
+// width/height attrs); the reference ships the heroicons home
+// OUTLINE (exactly ONE path, NO stroke-width attr → computed weight
+// 1, NO width/height attrs, the bare `w-4 h-4 mr-2` class) — its 404
+// view's platform-template origin, the one non-lucide icon family in
+// its tree. THE CURE: the reference's exact svg inlined at the Go
+// Home site (the lucide Home import retired there; OUR aria-hidden
+// kept — the s19 superset family)]. [D-194a4 the 404 TITLE CURED —
+// OURS shipped the s12 absolute title 'This Page Does Not Exist |
+// NEO CRM' (decoded from the reference's PRE-DRIFT build); the
+// CURRENT reference ships bare 'NEO CRM' (live-verified at both
+// contexts, 3s settles — and the title machinery is byte-equal on
+// every real route: both ship bare 'NEO CRM' on /dashboard, 'Accounts
+// | NEO CRM' on /accounts, 'About | NEO CRM' on /about; only the 404
+// differed). THE CURE: the metadata export retired in not-found.tsx —
+// the root layout's title.default 'NEO CRM' renders, byte-equal].
+// [D-194a5 the ANON UNKNOWN-ROUTE POSTURE — the PLATFORM GENUS,
+// PINNED: the reference's auth-first client-router guard redirects
+// anon unknown-routes to /login?from_url=<absolute-url> (its
+// designed 404 appears only PAST the guard — it never adjudicates
+// routability for anon visitors, everything anon → the wall; its SPA
+// also never ships a real HTTP 404 status — 200 everywhere); OURS
+// renders the designed 404 AT the unknown URL with a true HTTP 404
+// (routability adjudicated first — the route-group architecture:
+// known guarded routes → the wall; unknown routes → the 404,
+// session-independent). The reference's posture is its SPA platform
+// artifact (the s149 family) — OURS keeps the correct web semantics,
+// PINNED]. Every other walk67 delta a documented genus: the
+// outline-color serialization (oklab vs rgba — the s126 noise genus,
+// the D-193a1 cure's own family, zero visible pixels) · the
+// box-shadow SLOT-COUNT (every VISIBLE layer byte-equal — white 2px
+// + slate-500 4px) · the outline VERSION FORM (1px none vs 2px solid
+// transparent — the walk51 decode, zero visible pixels both) · the
+// reference's platform badge-close Tab stop (the s149 genus, never
+// mirrored) · OUR aria-hidden superset (the s19 family, KEPT).
+describe("session-194: the 404 interior's interactive arms (walk67 — the designed 404 view [D-194a1 the quoted-path form cured; D-194a2 the Go Home tag the KEPT SUPERSET, pinned; D-194a3 the glyph cured; D-194a4 the title cured; D-194a5 the anon posture the PLATFORM GENUS, pinned]; the Tab chains structurally identical, the Go Home ride + the phone axes byte-equal)", () => {
+  it("D-194a1 the quoted-pathname form — the CURE PIN (RED-first: the reference interpolates its router path WITHOUT the leading slash; our usePathname() carries it — the strip at the interpolation is the parity form)", () => {
+    const body = read("src/app/not-found-body.tsx");
+    // the CONSTRUCTION form (the JSX interpolation chain — the windowed
+    // form: the file's own docstring quotes the bare expression as decode
+    // history, so the pin guards the `}&quot;` interpolation tail only
+    // the construction carries)
+    expect(body).toContain('{pathname.replace(/^\\//, "")}&quot;');
+  });
+
+  it("D-194a3 the Go Home glyph — the CURE PIN (RED-first: the reference's heroicons home outline inlined — exactly ONE path, NO stroke-width attr [computed weight 1], NO width/height attrs, the bare w-4 h-4 mr-2 class; the lucide House import retired at this one site — the M-82c2 icon-identity family's first cross-library member, the D-186a1 pen-cure precedent)", () => {
+    const body = read("src/app/not-found-body.tsx");
+    // the lucide import retired (the one non-lucide site in the reference's tree)
+    expect(body).not.toContain('import { Home } from "lucide-react"');
+    // the reference's exact glyph: the heroicons home outline path
+    expect(body).toContain(
+      'd="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"',
+    );
+    // the reference's exact attr set: NO width/height, NO stroke-width
+    // (computed weight 1 — the visible weight delta the walk decoded)
+    const svgMatch = body.match(/<svg[^>]*>/);
+    expect(svgMatch).not.toBeNull();
+    const svg = svgMatch![0];
+    expect(svg).toContain('viewBox="0 0 24 24"');
+    expect(svg).toContain('fill="none"');
+    expect(svg).toContain('stroke="currentColor"');
+    expect(svg).not.toContain("stroke-width");
+    expect(svg).not.toContain('width="');
+    expect(svg).not.toContain('height="');
+    // OUR aria-hidden kept (the s19 superset family — the reference's
+    // svg carries none, its own a11y gap, never mirrored)
+    expect(svg).toContain('aria-hidden="true"');
+    // the class rides the constant (the reference's exact w-4 h-4 order)
+    expect(read("src/lib/page-layout.ts")).toContain('homeIcon: "w-4 h-4 mr-2"');
+  });
+
+  it("D-194a4 the 404 title — the CURE PIN (RED-first: the s12 absolute title is a PRE-DRIFT decode — the current reference ships bare 'NEO CRM'; the metadata export retires and the root layout's title.default renders, byte-equal)", () => {
+    const src = read("src/app/not-found.tsx");
+    // the CONSTRUCTION negatives (the windowed form — the file's own
+    // comment legitimately quotes the retired title as decode history,
+    // so the pin guards the metadata export + the absolute-title form,
+    // never the prose)
+    expect(src).not.toContain("export const metadata");
+    expect(src).not.toContain("title: { absolute:");
+  });
+
+  it("the walk67 decode freeze — the two-context OPEN ledgers + the REAL Tab chain with the Go Home focus capture + the write-free ride + the phone axis + the anon posture census (the tool's own contract; the AUTHENTICATED legs ride the sweep-state pair, the anon legs ride fresh contexts)", () => {
+    const src = read("scripts/walk67-404-interior-arms.ts");
+    // the authenticated battery form (the s162 pair-state doctrine)
+    expect(src).toContain("preflightPairState");
+    expect(src).toContain('const REF_URL = process.env.REF_URL ?? "https://neo-crm-8ab2c17c.base44.app"');
+    // Phase A the OPEN census — the DFS ledger from the min-h-screen page
+    // root (the platform artifacts stay OUTSIDE, the s149 doctrine) + the
+    // h1/h2/p/span faces + the Go Home arm inventory + the glyph decode +
+    // the title + the http status
+    expect(src).toContain("notFoundCensus");
+    expect(src).toContain("LEDGER_JS");
+    expect(src).toContain("computedStrokeWidth");
+    expect(src).toContain("glyphDelta");
+    // Phase B the REAL keyboard Tab drive + Phase C the write-free ride +
+    // Phase D the phone axis
+    expect(src).toContain("tabDrive");
+    expect(src).toContain('await page.keyboard.press("Tab")');
+    expect(src).toContain("ridePhase");
+    expect(src).toContain("phoneCensus");
+    expect(src).toContain("{ width: 1440, height: 900 }");
+    expect(src).toContain("{ width: 390, height: 844 }");
+    // Phase E the anon posture census (fresh contexts — the D-194a5 genus
+    // decode: OURS the 404 at the unknown URL vs the REF the redirect to
+    // /login?from_url — censused, never fixed)
+    expect(src).toContain("anonLeg");
+    expect(src).toContain('"/Login"');
+    // the destructive-arm discipline: no writes, no logout, no external nav
+    expect(src).toContain("no writes, no logout, no external nav");
+    // the diff machinery
+    expect(src).toContain("rowsDelta");
+    expect(src).toContain("focusDelta");
+  });
+
+  it("the 404 open-interior construction freeze — the not-found-body call-site chains (the genuine battery gap: the s12 pins hold the NOT_FOUND_LAYOUT constant strings, never the call-site construction; the walk proves the h1/h2/p/span boxes + the Go Home arm box byte-equal two-app, the ride + the phone axes byte-equal)", () => {
+    const body = read("src/app/not-found-body.tsx");
+    const wrapper = read("src/app/not-found.tsx");
+    // the skeleton chains — the three-group center (the s12 VLM decode)
+    expect(body).toContain('<h1 className={NOT_FOUND_LAYOUT.h1}>404</h1>');
+    expect(body).toContain('<h2 className={NOT_FOUND_LAYOUT.h2}>Page Not Found</h2>');
+    expect(body).toContain('<div className={NOT_FOUND_LAYOUT.divider} aria-hidden="true" />');
+    // D-194a1: the stripped interpolation (the reference's router-path form)
+    expect(body).toContain('&quot;{pathname.replace(/^\\//, "")}&quot;');
+    // D-194a2: the ANCHOR construction — the KEPT SUPERSET (the reference
+    // renders a JS-router <button> with no href; ours keeps the
+    // WCAG-correct link semantics, the D-112a2 doctrine's next member).
+    // The negative is scoped to the JSX return block — the file's own
+    // docstring legitimately names the reference's <button> as decode
+    // history (the D-193a1 windowed-slice lesson).
+    expect(body).toContain('<Link href={NOT_FOUND_LAYOUT.homeHref} className={NOT_FOUND_LAYOUT.homeButton}>');
+    const jsx = body.slice(body.indexOf("return ("));
+    expect(jsx).not.toContain("<button");
+    // D-194a3: the inline heroicons glyph rides the constant
+    expect(body).toContain("<svg");
+    expect(body).toContain("className={NOT_FOUND_LAYOUT.homeIcon}");
+    // the client seam (the only way to read the unmatched pathname)
+    expect(body).toContain("usePathname");
+    // the wrapper renders the body — no metadata, no session check
+    expect(wrapper).toContain('import { NotFoundBody } from "./not-found-body"');
+    expect(wrapper).toContain("return <NotFoundBody />;");
+  });
+
+  it("D-194a5 the ANON unknown-route posture — the PLATFORM GENUS, pinned (the 404 is SESSION-INDEPENDENT by design: no session resolution, no redirect — the reference's auth-first client-router guard walls every anon URL at /login?from_url=<absolute-url>, its designed 404 appearing only PAST the guard, and its SPA never ships a real HTTP 404 status; OURS adjudicates routability first and renders the designed 404 with the true 404 status for anon and authenticated visitors alike — the s149 platform family, never mirrored)", () => {
+    const wrapper = read("src/app/not-found.tsx");
+    const body = read("src/app/not-found-body.tsx");
+    // the session-independent construction: no session seam, no redirect
+    expect(wrapper).not.toContain("getSessionUser");
+    expect(wrapper).not.toContain("redirect(");
+    expect(body).not.toContain("getSessionUser");
+    expect(body).not.toContain("redirect(");
+    // no auth import anywhere on the surface
+    expect(wrapper).not.toContain('from "@/lib/auth"');
+    expect(body).not.toContain('from "@/lib/auth"');
   });
 });

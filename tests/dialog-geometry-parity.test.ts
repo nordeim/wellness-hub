@@ -644,7 +644,12 @@ describe("session-92 (F-92a2 + B-92a5 + B-92a4): the audit nanos", () => {
     expect(claude).not.toContain("Unit (Vitest, 2773 checks)");
     expect(claude).not.toContain("Unit (Vitest, 2777 checks)");
     expect(claude).not.toContain("Unit (Vitest, 2778 checks)"); // session-189: the retired form joins the negatives ladder (the walk62 +3)
-    expect(claude).toContain("Unit (Vitest, 2781 checks)");
+    expect(claude).not.toContain("Unit (Vitest, 2781 checks)"); // session-190: the retired form joins the negatives ladder (the walk63 +5)
+    expect(claude).not.toContain("Unit (Vitest, 2786 checks)"); // session-191: the retired form joins the negatives ladder (the walk64 +9)
+    expect(claude).not.toContain("Unit (Vitest, 2811 checks)"); // session-197: the retired form joins the negatives
+    expect(claude).not.toContain("Unit (Vitest, 2813 checks)"); // session-198: the retired form joins the negatives
+    expect(claude).not.toContain("Unit (Vitest, 2813 checks)"); // session-198: the retired form joins the negatives ladder (the D-197a1 sweep-tool +2)
+    expect(claude).toContain("Unit (Vitest, 2817 checks)");
     // session-145 lockstep carry-forward: the coverage line 2108 ->
     // 2112 (the walk35 transition pins); s146: 2112 -> 2115.
     expect(claude).not.toContain("(currently 2108)");
@@ -684,7 +689,10 @@ describe("session-92 (F-92a2 + B-92a5 + B-92a4): the audit nanos", () => {
     expect(claude).not.toContain("(currently 2773)");
     expect(claude).not.toContain("(currently 2777)");
     expect(claude).not.toContain("(currently 2778)"); // session-189: the retired form joins the negatives ladder
-    expect(claude).toContain("(currently 2781)");
+    expect(claude).not.toContain("(currently 2811)"); // session-197: the retired form joins the negatives ladder
+    expect(claude).not.toContain("(currently 2813)"); // session-198: the retired form joins the negatives ladder
+    expect(claude).not.toContain("(currently 2813)"); // session-198: the retired form joins the negatives ladder (the D-197a1 sweep-tool +2)
+    expect(claude).toContain("(currently 2817)");
     expect(claude).not.toContain("Vitest unit suites (2108 checks)");
     expect(claude).not.toContain("Vitest unit suites (2112 checks)");
     expect(claude).not.toContain("Vitest unit suites (2167 checks)");
@@ -725,7 +733,10 @@ describe("session-92 (F-92a2 + B-92a5 + B-92a4): the audit nanos", () => {
     expect(claude).not.toContain("Vitest unit suites (2773 checks)");
     expect(claude).not.toContain("Vitest unit suites (2777 checks)");
     expect(claude).not.toContain("Vitest unit suites (2778 checks)"); // session-189: the retired form joins the negatives ladder
-    expect(claude).toContain("Vitest unit suites (2781 checks)");
+    expect(claude).not.toContain("Vitest unit suites (2811 checks)"); // session-197: the retired form joins the neg
+    expect(claude).not.toContain("Vitest unit suites (2813 checks)"); // session-198: the retired form joins the neg
+    expect(claude).not.toContain("Vitest unit suites (2813 checks)"); // session-198: the retired form joins the negatives ladder (the D-197a1 sweep-tool +2)
+    expect(claude).toContain("Vitest unit suites (2817 checks)");
     expect(claude).not.toContain("`bun run test` (2108)");
     expect(claude).not.toContain("`bun run test` (2112)");
     expect(claude).not.toContain("`bun run test` (2115)");
@@ -771,7 +782,10 @@ describe("session-92 (F-92a2 + B-92a5 + B-92a4): the audit nanos", () => {
     expect(claude).not.toContain("`bun run test` (2773)");
     expect(claude).not.toContain("`bun run test` (2777)");
     expect(claude).not.toContain("`bun run test` (2778)"); // session-189: the retired form joins the negatives ladder
-    expect(claude).toContain("`bun run test` (2781)");
+    expect(claude).not.toContain("`bun run test` (2811)"); // session-197: the retired form joins the negatives ladd
+    expect(claude).not.toContain("`bun run test` (2813)"); // session-198: the retired form joins the negatives ladd
+    expect(claude).not.toContain("`bun run test` (2813)"); // session-198: the retired form joins the negatives ladder (the D-197a1 sweep-tool +2)
+    expect(claude).toContain("`bun run test` (2817)");
     expect(claude).not.toContain("Unit (Vitest, 2060 checks)");
     expect(claude).not.toContain("Vitest unit suites (2060 checks)");
     expect(claude).not.toContain("(currently 2101)");
