@@ -49,19 +49,19 @@ export function GradientButton({
 // owns this module's export surface.
 
 /** A white section card with an icon + title header (the Recent Workouts /
- *  Your Journey / Upcoming Events panels). */
+ *  Your Journey / Upcoming Events panels). WH-9 (F-2b): the `bodyClassName`
+ *  prop retired — zero call sites (every live SectionCard passes the bare
+ *  body constant); the component-prop census owns this surface. */
 export function SectionCard({
   icon: Icon,
   title,
   action,
   children,
-  bodyClassName,
 }: {
   icon: LucideIcon;
   title: string;
   action?: React.ReactNode;
   children: React.ReactNode;
-  bodyClassName?: string;
 }) {
   return (
     <section className={SECTION_CARD.card}>
@@ -70,27 +70,26 @@ export function SectionCard({
         <h2 className={cn(SECTION_CARD.title, "flex-1")}>{title}</h2>
         {action}
       </div>
-      <div className={cn(SECTION_CARD.body, bodyClassName)}>{children}</div>
+      <div className={SECTION_CARD.body}>{children}</div>
     </section>
   );
 }
 
-/** The empty-state block (the reference's "No workouts logged yet…" family). */
+/** The empty-state block (the reference's "No workouts logged yet…" family).
+ *  WH-9 (F-2b): the `title` prop retired — every live call site passes
+ *  icon + hint only; the constant's title face went with it. */
 export function EmptyState({
   icon: Icon,
   hint,
-  title,
 }: {
   icon: LucideIcon;
   hint?: string;
-  title?: string;
 }) {
   return (
     <div className={EMPTY_STATE.wrap}>
       <div className={EMPTY_STATE.icon} aria-hidden="true">
         <Icon className={EMPTY_STATE.iconGlyph} />
       </div>
-      {title && <p className={EMPTY_STATE.title}>{title}</p>}
       {hint && <p className={EMPTY_STATE.hint}>{hint}</p>}
     </div>
   );
@@ -107,19 +106,19 @@ export function LoadingBlock({ label }: { label: string }) {
 }
 
 /** The chip pair every option vocabulary renders (the tinted pill:
- *  bg-emerald-50 text-emerald-600 rounded-full px-2.5 py-0.5). */
+ *  bg-emerald-50 text-emerald-600 rounded-full px-2.5 py-0.5). WH-9 (F-2b):
+ *  the `className` prop retired — zero call sites (studyresources's icon
+ *  chip is the only live `icon` consumer; none styles the span). */
 export function OptionChip({
   label,
   icon,
   tint,
   text,
-  className,
 }: {
   label: string;
   icon?: string;
   tint: string;
   text: string;
-  className?: string;
 }) {
   return (
     <span
@@ -127,7 +126,6 @@ export function OptionChip({
         "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
         tint,
         text,
-        className,
       )}
     >
       {icon && <span aria-hidden="true">{icon}</span>}

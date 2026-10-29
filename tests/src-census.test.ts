@@ -416,3 +416,135 @@ it("WH-7: every @utility block in globals.css has a class consumer in src", () =
     "@utility blocks with zero class consumers — the F-3 class (input-base shipped dead since the build commit; the Input component styles through the page-layout constants, a different surface that shares the name)",
   ).toEqual([]);
 });
+
+// ---- WH-9: the component-prop + theme-store member liveness censuses ----------
+//
+// WH-9 found the two classes the WH-8 pins do not reach: a component's
+// ACCEPTED PROPS (the ui-export census sees export names, the value
+// census sees exported values — neither sees the surface between them;
+// the dead `underline` default arm hid inside tabs for eight rounds
+// behind a live prop) and the theme store's members (the WH-8 store
+// census walks WellnessState only; ThemeState was never read).
+//
+// The findings this round retired: tabs' `variant` (the union's only
+// live value was `segmented` — the Profile strip is the sole call site;
+// a one-value prop carries no information), SectionCard.bodyClassName,
+// EmptyState.title, OptionChip.className, SidebarNav/SidebarFooter's
+// onNavigate (the "rendered inside BOTH" drawer sharing never existed —
+// the drawer has carried its own sheet-styled nav since the build), and
+// the theme store's `reset` (zero call sites; the reference's
+// Appearance tab carries no reset surface — live-verified this round).
+//
+// Design (the api-export-surface doctrine): each audited component's
+// DESTRUCTURED prop list is extracted from its signature and asserted
+// EQUAL to the pinned literal — drift trips in either direction (a
+// re-added dead prop fails the equality; a consciously added live one
+// forces this pin's literal update in the same commit). The spread tail
+// (`...props`) is dropped: a passthrough is the primitive's own API,
+// not an invented prop. Known boundary (documented, accepted): fields
+// nested inside a prop's TYPE (the tabs item's former `count`) are not
+// destructure-level surface and ride no census — the next round widens
+// if a finding lands in that gap. The theme census mirrors the WH-8
+// wellness design: extraction from the CURRENT interface on every run,
+// so a re-added dead member fails at its next execution.
+
+/** The audited components (the round's sweep set) and their pinned live
+ * prop surfaces — the extraction sorts before comparing, so these lists
+ * are sorted too. */
+const PROPPED_COMPONENTS: Record<string, string[]> = {
+  "src/components/ui/tabs.tsx:Tabs": [
+    "children",
+    "className",
+    "cols",
+    "onValueChange",
+    "tabs",
+    "value",
+  ],
+  "src/components/ui/tabs.tsx:TabsPanel": ["children", "className", "tab"],
+  "src/components/shared/page-parts.tsx:PageHeader": ["actions", "subtitle", "title"],
+  "src/components/shared/page-parts.tsx:GradientButton": ["children", "className"],
+  "src/components/shared/page-parts.tsx:SectionCard": ["action", "children", "icon", "title"],
+  "src/components/shared/page-parts.tsx:EmptyState": ["hint", "icon"],
+  "src/components/shared/page-parts.tsx:OptionChip": ["icon", "label", "text", "tint"],
+  "src/components/shared/page-parts.tsx:LoadingBlock": ["label"],
+  "src/components/layout/sidebar.tsx:SidebarNav": [],
+  "src/components/layout/sidebar.tsx:SidebarFooter": [],
+};
+
+it("WH-9: each audited component's destructured props equal the pinned live surface", () => {
+  const mismatches: string[] = [];
+  for (const [key, pinned] of Object.entries(PROPPED_COMPONENTS)) {
+    const at = key.lastIndexOf(":");
+    const rel = key.slice(0, at);
+    const comp = key.slice(at + 1);
+    const src = readFileSync(join(REPO_ROOT, rel), "utf8");
+    const sig = src.match(new RegExp(`function ${comp}\\(([^)]*)\\)`));
+    if (!sig) {
+      mismatches.push(`${rel}: ${comp} — function signature not found`);
+      continue;
+    }
+    // The param list is either empty (a prop-less component — SidebarNav
+    // post-surgery) or a `{ destructure }` (possibly followed by a type
+    // annotation whose own braces/arrows are cut by the first-} rule: the
+    // destructure always closes first).
+    const destructure = sig[1].match(/^\{([^}]*)\}/);
+    const extracted = (destructure ? destructure[1] : "")
+      .split(",")
+      .map((raw) => raw.trim().split(":")[0].split("=")[0].trim())
+      .filter((name) => /^\w+$/.test(name))
+      .sort();
+    const want = [...pinned].sort();
+    if (JSON.stringify(extracted) !== JSON.stringify(want)) {
+      mismatches.push(
+        `${rel}: ${comp} — extracted [${extracted.join(", ")}] vs pinned [${want.join(", ")}]`,
+      );
+    }
+  }
+  expect(
+    mismatches,
+    "component prop surfaces that drifted from the pinned live set — a prop with no live consumer is the WH-9 F-2 class: retire it, or add it consciously by flipping this pin's literal in the same commit",
+  ).toEqual([]);
+});
+
+it("WH-9: every ThemeState member is consumed at a useThemeStore call site", () => {
+  const storePath = join(REPO_ROOT, "src", "stores", "theme-store.ts");
+  const storeSrc = readFileSync(storePath, "utf8");
+  const iface = storeSrc.match(/interface ThemeState \{([\s\S]*?)\n\}/);
+  if (!iface) throw new Error("ThemeState interface not found");
+  const body = iface[1].replace(/\/\/[^\n]*/g, "");
+  const members = [...body.matchAll(/^\s{2}(\w+):/gm)].map((m) => m[1]);
+  // The interface parses (state fields + actions; comments stripped).
+  expect(members.length).toBeGreaterThanOrEqual(10);
+
+  // The consumed set, per the WH-8 wellness design: the selector form
+  // (`useThemeStore((s) => s.x)`) and the whole-store form (the assigned
+  // variable at `const theme = useThemeStore()` then `theme.x` accesses)
+  // in production files outside the store itself. Tests stay OUT (the
+  // WH-4 doctrine: tests pin modules, they do not keep them alive).
+  const consumed = new Set<string>();
+  const files: string[] = [];
+  collect(join(REPO_ROOT, "src"), files, [".ts", ".tsx"]);
+  for (const file of files) {
+    if (file === storePath) continue;
+    const src = readFileSync(file, "utf8");
+    if (!src.includes("useThemeStore")) continue;
+    for (const m of src.matchAll(
+      /useThemeStore\s*\(\s*\(\s*(\w+)\s*\)\s*=>\s*([^\n)]*)/g,
+    )) {
+      for (const acc of m[2].matchAll(new RegExp(`\\b${m[1]}\\.(\\w+)`, "g"))) {
+        consumed.add(acc[1]);
+      }
+    }
+    for (const m of src.matchAll(/const (\w+) = useThemeStore\(\)/g)) {
+      for (const acc of src.matchAll(new RegExp(`\\b${m[1]}\\.(\\w+)`, "g"))) {
+        consumed.add(acc[1]);
+      }
+    }
+  }
+
+  const dead = members.filter((m) => !consumed.has(m));
+  expect(
+    dead,
+    "ThemeState members with zero production consumers at useThemeStore call sites — retire them (a dead store member is drift liability; the reference's Appearance tab carries no reset surface, live-verified at WH-9)",
+  ).toEqual([]);
+});

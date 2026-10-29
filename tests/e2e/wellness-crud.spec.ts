@@ -128,6 +128,11 @@ test("goals: create, log progress to completion, earn points", async ({ page }) 
   await page.getByRole("button", { name: "+1 times" }).click();
   await expect(page.getByText("Progress logged: 1/3 times")).toBeVisible();
   await page.getByRole("button", { name: "+1 times" }).click();
+  // Assert click #2's effect before dispatching #3: back-to-back unasserted
+  // clicks race the post-response list re-render, and a click dispatched on the
+  // detaching node is silently lost (observed once in the WH-9 baseline gate:
+  // goal stuck at 2/3, completion toast never fired).
+  await expect(page.getByText("Progress logged: 2/3 times")).toBeVisible();
   await page.getByRole("button", { name: "+1 times" }).click();
   await expect(page.getByText(/Goal completed/)).toBeVisible();
   // The points tile: the one_time goal (50) + the badges earned on the way

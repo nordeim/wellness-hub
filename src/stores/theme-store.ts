@@ -28,9 +28,9 @@ export interface ThemeState {
   animationLevel: "full" | "subtle" | "none";
   notificationsEnabled: boolean;
   weeklyReminders: boolean;
-  // actions
-  setTheme: (patch: Partial<Omit<ThemeState, "setTheme" | "reset">>) => void;
-  reset: () => void;
+  // actions (WH-9 F-3: the `reset` action retired — zero call sites; the
+  // reference's Appearance tab carries no reset surface, live-verified)
+  setTheme: (patch: Partial<Omit<ThemeState, "setTheme">>) => void;
 }
 
 const FONT_STACKS: Record<string, string> = {
@@ -52,7 +52,9 @@ function shade(hex: string, factor: number): string {
   return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
 }
 
-export type ThemeData = Omit<ThemeState, "setTheme" | "reset">;
+export type ThemeData = Omit<ThemeState, "setTheme">;
+// WH-9 (F-3): the dead `reset` member retired with the Omit entry that
+// named it — the theme-store member census owns this surface.
 
 function applyTheme(s: ThemeData) {
   if (typeof document === "undefined") return;
@@ -123,10 +125,9 @@ export const useThemeStore = create<ThemeState>()(
           body: JSON.stringify(patch),
         }).catch(() => null);
       },
-      reset: () => {
-        set(DEFAULTS);
-        applyTheme({ ...DEFAULTS });
-      },
+      // WH-9 (F-3): the `reset` action retired — zero call sites (the
+      // Profile page consumes every field + setTheme; the reference's
+      // Appearance tab carries no reset surface).
     }),
     {
       name: "wellness-theme",

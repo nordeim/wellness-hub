@@ -71,7 +71,6 @@ export default function ProfileClientPage({ user }: { user: AppUser | null }) {
         ]}
         value={tab}
         onValueChange={setTab}
-        variant="segmented"
         cols={3}
         className="mb-6 max-w-xl"
       >

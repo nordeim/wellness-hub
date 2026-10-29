@@ -154,7 +154,8 @@ export const EMPTY_STATE = {
   wrap: "flex flex-col items-center justify-center py-12 text-center",
   icon: "mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-line-soft",
   iconGlyph: "h-6 w-6 text-muted",
-  title: "text-sm font-medium text-foreground",
+  // WH-9 (F-2b): the `title` face retired with EmptyState's dead title
+  // prop — every live call site passes icon + hint only.
   hint: "mt-1 text-sm text-muted",
 } as const;
 
@@ -223,15 +224,10 @@ export const CHECKBOX = {
   label: "text-sm cursor-pointer",
 } as const;
 
-/** The tab families — the pill (multi-column page tabs) and the segmented
- *  control (the profile tablist); the pill's active state rides the app's
- *  primary pair (the reference's own active-tint convention). */
-export const TABS_PILL = {
-  track: "items-center justify-center rounded-lg p-1 text-muted-ink grid w-full h-auto bg-white border border-line",
-  trigger:
-    "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow text-xs sm:text-sm data-[state=active]:bg-primary/10 data-[state=active]:text-primary",
-} as const;
-
+/** The segmented tab control — the Profile page's tablist track. WH-9
+ *  (F-2a): the TABS_PILL twin retired with its only consumer (the tabs
+ *  `pill` variant, zero call sites since the build) — the value census
+ *  owns this module's export surface. */
 export const TABS_SEGMENTED = {
   track: "h-9 items-center justify-center rounded-lg bg-line-soft p-1 text-muted-ink grid w-full",
   trigger:

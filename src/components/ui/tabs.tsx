@@ -2,19 +2,20 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { TABS_PILL, TABS_SEGMENTED } from "@/lib/page-layout";
+import { TABS_SEGMENTED } from "@/lib/page-layout";
 
-// Native-ARIA tab strip with three track variants: `underline` (the
-// plain text tabs — API surface, no current consumer), `segmented` (the
-// equal-width grid control — the Profile page's Appearance/Account/
-// Preferences strip; the reference track is `h-9 grid w-full
-// grid-cols-{n} rounded-lg bg-muted p-1 text-muted-foreground` with an
-// equal-width column per tab and the active tab a raised white pill) and
-// `pill` (the white bordered container — API surface, no current
-// consumer; the active tab `bg-blue-50 text-blue-700` class pair it was
-// extracted from never shipped a wellness page). WH-8 (F-2): the
-// CRM-era consumer narrations retired — Activities/Settings/Reports are
-// pages this domain never shipped; the Profile strip is the live face.
+// Native-ARIA tab strip — the segmented control (the Profile page's
+// Appearance/Account/Preferences strip, its only live face; the reference
+// track is `h-9 grid w-full grid-cols-{n} rounded-lg bg-muted p-1
+// text-muted-foreground` with an equal-width column per tab and the
+// active tab a raised white pill). WH-8 (F-2) cured the CRM-era consumer
+// narrations (Activities/Settings/Reports — pages this domain never
+// shipped); WH-9 (F-2a) retired the variant API with them: the `underline`
+// and `pill` tracks had zero call sites (a one-value prop carries no
+// information — the component renders the segmented track unconditionally),
+// the `count` badge arm went with them, and `cols` became required (the
+// no-cols flex fallback existed for a call site that never shipped).
+// The component-prop census owns this surface.
 //
 // Session-12 (S12-P4): the tracks carry text-muted-ink (the reference's
 // tablist text-muted-foreground — inactive tabs INHERIT #737373 instead
@@ -42,15 +43,14 @@ import { TABS_PILL, TABS_SEGMENTED } from "@/lib/page-layout";
 // platform defect.
 
 interface TabsProps {
-  tabs: ReadonlyArray<{ id: string; label: string; count?: number }>;
+  tabs: ReadonlyArray<{ id: string; label: string }>;
   value: string;
   onValueChange: (value: string) => void;
   /** The wrapper div's classes — the reference's per-page Tabs region
    * (the Profile page ships `mb-6 max-w-xl`; pages own their spacing). */
   className?: string;
-  variant?: "underline" | "segmented" | "pill";
-  /** Equal-width grid columns for segmented/pill tracks (reference: one per tab). */
-  cols?: number;
+  /** Equal-width grid columns for the segmented track (reference: one per tab). */
+  cols: number;
   /** The TabsPanel shells — rendered inside the wrapper after the tablist. */
   children?: React.ReactNode;
 }
@@ -90,7 +90,7 @@ const GRID_COLS: Record<number, string> = {
 const PANEL_BASE =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 
-function Tabs({ tabs, value, onValueChange, className, variant = "underline", cols, children }: TabsProps) {
+function Tabs({ tabs, value, onValueChange, className, cols, children }: TabsProps) {
   const uid = React.useId();
   const tabRefs = React.useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -121,16 +121,11 @@ function Tabs({ tabs, value, onValueChange, className, variant = "underline", co
     }
   };
 
-  const trackClass =
-    variant === "segmented"
-      ? cn(TABS_SEGMENTED.track, cols && "w-full", cols ? GRID_COLS[cols] ?? null : "flex items-center gap-1 overflow-x-auto scrollbar-thin")
-      : variant === "pill"
-        ? TABS_PILL.track
-        : cn(
-            "flex items-center gap-1 overflow-x-auto scrollbar-thin border-b border-line",
-          );
-  const triggerClass = variant === "segmented" ? TABS_SEGMENTED.trigger : variant === "pill" ? TABS_PILL.trigger : null;
-  const underline = variant === "underline";
+  // The segmented track: one equal-width column per tab. GRID_COLS is the
+  // compile-time lookup the Tailwind v4 scanner needs (dynamic
+  // `grid-cols-${n}` templates never compile); a cols outside 2-6
+  // degrades to the bare track.
+  const trackClass = cn(TABS_SEGMENTED.track, "w-full", GRID_COLS[cols] ?? null);
   return (
     <TabsContext.Provider value={{ uid, value }}>
       <div className={className}>
@@ -156,30 +151,12 @@ function Tabs({ tabs, value, onValueChange, className, variant = "underline", co
                 data-state={isActive ? "active" : "inactive"}
                 tabIndex={isActive ? 0 : -1}
                 onClick={() => onValueChange(tab.id)}
-                className={cn(
-                  // Stock Radix trigger classes from the S12-P4 contracts —
-                  // the active styling rides the data-[state=active]
-                  // variants, so the string is identical on every tab.
-                  triggerClass,
-                  underline &&
-                    "-mb-px whitespace-nowrap rounded-t-md border-b-2 px-3.5 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                  underline && (isActive ? "border-primary text-primary" : "border-transparent text-muted hover:border-line hover:text-foreground"),
-                )}
+                // Stock Radix trigger classes from the S12-P4 contracts —
+                // the active styling rides the data-[state=active]
+                // variants, so the string is identical on every tab.
+                className={TABS_SEGMENTED.trigger}
               >
                 {tab.label}
-                {typeof tab.count === "number" && (
-                  // Session-66 (N-66d): the reference's literal count span —
-                  // the red count badge (`<span className="ml-2 px-2 py-0.5
-                  // text-xs bg-red-100 text-red-800 rounded-full">`,
-                  // byte-extracted from the reference's tab strip). API
-                  // surface — no wellness call site passes `count` today
-                  // (the WH-8 F-2 cure: the CRM-era page narration retired
-                  // with the page it named). Always the red tint, active
-                  // or not; a >0 guard lives at the call site.
-                  <span className="ml-2 px-2 py-0.5 text-xs bg-red-100 text-red-800 rounded-full">
-                    {tab.count}
-                  </span>
-                )}
               </button>
             );
           })}

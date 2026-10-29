@@ -9,10 +9,15 @@ import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 /**
- * Shared navigation list — rendered inside BOTH the desktop sidebar and
- * the mobile drawer so the two stay in lockstep (the chassis doctrine).
+ * The desktop sidebar's navigation list. WH-9 (F-4): the "rendered
+ * inside BOTH the desktop sidebar and the mobile drawer" narration
+ * retired — the drawer has carried its own sheet-styled nav
+ * (mobile-nav.tsx's DrawerNav) since the build; this list renders in
+ * the desktop sidebar only, and the `onNavigate` prop that served the
+ * phantom sharing went with it (zero call sites — app-shell renders
+ * both exports bare). The component-prop census owns this surface.
  */
-export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
+export function SidebarNav() {
   const pathname = usePathname();
 
   const isActive = (href: string) => isNavActive(pathname, href);
@@ -21,7 +26,6 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
     <Link
       key={item.href}
       href={item.href}
-      onClick={onNavigate}
       aria-current={active ? "page" : undefined}
       className={cn(
         active ? NAV_LAYOUT.linkActive : NAV_LAYOUT.link,
@@ -43,8 +47,10 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 /** The footer link — the reference's "Profile & Settings / Customize your
- *  experience" card, pinned to the sidebar bottom behind a divider. */
-export function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
+ *  experience" card, pinned to the sidebar bottom behind a divider. WH-9
+ *  (F-2c): the `onNavigate` prop retired with SidebarNav's (zero call
+ *  sites — app-shell renders this bare). */
+export function SidebarFooter() {
   const pathname = usePathname();
   return (
     <div className={NAV_LAYOUT.footerGroup}>
@@ -54,7 +60,6 @@ export function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
           <Link
             key={item.href}
             href={item.href}
-            onClick={onNavigate}
             aria-current={active ? "page" : undefined}
             className={cn(
               active ? NAV_LAYOUT.linkActive : NAV_LAYOUT.footerLink,
