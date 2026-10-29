@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, Lock, Mail, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Lock, Mail, ShieldCheck, Sprout } from "lucide-react";
 import { LOGIN_LAYOUT } from "@/lib/page-layout";
 import {
   canSubmitReset,
@@ -316,9 +316,6 @@ export function LoginCard({ mode = "signin" }: { mode?: Mode }) {
   return (
     <div className="w-full max-w-md">
       <div className={LOGIN_LAYOUT.card}>
-        {/* Gradient accent strip along the card's top edge. */}
-        <div className={LOGIN_LAYOUT.accent} aria-hidden="true" />
-
         <div className={LOGIN_LAYOUT.inner}>
           <div className={LOGIN_LAYOUT.centered}>
             {view !== "signin" ? (
@@ -619,17 +616,17 @@ export function LoginCard({ mode = "signin" }: { mode?: Mode }) {
               </>
             ) : (
               <>
-            {/* Logo — CSS brand mark (white circle + blue dot) with a soft
-                slate glow, ringed and shadowed like the reference avatar. */}
+            {/* Logo — the EvolveWell gradient badge with a soft primary
+                glow, ringed and shadowed like the reference avatar. */}
             <div className={LOGIN_LAYOUT.logoWrap}>
               <div className={LOGIN_LAYOUT.logoGlow} aria-hidden="true" />
               <span className={LOGIN_LAYOUT.logo} aria-hidden="true">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-sidebar sm:h-12 sm:w-12" />
+                <Sprout className="h-12 w-12 text-emerald-500 sm:h-14 sm:w-14" strokeWidth={1.75} />
               </span>
             </div>
 
             <div className="space-y-2 sm:space-y-3">
-              <h1 className={LOGIN_LAYOUT.title}>Welcome to NEO CRM</h1>
+              <h1 className={LOGIN_LAYOUT.title}>Welcome to EvolveWell</h1>
               <p className={LOGIN_LAYOUT.subtitle}>Sign in to continue</p>
             </div>
 

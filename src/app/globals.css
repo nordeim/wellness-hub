@@ -20,90 +20,54 @@
 @custom-variant hover (&:hover);
 
 /* ---------------------------------------------------------------------------
-   NEO CRM design tokens — Tailwind CSS v4 CSS-first configuration.
+   Wellness Hub design tokens — Tailwind CSS v4 CSS-first configuration.
    Rules (validated against docs/Tailwind-V4-Validation-Report.md):
    - No tailwind.config.js — everything lives in @theme.
    - No var() chains inside @theme — semantic tokens are LITERAL hex values.
    - tw-animate-css provides the Radix data-[state=open] animations.
+   - The brand pair (--color-primary / --color-secondary) is the reference's
+     Indigo Dream preset (#6366f1 → #a855f7, live-probed 2026-10-29); the
+     theme-store overrides BOTH at runtime on <html> so the Appearance
+     presets re-skin every gradient surface (from-primary/to-secondary
+     compile to var() references in v4 — the CSS-first win).
 --------------------------------------------------------------------------- */
 
 @theme {
-  /* Brand palette (measured from the reference app; session-7 live
-     computed-color probe: primary buttons render rgb(37,99,235) = blue-600
-     with blue-700 hover — NOT blue-500 as pinned in earlier sessions). */
-  --color-sidebar: #2563eb;
-  --color-sidebar-hover: #3b6ff0;
-  --color-sidebar-active: #4d7ef5;
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  /* Session-142 (D-142a1): the reference's MARKETING token — its landing
-     page ships `--brand: 221 83% 53%` (computed #2563eb, live-probed on
-     its new index-Dc6wvGtA.js bundle), consumed by the landing surface's
-     bg-brand / text-brand / border-brand / ring-brand utilities (with
-     alpha modifiers: bg-brand/5, bg-brand/10, bg-brand/80, hover:bg-
-     brand/90, border-brand/20, ring-brand/20). Same blue as --color-
-     primary; the separate token keeps the marketing family byte-shaped
-     like the reference (its landing classes carry `brand`, not
-     `primary`). */
-  --color-brand: #2563eb;
-  /* Session-119 (D-119a1, the 119-c contacts-family walk's systemic
-     find F-119c2): the reference's --primary-foreground is the shadcn
-     stock hsl(0 0% 98%) = #fafafa — live-computed rgb(250,250,250) on
-     EVERY blue primary (New Contact/New Account/New Lead/New Event/
-     the Filter buttons, the dialog submits) while our scaffold-era
-     #ffffff pinned pure white. The s13 plan's badge record ("fg
-     #fafafa ✓") already carried the reference's value. */
+  /* Brand palette (measured from the reference app; 2026-10-29 live
+     computed-style probes: primary buttons render the indigo→purple
+     gradient linear-gradient(to right, #6366f1, #a855f7), shadow-lg,
+     rounded-md h-10 px-8; the sidebar wordmark carries the same pair at
+     135deg as clipped text). */
+  --color-primary: #6366f1;
+  --color-secondary: #a855f7;
+  --color-primary-hover: #4f46e5;
+  --color-secondary-hover: #9333ea;
   --color-primary-foreground: #fafafa;
 
-  /* Neutrals */
+  /* The light sidebar family (live-probed: bg rgb(250,250,250), border-r
+     rgb(229,229,229), menu text rgb(63,63,70), rounded-xl 12px). */
+  --color-sidebar: #fafafa;
+  --color-sidebar-hover: #f4f4f5;
+  --color-sidebar-active: #eef2ff;
+  --color-sidebar-foreground: #3f3f46;
+  --color-sidebar-accent-foreground: #4f46e5;
+
+  /* Neutrals (the reference's body computes white; the main scroll area
+     carries the gray-50 wash its stat/quick-action tiles sit on). */
   --color-background: #f9fafb;
   --color-surface: #ffffff;
-  /* Session-13 (S13-P9): the reference's default foreground (body +
-     card-foreground) is #0a0a0a — computed probes on its body, stock
-     cards, KPI values, the More... button and dialog text. Ours shipped
-     #111827; the page H1s are separately EXPLICIT text-gray-900
-     (#111827) on the reference and are pinned as such in PAGE_HEADER. */
   --color-foreground: #0a0a0a;
   --color-muted: #6b7280;
   --color-subtle: #9ca3af;
 
-  /* Border split (session-12 S12-P3): the reference renders TWO border
-     grays. Its platform DEFAULT — the `* { border-color }` base AND its
-     --input token — is NEUTRAL-200 #e5e5e5, the color every bare-`border`
-     surface computes: ALL stock cards (dashboard/accounts/leads/calendar/
-     activities/settings/profile/contacts-stat + reports table & chart
-     cards), table rows, the reports tablist, outline buttons, select
-     triggers/contents, dropdown contents, dialog content and every bare
-     form input. Its EXPLICIT `border-gray-200` family (#e5e7eb) covers
-     only: the reports KPI stat cards, the reports sticky filter card, the
-     contacts table card and the topbar search input (that one already
-     ships literal border-gray-200), and since session-73 the TOPBAR
-     HEADER border too (L-73c3 — the reference's header carries the
-     explicit family; ours shipped the default one family off).
-     --color-line carries the default; --color-line-strong carries the
-     explicit family. */
   --color-line: #e5e5e5;
   --color-line-strong: #e5e7eb;
-  /* Session-14 (S14-P5): re-pinned from the scaffold-era #f3f4f6 (gray-100)
-     to the reference's muted/accent #f5f5f5 (neutral-100) — computed live on
-     the settings segmented tab track (bg-muted) + a bg-accent probe, both
-     rgb(245,245,245). The token rides every muted/accent-role surface: tab
-     tracks, outline/ghost hovers, select/menu focus washes, row hovers. */
   --color-line-soft: #f5f5f5;
 
-  /* Focus ring (session-9 S9-16): the reference's --ring is the stock
-     shadcn `0 0% 3.9%` (#0a0a0a) — focused controls render a 1px
-     near-black ring, not the app blue. Consumed by `ring-ring` utilities. */
+  /* Focus ring (the shadcn stock near-black). */
   --color-ring: #0a0a0a;
 
-  /* Stock-primitive inks (session-10 S10-2): the reference's stock
-     Input/Select carry NO text color class — typed text inherits its
-     --foreground `0 0% 3.9%` = #0a0a0a, and placeholders use its
-     --muted-foreground `0 0% 45.1%` = #737373 (computed probes on the
-     search input: text rgb(10,10,10), ::placeholder rgb(115,115,115)).
-     Ours rendered #111827 (text-foreground) and #9ca3af/#6b7280
-     placeholders. Page-level text keeps --color-foreground #111827 (the
-     reference's h1s/body use gray-900 there). */
+  /* Stock-primitive inks. */
   --color-ink: #0a0a0a;
   --color-muted-ink: #737373;
 
@@ -359,20 +323,34 @@
      thinner text than the reference on macOS. */
 
   body {
-    background-color: var(--color-background);
+    background-color: #ffffff;
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    /* Session-13 (S13-P12): the reference's body computes 16px (the
-       browser default — verified on its dashboard + profile). The
-       scaffold-era `font-size: 14px` was never reference-verified and
-       made every size-INHERITING surface render one step small (the
-       stock CardTitle computed 14px vs the reference's 16px). */
   }
 
-  /* Session-22 (S22-P3): the ::selection rule is RETIRED — the
-     reference's stylesheet contains zero selection rules (the browser
-     default selection color); our blue 0.18 tint was a scaffold-era
-     invention. */
+  /* Dark mode — the Appearance tab's Dark/Auto modes (the reference ships
+     the toggle; our tokens make it real). The .dark class rides <html>
+     (theme-store); every semantic token swaps to a near-black surface set
+     so ALL utilities (bg-surface, text-foreground, border-line…) flip in
+     one cascade. */
+  .dark {
+    --color-background: #09090b;
+    --color-surface: #18181b;
+    --color-foreground: #fafafa;
+    --color-muted: #a1a1aa;
+    --color-subtle: #71717a;
+    --color-line: #27272a;
+    --color-line-strong: #3f3f46;
+    --color-line-soft: #1c1c1f;
+    --color-ink: #fafafa;
+    --color-muted-ink: #a1a1aa;
+    --color-sidebar: #101014;
+    --color-sidebar-hover: #1c1c1f;
+    --color-sidebar-active: #26264e;
+    --color-sidebar-foreground: #d4d4d8;
+    --color-sidebar-accent-foreground: #a5b4fc;
+    --color-ring: #d4d4d8;
+  }
 }
 
 /* ---------------------------------------------------------------------------

@@ -15,8 +15,10 @@ test("authenticate demo user", async ({ page }) => {
   await page.getByLabel("Password").fill("$Abcd1234");
   await page.getByRole("button", { name: "Sign in" }).click();
 
-  await page.waitForURL("/");
-  await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
+  // The reference's post-login face: the root redirects the signed-in
+  // session at /Dashboard with the "Welcome Back!" hero.
+  await page.waitForURL("**/Dashboard");
+  await expect(page.getByRole("heading", { name: "Welcome Back" })).toBeVisible();
 
   await page.context().storageState({ path: STORAGE });
 });

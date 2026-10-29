@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
-# The smoke leg (session-170, WP-5 — the web-app-foundation §13.4
-# skeleton, the neo-crm form). Boots the STANDALONE ARTIFACT (not the dev
-# server — the e2e doctrine: validate what ships) on :3210 with its OWN
+# The smoke leg — the wellness form. Boots the STANDALONE ARTIFACT (not the
+# dev server — the e2e doctrine: validate what ships) on :3210 with its OWN
 # scratch database (db/smoke.db, gitignored like db/custom.db) and a
 # dedicated throwaway AUTH_SECRET, then walks the assertion ladder:
 #
 #   01  /api/health 200 + "status":"healthy"        (the db round-trip)
-#   02  unauthenticated /api/contacts -> 401        (the session wall)
+#   02  unauthenticated /api/workouts -> 401        (the session wall)
 #   03  unauthenticated /api/dashboard -> 401
 #   04  /login renders the page title               (the SSR shell)
-#   05  / renders the landing hero                  (the public surface)
+#   05  the guest / redirects to the login wall     (the reference's root face)
 #   06  the demo login -> the neo_session cookie    (the auth round-trip)
-#   07  the sessioned /api/contacts -> 200          (the envelope ok:true)
+#   07  the sessioned /api/workouts -> 200           (the envelope ok:true)
 #   08  an invalid payload POST -> 400              (the Zod seam)
-#   09  a valid create -> 200                       (the CRUD round-trip)
-#   10  logout -> /api/auth/me 401                  (the cookie teardown)
+#   09  a valid workout create -> 200               (the CRUD round-trip)
+#   10  logout -> /api/auth/me 200 + data:null      (the cookie teardown)
 #   11  the login rate-limit probe -> the 11th -> 429 (LAST: it exhausts
 #       the login bucket for this IP for 15 min)
 #   12  /sitemap.xml + /robots.txt + /manifest.json all 200 (the SEO family)
@@ -22,10 +21,10 @@
 #       to serve — the fail-fast posture (the log carries the message)
 #   14  THE ARTIFACT-HYGIENE assertions: the built artifact contains NO
 #       .env / .git / db / skills / docs / uploads / worklog.md /
-#       test-results entries (the F-170a cure, policed every smoke run)
+#       test-results entries
 #
-# Every assertion: ok "NN — description" || { fail "NN"; exit 1; }
-# (the §13.4 convention). The trap kills the server on ANY exit.
+# Every assertion: ok "NN — description" || { fail "NN"; exit 1; }.
+# The trap kills the server on ANY exit.
 
 set -euo pipefail
 
@@ -82,12 +81,12 @@ code() { curl -s -o /dev/null -w "%{http_code}" "$@"; }
   && ok 01 "health 200 + healthy" || { fail 01 "health"; exit 1; }
 
 # 02/03 — the session wall
-[ "$(code "$BASE/api/contacts")" = 401 ] && ok 02 "unauth contacts 401" || { fail 02 "unauth contacts"; exit 1; }
+[ "$(code "$BASE/api/workouts")" = 401 ] && ok 02 "unauth workouts 401" || { fail 02 "unauth workouts"; exit 1; }
 [ "$(code "$BASE/api/dashboard")" = 401 ] && ok 03 "unauth dashboard 401" || { fail 03 "unauth dashboard"; exit 1; }
 
 # 04/05 — the pages render
 body "$BASE/login" | grep -q "<title>" && ok 04 "login renders" || { fail 04 "login page"; exit 1; }
-body "$BASE/" | grep -q "<title>" && body "$BASE/" | grep -qi "neo" && ok 05 "landing renders" || { fail 05 "landing page"; exit 1; }
+body "$BASE/" | grep -q "login" && ok 05 "guest / redirects to the login wall" || { fail 05 "root face"; exit 1; }
 
 # 06 — the demo login round-trip (the seed contract's credentials)
 login_code=$(code -c "$COOKIE_JAR" -H "Content-Type: application/json" \
@@ -96,23 +95,21 @@ login_code=$(code -c "$COOKIE_JAR" -H "Content-Type: application/json" \
   && ok 06 "demo login + the neo_session cookie" || { fail 06 "login"; exit 1; }
 
 # 07 — the sessioned envelope
-[ "$(code -b "$COOKIE_JAR" "$BASE/api/contacts")" = 200 ] && body -b "$COOKIE_JAR" "$BASE/api/contacts" | grep -q '"ok":true' \
-  && ok 07 "sessioned contacts 200 + ok:true" || { fail 07 "sessioned read"; exit 1; }
+[ "$(code -b "$COOKIE_JAR" "$BASE/api/workouts")" = 200 ] && body -b "$COOKIE_JAR" "$BASE/api/workouts" | grep -q '"ok":true' \
+  && ok 07 "sessioned workouts 200 + ok:true" || { fail 07 "sessioned read"; exit 1; }
 
-# 08 — the invalid payload (the Zod seam's 400)
-[ "$(code -b "$COOKIE_JAR" -H "Content-Type: application/json" -d '{"name":""}' "$BASE/api/contacts")" = 400 ] \
+# 08 — the invalid payload (the Zod seam's 400: a workout needs minutes)
+[ "$(code -b "$COOKIE_JAR" -H "Content-Type: application/json" -d '{"type":"cardio"}' "$BASE/api/workouts")" = 400 ] \
   && ok 08 "invalid payload 400" || { fail 08 "invalid payload"; exit 1; }
 
-# 09 — the valid create (the CRUD round-trip; smoke.db is disposable —
-# the minimal body: priority defaults to Standard, status to active)
+# 09 — the valid create (the CRUD round-trip; smoke.db is disposable)
 [ "$(code -b "$COOKIE_JAR" -H "Content-Type: application/json" \
-  -d '{"name":"Smoke Test Contact","email":"smoke@example.com"}' \
-  "$BASE/api/contacts")" = 200 ] \
-  && ok 09 "valid create 200" || { fail 09 "valid create"; exit 1; }
+  -d '{"type":"cardio","durationMinutes":30,"intensity":"moderate","date":"2026-10-29"}' \
+  "$BASE/api/workouts")" = 200 ] \
+  && ok 09 "valid workout create 200" || { fail 09 "valid create"; exit 1; }
 
 # 10 — the logout teardown (-c: the jar takes the cleared cookie; /me is
-# the by-design data:null face, session-41 — a logged-out caller gets
-# 200 + data:null, NOT a 401)
+# the by-design data:null face — a logged-out caller gets 200 + data:null)
 code -b "$COOKIE_JAR" -c "$COOKIE_JAR" -X POST "$BASE/api/auth/logout" >/dev/null
 body -b "$COOKIE_JAR" "$BASE/api/auth/me" | grep -q '"data":null' \
   && ok 10 "logout + post-logout data:null" || { fail 10 "logout teardown"; exit 1; }

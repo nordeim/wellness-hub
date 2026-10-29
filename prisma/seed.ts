@@ -1,535 +1,565 @@
-// Seed: NEO CRM demo workspace.
-// Idempotent: clears domain tables, then inserts the canonical demo data.
-// Run: bun prisma/seed.ts  (or: bun run db:seed)
+// Seed: Wellness Hub demo workspace.
+// Idempotent: content tables are wiped and re-seeded (templates, tutorials,
+// badges); the demo user lands through UPSERT-BY-EMAIL so session-cookie
+// provenance survives a re-seed. Run: bun run db:seed
 //
 // Demo login (mirrors the reference app): sepnetflix2023@outlook.com / $Abcd1234
+//
+// Content provenance: the 11 routine templates (with their steps, benefits
+// and pro tips) and the 12 Learning Center tutorials are byte-exact
+// transcriptions of the reference app's seeded entities, live-decoded from
+// its entity API on 2026-10-29 (see docs/plans/2026-10-29-wellness-hub-build.md).
 
-import { PrismaClient, type Account, type Contact } from "@prisma/client";
-import { runtimeDatabaseUrl } from "../src/lib/db-path";
-// Session-163 (the digma S70-D port): the PURE crypto seam — the seed
-// script used to DUPLICATE the scrypt parameter set (16-byte salt,
-// 64-byte key, `scrypt:salt:hash`), and a change in src/lib/auth.ts
-// (un-importable here: its transitive next/headers + Prisma imports)
-// silently broke demo login. The seam is node:crypto-only; both
-// consumers import the ONE implementation.
+import { PrismaClient } from "@prisma/client";
+// The PURE crypto seam (node:crypto-only) — the seed and src/lib/auth.ts
+// import the ONE scrypt implementation.
 import { hashPassword } from "../src/lib/password";
-
 // Explicit datasource URL: never let the Prisma engine (or bun's .env
 // absolutization) pick the database location — the shared resolver pins
 // every consumer to <repo>/db/<name> (see src/lib/db-path.ts).
+import { runtimeDatabaseUrl } from "../src/lib/db-path";
+
 const db = new PrismaClient({
   datasources: { db: { url: runtimeDatabaseUrl() } },
 });
 
-function d(offsetDays: number, hour = 10, minute = 0): Date {
-  const x = new Date();
-  x.setDate(x.getDate() + offsetDays);
-  x.setHours(hour, minute, 0, 0);
-  return x;
+interface SeedStep {
+  title: string;
+  duration: string;
+  description: string;
 }
 
-function iso(offsetDays: number, hour = 10, minute = 0): Date {
-  return d(offsetDays, hour, minute);
+interface SeedTemplate {
+  key: string;
+  name: string;
+  description: string;
+  category: string;
+  timeOfDay: string;
+  duration: string;
+  difficulty: string;
+  benefits: string[];
+  tipsForProcrastinators: string;
+  videoUrl: string | null;
+  thumbnail: string | null;
+  sortOrder: number;
+  steps: SeedStep[];
 }
+
+interface SeedTutorial {
+  key: string;
+  title: string;
+  description: string;
+  category: string;
+  videoUrl: string | null;
+  thumbnail: string | null;
+  duration: string;
+  difficulty: string;
+  sortOrder: number;
+}
+
+const ROUTINE_TEMPLATES: SeedTemplate[] = [
+  {
+    key: "5_minute_morning_energizer",
+    name: "5-Minute Morning Energizer",
+    description: "A super quick morning routine to jumpstart your day—perfect when you hit snooze too many times!",
+    category: "morning",
+    timeOfDay: "Right after waking up",
+    duration: "5 minutes",
+    difficulty: "easy",
+    benefits: ["Increases energy", "Creates momentum", "Improves hydration"],
+    tipsForProcrastinators: "Keep a water bottle by your bed so you literally just have to reach for it. The key is starting SUPER small—once you're up and moving, the rest flows naturally!",
+    videoUrl: null,
+    thumbnail: null,
+    sortOrder: 0,
+    steps: [
+        { title: "Drink a glass of water", duration: "1 min", description: "Rehydrate after sleep" },
+        { title: "2-minute stretch", duration: "2 min", description: "Simple stretches in bed or standing" },
+        { title: "Make your bed", duration: "2 min", description: "Start with one small win" }
+    ],
+  },
+  {
+    key: "10_minute_home_workout",
+    name: "10-Minute Home Workout",
+    description: "No equipment needed—get your body moving even when you don't feel like it",
+    category: "exercise",
+    timeOfDay: "Morning or afternoon",
+    duration: "10 minutes",
+    difficulty: "moderate",
+    benefits: ["Boosts energy", "Improves mood", "Builds consistency"],
+    tipsForProcrastinators: "Tell yourself you're just doing the warm-up. Once you start moving, your body will want to continue. And if you stop after 2 minutes? That's still better than nothing!",
+    videoUrl: null,
+    thumbnail: null,
+    sortOrder: 1,
+    steps: [
+        { title: "Warm-up: Jumping jacks", duration: "2 min", description: "Get your heart rate up" },
+        { title: "20 squats", duration: "2 min", description: "Focus on form" },
+        { title: "10 push-ups (modified OK!)", duration: "2 min", description: "Do what you can" },
+        { title: "30-second plank", duration: "2 min", description: "Core strength" },
+        { title: "Cool-down stretch", duration: "2 min", description: "Gentle stretching" }
+    ],
+  },
+  {
+    key: "the_pomodoro_power_study_session",
+    name: "The Pomodoro Power Study Session",
+    description: "Beat procrastination with focused 25-minute study bursts",
+    category: "study",
+    timeOfDay: "Anytime you need to study",
+    duration: "30 minutes total",
+    difficulty: "easy",
+    benefits: ["Improves focus", "Reduces overwhelm", "Makes studying less daunting"],
+    tipsForProcrastinators: "Promise yourself just ONE 25-minute session. That's it. No pressure to do more. You'll often find that once you start, you'll want to keep going!",
+    videoUrl: null,
+    thumbnail: null,
+    sortOrder: 2,
+    steps: [
+        { title: "Set timer for 25 minutes", duration: "0 min", description: "Use your phone or a Pomodoro app" },
+        { title: "Study with ZERO distractions", duration: "25 min", description: "Phone away, one task only" },
+        { title: "Take a 5-minute break", duration: "5 min", description: "Stand up, stretch, hydrate" }
+    ],
+  },
+  {
+    key: "calm_evening_wind_down",
+    name: "Calm Evening Wind-Down",
+    description: "Prepare your mind and body for better sleep",
+    category: "evening",
+    timeOfDay: "1 hour before bed",
+    duration: "20 minutes",
+    difficulty: "easy",
+    benefits: ["Better sleep quality", "Reduced anxiety", "Clearer mind"],
+    tipsForProcrastinators: "Start with JUST putting your phone away. That's the hardest part. The rest will feel easier once you're not scrolling mindlessly.",
+    videoUrl: null,
+    thumbnail: null,
+    sortOrder: 3,
+    steps: [
+        { title: "Put phone on Do Not Disturb", duration: "1 min", description: "Reduce blue light exposure" },
+        { title: "Light stretching or yoga", duration: "10 min", description: "Release physical tension" },
+        { title: "Gratitude journal", duration: "5 min", description: "Write 3 things you're grateful for" },
+        { title: "Deep breathing", duration: "4 min", description: "4-7-8 breathing technique" }
+    ],
+  },
+  {
+    key: "self_care_sunday_reset",
+    name: "Self-Care Sunday Reset",
+    description: "Recharge and prepare for the week ahead",
+    category: "self_care",
+    timeOfDay: "Sunday afternoon/evening",
+    duration: "45 minutes",
+    difficulty: "easy",
+    benefits: ["Reduces Monday anxiety", "Creates structure", "Improves organization"],
+    tipsForProcrastinators: "Pick ONE thing from this list. Just one. Even cleaning your desk for 5 minutes counts. Progress over perfection!",
+    videoUrl: null,
+    thumbnail: null,
+    sortOrder: 4,
+    steps: [
+        { title: "Clean your space", duration: "15 min", description: "Clear desk, make bed, tidy room" },
+        { title: "Meal prep for Monday", duration: "15 min", description: "Prepare something easy" },
+        { title: "Review weekly goals", duration: "10 min", description: "Plan your week" },
+        { title: "Do something fun", duration: "5 min", description: "Read, music, or hobby" }
+    ],
+  },
+  {
+    key: "creative_flow_session",
+    name: "Creative Flow Session",
+    description: "Unlock your creativity without judgment or pressure",
+    category: "creative",
+    timeOfDay: "When you feel inspired",
+    duration: "60 minutes",
+    difficulty: "easy",
+    benefits: ["Reduces perfectionism", "Builds creative confidence", "Provides stress relief", "Reconnects with your passions"],
+    tipsForProcrastinators: "Give yourself permission to make 'bad' art. The goal is process, not product. Just showing up is creative success! 🎨",
+    videoUrl: "https://youtube.com/watch?v=example-creative",
+    thumbnail: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800",
+    sortOrder: 5,
+    steps: [
+        { title: "Set up inspiring space", duration: "5 min", description: "Good lighting, music, materials ready" },
+        { title: "Warm-up exercise", duration: "10 min", description: "Doodle, free write, improvise—no rules" },
+        { title: "Main creative work", duration: "35 min", description: "Create without editing or judging" },
+        { title: "Step back and appreciate", duration: "5 min", description: "Acknowledge what you made, no criticism" },
+        { title: "Note ideas for next time", duration: "5 min", description: "Capture inspiration while fresh" }
+    ],
+  },
+  {
+    key: "quick_productivity_reset",
+    name: "Quick Productivity Reset",
+    description: "15-minute reboot when you're stuck or overwhelmed",
+    category: "productivity",
+    timeOfDay: "Whenever needed",
+    duration: "15 minutes",
+    difficulty: "easy",
+    benefits: ["Clears mental fog", "Reduces overwhelm", "Restores motivation", "Creates quick wins"],
+    tipsForProcrastinators: "This is your procrastination escape hatch! When stuck, do this routine instead of scrolling. It breaks the paralysis. 🚀",
+    videoUrl: "https://youtube.com/watch?v=example-reset",
+    thumbnail: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800",
+    sortOrder: 6,
+    steps: [
+        { title: "Brain dump", duration: "3 min", description: "Write down everything in your head" },
+        { title: "Pick ONE thing", duration: "2 min", description: "What's the smallest next step?" },
+        { title: "Movement break", duration: "5 min", description: "Walk, dance, stretch—anything physical" },
+        { title: "Clean workspace", duration: "3 min", description: "Clear desk = clear mind" },
+        { title: "Start that ONE thing", duration: "2 min", description: "Just begin. Progress beats perfection." }
+    ],
+  },
+  {
+    key: "energizing_morning_kickstart",
+    name: "Energizing Morning Kickstart",
+    description: "Start your day with intention and energy—even if you're not a morning person!",
+    category: "morning",
+    timeOfDay: "7:00 AM - 8:00 AM",
+    duration: "30 minutes",
+    difficulty: "easy",
+    benefits: ["Boosts energy and alertness", "Reduces morning stress", "Creates positive momentum for the day", "Improves focus and productivity"],
+    tipsForProcrastinators: "Just do the first step (drink water). Momentum builds naturally. You don't have to be perfect—any start is a good start! 💧",
+    videoUrl: "https://youtube.com/watch?v=example-morning",
+    thumbnail: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
+    sortOrder: 7,
+    steps: [
+        { title: "Hydrate immediately", duration: "2 min", description: "Drink a full glass of water before anything else" },
+        { title: "Light stretching or yoga", duration: "5 min", description: "Gentle movements to wake up your body" },
+        { title: "Quick shower", duration: "8 min", description: "End with 30 seconds of cold water for alertness" },
+        { title: "Healthy breakfast", duration: "10 min", description: "Protein + complex carbs fuel your brain" },
+        { title: "Set 3 intentions for the day", duration: "5 min", description: "Write down your top 3 priorities" }
+    ],
+  },
+  {
+    key: "self_care_sunday",
+    name: "Self-Care Sunday",
+    description: "Weekly reset for your mind, body, and soul",
+    category: "self_care",
+    timeOfDay: "Sunday afternoon",
+    duration: "2 hours",
+    difficulty: "easy",
+    benefits: ["Reduces Sunday anxiety", "Makes the week feel manageable", "Prioritizes self-compassion", "Creates something to look forward to"],
+    tipsForProcrastinators: "Treat this as non-negotiable 'you' time. Future you will thank present you! Start with just the bath if that's all you can manage. 🛁",
+    videoUrl: "https://youtube.com/watch?v=example-selfcare",
+    thumbnail: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800",
+    sortOrder: 8,
+    steps: [
+        { title: "Long bath or shower", duration: "20 min", description: "Add epsom salts, music, candles" },
+        { title: "Face mask & skincare", duration: "15 min", description: "Pamper yourself" },
+        { title: "Meal prep for the week", duration: "45 min", description: "Prep 3-4 easy meals" },
+        { title: "Plan the week ahead", duration: "15 min", description: "Calendar check, to-do list" },
+        { title: "Do something purely for joy", duration: "25 min", description: "Read, draw, game, whatever you love" }
+    ],
+  },
+  {
+    key: "focused_study_session",
+    name: "Focused Study Session",
+    description: "Beat procrastination with structured study time that actually works",
+    category: "study",
+    timeOfDay: "Any focused time block",
+    duration: "90 minutes",
+    difficulty: "moderate",
+    benefits: ["Maximizes retention and understanding", "Prevents burnout", "Builds consistent study habits", "Makes studying feel less overwhelming"],
+    tipsForProcrastinators: "Commit to just ONE 25-minute block. Tell yourself you can stop after. Usually you'll want to continue! The hardest part is starting. 📚",
+    videoUrl: "https://youtube.com/watch?v=example-study",
+    thumbnail: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800",
+    sortOrder: 9,
+    steps: [
+        { title: "Gather all materials", duration: "5 min", description: "Books, notes, laptop, snacks, water" },
+        { title: "Deep work block 1", duration: "25 min", description: "Pure focus on hardest task first (Pomodoro)" },
+        { title: "Break: move & hydrate", duration: "5 min", description: "Walk around, stretch, drink water" },
+        { title: "Deep work block 2", duration: "25 min", description: "Continue or switch to next priority" },
+        { title: "Break: snack & refresh", duration: "10 min", description: "Healthy snack, fresh air if possible" },
+        { title: "Deep work block 3", duration: "25 min", description: "Final push or review what you learned" }
+    ],
+  },
+  {
+    key: "peaceful_evening_wind_down",
+    name: "Peaceful Evening Wind-Down",
+    description: "Release the day's stress and prepare for restorative sleep",
+    category: "evening",
+    timeOfDay: "9:00 PM - 10:00 PM",
+    duration: "45 minutes",
+    difficulty: "easy",
+    benefits: ["Improves sleep quality", "Reduces anxiety", "Creates closure on the day", "Makes mornings easier"],
+    tipsForProcrastinators: "Start just 15 minutes before bed. Small rituals compound into better sleep over time. You deserve rest! 🌙",
+    videoUrl: "https://youtube.com/watch?v=example-evening",
+    thumbnail: "https://images.unsplash.com/photo-1511295742362-92c96b1cf484?w=800",
+    sortOrder: 10,
+    steps: [
+        { title: "No screens for 30 minutes", duration: "30 min", description: "Put phone away and dim lights" },
+        { title: "Light journaling", duration: "5 min", description: "Write 3 things you're grateful for" },
+        { title: "Gentle stretching", duration: "5 min", description: "Release physical tension" },
+        { title: "Calming tea or warm milk", duration: "5 min", description: "Chamomile, lavender, or golden milk" },
+        { title: "Prep for tomorrow", duration: "5 min", description: "Lay out clothes, plan breakfast" }
+    ],
+  },
+];
+
+const TUTORIALS: SeedTutorial[] = [
+  {
+    key: "overcoming_procrastination_the_2_minute_rule",
+    title: "Overcoming Procrastination: The 2-Minute Rule",
+    description: "Learn the simple trick that helps you start any task, no matter how overwhelming it feels",
+    category: "productivity",
+    videoUrl: "https://youtube.com/watch?v=example-procrastination",
+    thumbnail: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800",
+    duration: "8:45",
+    difficulty: "beginner",
+    sortOrder: 0,
+  },
+  {
+    key: "building_morning_routines_that_actually_stick",
+    title: "Building Morning Routines That Actually Stick",
+    description: "Why most morning routines fail and how to create one that works for YOUR life",
+    category: "life_skills",
+    videoUrl: "https://youtube.com/watch?v=example-morning-routine",
+    thumbnail: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
+    duration: "12:20",
+    difficulty: "beginner",
+    sortOrder: 1,
+  },
+  {
+    key: "the_power_of_tiny_habits",
+    title: "The Power of Tiny Habits",
+    description: "Transform your life by making changes so small you can't fail",
+    category: "life_skills",
+    videoUrl: "https://youtube.com/watch?v=example-tiny-habits",
+    thumbnail: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800",
+    duration: "16:30",
+    difficulty: "beginner",
+    sortOrder: 2,
+  },
+  {
+    key: "the_science_of_motivation",
+    title: "The Science of Motivation",
+    description: "Understand what actually drives behavior change (hint: it's not willpower)",
+    category: "life_skills",
+    videoUrl: "https://youtube.com/watch?v=example-motivation",
+    thumbnail: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800",
+    duration: "18:40",
+    difficulty: "intermediate",
+    sortOrder: 3,
+  },
+  {
+    key: "self_compassion_for_perfectionists",
+    title: "Self-Compassion for Perfectionists",
+    description: "Learn to be kinder to yourself and break free from all-or-nothing thinking",
+    category: "mental_health",
+    videoUrl: "https://youtube.com/watch?v=example-self-compassion",
+    thumbnail: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800",
+    duration: "14:15",
+    difficulty: "beginner",
+    sortOrder: 4,
+  },
+  {
+    key: "beating_decision_fatigue",
+    title: "Beating Decision Fatigue",
+    description: "Why you're exhausted by simple choices and how to preserve your mental energy",
+    category: "productivity",
+    videoUrl: "https://youtube.com/watch?v=example-decision-fatigue",
+    thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800",
+    duration: "10:50",
+    difficulty: "intermediate",
+    sortOrder: 5,
+  },
+  {
+    key: "healthy_meal_prep_guide",
+    title: "Healthy Meal Prep Guide",
+    description: "Simple and nutritious meal prep ideas for a busy lifestyle",
+    category: "wellness",
+    videoUrl: "https://youtube.com/watch?v=example5",
+    thumbnail: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800",
+    duration: "25:30",
+    difficulty: "beginner",
+    sortOrder: 6,
+  },
+  {
+    key: "building_better_habits",
+    title: "Building Better Habits",
+    description: "Science-backed strategies for forming lasting positive habits",
+    category: "life_skills",
+    videoUrl: "https://youtube.com/watch?v=example6",
+    thumbnail: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800",
+    duration: "20:15",
+    difficulty: "beginner",
+    sortOrder: 7,
+  },
+  {
+    key: "mindfulness_meditation_for_anxiety",
+    title: "Mindfulness Meditation for Anxiety",
+    description: "Learn techniques to calm your mind and reduce anxiety through guided meditation",
+    category: "mental_health",
+    videoUrl: "https://youtube.com/watch?v=example2",
+    thumbnail: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
+    duration: "15:00",
+    difficulty: "beginner",
+    sortOrder: 8,
+  },
+  {
+    key: "effective_study_techniques",
+    title: "Effective Study Techniques",
+    description: "Master proven study methods to improve retention and ace your exams",
+    category: "study_skills",
+    videoUrl: "https://youtube.com/watch?v=example3",
+    thumbnail: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800",
+    duration: "18:45",
+    difficulty: "beginner",
+    sortOrder: 9,
+  },
+  {
+    key: "10_minute_morning_yoga_flow",
+    title: "10-Minute Morning Yoga Flow",
+    description: "Start your day with this energizing yoga sequence perfect for beginners",
+    category: "exercise",
+    videoUrl: "https://youtube.com/watch?v=example1",
+    thumbnail: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800",
+    duration: "10:23",
+    difficulty: "beginner",
+    sortOrder: 10,
+  },
+  {
+    key: "time_management_mastery",
+    title: "Time Management Mastery",
+    description: "Learn to prioritize tasks and maximize your productivity",
+    category: "productivity",
+    videoUrl: "https://youtube.com/watch?v=example4",
+    thumbnail: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800",
+    duration: "22:10",
+    difficulty: "intermediate",
+    sortOrder: 11,
+  },
+];
+
+const BADGES = [
+  {
+    key: "first_workout", name: "First Step", description: "Log your very first workout", icon: "🏃",
+    color: "#ef4444", points: 10, sortOrder: 0,
+  },
+  {
+    key: "workout_10", name: "Fitness Enthusiast", description: "Complete 10 workouts", icon: "💪",
+    color: "#f97316", points: 25, sortOrder: 1,
+  },
+  {
+    key: "mood_first", name: "Self-Aware", description: "Write your first mood journal entry", icon: "🧘",
+    color: "#10b981", points: 10, sortOrder: 2,
+  },
+  {
+    key: "streak_7", name: "7-Day Streak", description: "Journal your mood 7 days in a row", icon: "🔥",
+    color: "#f59e0b", points: 50, sortOrder: 3,
+  },
+  {
+    key: "goal_first", name: "Goal Getter", description: "Complete your first goal", icon: "🎯",
+    color: "#6366f1", points: 25, sortOrder: 4,
+  },
+  {
+    key: "goals_5", name: "High Achiever", description: "Complete 5 goals", icon: "🏆",
+    color: "#a855f7", points: 100, sortOrder: 5,
+  },
+  {
+    key: "assignment_ace", name: "Assignment Ace", description: "Complete 10 assignments", icon: "📝",
+    color: "#3b82f6", points: 50, sortOrder: 6,
+  },
+  {
+    key: "wellness_warrior", name: "Wellness Warrior", description: "Earn 500 total points", icon: "⭐",
+    color: "#ec4899", points: 100, sortOrder: 7,
+  },];
 
 async function main() {
-  // Idempotency: wipe domain data, keep schema.
-  await db.savedReport.deleteMany();
-  await db.activity.deleteMany();
+  // Idempotency: wipe domain + content data, keep schema and users.
+  await db.userBadge.deleteMany();
+  await db.userRoutine.deleteMany();
+  await db.routineStep.deleteMany();
+  await db.routineTemplate.deleteMany();
+  await db.tutorial.deleteMany();
+  await db.badge.deleteMany();
+  await db.workout.deleteMany();
+  await db.moodEntry.deleteMany();
+  await db.assignment.deleteMany();
   await db.event.deleteMany();
-  await db.lead.deleteMany();
-  await db.contact.deleteMany();
-  await db.account.deleteMany();
-  await db.setting.deleteMany();
+  await db.studyResource.deleteMany();
+  await db.reminder.deleteMany();
+  await db.goal.deleteMany();
 
-  // ---- users (sales team) ---------------------------------------------------
-  // Session-162 (the 162-c decode): the users land through UPSERT-BY-EMAIL,
-  // never deleteMany — a re-seed preserves the users' IDS. The old
-  // wipe+recreate rotated every cuid on each `bun run db:seed`, which
-  // orphaned the sweep's cross-process auth state (the cookie uid pointed
-  // at a deleted row — the self-heal re-logged-in on every invocation and
-  // the login consolidation saved nothing). The domain tables keep their
-  // wipe+recreate (nothing references their ids across seeds); the users
-  // are the session-cookie's provenance — stable by contract now. The
-  // update path resets every seeded field, so "reseed in place" stays
-  // literal: the same rows, the demo state restored onto them.
-  const [demo, sara, omar, lena] = await Promise.all([
-    db.user.upsert({
-      where: { email: "sepnetflix2023@outlook.com" },
-      update: {
-        name: "sepnetflix2023",
-        passwordHash: hashPassword("$Abcd1234"),
-        avatarColor: "#e5e7eb", // light grey + dark "S" — mirrors the reference avatar
-        role: "user", // matches the reference account's role display
-        photoUrl: null,
-        verificationCodeHash: null,
-        verificationAttempts: 0,
-        verificationExpiresAt: null,
-        // Session-164: the reset funnel clears with the seed (the verification
-        // fields' own posture — a stale pending token never survives a
-        // re-seed; tokenVersion deliberately NOT reset — no demo-session
-        // eviction, the sweep-state contract).
-        resetToken: null,
-        resetTokenExpiresAt: null,
-      },
-      create: {
-        email: "sepnetflix2023@outlook.com",
-        name: "sepnetflix2023",
-        passwordHash: hashPassword("$Abcd1234"),
-        avatarColor: "#e5e7eb", // light grey + dark "S" — mirrors the reference avatar
-        role: "user", // matches the reference account's role display
-      },
-    }),
-    db.user.upsert({
-      where: { email: "sara.chen@neo-crm.app" },
-      update: {
-        name: "Sara Chen",
-        passwordHash: hashPassword("Demo1234!"),
-        avatarColor: "#0891b2",
-        photoUrl: null,
-        verificationCodeHash: null,
-        verificationAttempts: 0,
-        verificationExpiresAt: null,
-        // Session-164: the reset funnel clears with the seed (the verification
-        // fields' own posture — a stale pending token never survives a
-        // re-seed; tokenVersion deliberately NOT reset — no demo-session
-        // eviction, the sweep-state contract).
-        resetToken: null,
-        resetTokenExpiresAt: null,
-      },
-      create: {
-        email: "sara.chen@neo-crm.app",
-        name: "Sara Chen",
-        passwordHash: hashPassword("Demo1234!"),
-        avatarColor: "#0891b2",
-      },
-    }),
-    db.user.upsert({
-      where: { email: "omar.haddad@neo-crm.app" },
-      update: {
-        name: "Omar Haddad",
-        passwordHash: hashPassword("Demo1234!"),
-        avatarColor: "#7c3aed",
-        photoUrl: null,
-        verificationCodeHash: null,
-        verificationAttempts: 0,
-        verificationExpiresAt: null,
-        // Session-164: the reset funnel clears with the seed (the verification
-        // fields' own posture — a stale pending token never survives a
-        // re-seed; tokenVersion deliberately NOT reset — no demo-session
-        // eviction, the sweep-state contract).
-        resetToken: null,
-        resetTokenExpiresAt: null,
-      },
-      create: {
-        email: "omar.haddad@neo-crm.app",
-        name: "Omar Haddad",
-        passwordHash: hashPassword("Demo1234!"),
-        avatarColor: "#7c3aed",
-      },
-    }),
-    db.user.upsert({
-      where: { email: "lena.fischer@neo-crm.app" },
-      update: {
-        name: "Lena Fischer",
-        passwordHash: hashPassword("Demo1234!"),
-        avatarColor: "#059669",
-        photoUrl: null,
-        verificationCodeHash: null,
-        verificationAttempts: 0,
-        verificationExpiresAt: null,
-        // Session-164: the reset funnel clears with the seed (the verification
-        // fields' own posture — a stale pending token never survives a
-        // re-seed; tokenVersion deliberately NOT reset — no demo-session
-        // eviction, the sweep-state contract).
-        resetToken: null,
-        resetTokenExpiresAt: null,
-      },
-      create: {
-        email: "lena.fischer@neo-crm.app",
-        name: "Lena Fischer",
-        passwordHash: hashPassword("Demo1234!"),
-        avatarColor: "#059669",
-      },
-    }),
-  ]);
-
-  const owners = [demo, sara, omar, lena];
-  const pick = (i: number) => owners[i % owners.length];
-
-  // ---- accounts --------------------------------------------------------------
-  const accountSeed = [
-    { name: "Emirates Global Trading", industry: "Logistics", revenue: 12_500_000, employees: 340, status: "active", email: "contact@egt.ae", website: "https://egt.ae", health: "Healthy" },
-    { name: "Gulf Tech Solutions", industry: "Technology", revenue: 4_800_000, employees: 120, status: "active", email: "hello@gulftech.io", website: "https://gulftech.io", health: "Healthy" },
-    { name: "Al Noor Manufacturing", industry: "Manufacturing", revenue: 8_200_000, employees: 260, status: "active", email: "info@alnoor-mfg.com", health: "At Risk" },
-    { name: "Cedar Retail Group", industry: "Retail", revenue: 2_100_000, employees: 85, status: "active", email: "team@cedarretail.com", health: "Needs Attention" },
-    { name: "Meridian Financial", industry: "Finance", revenue: 15_900_000, employees: 410, status: "active", email: "sales@meridianfin.com", health: "Healthy" },
-    { name: "Oasis Healthcare", industry: "Healthcare", revenue: 6_400_000, employees: 190, status: "active", email: "procurement@oasishealth.ae", health: "Healthy" },
-    { name: "Northwind Energy", industry: "Energy", revenue: 22_000_000, employees: 520, status: "active", email: "vendors@northwind.energy", health: "At Risk" },
-    { name: "Brightline Education", industry: "Education", revenue: 900_000, employees: 45, status: "inactive", email: "admin@brightline.edu", health: "Needs Attention" },
-    { name: "Sahara Logistics", industry: "Logistics", revenue: 3_300_000, employees: 110, status: "inactive", email: "ops@saharalog.com", health: "At Risk" },
-    { name: "Falcon Analytics", industry: "Technology", revenue: 1_400_000, employees: 32, status: "active", email: "hi@falconanalytics.ai", health: "Healthy" },
-  ];
-
-  const accounts: Account[] = [];
-  for (let i = 0; i < accountSeed.length; i += 1) {
-    const a = accountSeed[i]!;
-    accounts.push(
-      await db.account.create({
-        data: {
-          name: a.name,
-          industry: a.industry,
-          annualRevenue: a.revenue,
-          employees: a.employees,
-          status: a.status,
-          // Session-26 (S26-P5): the reference's three-state vocabulary.
-          health: a.health,
-          email: a.email,
-          website: a.website ?? null,
-          phone: `+971 4 ${200 + i} ${4000 + i * 7}`,
-          ownerId: pick(i).id,
-          lastActivityAt: d(-((i * 9) % 60) - 1),
-        },
-      }),
-    );
-  }
-
-  // ---- contacts ---------------------------------------------------------------
-  // Session-5 (re-scoped session-29): sources follow the reference's RAW
-  // dialog vocabularies — leads store call/email/website/partner (value
-  // "call", label "Call"; referral is filter-only); contacts use the five
-  // "How did you meet?" emoji options. Old working values map onto the raw
-  // lists.
-  const LEAD_SOURCE_MAP: Record<string, string> = {
-    Referral: "referral",
-    Event: "partner",
-    "Social Media": "partner",
-    Advertisement: "partner",
-    Partner: "partner",
-    Phone: "call",
-    "Cold Call": "call",
-    Call: "call",
-    Website: "website",
-    Email: "email",
-  };
-  // Session-28 (S28-P1): the reference stores RAW source values
-  // (call/email/website/partner/referral) — the emoji strings are
-  // create-dialog labels only.
-  const CONTACT_SOURCE_MAP: Record<string, string> = {
-    Email: "email",
-    Phone: "call",
-    "Cold Call": "call",
-    Website: "website",
-    Referral: "partner",
-    Partner: "partner",
-    Event: "referral",
-    "Social Media": "referral",
-    Advertisement: "referral",
-  };
-  // Session-28 (S28-P1): the reference's contact priority vocabulary is
-  // Key/Standard/At Risk; the legacy seed adjectives map onto it. Role,
-  // engagement level, and company size ride the new fields.
-  const PRIORITY_MAP: Record<string, string> = {
-    hot: "Key",
-    warm: "Standard",
-    cold: "At Risk",
-  };
-  const ROLES = ["Decision Maker", "Key Contact", "Influencer", "End User", "Other"];
-  const ENGAGEMENT = ["High", "Medium", "Low"];
-  const SIZES = ["Small (1-50)", "Medium (51-500)", "Large (500+)"];
-
-  const contactSeed = [
-    { name: "Khalid Al Mansoori", position: "Chief Procurement Officer", priority: "hot", company: "Emirates Global Trading", source: "Referral" },
-    { name: "Priya Raghavan", position: "IT Director", priority: "hot", company: "Gulf Tech Solutions", source: "Event" },
-    { name: "Yousef Haddadi", position: "Plant Manager", priority: "warm", company: "Al Noor Manufacturing", source: "Cold Call" },
-    { name: "Marie Dubois", position: "Head of Retail Ops", priority: "warm", company: "Cedar Retail Group", source: "Website" },
-    { name: "James Whitfield", position: "CFO", priority: "hot", company: "Meridian Financial", source: "Referral" },
-    { name: "Dr. Amina Rashid", position: "Medical Director", priority: "warm", company: "Oasis Healthcare", source: "Email" },
-    { name: "Viktor Petrov", position: "VP Operations", priority: "cold", company: "Northwind Energy", source: "Event" },
-    { name: "Sarah Thompson", position: "Principal", priority: "cold", company: "Brightline Education", source: "Social Media" },
-    { name: "Hassan Al Farsi", position: "Fleet Manager", priority: "cold", company: "Sahara Logistics", source: "Phone" },
-    { name: "Elena Kovacs", position: "CEO", priority: "hot", company: "Falcon Analytics", source: "Website" },
-    { name: "Daniel Okafor", position: "Sales Manager", priority: "warm", company: "Emirates Global Trading", source: "Email" },
-    { name: "Mei Lin Chow", position: "CTO", priority: "warm", company: "Gulf Tech Solutions", source: "Referral" },
-    { name: "Tomas Novak", position: "Quality Lead", priority: "cold", company: "Al Noor Manufacturing", source: "Advertisement" },
-    { name: "Aisha Bakr", position: "Marketing Head", priority: "warm", company: "Cedar Retail Group", source: "Social Media" },
-    { name: "Robert Chen", position: "Investment Analyst", priority: "warm", company: "Meridian Financial", source: "Email" },
-  ];
-
-  const contacts: Contact[] = [];
-  for (let i = 0; i < contactSeed.length; i += 1) {
-    const c = contactSeed[i]!;
-    const account = accounts.find((a) => a.name === c.company);
-    contacts.push(
-      await db.contact.create({
-        data: {
-          name: c.name,
-          email: `${c.name.toLowerCase().replace(/[^a-z]+/g, ".")}@example.com`,
-          phone: `+971 5${i} ${100 + i} ${2000 + i * 13}`,
-          company: c.company,
-          position: c.position,
-          source: CONTACT_SOURCE_MAP[c.source] ?? c.source,
-          priority: PRIORITY_MAP[c.priority] ?? "Standard",
-          role: ROLES[i % ROLES.length],
-          engagementLevel: ENGAGEMENT[i % ENGAGEMENT.length],
-          companySize: SIZES[i % SIZES.length],
-          accountId: account?.id ?? null,
-          ownerId: pick(i + 1).id,
-          lastActivityAt: d(-(i * 3 + 1)),
-        },
-      }),
-    );
-  }
-
-  // ---- leads -------------------------------------------------------------------
-  // stage / source / value / createdDaysAgo / closedDaysAgo
-  const leadSeed: Array<{
-    name: string;
-    company: string;
-    stage: string;
-    source: string;
-    value: number;
-    created: number;
-    closed?: number;
-    ownerIdx: number;
-  }> = [
-    { name: "Fleet tracking rollout", company: "Emirates Global Trading", stage: "won", source: "Referral", value: 145_000, created: -140, closed: -96, ownerIdx: 0 },
-    { name: "ERP integration phase 1", company: "Gulf Tech Solutions", stage: "won", source: "Event", value: 98_000, created: -120, closed: -70, ownerIdx: 1 },
-    { name: "Annual platform license", company: "Meridian Financial", stage: "won", source: "Email", value: 210_000, created: -95, closed: -40, ownerIdx: 2 },
-    { name: "Analytics add-on bundle", company: "Falcon Analytics", stage: "won", source: "Website", value: 42_000, created: -80, closed: -18, ownerIdx: 3 },
-    { name: "Compliance suite renewal", company: "Oasis Healthcare", stage: "won", source: "Phone", value: 66_000, created: -62, closed: -6, ownerIdx: 0 },
-    { name: "Warehouse sensors pilot", company: "Al Noor Manufacturing", stage: "lost", source: "Cold Call", value: 55_000, created: -110, closed: -60, ownerIdx: 1 },
-    { name: "Campus-wide deployment", company: "Brightline Education", stage: "lost", source: "Social Media", value: 30_000, created: -150, closed: -100, ownerIdx: 2 },
-    { name: "Fleet expansion RFP", company: "Sahara Logistics", stage: "lost", source: "Advertisement", value: 77_000, created: -130, closed: -85, ownerIdx: 3 },
-    { name: "Security audit retainer", company: "Northwind Energy", stage: "negotiation", source: "Referral", value: 180_000, created: -55, ownerIdx: 0 },
-    { name: "Logistics platform migration", company: "Emirates Global Trading", stage: "negotiation", source: "Referral", value: 125_000, created: -48, ownerIdx: 1 },
-    { name: "Payment gateway switch", company: "Cedar Retail Group", stage: "proposal", source: "Website", value: 88_000, created: -35, ownerIdx: 2 },
-    { name: "Data center refresh", company: "Meridian Financial", stage: "proposal", source: "Email", value: 160_000, created: -28, ownerIdx: 3 },
-    { name: "Patient portal upgrade", company: "Oasis Healthcare", stage: "qualified", source: "Phone", value: 71_000, created: -22, ownerIdx: 0 },
-    { name: "IoT monitoring rollout", company: "Al Noor Manufacturing", stage: "qualified", source: "Cold Call", value: 94_000, created: -18, ownerIdx: 1 },
-    { name: "CRM seats expansion", company: "Gulf Tech Solutions", stage: "contacted", source: "Event", value: 36_000, created: -12, ownerIdx: 2 },
-    { name: "Retail analytics trial", company: "Cedar Retail Group", stage: "contacted", source: "Social Media", value: 24_000, created: -9, ownerIdx: 3 },
-    { name: "AI forecasting pilot", company: "Falcon Analytics", stage: "new", source: "Website", value: 58_000, created: -5, ownerIdx: 0 },
-    { name: "Turbine telemetry POC", company: "Northwind Energy", stage: "new", source: "Referral", value: 132_000, created: -3, ownerIdx: 1 },
-    { name: "LMS replacement", company: "Brightline Education", stage: "new", source: "Email", value: 19_000, created: -2, ownerIdx: 2 },
-    { name: "Supply chain visibility", company: "Emirates Global Trading", stage: "new", source: "Phone", value: 110_000, created: -1, ownerIdx: 3 },
-    { name: "Compliance tracking", company: "Meridian Financial", stage: "won", source: "Referral", value: 87_000, created: -45, closed: -12, ownerIdx: 1 },
-    { name: "Marketing automation", company: "Cedar Retail Group", stage: "won", source: "Email", value: 39_000, created: -38, closed: -9, ownerIdx: 2 },
-    { name: "Field service app", company: "Al Noor Manufacturing", stage: "lost", source: "Event", value: 64_000, created: -70, closed: -25, ownerIdx: 0 },
-    { name: "Procurement dashboard", company: "Emirates Global Trading", stage: "qualified", source: "Referral", value: 76_000, created: -8, ownerIdx: 3 },
-  ];
-
-  for (let i = 0; i < leadSeed.length; i += 1) {
-    const l = leadSeed[i]!;
-    const account = accounts.find((a) => a.name === l.company);
-    const contact = contacts.find((c) => c.company === l.company);
-    const closed = l.stage === "won" || l.stage === "lost";
-    await db.lead.create({
-      data: {
-        name: l.name,
-        email: contact?.email ?? `deal${i}@example.com`,
-        phone: contact?.phone ?? null,
-        company: l.company,
-        value: l.value,
-        stage: l.stage,
-        source: LEAD_SOURCE_MAP[l.source] ?? l.source,
-        status: closed ? (l.stage === "won" ? "closed_won" : "closed_lost") : "open",
-        createdAt: iso(l.created, 9 + (i % 8)),
-        closedAt: closed ? iso(l.closed ?? -30, 15) : null,
-        expectedCloseDate: !closed ? d(14 + (i * 3) % 60) : null,
-        nextFollowUp: !closed ? d(1 + (i % 10)) : null,
-        accountId: account?.id ?? null,
-        contactId: contact?.id ?? null,
-        ownerId: pick(l.ownerIdx).id,
-      },
-    });
-  }
-
-  // ---- opportunities (session-31: the reference's SECOND deal model) -----------
-  // Bundle-decoded from index-DZ-xbrIm.js: the Opportunity entity has NO
-  // create-edit UI on the reference (the dead "Convert to Opportunity"
-  // item) — its data feeds the dashboard, all five reports tabs, and both
-  // insights surfaces. accountName/owner are NAME STRINGS (the reference's
-  // model). The four won amounts (87k+145k+39k+66k = $337.0K) are the e2e's
-  // date-independent All-Time pin.
-  await db.opportunity.deleteMany();
-  const oppSeed: Array<{
-    name: string;
-    accountName: string;
-    stage: string;
-    amount: number;
-    probability: number;
-    close: number | null; // closeDate offset (closed opps only)
-    created: number;
-    updated: number;
-    source: string;
-    owner: string;
-  }> = [
-    // won (4) — $337.0K total
-    { name: "Compliance tracking renewal", accountName: "Meridian Financial", stage: "closed_won", amount: 87_000, probability: 90, close: -12, created: -45, updated: -1, source: "referral", owner: "Sara Chen" },
-    { name: "Fleet telemetry rollout", accountName: "Emirates Global Trading", stage: "closed_won", amount: 145_000, probability: 85, close: -20, created: -60, updated: -20, source: "partner", owner: "Omar Haddad" },
-    { name: "LMS migration", accountName: "Brightline Education", stage: "closed_won", amount: 39_000, probability: 80, close: -9, created: -38, updated: -1, source: "email", owner: "Lena Fischer" },
-    { name: "Retail analytics upgrade", accountName: "Cedar Retail Group", stage: "closed_won", amount: 66_000, probability: 75, close: -33, created: -55, updated: -33, source: "website", owner: "Sara Chen" },
-    // lost (2) — $92.0K
-    { name: "Predictive maintenance POC", accountName: "Al Noor Manufacturing", stage: "closed_lost", amount: 64_000, probability: 40, close: -25, created: -70, updated: -25, source: "call", owner: "Omar Haddad" },
-    { name: "Cold-chain tracking", accountName: "Sahara Logistics", stage: "closed_lost", amount: 28_000, probability: 30, close: -40, created: -80, updated: -40, source: "email", owner: "Lena Fischer" },
-    // open (6) across the four open stages — $525K pipeline
-    { name: "AI forecasting pilot", accountName: "Falcon Analytics", stage: "prospecting", amount: 58_000, probability: 20, close: null, created: -5, updated: -2, source: "website", owner: "Sara Chen" },
-    { name: "Turbine telemetry POC", accountName: "Northwind Energy", stage: "prospecting", amount: 132_000, probability: 15, close: null, created: -3, updated: -3, source: "partner", owner: "Omar Haddad" },
-    { name: "Supply chain visibility", accountName: "Emirates Global Trading", stage: "qualification", amount: 110_000, probability: 40, close: null, created: -8, updated: -8, source: "call", owner: "Lena Fischer" },
-    { name: "Patient portal integration", accountName: "Oasis Healthcare", stage: "proposal", amount: 95_000, probability: 60, close: null, created: -21, updated: -21, source: "referral", owner: "Sara Chen" },
-    { name: "Procurement dashboard", accountName: "Meridian Financial", stage: "negotiation", amount: 76_000, probability: 75, close: null, created: -16, updated: -16, source: "partner", owner: "Omar Haddad" },
-    { name: "Gulf ERP connector", accountName: "Gulf Tech Solutions", stage: "negotiation", amount: 54_000, probability: 70, close: null, created: -12, updated: -12, source: "email", owner: "Lena Fischer" },
-  ];
-  for (const o of oppSeed) {
-    await db.opportunity.create({
-      data: {
-        name: o.name,
-        accountName: o.accountName,
-        stage: o.stage,
-        amount: o.amount,
-        probability: o.probability,
-        closeDate: o.close !== null ? iso(o.close, 15) : null,
-        source: o.source,
-        owner: o.owner,
-        createdAt: iso(o.created, 9),
-        updatedAt: iso(o.updated, 16),
-      },
-    });
-  }
-
-  // ---- activities -----------------------------------------------------------------
-  const activitySeed: Array<{
-    type: string;
-    subject: string;
-    status: string;
-    due: number;
-    ownerIdx: number;
-    contactIdx?: number;
-    notes?: string;
-    // Session-31: the Opportunity-related activities (the reports Deals at
-    // Risk join — relatedType "Opportunity" + the freeform relatedName).
-    relatedType?: string;
-    relatedName?: string;
-  }> = [
-    { type: "call", subject: "Discovery call — fleet rollout", status: "completed", due: -12, ownerIdx: 0, contactIdx: 0, notes: "Confirmed budget cycle opens next quarter." },
-    { type: "email", subject: "Sent pricing to Meridian", status: "completed", due: -9, ownerIdx: 1, contactIdx: 4 },
-    { type: "meeting", subject: "Onsite workshop at Al Noor", status: "completed", due: -7, ownerIdx: 2, contactIdx: 2, notes: "Plant tour + IoT requirements gathered." },
-    { type: "whatsapp", subject: "Quick Q&A with Priya", status: "completed", due: -5, ownerIdx: 3, contactIdx: 1 },
-    { type: "call", subject: "Follow-up: security audit", status: "scheduled", due: -2, ownerIdx: 0, contactIdx: 6, notes: "Left voicemail, retry Thursday." },
-    { type: "email", subject: "Proposal revision v3", status: "scheduled", due: -1, ownerIdx: 1, contactIdx: 3 },
-    { type: "task", subject: "Prepare RFP response", status: "scheduled", due: 0, ownerIdx: 2, contactIdx: 0 },
-    { type: "call", subject: "Check-in — patient portal", status: "scheduled", due: 0, ownerIdx: 0, contactIdx: 5 },
-    { type: "meeting", subject: "Executive demo — Northwind", status: "scheduled", due: 1, ownerIdx: 1, contactIdx: 6 },
-    { type: "email", subject: "Contract redlines to legal", status: "scheduled", due: 2, ownerIdx: 2, contactIdx: 4 },
-    { type: "whatsapp", subject: "Confirm demo attendees", status: "scheduled", due: 3, ownerIdx: 3, contactIdx: 9 },
-    { type: "task", subject: "Update CRM forecasting sheet", status: "scheduled", due: 4, ownerIdx: 0 },
-    { type: "call", subject: "Renewal conversation", status: "scheduled", due: 6, ownerIdx: 1, contactIdx: 10 },
-    { type: "note", subject: "Champion change at Cedar Retail", status: "completed", due: -20, ownerIdx: 2, contactIdx: 3, notes: "Marie left the company; new contact TBD." },
-    { type: "email", subject: "Quarterly business review deck", status: "completed", due: -15, ownerIdx: 3, contactIdx: 8 },
-    { type: "call", subject: "Overdue: pricing call-back", status: "scheduled", due: -4, ownerIdx: 2, contactIdx: 12 },
-    { type: "task", subject: "Book onsite for April", status: "scheduled", due: 9, ownerIdx: 1 },
-    { type: "meeting", subject: "Pipeline review — weekly", status: "completed", due: -3, ownerIdx: 0 },
-    { type: "call", subject: "Intro call — Falcon Analytics", status: "completed", due: -6, ownerIdx: 3, contactIdx: 9 },
-    { type: "email", subject: "Case study request", status: "scheduled", due: 5, ownerIdx: 0, contactIdx: 1 },
-    // Opportunity-linked (session-31): AI forecasting pilot is FRESH (2d —
-    // not at risk); Supply chain visibility (20d) + Procurement dashboard
-    // (30d) are stale — the at-risk table's live rows.
-    { type: "meeting", subject: "Scoping session — AI forecasting", status: "completed", due: -2, ownerIdx: 0, relatedType: "Opportunity", relatedName: "AI forecasting pilot", notes: "Requirements + success criteria agreed." },
-    { type: "call", subject: "Stakeholder alignment — supply chain", status: "completed", due: -20, ownerIdx: 2, relatedType: "Opportunity", relatedName: "Supply chain visibility" },
-    { type: "email", subject: "Pricing follow-up — procurement", status: "completed", due: -30, ownerIdx: 1, relatedType: "Opportunity", relatedName: "Procurement dashboard" },
-  ];
-
-  for (const a of activitySeed) {
-    await db.activity.create({
-      data: {
-        type: a.type,
-        subject: a.subject,
-        notes: a.notes ?? null,
-        status: a.status,
-        priority: a.due < 0 && a.status === "scheduled" ? "high" : "normal",
-        dueAt: iso(a.due, 10 + (a.ownerIdx * 2), (a.due * 7) % 60),
-        completedAt: a.status === "completed" ? iso(a.due, 16) : null,
-        accountId: a.contactIdx !== undefined ? (contacts[a.contactIdx]?.accountId ?? null) : null,
-        contactId: a.contactIdx !== undefined ? (contacts[a.contactIdx]?.id ?? null) : null,
-        relatedType: a.relatedType ?? null,
-        relatedName: a.relatedName ?? null,
-        ownerId: pick(a.ownerIdx).id,
-        createdAt: iso(a.due - (a.status === "completed" ? 0 : 2), 9),
-      },
-    });
-  }
-
-  // ---- events ------------------------------------------------------------------------
-  const eventSeed: Array<{
-    title: string;
-    type: string;
-    start: number;
-    hour: number;
-    location?: string;
-    contactIdx?: number;
-    ownerIdx: number;
-    status?: string;
-  }> = [
-    { title: "Pipeline review with Sara", type: "meeting", start: 0, hour: 11, location: "Meeting room 2", ownerIdx: 0 },
-    { title: "Call — Khalid (EGT)", type: "call", start: 0, hour: 14, contactIdx: 0, ownerIdx: 0 },
-    { title: "Product demo — Meridian", type: "meeting", start: 1, hour: 10, location: "https://meet.example.com/demo", contactIdx: 4, ownerIdx: 1 },
-    { title: "Dentist appointment", type: "appointment", start: 2, hour: 9, ownerIdx: 2 },
-    { title: "Proposal walkthrough — Cedar", type: "meeting", start: 3, hour: 13, location: "Zoom", contactIdx: 3, ownerIdx: 2 },
-    { title: "Send onboarding kit", type: "task", start: 3, hour: 16, ownerIdx: 3 },
-    { title: "Quarterly business review", type: "meeting", start: 5, hour: 10, location: "Meridian HQ", contactIdx: 4, ownerIdx: 0 },
-    { title: "Follow-up — patient portal", type: "call", start: 6, hour: 15, contactIdx: 5, ownerIdx: 0 },
-    { title: "Onsite — Al Noor plant", type: "appointment", start: 8, hour: 8, location: "Sharjah industrial zone", contactIdx: 2, ownerIdx: 2 },
-    { title: "Intro meeting — Falcon AI", type: "meeting", start: -4, hour: 10, contactIdx: 9, ownerIdx: 3, status: "completed" },
-    { title: "Weekly sync", type: "meeting", start: -7, hour: 9, ownerIdx: 0, status: "completed" },
-    { title: "Contract call — Northwind", type: "call", start: 10, hour: 12, contactIdx: 6, ownerIdx: 1 },
-  ];
-
-  for (const e of eventSeed) {
-    await db.event.create({
-      data: {
-        title: e.title,
-        type: e.type,
-        status: e.status ?? "scheduled",
-        startAt: iso(e.start, e.hour, e.hour % 2 ? 30 : 0),
-        endAt: iso(e.start, e.hour + 1, e.hour % 2 ? 30 : 0),
-        location: e.location ?? null,
-        accountId: e.contactIdx !== undefined ? (contacts[e.contactIdx]?.accountId ?? null) : null,
-        contactId: e.contactIdx !== undefined ? (contacts[e.contactIdx]?.id ?? null) : null,
-        ownerId: pick(e.ownerIdx).id,
-      },
-    });
-  }
-
-  // ---- settings singleton ---------------------------------------------------------------
-  await db.setting.create({
-    data: {
-      id: "singleton",
-      contactSources: JSON.stringify(["Email", "Phone", "Website", "Referral", "Event", "Social Media", "Cold Call", "Advertisement"]),
-      leadStages: JSON.stringify(["new", "contacted", "qualified", "proposal", "negotiation", "won", "lost"]),
-      activityTypes: JSON.stringify(["call", "email", "meeting", "whatsapp", "task", "note"]),
-      accountTiers: JSON.stringify(["A", "B", "C"]),
-      industries: JSON.stringify(["Technology", "Manufacturing", "Retail", "Finance", "Healthcare", "Education", "Logistics", "Energy"]),
-      defaultCurrency: "AED",
-      defaultLeadStage: "new",
-      defaultTier: "B",
-      followUpDays: 3,
-      calendarView: "month",
-      firstDayOfWeek: "monday",
+  // ---- demo user (UPSERT-BY-EMAIL — ids stay stable across re-seeds) ----
+  const demo = await db.user.upsert({
+    where: { email: "sepnetflix2023@outlook.com" },
+    update: {
+      name: "sepnetflix2023",
+      avatarColor: "#6366f1",
+      role: "user",
+      verificationCodeHash: null,
+      verificationAttempts: 0,
+      verificationExpiresAt: null,
+      resetToken: null,
+      resetTokenExpiresAt: null,
+    },
+    create: {
+      email: "sepnetflix2023@outlook.com",
+      name: "sepnetflix2023",
+      passwordHash: hashPassword("$Abcd1234"),
+      avatarColor: "#6366f1",
+      role: "user",
     },
   });
+  console.log(`[seed] demo user upserted: ${demo.email}`);
 
-  const counts = {
-    users: await db.user.count(),
-    accounts: await db.account.count(),
-    contacts: await db.contact.count(),
-    leads: await db.lead.count(),
-    activities: await db.activity.count(),
-    events: await db.event.count(),
-  };
+  // ---- routine templates + steps ------------------------------------------
+  for (const t of ROUTINE_TEMPLATES) {
+    const created = await db.routineTemplate.create({
+      data: {
+        key: t.key,
+        name: t.name,
+        description: t.description,
+        category: t.category,
+        timeOfDay: t.timeOfDay,
+        duration: t.duration,
+        difficulty: t.difficulty,
+        benefits: JSON.stringify(t.benefits),
+        tipsForProcrastinators: t.tipsForProcrastinators,
+        videoUrl: t.videoUrl || null,
+        thumbnail: t.thumbnail || null,
+        sortOrder: t.sortOrder,
+      },
+    });
+    let order = 0;
+    for (const s of t.steps) {
+      await db.routineStep.create({
+        data: {
+          templateId: created.id,
+          title: s.title,
+          duration: s.duration,
+          description: s.description,
+          sortOrder: order++,
+        },
+      });
+    }
+  }
+  console.log(`[seed] ${ROUTINE_TEMPLATES.length} routine templates seeded`);
 
-  console.log("Seeded NEO CRM demo workspace:", counts);
-  console.log("Demo login: sepnetflix2023@outlook.com / $Abcd1234");
+  // ---- tutorials -----------------------------------------------------------
+  for (const t of TUTORIALS) {
+    await db.tutorial.create({
+      data: {
+        key: t.key,
+        title: t.title,
+        description: t.description,
+        category: t.category,
+        videoUrl: t.videoUrl || null,
+        thumbnail: t.thumbnail || null,
+        duration: t.duration,
+        difficulty: t.difficulty,
+        sortOrder: t.sortOrder,
+      },
+    });
+  }
+  console.log(`[seed] ${TUTORIALS.length} tutorials seeded`);
+
+  // ---- badge catalog --------------------------------------------------------
+  for (const b of BADGES) {
+    await db.badge.create({
+      data: {
+        key: b.key,
+        name: b.name,
+        description: b.description,
+        icon: b.icon,
+        color: b.color,
+        points: b.points,
+        sortOrder: b.sortOrder,
+      },
+    });
+  }
+  console.log(`[seed] ${BADGES.length} badges seeded`);
 }
 
 main()

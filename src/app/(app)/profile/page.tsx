@@ -1,17 +1,15 @@
 import { pageMetadata } from "@/lib/site";
-import ProfilePage from "./profile-page";
+import { getSessionUser } from "@/lib/auth";
+import ProfileClientPage from "./profile-page";
+import type { User as AppUser } from "@/types";
 
-// Session-10 (S10-10): per-page document titles — the reference titles every
-// non-dashboard page "X | NEO CRM" (document.title probes, all 10 routes);
-// the dashboard and login stay "NEO CRM" (root-layout default). A server
-// page wrapper contributes the metadata (client pages cannot export it);
-// the AppShell effect covers client-side navigations too.
-// Session-19 (S19-P4/P5): the reference also ships PER-ROUTE canonical +
-// OG/Twitter on every inner page (og:title "X | NEO CRM", og:url
-// origin+route, og:description "X on NEO CRM. " + the root paragraph) —
-// all built through the pageMetadata() factory in src/lib/site.ts.
-export const metadata = pageMetadata({ page: "Profile", route: "/profile" });
+export const metadata = pageMetadata({ page: "Profile & Customization", route: "/Profile" });
 
-export default function ProfilePageRoute() {
-  return <ProfilePage />;
+export const dynamic = "force-dynamic";
+
+export default async function ProfilePage() {
+  // The Account tab's disabled fields ride the server-read session user
+  // (name/email/role — exactly the reference's own read-only account card).
+  const user = (await getSessionUser()) as AppUser | null;
+  return <ProfileClientPage user={user} />;
 }

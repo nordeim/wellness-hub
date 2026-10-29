@@ -28,7 +28,7 @@ test.describe("reset-password landing (no token → the invalid-link card)", () 
 
     await page.getByRole("button", { name: "Back to login" }).click();
     await expect(page).toHaveURL(/\/login$/);
-    await expect(page.getByRole("heading", { name: "Welcome to NEO CRM" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Welcome to EvolveWell" })).toBeVisible();
   });
 
   test("an empty token and a differently-named param both render the invalid card", async ({ page }) => {
@@ -43,7 +43,7 @@ test.describe("reset-password form (a non-empty token)", () => {
   test("renders the set-password form with the helper text", async ({ page }) => {
     await page.goto("/reset-password?token=e2e-shape-probe");
     await expect(page.getByRole("heading", { name: "Set new password" })).toBeVisible();
-    await expect(page.getByText("Enter your new password for NEO CRM")).toBeVisible();
+    await expect(page.getByText("Enter your new password for Wellness Hub")).toBeVisible();
 
     const password = page.locator("input#password");
     const confirm = page.locator("input#confirmPassword");
@@ -76,7 +76,7 @@ test.describe("reset-password form (a non-empty token)", () => {
     await page.goto("/reset-password?token=e2e-shape-probe");
     await page.getByRole("button", { name: "Back to login" }).first().click();
     await expect(page).toHaveURL(/\/login$/);
-    await expect(page.getByRole("heading", { name: "Welcome to NEO CRM" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Welcome to EvolveWell" })).toBeVisible();
   });
 });
 
@@ -158,7 +158,7 @@ test.describe("the full reset round-trip (the in-app delivery)", () => {
 
     await page.getByLabel("Password").fill("Reset1234!");
     await page.getByRole("button", { name: "Sign in", exact: true }).click();
-    await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole("heading", { name: "Welcome Back" })).toBeVisible({ timeout: 15_000 });
 
     // 7. The new session is live: /api/auth/me answers with the scratch
     //    user (the me route answers 200 with data:null when signed out,

@@ -1,7 +1,11 @@
-// NEO CRM — Prisma schema (SQLite)
-// Domain model cloned from the reference app: login users (sales reps /
-// owners), accounts, contacts, leads (deals), calendar events, activities,
-// saved reports and a settings singleton (editable picklists + defaults).
+// Wellness Hub (EvolveWell) — Prisma schema (SQLite)
+// Domain model cloned from the reference app: a login User (the full auth
+// ladder is kept from the chassis — verification, reset, tokenVersion)
+// plus the wellness entities decoded live from the reference's base44
+// API: workouts, mood entries, assignments, events, study resources,
+// reminders, goals, badges/achievements, routine templates (seeded
+// content with steps), scheduled user routines, tutorials (seeded
+// content) and a per-user preferences singleton (theme + notifications).
 
 generator client {
   provider = "prisma-client-js"
@@ -17,246 +21,292 @@ model User {
   email        String   @unique
   name         String
   passwordHash String
-  avatarColor  String   @default("#2563eb")
-  // Session-30 (S30-P3): the profile-photo round-trip — the reference's
-  // aCe stores the uploaded file's URL via updateMe({profile_picture}).
-  // Null = never uploaded (the gray-200 initial fallback renders).
+  avatarColor  String   @default("#6366f1")
   photoUrl     String?
-  role         String   @default("rep") // rep | admin
-  // Session-21 (S21-P5): the email-verification funnel. A NULL
-  // verificationExpiresAt means "no verification pending" — the seeded
-  // demo users and every pre-session-21 account pass straight through
-  // login. The code itself is stored HASHED (scrypt, auth.ts's format);
-  // the plaintext rides only the server console log.
+  role         String   @default("user") // user (the reference's account tab shows "user")
+  // Email-verification funnel (kept from the chassis): NULL
+  // verificationExpiresAt = no verification pending; the code is stored
+  // HASHED (scrypt) — the plaintext rides only the server console log.
   verificationCodeHash   String?
   verificationAttempts   Int      @default(0)
   verificationExpiresAt  DateTime?
-  // Session-163 (the digma S67-A port): the revocation dimension. Every
-  // session token embeds the row's tokenVersion at mint time; a password
-  // reset increments it and every previously minted cookie dies at the
-  // getSessionUser comparison (a stolen session no longer outlives the
-  // reset performed specifically to kill it).
+  // Revocation dimension (kept): every session token embeds tokenVersion
+  // at mint time; a password reset increments it and every previously
+  // minted cookie dies at the getSessionUser comparison.
   tokenVersion Int @default(0)
-  // Session-163 (the digma S46/S64 port): the password-reset funnel. A
-  // NULL resetToken means "no reset pending"; the token is a 32-byte
-  // crypto-random hex consumed ATOMICALLY and SINGLE-USE (the conditional
-  // updateMany carries token + live expiry in its WHERE — a racing replay
-  // lands count 0 and answers the invalid-token 400). 60-minute TTL.
-  // Session-164 (the skill §12 hashed-at-rest compliance): the column
-  // stores hashResetToken(token) — the SHA-256 hex of the raw token, the
-  // same hashed-storage posture as verificationCodeHash; the raw token
-  // lives only in the delivery URL, so a DB read compromise never mints
-  // live reset links.
+  // Password-reset funnel (kept): the column stores hashResetToken(token) —
+  // the SHA-256 hex of the raw token (the hashed-at-rest posture, the same
+  // as verificationCodeHash); the raw token lives only in the delivery
+  // URL. Single-use, consumed ATOMICALLY via a conditional updateMany.
+  // 60-minute TTL.
   resetToken           String?
   resetTokenExpiresAt  DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  accounts  Account[]
-  contacts  Contact[]
-  leads     Lead[]
-  events    Event[]
-  activities Activity[]
+  workouts       Workout[]
+  moodEntries    MoodEntry[]
+  assignments    Assignment[]
+  events         Event[]
+  studyResources StudyResource[]
+  reminders      Reminder[]
+  goals          Goal[]
+  userBadges     UserBadge[]
+  routines       UserRoutine[]
+  prefs          UserPrefs?
 }
 
-model Account {
-  id            String    @id @default(cuid())
-  name          String
-  industry      String?
-  email         String?
-  phone         String?
-  website       String?
-  annualRevenue Float? // in default currency units (not minor units — display app)
-  employees     Int?
-  status        String    @default("active") // active | inactive | prospect (session-86: the reference's bce/wce dialog trio)
-  // Session-26 (S26-P5): the reference's Account entity carries a STORED
-  // health (Healthy | At Risk | Needs Attention — its detail view's
-  // class-map), backend-defaulted (its New Account dialog has NO health
-  // field — live-verified: 8 labels, none health). Our accounts page
-  // export includes the Health column; the field rides the raw JSON the
-  // same way the reference's does.
-  health        String    @default("Healthy") // Healthy | At Risk | Needs Attention
-  ownerId       String?
-  lastActivityAt DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+model Workout {
+  id              String   @id @default(cuid())
+  userId          String
+  type            String // cardio | strength | yoga | sports | walking | cycling | swimming | other
+  durationMinutes Int
+  intensity       String   @default("moderate") // light | moderate | intense
+  caloriesBurned  Int?
+  notes           String?
+  date            DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  owner      User?      @relation(fields: [ownerId], references: [id], onDelete: SetNull)
-  contacts   Contact[]
-  leads      Lead[]
-  events     Event[]
-  activities Activity[]
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([name])
-  @@index([status])
+  @@index([userId, date])
 }
 
-model Contact {
-  id            String    @id @default(cuid())
-  name          String
-  email         String?
-  phone         String?
-  company       String?
-  position      String?
-  source        String? // RAW value: call | email | website | partner | referral (emojis are create-dialog labels only)
-  // Session-28 (S28-P1): the reference's contact vocabulary — priority is
-  // Key | Standard | At Risk (NOT the lead hot/warm/cold temperature), and
-  // role/engagement/companySize/photoUrl are first-class fields (the inline
-  // role select, the 3-bar engagement cell, the company-size stack, the
-  // photo-driven avatar).
-  priority      String    @default("Standard") // key | standard | at_risk — stored "Key"/"Standard"/"At Risk"
-  role          String? // Decision Maker | Key Contact | Influencer | End User | Other
-  engagementLevel String? // High | Medium | Low
-  companySize   String? // "Small (1-50)" | "Medium (51-500)" | "Large (500+)"
-  photoUrl      String?
-  status        String    @default("active")
-  accountId     String?
-  ownerId       String?
-  lastActivityAt DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+model MoodEntry {
+  id         String   @id @default(cuid())
+  userId     String
+  mood       String // amazing | good | okay | low | struggling
+  energy     Int      @default(5) // 0..10 (the reference's slider default)
+  activities String? // JSON string array (the reference's tag list)
+  gratitude  String?
+  reflection String?
+  date       DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  account   Account?   @relation(fields: [accountId], references: [id], onDelete: SetNull)
-  owner     User?      @relation(fields: [ownerId], references: [id], onDelete: SetNull)
-  leads     Lead[]
-  events    Event[]
-  activities Activity[]
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([name])
-  @@index([email])
-  @@index([priority])
+  @@index([userId, date])
 }
 
-model Lead {
-  id               String    @id @default(cuid())
-  name             String
-  email            String?
-  phone            String?
-  company          String?
-  value            Float     @default(0)
-  stage            String    @default("new") // new | contacted | qualified | proposal | negotiation | won | lost
-  source           String?
-  status           String    @default("open") // open | closed_won | closed_lost
-  expectedCloseDate DateTime?
-  closedAt         DateTime?
-  nextFollowUp     DateTime?
-  accountId        String?
-  contactId        String?
-  ownerId          String?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+model Assignment {
+  id             String    @id @default(cuid())
+  userId         String
+  title          String
+  description    String?
+  subject        String?
+  dueDate        DateTime?
+  priority       String    @default("medium") // low | medium | high | urgent
+  estimatedHours Float?
+  status         String    @default("pending") // pending | completed
+  completedAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  account    Account?  @relation(fields: [accountId], references: [id], onDelete: SetNull)
-  contact    Contact?  @relation(fields: [contactId], references: [id], onDelete: SetNull)
-  owner      User?     @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([name])
-  @@index([stage])
-  @@index([status])
-  @@index([ownerId])
+  @@index([userId, status])
 }
 
 model Event {
   id          String   @id @default(cuid())
+  userId      String
   title       String
   description String?
-  type        String   @default("meeting") // meeting | call | demo | task | reminder | appointment
-  status      String   @default("scheduled") // scheduled | completed | cancelled
-  startAt     DateTime
-  endAt       DateTime?
-  allDay      Boolean  @default(false)
+  date        DateTime
+  time        String? // "HH:mm" 24h (display formats to 12h)
+  category    String   @default("personal") // personal | work | social | health | education | other
   location    String?
-  relatedType String? // session-5: the reference's "Related To" picker (none | contact | account | opportunity | lead)
-  // Session-76 (M-76c13, bundle-decoded from the reference's SAe dialog):
-  // the reference's CalendarEvent carries related_to_name — the
-  // conditional "Name" field renders in the Related To pair's second
-  // cell when a type is chosen. Our model lacked the column entirely.
-  relatedName String?
-  accountId   String?
-  contactId   String?
-  ownerId     String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  account Account? @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  contact Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
-  owner   User?    @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([startAt])
-  @@index([type])
+  @@index([userId, date])
 }
 
-model Activity {
+model StudyResource {
+  id            String    @id @default(cuid())
+  userId        String
+  title         String
+  subject       String
+  description   String?
+  type          String    @default("notes") // notes | video | practice_test | textbook | article | website | flashcards | other
+  examDate      DateTime?
+  url           String?
+  tags          String? // JSON string array
+  personalNotes String?
+  rating        Int? // 1..5 (the reference's 5-star input)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, subject])
+}
+
+model Reminder {
   id          String    @id @default(cuid())
-  type        String    @default("call") // call | email | meeting | whatsapp | task | note
-  subject     String
-  notes       String?
-  status      String    @default("scheduled") // scheduled | completed
-  priority    String    @default("normal") // high | normal | low
-  dueAt       DateTime?
+  userId      String
+  title       String
+  details     String?
+  remindAt    DateTime
+  type        String    @default("custom") // custom | assignment | event | goal | routine
+  priority    String    @default("medium") // low | medium | high | urgent
+  repeat      String    @default("none") // none | daily | weekly | monthly
+  completed   Boolean   @default(false)
   completedAt DateTime?
-  relatedType String? // session-5: the reference's "Related To (Type)" picker
-  relatedName String? // session-5: the reference's freeform "Related To (Name)" input
-  accountId   String?
-  contactId   String?
-  ownerId     String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  account Account? @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  contact Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
-  owner   User?    @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([dueAt])
-  @@index([type])
-  @@index([status])
+  @@index([userId, remindAt])
 }
 
-// Session-31 (S31-P1): the reference's SECOND deal model (bundle-decoded
-// from index-DZ-xbrIm.js). The reference ships a full Opportunity entity
-// with NO create-edit UI (the leads "Convert to Opportunity" item is dead —
-// no onClick; no New Opportunity dialog exists); its data feeds the
-// dashboard, all five reports tabs, and both insights surfaces.
-// accountName/owner are NAME STRINGS — the reference stores display names,
-// not relations (its Top Reps card groups by the owner string; its
-// insights join by account_name).
-model Opportunity {
-  id          String    @id @default(cuid())
+model Goal {
+  id           String    @id @default(cuid())
+  userId       String
+  title        String
+  description  String?
+  category     String    @default("personal") // exercise | mental_health | learning | productivity | personal | other
+  frequency    String    @default("one_time") // daily | weekly | monthly | yearly | one_time
+  targetValue  Int
+  currentValue Int       @default(0)
+  unit         String
+  deadline     DateTime?
+  points       Int       @default(0) // awarded on completion (frequency-derived)
+  status       String    @default("active") // active | completed
+  completedAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+}
+
+// Badge catalog — seeded definitions (the reference keeps its achievement
+// vocabulary in code; we promote it to data so the count "of N total" is
+// real and extensible).
+model Badge {
+  id          String @id @default(cuid())
+  key         String @unique
   name        String
-  accountName String?
-  stage       String    @default("prospecting") // prospecting | qualification | proposal | negotiation | closed_won | closed_lost
-  amount      Float     @default(0)
-  probability Int? // 0-100 — feeds the Forecast by Probability bands + the accuracy forecast
-  closeDate   DateTime?
-  source      String?
-  owner       String?
+  description String
+  icon        String // emoji
+  color       String // tint hex for the card chip
+  points      Int    @default(0)
+  sortOrder   Int    @default(0)
+
+  userBadges UserBadge[]
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  badgeId  String
+  earnedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+}
+
+// Routine templates — SEEDED content (the reference ships 10, decoded
+// live from its RoutineTemplate entity API: name, description, category,
+// time_of_day, duration, difficulty, tasks[], benefits[],
+// tips_for_procrastinators, video_url, thumbnail).
+model RoutineTemplate {
+  id                     String  @id @default(cuid())
+  key                    String  @unique
+  name                   String
+  description            String
+  category               String // morning | exercise | study | evening | selfcare | creative | productivity
+  timeOfDay              String
+  duration               String // display string ("5 minutes")
+  difficulty             String // easy | moderate
+  benefits               String? // JSON string array
+  tipsForProcrastinators String?
+  videoUrl               String?
+  thumbnail              String?
+  sortOrder              Int     @default(0)
+
+  steps   RoutineStep[]
+  routines UserRoutine[]
+}
+
+model RoutineStep {
+  id          String @id @default(cuid())
+  templateId  String
+  title       String
+  duration    String // display string ("1 min")
+  description String?
+  sortOrder   Int    @default(0)
+
+  template RoutineTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([templateId])
+}
+
+// A user's scheduled routine — created from the "Use This Template"
+// dialog (or custom, superset) with date/time/notes.
+model UserRoutine {
+  id          String    @id @default(cuid())
+  userId      String
+  templateId  String?
+  title       String
+  date        DateTime
+  time        String?
+  notes       String?
+  completed   Boolean   @default(false)
+  completedAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  @@index([stage])
-  @@index([accountName])
+  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  template RoutineTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+
+  @@index([userId, date])
 }
 
-model SavedReport {
-  id        String   @id @default(cuid())
-  name      String
-  tab       String   @default("sales") // sales | pipeline | activity | sources | health
-  config    String // JSON: { period, ownerId, stage, status }
-  createdAt DateTime @default(now())
+// Tutorials — SEEDED content (the reference ships 12, decoded live from
+// its Tutorial entity API: title, description, category, video_url,
+// thumbnail, duration, difficulty, views).
+model Tutorial {
+  id          String @id @default(cuid())
+  key         String @unique
+  title       String
+  description String
+  category    String // productivity | life_skills | mental_health | wellness | study_skills | exercise
+  videoUrl    String?
+  thumbnail   String?
+  duration    String // display string ("8:45")
+  difficulty  String // beginner | intermediate
+  views       Int    @default(0)
+  sortOrder   Int    @default(0)
 }
 
-model Setting {
-  id               String   @id @default("singleton")
-  contactSources   String   @default("[\"Email\",\"Phone\",\"Website\",\"Referral\",\"Event\",\"Social Media\"]")
-  leadStages       String   @default("[\"new\",\"contacted\",\"qualified\",\"proposal\",\"negotiation\",\"won\",\"lost\"]")
-  activityTypes    String   @default("[\"call\",\"email\",\"meeting\",\"whatsapp\",\"task\",\"note\"]")
-  accountTiers     String   @default("[\"A\",\"B\",\"C\"]")
-  industries       String   @default("[\"Technology\",\"Manufacturing\",\"Retail\",\"Finance\",\"Healthcare\",\"Education\",\"Logistics\",\"Energy\"]")
-  defaultCurrency  String   @default("AED")
-  defaultLeadStage String   @default("new")
-  defaultTier      String   @default("B")
-  followUpDays     Int      @default(3)
-  calendarView     String   @default("month")
-  firstDayOfWeek   String   @default("monday")
-  updatedAt        DateTime @updatedAt
+// Per-user preferences singleton — the Profile & Customization tab's
+// persistence (theme mode, colors, font, sidebar/card/animation styles,
+// notification toggles). The client theme-store applies instantly via
+// localStorage; this row is the cross-device sync (superset).
+model UserPrefs {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  themeMode           String   @default("light") // light | dark | auto
+  primaryColor        String   @default("#6366f1")
+  secondaryColor      String   @default("#a855f7")
+  fontFamily          String   @default("system") // system | inter | poppins | roboto | lora
+  bgImageUrl          String?
+  sidebarStyle        String   @default("gradient") // gradient | solid | minimal
+  cardStyle           String   @default("elevated") // elevated | flat | outline
+  animationLevel      String   @default("full") // full | subtle | none
+  notificationsEnabled Boolean @default(true)
+  weeklyReminders     Boolean @default(true)
+  updatedAt           DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

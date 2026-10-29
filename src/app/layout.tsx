@@ -30,10 +30,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   manifest: `${siteUrl()}/manifest.json`,
   title: {
-    default: "NEO CRM",
+    default: "Wellness Hub",
     // Session-10 (S10-10): the reference's separator is a pipe
-    // ("Accounts | NEO CRM" — document.title probes on all 10 routes).
-    template: "%s | NEO CRM",
+    // ("Accounts | Wellness Hub" — document.title probes on all 10 routes).
+    template: "%s | Wellness Hub",
   },
   description: SITE_DESCRIPTION,
   // The reference's canonical link: origin + route (the dashboard's is
@@ -43,11 +43,11 @@ export const metadata: Metadata = {
   // pages override this through pageMetadata().
   alternates: { canonical: "/" },
   openGraph: {
-    title: "NEO CRM",
+    title: "Wellness Hub",
     description: SITE_DESCRIPTION,
     url: siteUrl(),
     type: "website",
-    siteName: "NEO CRM",
+    siteName: "Wellness Hub",
     images: [
       {
         url: "/og-image.png",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "NEO CRM",
+    title: "Wellness Hub",
     description: SITE_DESCRIPTION,
     images: ["/og-image.png"],
   },

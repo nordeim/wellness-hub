@@ -1,22 +1,18 @@
-import { LandingPage } from "@/components/landing/landing-page";
+import { redirect } from "next/navigation";
+import { getSessionUser } from "@/lib/auth";
 
-// Session-142 (D-142a1): the PUBLIC MARKETING LANDING PAGE at `/` — the
-// reference's index-Dc6wvGtA.js parity event (probe:ref #114). Its root
-// used to render the dashboard (auth-gated through the (app) group); the
-// dashboard moved to (app)/dashboard/page.tsx and the capital /Dashboard
-// alias re-imports it.
+// The reference's root face: a logged-out visitor lands on the LOGIN WALL
+// (its platform serves the auth screen at "/"); a signed-in session lands
+// on the dashboard. A server redirect models both — no marketing layer
+// (the reference ships none; the CRM-era landing retired with the
+// session-142 parity event it mirrored).
 //
-// PUBLIC: this page sits OUTSIDE the (app) route group — no session
-// resolution, no redirect (the reference serves its landing to guests
-// and authenticated visitors alike; live-verified logged-out AND
-// post-login — the login card redirects to `/`).
-//
-// NO page-level metadata export: the ROOT layout's object already IS the
-// reference's landing head, axis for axis — title "NEO CRM" (absolute,
-// no template), the 405-char description (byte-identical), the
-// bare-origin canonical, the OG family (+ og-image.png), the Twitter
-// family (summary_large_image + twitter:url via `other`), the PWA metas.
-// A page export would only re-declare the same values.
-export default function RootLandingRoute() {
-  return <LandingPage />;
+// NO page-level metadata export: the ROOT layout's object is the landing
+// head (title "Wellness Hub" absolute, the description, the bare-origin
+// canonical, the OG/Twitter families, the PWA metas).
+export const dynamic = "force-dynamic";
+
+export default async function RootRoute() {
+  const user = await getSessionUser();
+  redirect(user ? "/Dashboard" : "/login");
 }

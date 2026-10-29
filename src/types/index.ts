@@ -1,4 +1,4 @@
-// Shared client-side domain types (API wire shapes).
+// Shared client-side domain types (API wire shapes) — Wellness Hub.
 
 export type Result<T, E> = { ok: true; data: T } | { ok: false; error: E };
 
@@ -7,274 +7,205 @@ export interface User {
   email: string;
   name: string;
   avatarColor: string;
-  // Session-30 (S30-P3): the profile-photo URL (the reference's
-  // profile_picture) — null = the gray-200 initial fallback.
+  // The profile-photo URL (the reference's profile_picture) — null = the
+  // gray-200 initial fallback.
   photoUrl: string | null;
   role: string;
 }
 
-export interface Account {
+export interface Workout {
   id: string;
-  name: string;
-  industry: string | null;
-  email: string | null;
-  phone: string | null;
-  website: string | null;
-  annualRevenue: number | null;
-  employees: number | null;
-  status: string;
-  // Session-26 (S26-P5): the reference's stored health (Healthy | At Risk |
-  // Needs Attention) — backend-defaulted, surfaced through the accounts
-  // page export's Health column.
-  health: string;
-  ownerId: string | null;
-  owner?: Pick<User, "id" | "name" | "avatarColor"> | null;
-  lastActivityAt: string | null;
+  type: string;
+  durationMinutes: number;
+  intensity: string;
+  caloriesBurned: number | null;
+  notes: string | null;
+  date: string; // ISO
   createdAt: string;
   updatedAt: string;
 }
 
-export interface Contact {
+export interface MoodEntry {
   id: string;
-  name: string;
-  email: string | null;
-  phone: string | null;
-  company: string | null;
-  position: string | null;
-  source: string | null;
-  // Session-28 (S28-P1): the reference's contact vocabulary — priority is
-  // Key/Standard/At Risk; role/engagementLevel/companySize/photoUrl are
-  // first-class fields (the inline role select, the 3-bar engagement cell,
-  // the company-size stack, the photo avatar).
-  priority: string; // Key | Standard | At Risk
-  role: string | null; // Decision Maker | Key Contact | Influencer | End User | Other
-  engagementLevel: string | null; // High | Medium | Low
-  companySize: string | null; // "Small (1-50)" | "Medium (51-500)" | "Large (500+)"
-  photoUrl: string | null;
-  status: string;
-  accountId: string | null;
-  account?: { id: string; name: string } | null;
-  ownerId: string | null;
-  owner?: Pick<User, "id" | "name" | "avatarColor"> | null;
-  lastActivityAt: string | null;
+  mood: string;
+  energy: number;
+  activities: string; // JSON array
+  gratitude: string | null;
+  reflection: string | null;
+  date: string; // ISO
   createdAt: string;
   updatedAt: string;
 }
 
-export interface Lead {
-  id: string;
-  name: string;
-  email: string | null;
-  phone: string | null;
-  company: string | null;
-  value: number;
-  stage: string;
-  source: string | null;
-  status: string;
-  expectedCloseDate: string | null;
-  closedAt: string | null;
-  nextFollowUp: string | null;
-  accountId: string | null;
-  account?: { id: string; name: string } | null;
-  contactId: string | null;
-  ownerId: string | null;
-  owner?: Pick<User, "id" | "name" | "avatarColor"> | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// Session-31 (S31-P1): the reference's SECOND deal model — serialized shape.
-// accountName/owner are NAME STRINGS (the reference stores display names,
-// not relations); stage is the OPPORTUNITY_STAGES vocabulary.
-export interface Opportunity {
-  id: string;
-  name: string;
-  accountName: string | null;
-  stage: string;
-  amount: number;
-  probability: number | null;
-  closeDate: string | null;
-  source: string | null;
-  owner: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CrmEvent {
+export interface Assignment {
   id: string;
   title: string;
   description: string | null;
-  type: string;
-  status: string;
-  startAt: string;
-  endAt: string | null;
-  allDay: boolean;
-  location: string | null;
-  relatedType: string | null;
-  // Session-76 (M-76c13): the reference's CalendarEvent carries
-  // related_to_name — mirrored at the model, route and dialog.
-  relatedName: string | null;
-  accountId: string | null;
-  account?: { id: string; name: string } | null;
-  contactId: string | null;
-  contact?: { id: string; name: string } | null;
-  ownerId: string | null;
-  owner?: Pick<User, "id" | "name" | "avatarColor"> | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Activity {
-  id: string;
-  type: string;
-  subject: string;
-  notes: string | null;
-  status: string;
+  subject: string | null;
+  dueDate: string | null;
   priority: string;
-  dueAt: string | null;
+  estimatedHours: number | null;
+  status: string; // pending | completed
   completedAt: string | null;
-  relatedType: string | null;
-  relatedName: string | null;
-  accountId: string | null;
-  account?: { id: string; name: string } | null;
-  contactId: string | null;
-  contact?: { id: string; name: string } | null;
-  ownerId: string | null;
-  owner?: Pick<User, "id" | "name" | "avatarColor"> | null;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface Settings {
-  contactSources: string[];
-  leadStages: string[];
-  activityTypes: string[];
-  accountTiers: string[];
-  industries: string[];
-  defaultCurrency: string;
-  defaultLeadStage: string;
-  defaultTier: string;
-  followUpDays: number;
-  calendarView: string;
-  firstDayOfWeek: string;
+export interface EventItem {
+  id: string;
+  title: string;
+  description: string | null;
+  date: string; // ISO (day-anchored)
+  time: string | null; // "HH:mm"
+  category: string;
+  location: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
-// Session-59 (S59-P2, N-59a): the `SavedReport` interface RETIRED here —
-// zero references repo-wide INCLUDING this file. The LIVE SavedReport is
-// a different localStorage shape in src/lib/saved-reports.ts (the s25
-// seam, consumed by save-report-dialog + the reports page). This one
-// mirrored the dead Prisma model's DB wire shape (the ledger-10
-// deferral — its only db consumers are the reset + seed-time wipes).
-// The s54 fully-dead class, TYPE variant. The SKILL §20 carrier
-// followed the code.
+export interface StudyResource {
+  id: string;
+  title: string;
+  subject: string;
+  description: string | null;
+  type: string;
+  examDate: string | null;
+  url: string | null;
+  tags: string; // JSON array
+  personalNotes: string | null;
+  rating: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
 
-// ---- computed aggregates ---------------------------------------------------
+export interface Reminder {
+  id: string;
+  title: string;
+  details: string | null;
+  remindAt: string; // ISO
+  type: string;
+  priority: string;
+  repeat: string;
+  completed: boolean;
+  completedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Goal {
+  id: string;
+  title: string;
+  description: string | null;
+  category: string;
+  frequency: string;
+  targetValue: number;
+  currentValue: number;
+  unit: string;
+  deadline: string | null;
+  points: number;
+  status: string; // active | completed
+  completedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Badge {
+  id: string;
+  key: string;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  points: number;
+  sortOrder: number;
+  earnedAt?: string | null; // present when earned (the /api/achievements merge)
+}
+
+export interface RoutineStep {
+  id: string;
+  templateId: string;
+  title: string;
+  duration: string;
+  description: string | null;
+  sortOrder: number;
+}
+
+export interface RoutineTemplate {
+  id: string;
+  key: string;
+  name: string;
+  description: string;
+  category: string;
+  timeOfDay: string;
+  duration: string;
+  difficulty: string;
+  benefits: string; // JSON array
+  tipsForProcrastinators: string | null;
+  videoUrl: string | null;
+  thumbnail: string | null;
+  sortOrder: number;
+  steps: RoutineStep[];
+}
+
+export interface UserRoutine {
+  id: string;
+  templateId: string | null;
+  title: string;
+  date: string; // ISO
+  time: string | null;
+  notes: string | null;
+  completed: boolean;
+  completedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Tutorial {
+  id: string;
+  key: string;
+  title: string;
+  description: string;
+  category: string;
+  videoUrl: string | null;
+  thumbnail: string | null;
+  duration: string;
+  difficulty: string;
+  views: number;
+  sortOrder: number;
+}
+
+export interface UserPrefs {
+  themeMode: string;
+  primaryColor: string;
+  secondaryColor: string;
+  fontFamily: string;
+  bgImageUrl: string | null;
+  sidebarStyle: string;
+  cardStyle: string;
+  animationLevel: string;
+  notificationsEnabled: boolean;
+  weeklyReminders: boolean;
+  updatedAt: string;
+}
+
+// ---------------------------------------------------------------------------
+// Dashboard aggregate (the /api/dashboard envelope — one read, all tiles).
+// ---------------------------------------------------------------------------
 
 export interface DashboardData {
-  // Session-31 (S31-P2; slimmed session-78 M-78c2): the bundle's Eke KPI
-  // memo's UNFILTERED members — salesTarget is the reference's HARDCODED 0
-  // (its literal V=0) with targetProgress 0; avgSalesCycleDays is the
-  // average AGE of won leads (now − created). dealsClosedValue +
-  // revenueThisMonth moved CLIENT-SIDE with the filter re-derivation (the
-  // reference's `p` memo reads the stage/source-filtered opps — the page's
-  // filteredOpps memo); pipeline/topReps/recentDeals went with them (the
-  // route's copies retired, zero consumers).
-  kpis: {
-    totalLeads: number;
-    salesTarget: number;
-    salesTargetProgress: number;
-    conversionRate: string;
-    avgSalesCycleDays: number;
-  };
-  /** Session-142 (D-142b0): the ROLLING last-7-months window (labels =
-   *  the data months, ending at the current month — the reference's new
-   *  bundle retired its fixed Nov..May quirk) — over the UNFILTERED
-   *  opps (the reference's `b` memo reads `f`). The WON series only:
-   *  the synthetic target member retired with the reference's
-   *  index-Dc6wvGtA.js bundle (one area series, no legend). */
-  revenueOverTime: Array<{ month: string; won: number }>;
-  leadSources: Array<{ source: string; count: number; value: number }>;
-  /** Session-78 (L-78c4): the reference's `A` memo — the top-10-by-date
-   *  window filtered to date >= now, slice(0,3). */
-  upcomingActivities: Activity[];
+  workoutsThisWeek: number;
+  workoutMinutesThisWeek: number;
+  moodEntries: number;
+  activeAssignments: number;
+  goalsCompleted: number;
+  goalsTotal: number;
+  recentActivity: {
+    kind: "workout" | "mood" | "assignment" | "event" | "reminder" | "goal" | "routine";
+    id: string;
+    title: string;
+    detail: string | null;
+    at: string;
+  }[];
+  upcomingReminders: Reminder[];
+  upcomingEvents: EventItem[];
 }
-
-export interface ReportsData {
-  // Session-31 (S31-P3): the bundle's reports KPI memo — openLeads counts
-  // leads with status new+contacted ONLY; won/lost count+value and the
-  // conversion rate derive from OPPORTUNITIES (won/(won+lost), toFixed(1)).
-  kpis: {
-    totalLeads: number;
-    openLeads: number;
-    wonDeals: number;
-    wonValue: number;
-    lostDeals: number;
-    lostValue: number;
-    conversionRate: string;
-  };
-  /** WON opp amounts per close month ("MMM yyyy" keys, insertion order). */
-  revenueOverTime: Array<{ month: string; revenue: number }>;
-  wonVsLostOverTime: Array<{ month: string; won: number; lost: number }>;
-  /** Session-31: the 8-slug funnel SPLIT — leads' new/contacted/qualified
-   *  counts + the OPP five-stage counts (pipelineStageCounts). */
-  pipeline: Array<{ slug: string; count: number }>;
-  /** OPEN opps grouped by stage — RAW slug ticks, row-derived (empty at zero). */
-  pipelineByStageRows: Array<{ stage: string; count: number; value: number }>;
-  /** Session-10 (S10-8): ROW-DERIVED (types actually present; empty at
-   *  zero, like the reference's tab-3 charts). */
-  activitiesByType: Array<{ type: string; label: string; count: number; color: string }>;
-  /** "Activity Log by Owner" — Owner/Activities rows (slice 10). */
-  activitiesByOwner: Array<{ name: string; total: number }>;
-  /** The sources tab: leads counted from LEADS; won/lost/revenue/winRate/
-   *  avgValue from OPPORTUNITIES (the reference's split model). */
-  leadSources: Array<{
-    source: string;
-    leads: number;
-    won: number;
-    lost: number;
-    revenue: number;
-    winRate: string;
-    avgValue: number;
-  }>;
-  /** Session-27 (S27-P1): the COMPUTED health distribution (name/value pairs for the pie). */
-  accountHealth: Array<{ name: string; value: number }>;
-  topAccounts: Array<{ id: string; name: string; revenue: number; industry: string | null }>;
-  atRiskAccounts: Array<{ id: string; name: string; daysSinceActivity: number; health: string }>;
-  accountSummary: Array<{ id: string; name: string; industry: string | null; status: string; contacts: number; openLeads: number }>;
-  /** WON opps slice(0,10) — Deal/Account/Amount rows. */
-  recentWonDeals: Array<{ id: string; name: string; account: string | null; amount: number }>;
-  /** ALL opps amount-desc slice(0,10) — Deal/Stage/Amount rows. */
-  topDeals: Array<{ id: string; name: string; stage: string; amount: number }>;
-  // ---- Session-10 (S10-8): tab 2–4 additions -------------------------------
-  /** Fixed 4-bucket aging list (AGING_BUCKETS; all buckets present at zero). */
-  agingPipeline: Array<{ label: string; count: number }>;
-  /** The tab-2 wide chart + its "Average Accuracy: N%" caption (strings —
-   *  the reference's toFixed(1) chain). */
-  forecastingAccuracy: {
-    points: Array<{ month: string; forecasted: number; actual: number; accuracy: string | number }>;
-    average: string;
-  };
-  /** Session-27 (S27-P4): the FIXED 4 probability bands with value sums (the reference's pie data). */
-  forecastByProbability: Array<{ band: string; value: number }>;
-  /** Open deals table rows (Deal/Stage/Amount) — slice(0,10), list order. */
-  openDealsByStage: Array<{ id: string; deal: string; stage: string; amount: number }>;
-  /** Open opps with no linked activity for >14 days (Deal/Account/Amount) — slice(0,20). */
-  dealsAtRisk: Array<{ id: string; deal: string; account: string | null; amount: number }>;
-  /** Row-derived activity month series (Activities Over Time chart). */
-  activitiesOverTime: Array<{ month: string; count: number }>;
-  /** Months with activities count vs won-OPP count (Activities vs Wins chart). */
-  activitiesVsWins: Array<{ month: string; activities: number; wins: number }>;
-  /** Overdue activities table rows (Activity/Type/Due Date) — slice(0,20). */
-  // Session-85 (N-85c5): dueAt narrows to string — the overdue filter's
-  // date-present guard (the reference's `f.date &&` arm) guarantees it.
-  overdueActivities: Array<{ id: string; subject: string; type: string; dueAt: string }>;
-  /** Leads list by source table rows (Lead/Source/Status). */
-  leadsListBySource: Array<Lead>;
-}
-
-// Session-58 (S58-P2, N-58b): the `SearchResult` interface RETIRED here —
-// definition-only since birth (zero references repo-wide INCLUDING this
-// file) AND shape-inaccurate: it claimed full Account[]/Contact[]/Lead[]
-// entities while the live topbar consumes its own slimmer inline row
-// shape ({ id, name } + the leads' stage/value). The s54 fully-dead
-// class, TYPE variant. The SKILL §20 carrier followed the code.

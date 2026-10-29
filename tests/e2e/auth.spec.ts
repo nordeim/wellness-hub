@@ -4,9 +4,9 @@ import { expect, test } from "@playwright/test";
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
-test("login page renders the NEO CRM card", async ({ page }) => {
+test("login page renders the EvolveWell card", async ({ page }) => {
   await page.goto("/login");
-  await expect(page.getByRole("heading", { name: "Welcome to NEO CRM" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Welcome to EvolveWell" })).toBeVisible();
   await expect(page.getByLabel("Email")).toBeVisible();
   await expect(page.getByLabel("Password")).toBeVisible();
   await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
@@ -35,7 +35,7 @@ test("rejects wrong credentials with a visible error", async ({ page }) => {
   await expect(page.getByRole("status")).toHaveCount(0);
 });
 
-test("unauthenticated visits to app pages login-wall with from_url (the s147 mirror), but `/` serves the PUBLIC landing", async ({ page }) => {
+test("unauthenticated visits login-wall: `/` serves the reference auth face, inner pages carry from_url", async ({ page }) => {
   // Session-142 (D-142a0): the reference's root is its PUBLIC marketing
   // landing page (probe:ref #114's parity event) — a guest sees the
   // landing (no redirect, live-verified logged-out on the reference).
@@ -44,13 +44,15 @@ test("unauthenticated visits to app pages login-wall with from_url (the s147 mir
   // our (app) group keeps the SERVER-side session decision (the guest
   // never receives the CRM page's HTML) but lands on the same wall via
   // the GuestLoginRedirect shim, with the same from_url round-trip.
+  // The reference's root face: a guest lands on the LOGIN WALL (its
+  // platform serves the auth screen at "/").
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Every account, contact and deal in one calm workspace" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Open dashboard" }).first()).toBeVisible();
+  await page.waitForURL(/\/login/);
+  await expect(page.getByRole("heading", { name: "Welcome to EvolveWell" })).toBeVisible();
   // the app pages login-wall with the from_url param:
   await page.goto("/dashboard");
   await page.waitForURL(/\/login\?from_url=/);
-  await expect(page.getByRole("heading", { name: "Welcome to NEO CRM" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Welcome to EvolveWell" })).toBeVisible();
 });
 
 // Session-11 (S11-P1): the reference's Forgot-password flow — an in-card
@@ -71,12 +73,12 @@ test("forgot password swaps the card to the reset view and back", async ({ page 
   await expect(page.getByRole("button", { name: "Back to sign in" })).toBeVisible();
   // The login-only chrome is gone on the reset view.
   await expect(page.getByRole("button", { name: "Continue with Google" })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "Welcome to NEO CRM" })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Welcome to EvolveWell" })).toHaveCount(0);
   // The URL never changes — the swap is in-card.
   await expect(page).toHaveURL(/\/login$/);
 
   await page.getByRole("button", { name: "Back to sign in" }).click();
-  await expect(page.getByRole("heading", { name: "Welcome to NEO CRM" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Welcome to EvolveWell" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
 });
 
@@ -95,7 +97,7 @@ test("send reset link swaps to the check-your-email view", async ({ page }) => {
   ).toBeVisible();
 
   await page.getByRole("button", { name: "Back to sign in" }).click();
-  await expect(page.getByRole("heading", { name: "Welcome to NEO CRM" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Welcome to EvolveWell" })).toBeVisible();
 });
 
 // ---------------------------------------------------------------------
@@ -120,12 +122,12 @@ test("need an account swaps the card to the minimal signup view and back", async
   // The login-only chrome is GONE on the signup view (the reference's
   // column-replacement architecture, same as the reset view).
   await expect(page.getByRole("button", { name: "Continue with Google" })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "Welcome to NEO CRM" })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Welcome to EvolveWell" })).toHaveCount(0);
   // The URL never changes — the swap is in-card.
   await expect(page).toHaveURL(/\/login$/);
 
   await page.getByRole("button", { name: "Back to sign in" }).click();
-  await expect(page.getByRole("heading", { name: "Welcome to NEO CRM" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Welcome to EvolveWell" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
 });
 
@@ -265,7 +267,7 @@ test("the /signup page renders the same minimal signup view", async ({ page }) =
   // its content mirrors the reference's real signup form: no Google
   // button, no divider, no name field.
   await expect(page.getByRole("button", { name: "Continue with Google" })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "Welcome to NEO CRM" })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Welcome to EvolveWell" })).toHaveCount(0);
 });
 
 test("the signup 4xx negatives: the duplicate surfaces in the card + the API quartet (S73-P7b + the S165-P1 CSRF probe)", async ({ page }) => {

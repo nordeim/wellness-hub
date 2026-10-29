@@ -3,16 +3,10 @@
 //
 // Why this exists (session-53, S53-P2 — the N-53b lesson, pinned by
 // tests/db-census.test.ts):
-//   • a raw `new PrismaClient()` run from the repo root opens
-//     <sandbox-root>/db/custom.db — NOT <repo>/db/custom.db — under BOTH
-//     node (the relative `file:` URL from the repo .env resolves against
-//     the process CWD, not the schema dir) and bun (which additionally
-//     absolutizes the .env value against the .env location — the same
-//     outer path). Session-53 proved this live: the orchestrator's own
-//     intake census read the sandbox-root mirror db (which still carries
-//     the s51 zombie server's probe event) and briefly misread it as
-//     repo-db residue; `PRAGMA database_list` revealed the engine's true
-//     file, and the repo db itself had been pristine all along.
+//   • a raw `new PrismaClient()` run from the repo root opens the WRONG
+//     file under both node (relative `file:` resolves against the CWD)
+//     and bun (which absolutizes the .env value against the .env
+//     location).
 //   • the closure: censuses go through the app's own client — the SAME
 //     singleton the running server uses (`src/lib/db`, re-anchored by
 //     runtimeDatabaseUrl) — and PRINT the resolved URL, so every count
@@ -27,60 +21,74 @@
 import { db } from "../src/lib/db";
 import { runtimeDatabaseUrl } from "../src/lib/db-path";
 
-// The seed contract — prisma/seed.ts's row counts (contacts / leads /
-// accounts / activities / events + users). Keep in sync with the seed.
+// The seed contract — prisma/seed.ts's row counts. Keep in sync with the
+// seed: the demo user (1), 11 routine templates, their steps, 12
+// tutorials, 8 badges; the per-user domain tables seed EMPTY (the
+// reference's own fresh-account face).
 const EXPECTED = {
-  contacts: 15,
-  leads: 24,
-  accounts: 10,
-  activities: 23,
-  events: 12,
-  users: 4,
+  users: 1,
+  routineTemplates: 11,
+  routineSteps: 50,
+  tutorials: 12,
+  badges: 8,
+  workouts: 0,
+  moodEntries: 0,
+  assignments: 0,
+  events: 0,
+  studyResources: 0,
+  reminders: 0,
+  goals: 0,
+  userRoutines: 0,
+  userBadges: 0,
 } as const;
 
-type Counts = Record<keyof typeof EXPECTED, number>;
+type Counts = keyof typeof EXPECTED;
 
 async function main(): Promise<void> {
   const url = runtimeDatabaseUrl();
-  const [contacts, leads, accounts, activities, events, users] = await Promise.all([
-    db.contact.count(),
-    db.lead.count(),
-    db.account.count(),
-    db.activity.count(),
-    db.event.count(),
-    db.user.count(),
-  ]);
-  const counts: Counts = { contacts, leads, accounts, activities, events, users };
+  const counts: Record<Counts, number> = {
+    users: await db.user.count(),
+    routineTemplates: await db.routineTemplate.count(),
+    routineSteps: await db.routineStep.count(),
+    tutorials: await db.tutorial.count(),
+    badges: await db.badge.count(),
+    workouts: await db.workout.count(),
+    moodEntries: await db.moodEntry.count(),
+    assignments: await db.assignment.count(),
+    events: await db.event.count(),
+    studyResources: await db.studyResource.count(),
+    reminders: await db.reminder.count(),
+    goals: await db.goal.count(),
+    userRoutines: await db.userRoutine.count(),
+    userBadges: await db.userBadge.count(),
+  };
 
   console.log(`database: ${url}`);
   console.log(
-    `counts: contacts=${contacts} leads=${leads} accounts=${accounts} ` +
-      `activities=${activities} events=${events} users=${users}`,
+    `counts: users=${counts.users} templates=${counts.routineTemplates} ` +
+      `steps=${counts.routineSteps} tutorials=${counts.tutorials} badges=${counts.badges} ` +
+      `workouts=${counts.workouts} moods=${counts.moodEntries} assignments=${counts.assignments} ` +
+      `events=${counts.events} resources=${counts.studyResources} reminders=${counts.reminders} ` +
+      `goals=${counts.goals} routines=${counts.userRoutines} earned=${counts.userBadges}`,
   );
 
-  const drift = (Object.keys(EXPECTED) as Array<keyof typeof EXPECTED>).filter(
-    (k) => counts[k] !== EXPECTED[k],
-  );
-  if (drift.length > 0) {
-    const detail = drift.map((k) => `${k}=${counts[k]} (expected ${EXPECTED[k]})`).join(", ");
-    console.error(`pristine: MISMATCH — ${detail}`);
-    console.error("Probe residue? Remove it, or reseed in place: bun run db:seed");
-    await db.$disconnect();
-    process.exit(1);
+  let mismatch = false;
+  for (const key of Object.keys(EXPECTED) as Counts[]) {
+    if (counts[key] !== EXPECTED[key]) {
+      console.error(
+        `  MISMATCH ${key}: expected ${EXPECTED[key]}, found ${counts[key]} ` +
+          `(probe residue? reseed with \`bun run db:seed\`)`,
+      );
+      mismatch = true;
+    }
   }
-  // Session-54 (S54-P3, N-54d): the banner DERIVES from EXPECTED — the
-  // s53 form hardcoded "15/24/10/23/12 + 4 users", so a future EXPECTED
-  // re-sync would have left the printed contract silently stale.
-  const contract =
-    (Object.keys(EXPECTED) as Array<keyof typeof EXPECTED>)
-      .filter((k) => k !== "users")
-      .map((k) => EXPECTED[k])
-      .join("/") + ` + ${EXPECTED.users} users`;
-  console.log(`pristine: MATCH (${contract} — the seed contract)`);
-  await db.$disconnect();
+  if (mismatch) process.exit(1);
+  console.log("census: MATCH (the seed contract holds)");
 }
 
-// Only take over the process when executed directly (not when imported by
-// the Vitest suite).
-const invokedAsScript = process.argv[1]?.endsWith("census.ts");
-if (invokedAsScript) void main();
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(() => db.$disconnect());

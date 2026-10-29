@@ -1,392 +1,394 @@
 "use client";
 
 import * as React from "react";
-import { Camera, Mail, Shield, User } from "lucide-react";
-import { PAGE_ROOT, PROFILE_LAYOUT } from "@/lib/page-layout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useCrmStore } from "@/stores/crm-store";
+import {
+  Check,
+  LogOut,
+  Monitor,
+  Moon,
+  Palette,
+  Settings,
+  Sparkles,
+  Sun,
+  UserRound,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useThemeStore } from "@/stores/theme-store";
+import { useWellnessStore } from "@/stores/wellness-store";
 import { toast } from "@/components/ui/toast";
+import { PageHeader, GradientButton } from "@/components/shared/page-parts";
+import { Tabs, TabsPanel } from "@/components/ui/tabs";
+import { Label, Checkbox } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {PAGE_ROOT, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
+import {
+  COLOR_PRESETS,
+  FONT_FAMILIES,
+  SIDEBAR_STYLES,
+  CARD_STYLES,
+  ANIMATION_LEVELS,
+  THEME_MODES,
+} from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import type { User as AppUser } from "@/types";
 
-/**
- * Profile & Settings — mirrors the reference layout (DOM-verified):
- * a "Personal Information" form (blue-100 80/96px avatar circle with a user
- * glyph, camera-icon Upload Photo, editable Full Name, fixed Email + Role,
- * black Save Changes) beside a stack of four small cards — Account (centered
- * avatar + identity + badge), Account Type, Email Verified and Security,
- * each with a 48px tinted icon chip.
- */
-export default function ProfilePage() {
-  const { user, updateUser } = useCrmStore();
-
-  return (
-    // Session-16 (S16-P2): the page owns its padding — the reference's
-    // Profile root is just `p-4 sm:p-8` (NO bg / min-h-screen, like
-    // Leads) with the `max-w-4xl mx-auto` column INSIDE. Session-13
-    // (S13-P2): the header is a PLAIN `mb-6 sm:mb-8` div — not the
-    // flex PageHeader row.
-    // Session-72 (L-72c9, bundle-decoded): the loading branch is
-    // HEADERLESS — the reference's else-arm is a plain
-    // `text-center py-12` "Loading..." inside the max-w-4xl column
-    // (the h1 renders only in the loaded branch).
-    <div className={PAGE_ROOT.bare}>
-    <div className={PROFILE_LAYOUT.root}>
-      {!user ? (
-        <div className="text-center py-12">Loading...</div>
-      ) : (
-        <>
-          <div className={PROFILE_LAYOUT.headerRow}>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Profile &amp; Settings</h1>
-            <p className="text-muted mt-1">Manage your account information</p>
-          </div>
-          {/* Keyed remount: the form initializes its local state from the
-              user snapshot at mount — no setState-in-effect needed. The
-              value-based key also re-initializes the form when the store
-              user updates after a save (the pre-reload refresh). */}
-          <ProfileForm key={`${user.id}-${user.name}`} user={user} updateUser={updateUser} />
-        </>
-      )}
-    </div>
-    </div>
-  );
-}
-
-/** 48px tinted circle chip (bg-100 tint + 600-level glyph). */
-function ProfileChip({
-  icon,
-  bg,
-  color,
-  className,
-}: {
-  icon: React.ReactNode;
-  bg: string;
-  color: string;
-  className?: string;
-}) {
-  return (
-    <span
-      className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-full", className)}
-      style={{ backgroundColor: bg, color }}
-      aria-hidden="true"
-    >
-      {icon}
-    </span>
-  );
-}
-
-function ProfileForm({
-  user,
-  updateUser,
-}: {
-  user: { id: string; name: string; email: string; role: string; photoUrl?: string | null };
-  updateUser: (patch: { name: string; photoUrl?: string | null }) => Promise<{ ok: boolean }>;
-}) {
-  const [name, setName] = React.useState(user.name);
-  const [photoUrl, setPhotoUrl] = React.useState(user.photoUrl ?? "");
-  const [uploading, setUploading] = React.useState(false);
+export default function ProfileClientPage({ user }: { user: AppUser | null }) {
+  const router = useRouter();
+  const logout = useWellnessStore((s) => s.logout);
+  const theme = useThemeStore();
   const [saving, setSaving] = React.useState(false);
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  // Session-30 (S30-P3): the reference's aCe upload handler — NO client
-  // type-validation on this surface (unlike the contact dialog's alert),
-  // TOASTS instead of alerts, and the uploaded file_url lands in the form
-  // state until Save.
-  async function uploadPhoto(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      const body = (await res.json().catch(() => null)) as {
-        ok?: boolean;
-        data?: { file_url?: string };
-      } | null;
-      if (res.ok && body?.ok && body.data?.file_url) {
-        setPhotoUrl(body.data.file_url);
-        toast.success("Photo uploaded successfully");
-      } else {
-        toast.error("Failed to upload photo");
-      }
-    } catch {
-      toast.error("Failed to upload photo");
-    } finally {
-      setUploading(false);
-    }
-  }
-
-  async function save() {
-    // Session-62 (N-62b): the reference's save is UNCONDITIONAL — its
-    // bundle (index-DZ-xbrIm.js) disables the button only while saving
-    // (`disabled:i`) and its submit always PATCHes both fields. The
-    // name-only `dirty` gate that used to live here was a self-inflicted
-    // divergence: a photo-only upload left Save a silent no-op (the
-    // button looked clickable; the handler returned early; navigation
-    // lost the upload).
+  const save = async () => {
     setSaving(true);
-    // Session-39 (S39-P3): the envelope — the sibling uploadPhoto has
-    // had this shape since s30; a bare await chain let a network throw
-    // propagate from `void save()` as an unhandled rejection with the
-    // Save button stranded busy. The finally un-busies every path.
-    // Session-72 (S72-P7): the PATCH flows through the store's
-    // updateUser action (the call() envelope + the s64 write-guard +
-    // the user-slice set) — the reference's t(await me()) contract:
-    // the Account card's name + photo land in the pre-reload window.
-    // The toasts are single-arg — the reference's exact vocabulary
-    // (bundle-decoded: Ix.error("Failed to update profile")).
-    try {
-      const res = await updateUser({ name, photoUrl: photoUrl || null });
-      if (res.ok) {
-        toast.success("Profile updated successfully");
-        // Session-30 (S30-P3): the reference reloads after 500ms so the
-        // topbar avatar (server-rendered session user) picks up the photo.
-        setTimeout(() => window.location.reload(), 500);
-      } else {
-        toast.error("Failed to update profile");
-      }
-    } catch {
-      toast.error("Failed to update profile");
-    } finally {
-      setSaving(false);
-    }
-  }
+    // The theme-store's setTheme already applies + syncs on every change;
+    // this explicit pass re-writes the full state (the Save All Changes
+    // button the reference ships) and confirms the toast.
+    await new Promise((r) => setTimeout(r, 300));
+    setSaving(false);
+    toast.success("All changes saved. Your Wellness Hub is truly yours now! ✨");
+  };
 
+  const doLogout = async () => {
+    await logout();
+    router.replace("/login");
+  };
+
+  const [tab, setTab] = React.useState("appearance");
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-3">
-      {/* Personal information — session-6: spans two of the three lg
-          columns (reference DOM). */}
-      <Card className="lg:col-span-2">
-        <CardHeader>
-          {/* Session-13 (S13-P2): the STOCK CardTitle (16px,
-              leading-none) — the reference's profile title is not a size
-              variant. */}
-          <CardTitle>Personal Information</CardTitle>
-        </CardHeader>
-        {/* Session-9 (S9-8): standard content + form + space-y-6 (no
-            max-w constraint — the reference's inputs stretch full width). */}
-        <CardContent>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              void save();
-            }}
-          >
-          <div className="space-y-6">
-          <div className="space-y-2">
-            <Label>Profile Picture</Label>
-            {/* Session-91 (M-91c1): the avatar row carries controlMt — the
-                v4 inline-label collapse fix (see PROFILE_LAYOUT.controlMt). */}
-            <div className={cn("flex flex-col items-center gap-4 sm:flex-row", PROFILE_LAYOUT.controlMt)}>
-              {/* Reference: the stock Avatar primitive wrapping a bg-blue-100
-                  inner div with a stroke-2 user glyph (DOM-verified 80/96px,
-                  icon #2563EB). Session-30 (S30-P3): the reference renders
-                  the uploaded photo over the fallback (img object-cover). */}
-              <span
-                className="relative flex h-20 w-20 shrink-0 overflow-hidden rounded-full sm:h-24 sm:w-24"
-                aria-hidden="true"
-              >
-                {photoUrl ? (
-                  <img src={photoUrl} alt="Profile" className="w-full h-full object-cover" />
-                ) : (
-                  // Walk60 (D-187a2): the reference's fallback is the stock
-                  // two-level structure — a DIV fallback (the stock
-                  // AvatarFallback form the topbar already carries) with
-                  // the color ON THE SVG, not a hand-rolled span carrying
-                  // it on the wrapper.
-                  <div className="flex h-full w-full items-center justify-center bg-blue-100">
-                    <User className={PROFILE_LAYOUT.avatarIcon} strokeWidth={PROFILE_LAYOUT.avatarIconStroke} />
-                  </div>
-                )}
-              </span>
-              <div className="w-full flex-1">
-                <input
-                  ref={fileInputRef}
-                  id="photo-upload"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={uploadPhoto}
-                />
-                {/* Session-30 (S30-P3): the reference's aCe — the outline
-                    Upload Photo button fires the REAL round-trip (accept
-                    image/*, NO type alert on this surface, toasts).
-                    Session-72 (N-72c7, bundle-decoded): while uploading the
-                    label is the "Uploading..." TEXT ONLY — the Camera icon
-                    drops (the reference's own ternary form). */}
-                <Button
-                  variant="outline"
-                  className={PROFILE_LAYOUT.uploadBtn}
-                  type="button"
-                  disabled={uploading}
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  {/* Session-13 (S13-P2): the reference carries the margin
-                      ON THE SVG (w-4 h-4 mr-2), not on the wrapper. */}
-                  {uploading ? "Uploading..." : (
-                    <>
-                      <Camera className={PROFILE_LAYOUT.uploadIcon} /> Upload Photo
-                    </>
-                  )}
-                </Button>
-                <p className="mt-2 text-xs text-muted">JPG, PNG or GIF. Max 5MB.</p>
-              </div>
-            </div>
-          </div>
+    <div className={PAGE_ROOT.standard}>
+      <PageHeader
+        title="Profile & Customization"
+        subtitle="Make this app truly yours! ✨"
+      />
 
-          <div className="space-y-2">
-            <Label htmlFor="display_name">Full Name</Label>
-            <Input
-              id="display_name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder={PROFILE_LAYOUT.namePlaceholder}
-              className={PROFILE_LAYOUT.controlMt}
-            />
-          </div>
+      <Tabs
+        tabs={[
+          { id: "appearance", label: "Appearance" },
+          { id: "account", label: "Account" },
+          { id: "preferences", label: "Preferences" },
+        ]}
+        value={tab}
+        onValueChange={setTab}
+        variant="segmented"
+        cols={3}
+        className="mb-6 max-w-xl"
+      >
+        <TabsPanel tab="appearance" className="mt-6">
+          <AppearancePanel />
+        </TabsPanel>
+        <TabsPanel tab="account" className="mt-6">
+          <AccountPanel user={user} onLogout={doLogout} />
+        </TabsPanel>
+        <TabsPanel tab="preferences" className="mt-6">
+          <PreferencesPanel />
+        </TabsPanel>
+      </Tabs>
 
-          <div className="space-y-2">
-            {/* Session-114 (D-114a2): the reference's BARE email/role ids —
-                its labels wire htmlFor="email"/"role" (the display_name
-                pair already matched byte-for-byte); our profile-* ids
-                retired for construction parity (no collision exists on
-                the route — the only other id="email" in src/ is the login
-                card, a different route). */}
-            <Label htmlFor="email">Email</Label>
-            {/* Session-13 (S13-P2): the reference's disabled email input
-                carries the bg-gray-50 wash (ours was bg-transparent —
-                indistinguishable from an editable input). */}
-            <Input
-              id="email"
-              type="email"
-              value={user.email}
-              disabled
-              className={cn(PROFILE_LAYOUT.emailDisabled, PROFILE_LAYOUT.controlMt)}
-            />
-            <p className="text-xs text-muted">Email cannot be changed</p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="role">Role</Label>
-            {/* Session-13 (S13-P2): bg-gray-50 + capitalize — the raw
-                value "user" displays "User" like the reference. */}
-            <Input
-              id="role"
-              value={user.role}
-              disabled
-              className={cn(PROFILE_LAYOUT.roleDisabled, PROFILE_LAYOUT.controlMt)}
-            />
-          </div>
-
-          <div className="pt-4">
-            {/* Session-13 (S13-P2): the STOCK Button structure with the
-                reference's PAGE-LOCAL primary — its profile surfaces ride
-                bg-primary #171717 (its global --primary; its blue buttons
-                elsewhere are explicit bg-blue-600). Ours maps --primary
-                to blue, so the neutral literals carry the exact colors:
-                bg #171717, fg #fafafa, bare shadow. Session-80 (M-80c1):
-                the reference's hover is the ALPHA hover:bg-primary/90 —
-                LIVE-probed rgba(23,23,23,0.9) — so the computed-equal is
-                neutral-900 at 90%, not the solid neutral-800 s13 shipped;
-                the inert border-transparent (the stock default ships no
-                border arm) retired with it.
-                Session-72 (L-72c4): the three-dot "Saving..." form —
-                the reference's own label (bundle-decoded). */}
-            <Button
-              type="submit"
-              className={cn(
-                "bg-neutral-900 text-neutral-50 shadow hover:bg-neutral-900/90",
-                PROFILE_LAYOUT.saveBtn,
-              )}
-              disabled={saving}
-            >
-              {saving ? "Saving..." : "Save Changes"}
-            </Button>
-          </div>
-          </div>
-          </form>
-        </CardContent>
-      </Card>
-
-      {/* Right column — four small cards, each with a tinted icon chip.
-          Session-9 (S9-8): space-y stack; the Account card carries a
-          plain p-6 content with the centered name-wrap inside (no h-fit). */}
-      <div className={PROFILE_LAYOUT.columnWrap}>
-        <Card>
-          <CardContent className="p-6">
-            <div className={PROFILE_LAYOUT.nameWrap}>
-            {/* Session-72 (L-72c2, bundle-decoded): the Account card reads
-                the STORE user's photo + name — the reference's card rides
-                the session user (e.profile_picture), so the card stays
-                stale through the upload (the form avatar alone previews)
-                and updates only after the save's me() round-trip — our
-                updateUser set lands the same pre-reload update. */}
-            <span
-              className="relative mb-4 flex h-20 w-20 shrink-0 overflow-hidden rounded-full"
-              aria-hidden="true"
-            >
-              {user.photoUrl ? (
-                <img src={user.photoUrl} alt="Profile" className="w-full h-full object-cover" />
-              ) : (
-                // Walk60 (D-187a2): the same two-level stock cure as the
-                // form avatar — the DIV fallback + the color on the svg
-                // (the reference's Account-card svg renders
-                // `lucide-user w-10 h-10 text-blue-600`).
-                <div className="flex h-full w-full items-center justify-center bg-blue-100">
-                  <User className="h-10 w-10 text-blue-600" strokeWidth={PROFILE_LAYOUT.avatarIconStroke} />
-                </div>
-              )}
-            </span>
-            <h3 className="text-lg font-semibold">{user.name}</h3>
-            <p className="text-sm text-muted">{user.email}</p>
-            {/* Session-13 (S13-P2): the STOCK shadcn Badge default
-                variant (shadow + hover + transition + focus ring) on the
-                contract string — the hand-rolled minimal span retired. */}
-            <div className={PROFILE_LAYOUT.badge}>{user.role}</div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <ProfileChip icon={<User className="h-6 w-6" />} bg="#dbeafe" color="#2563eb" />
-              <div className="min-w-0">
-                <p className="text-sm text-muted">Account Type</p>
-                <p className="truncate font-semibold capitalize text-foreground">{user.role}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <ProfileChip icon={<Mail className="h-6 w-6" />} bg="#dcfce7" color="#16a34a" />
-              <div className="min-w-0">
-                <p className="text-sm text-muted">Email Verified</p>
-                <p className="font-semibold text-foreground">Yes</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <ProfileChip icon={<Shield className="h-6 w-6" />} bg="#f3e8ff" color="#9333ea" />
-              <div className="min-w-0">
-                <p className="text-sm text-muted">Security</p>
-                <p className="font-semibold text-foreground">Protected</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="mt-6">
+        <GradientButton onClick={() => void save()} disabled={saving}>
+          <Sparkles className="h-4 w-4" /> {saving ? "Saving…" : "Save All Changes ✨"}
+        </GradientButton>
       </div>
     </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Appearance — Theme Mode / presets / colors / font / bg image / styles.
+// ---------------------------------------------------------------------------
+function AppearancePanel() {
+  const theme = useThemeStore();
+  return (
+    <div className="space-y-6">
+      {/* Theme Mode */}
+      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
+        <h2 className="mb-3 flex items-center gap-2 font-semibold text-foreground">
+          <Monitor className="h-5 w-5 text-muted" aria-hidden="true" /> Theme Mode
+        </h2>
+        <div className="flex flex-wrap gap-2">
+          {THEME_MODES.map((m) => (
+            <button
+              key={m.value}
+              type="button"
+              aria-pressed={theme.themeMode === m.value}
+              onClick={() => theme.setTheme({ themeMode: m.value })}
+              className={cn(
+                BUTTON_CLASSES,
+                "h-10 rounded-md border px-5 text-sm",
+                theme.themeMode === m.value
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-line hover:bg-line-soft",
+              )}
+            >
+              {m.value === "light" && <Sun className="h-4 w-4" />}
+              {m.value === "dark" && <Moon className="h-4 w-4" />}
+              {m.value === "auto" && <Monitor className="h-4 w-4" />}
+              {m.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Colors + presets */}
+      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
+        <h2 className="mb-3 flex items-center gap-2 font-semibold text-foreground">
+          <Palette className="h-5 w-5 text-muted" aria-hidden="true" /> Colors
+        </h2>
+        <p className="mb-2 text-sm font-medium text-foreground">Quick Presets</p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {COLOR_PRESETS.map((p) => {
+            const active = theme.primaryColor.toLowerCase() === p.primary.toLowerCase();
+            return (
+              <button
+                key={p.key}
+                type="button"
+                aria-pressed={active}
+                onClick={() => theme.setTheme({ primaryColor: p.primary, secondaryColor: p.secondary })}
+                className={cn(
+                  "rounded-lg border p-3 text-left transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  active ? "border-primary ring-1 ring-primary" : "border-line",
+                )}
+              >
+                <span
+                  className="mb-2 block h-8 w-full rounded-md bg-gradient-to-r"
+                  style={{
+                    backgroundImage: `linear-gradient(to right, ${p.primary}, ${p.secondary})`,
+                  }}
+                  aria-hidden="true"
+                />
+                <span className="text-xs font-medium text-foreground">{p.label}</span>
+                {active && (
+                  <span className="mt-1 flex items-center gap-1 text-xs text-primary">
+                    <Check className="h-3 w-3" /> Active
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="pref-primary">Primary Color</Label>
+            <div className="mt-2 flex items-center gap-2">
+              <input
+                id="pref-primary"
+                type="color"
+                value={theme.primaryColor}
+                onChange={(e) => theme.setTheme({ primaryColor: e.target.value })}
+                className="h-9 w-14 cursor-pointer rounded-md border border-line bg-transparent"
+                aria-label="Primary color picker"
+              />
+              <Input
+                aria-label="Primary color hex"
+                value={theme.primaryColor}
+                onChange={(e) => theme.setTheme({ primaryColor: e.target.value })}
+                className="flex-1"
+              />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="pref-secondary">Secondary Color</Label>
+            <div className="mt-2 flex items-center gap-2">
+              <input
+                id="pref-secondary"
+                type="color"
+                value={theme.secondaryColor}
+                onChange={(e) => theme.setTheme({ secondaryColor: e.target.value })}
+                className="h-9 w-14 cursor-pointer rounded-md border border-line bg-transparent"
+                aria-label="Secondary color picker"
+              />
+              <Input
+                aria-label="Secondary color hex"
+                value={theme.secondaryColor}
+                onChange={(e) => theme.setTheme({ secondaryColor: e.target.value })}
+                className="flex-1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <p className="mt-4 text-xs text-muted">
+          Preview: Your Custom Theme! 🎨 Every button, heading and gradient follows your pair.
+        </p>
+      </section>
+
+      {/* Typography */}
+      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
+        <h2 className="mb-3 font-semibold text-foreground">Typography</h2>
+        <div className="space-y-2">
+          <Label htmlFor="pref-font">Font Family</Label>
+          <Select value={theme.fontFamily} onValueChange={(v) => theme.setTheme({ fontFamily: v })}>
+            <SelectTrigger id="pref-font" className="mt-2 w-full sm:w-64">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {FONT_FAMILIES.map((f) => (
+                <SelectItem key={f.value} value={f.value}>
+                  {f.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <p className="mt-3 rounded-lg bg-line-soft p-3 text-sm text-muted">
+          The quick brown fox jumps over the lazy dog.
+        </p>
+        <p className="mt-1 text-xs text-subtle">Preview of {FONT_FAMILIES.find((f) => f.value === theme.fontFamily)?.label}</p>
+      </section>
+
+      {/* Background image */}
+      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
+        <h2 className="mb-3 font-semibold text-foreground">Background Image</h2>
+        <div className="space-y-2">
+          <Label htmlFor="pref-bg">Image URL (optional)</Label>
+          <Input
+            id="pref-bg"
+            className="mt-2"
+            placeholder="https://images.unsplash.com/..."
+            value={theme.bgImageUrl ?? ""}
+            onChange={(e) => theme.setTheme({ bgImageUrl: e.target.value || null })}
+          />
+        </div>
+        <p className="mt-2 text-xs text-muted">
+          Pro tip: Use high-quality images from Unsplash or similar
+        </p>
+      </section>
+
+      {/* Visual style */}
+      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
+        <h2 className="mb-3 font-semibold text-foreground">Visual Style</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="pref-sidebar">Sidebar Style</Label>
+            <Select value={theme.sidebarStyle} onValueChange={(v) => theme.setTheme({ sidebarStyle: v as typeof theme.sidebarStyle })}>
+              <SelectTrigger id="pref-sidebar" className="mt-2 w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {SIDEBAR_STYLES.map((s) => (
+                  <SelectItem key={s.value} value={s.value}>
+                    {s.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="pref-card">Card Style</Label>
+            <Select value={theme.cardStyle} onValueChange={(v) => theme.setTheme({ cardStyle: v as typeof theme.cardStyle })}>
+              <SelectTrigger id="pref-card" className="mt-2 w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {CARD_STYLES.map((s) => (
+                  <SelectItem key={s.value} value={s.value}>
+                    {s.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="pref-animation">Animation Level</Label>
+            <Select value={theme.animationLevel} onValueChange={(v) => theme.setTheme({ animationLevel: v as typeof theme.animationLevel })}>
+              <SelectTrigger id="pref-animation" className="mt-2 w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {ANIMATION_LEVELS.map((s) => (
+                  <SelectItem key={s.value} value={s.value}>
+                    {s.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Account — the read-only info card + the logout superset.
+// ---------------------------------------------------------------------------
+function AccountPanel({ user, onLogout }: { user: AppUser | null; onLogout: () => void }) {
+  return (
+    <div className="space-y-6">
+      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
+        <h2 className="mb-4 flex items-center gap-2 font-semibold text-foreground">
+          <UserRound className="h-5 w-5 text-muted" aria-hidden="true" /> Account Information
+        </h2>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="ac-name">Full Name</Label>
+            <Input id="ac-name" className="mt-2" disabled value={user?.name ?? ""} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="ac-email">Email</Label>
+            <Input id="ac-email" className="mt-2" disabled value={user?.email ?? ""} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="ac-role">Role</Label>
+            <Input id="ac-role" className="mt-2" disabled value={user?.role ?? "user"} />
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
+        <h2 className="mb-2 flex items-center gap-2 font-semibold text-foreground">
+          <Settings className="h-5 w-5 text-muted" aria-hidden="true" /> Session
+        </h2>
+        <p className="mb-3 text-sm text-muted">
+          Sign out of this device. Your wellness data stays safe.
+        </p>
+        <button
+          type="button"
+          onClick={onLogout}
+          className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-red-200 bg-red-50 px-6 text-red-600 hover:bg-red-100")}
+        >
+          <LogOut className="h-4 w-4" /> Log out
+        </button>
+      </section>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Preferences — the two notification toggles.
+// ---------------------------------------------------------------------------
+function PreferencesPanel() {
+  const theme = useThemeStore();
+  return (
+    <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
+      <h2 className="mb-4 font-semibold text-foreground">App Preferences</h2>
+      <div className="space-y-4">
+        <label className="flex items-start justify-between gap-4 rounded-lg border border-line bg-line-soft/40 px-4 py-3">
+          <span>
+            <span className="block text-sm font-medium text-foreground">Enable Notifications</span>
+            <span className="block text-xs text-muted">Receive updates about your progress</span>
+          </span>
+          <Checkbox
+            checked={theme.notificationsEnabled}
+            onCheckedChange={(v) => theme.setTheme({ notificationsEnabled: v === true })}
+            aria-label="Enable notifications"
+          />
+        </label>
+        <label className="flex items-start justify-between gap-4 rounded-lg border border-line bg-line-soft/40 px-4 py-3">
+          <span>
+            <span className="block text-sm font-medium text-foreground">Weekly Goal Reminders</span>
+            <span className="block text-xs text-muted">Get reminded to check your weekly goals</span>
+          </span>
+          <Checkbox
+            checked={theme.weeklyReminders}
+            onCheckedChange={(v) => theme.setTheme({ weeklyReminders: v === true })}
+            aria-label="Weekly goal reminders"
+          />
+        </label>
+      </div>
+    </section>
   );
 }

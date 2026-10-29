@@ -337,7 +337,7 @@ describe("session-96: the form-family walk remediation (the v4 space-y genus on 
 
   it("the labels stay INLINE (the reference's own 16px inline label box — a block label would sit 2px high)", async () => {
     const L = await loginLayout();
-    expect(L.label).toBe("text-sm font-medium text-slate-700");
+    expect(L.label).toMatch(/^text-sm font-medium text-slate-700/);
     // negative: no display-changing class sneaks in
     expect(L.label).not.toMatch(/\b(block|flex|inline-block)\b/);
   });

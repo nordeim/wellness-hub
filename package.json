@@ -1,7 +1,7 @@
 {
-  "name": "neo-crm",
+  "name": "wellness-hub",
   "version": "1.0.0",
-  "description": "NEO CRM — Next.js 16 + React 19 + Prisma/SQLite CRM application",
+  "description": "Wellness Hub (EvolveWell) — Next.js 16 + React 19 + Prisma/SQLite student wellbeing application",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
@@ -17,12 +17,7 @@
     "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit",
     "gate": "bun run lint && bun run typecheck && bun run test && bun run build && ./scripts/smoke-test.sh && CI=1 bun run test:e2e",
-    "smoke": "./scripts/smoke-test.sh",
-    "sweep": "bun scripts/sweep.ts",
-    "probe:ref": "bun scripts/drift-probe.ts",
-    "gate:full": "bun run lint && bun run typecheck && bun run test && bun run build && ./scripts/smoke-test.sh && CI=1 bun run test:e2e && bun run sweep -- --fail-on-drift && bun run sweep -- --width 390 --height 844 --fail-on-drift && bun run sweep -- --width 768 --height 1024 --fail-on-drift && bun run sweep -- --width 1024 --height 768 --fail-on-drift && bun run sweep:fullpage -- --fail-on-drift && bun run census:interior -- --fail-on-drift --parallel 4",
-    "sweep:fullpage": "bun scripts/fullpage-sweep.ts",
-    "census:interior": "bun scripts/interior-census.ts"
+    "smoke": "./scripts/smoke-test.sh"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
