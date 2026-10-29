@@ -51,10 +51,12 @@ test-results/
 playwright-report/
 .vitest/
 
-# session-30: uploaded files (the UploadFile mirror — like db/, never committed).
-# session-35: ANCHORED to the repo root — the unanchored `uploads/` form also
-# matched src/app/api/uploads/ and silently kept the GET route out of git
-# (the fresh-clone broken-photo bug).
+# session-30: a repo-root uploads/ mirror directory (like db/, never
+# committed). session-35: ANCHORED to the repo root — the unanchored
+# `uploads/` form can match nested route dirs and silently keep them out
+# of git. WH-4 (F-1): the upload route family retired (zero consumers);
+# the guard STAYS as a belt — any future uploads/ mirror at the root
+# still stays out of git.
 /uploads/
 
 # session-92: the sweep tool's capture artifacts (regenerated per run)

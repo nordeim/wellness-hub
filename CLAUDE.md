@@ -97,7 +97,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 | `bun run start` | Boot the standalone server |
 | `bun run lint` | ESLint (`--max-warnings 0`) |
 | `bun run typecheck` | `tsc --noEmit` |
-| `bun run test` | Vitest unit suite (316 checks) |
+| `bun run test` | Vitest unit suite (319 checks) |
 | `bun run test:e2e` | Playwright (42 checks; build first) |
 | `bun run gate` | The full chain in one command |
 
@@ -105,9 +105,10 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 
 ### Test Pyramid
 
-- **Unit (Vitest, 316 checks / 17 suites)**: pure seams — auth helpers,
+- **Unit (Vitest, 319 checks / 19 suites)**: pure seams — auth helpers,
   db-path contract, wellness math (streaks/points/badges), schemas,
-  theme engine, formatters, the dead-dependency census.
+  theme engine, formatters, the dead-dependency census, the route/ui
+  module census, the signup role pin.
 - **E2E (Playwright, 42 checks — 5 specs + the auth setup project)**: the
   real UI in Chromium against the
   production standalone server — auth ladder, mobile drawer battery, shell
@@ -211,7 +212,7 @@ Hard rules enforced by lint: no synchronous `setState` in `useEffect`;
 - Every mutation checks ownership (the record's `userId` must match the
   session's) — a mismatch answers 404.
 - Public auth routes are rate-limited per IP/15 min: login 10, signup 10,
-  resend 5, verify 20, forgot 10, reset 10; uploads 20.
+  resend 5, verify 20, forgot 10, reset 10.
 
 ### Database / Data Layer
 
@@ -232,9 +233,9 @@ Hard rules enforced by lint: no synchronous `setState` in `useEffect`;
 | `DATABASE_URL` | SQLite path (relative, resolved against `prisma/schema.prisma`) | `file:../db/custom.db` |
 | `NEXT_PUBLIC_SITE_URL` | Canonical origin for SEO/sitemap/manifest (build-time inlined) | `http://localhost:3000` |
 | `AUTH_SECRET` | HMAC session secret — **required in production**, min 16 chars, boot fails hard | `openssl rand -hex 32` |
-| `NEO_PROXY_HOPS` | Trusted proxy depth for rate-limit IP keying (unset=1) | `""` |
-| `NEO_DISABLE_IN_APP_OTP` | `1` = hide the signup OTP from responses (real mail transport) | `""` |
-| `NEO_DISABLE_IN_APP_RESET` | `1` = hide the reset link from responses | `""` |
+| `WELLNESS_PROXY_HOPS` | Trusted proxy depth for rate-limit IP keying (unset=1) | `""` |
+| `WELLNESS_DISABLE_IN_APP_OTP` | `1` = hide the signup OTP from responses (real mail transport) | `""` |
+| `WELLNESS_DISABLE_IN_APP_RESET` | `1` = hide the reset link from responses | `""` |
 
 ## Anti-Patterns to Avoid
 

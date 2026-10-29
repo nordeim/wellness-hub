@@ -82,7 +82,9 @@ describe("session-170 (WP-2): the cooldown arithmetic (shouldHardReload)", () =>
 
   it("the cooldown constant is the documented 10s + the flag carries the app namespace", () => {
     expect(CHUNK_RELOAD_COOLDOWN_MS).toBe(10_000);
-    expect(CHUNK_RELOAD_FLAG).toBe("neo-crm:chunk-reload-at");
+    // WH-4 (F-4): the de-NEO rename — the storage flag carries the app's
+    // own namespace (the CRM-era neo-crm: prefix retired with the rename).
+    expect(CHUNK_RELOAD_FLAG).toBe("wellness-hub:chunk-reload-at");
   });
 });
 

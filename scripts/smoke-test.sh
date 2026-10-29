@@ -9,7 +9,7 @@
 #   03  unauthenticated /api/dashboard -> 401
 #   04  /login renders the page title               (the SSR shell)
 #   05  the guest / redirects to the login wall     (the reference's root face)
-#   06  the demo login -> the neo_session cookie    (the auth round-trip)
+#   06  the demo login -> the wellness_session cookie    (the auth round-trip)
 #   07  the sessioned /api/workouts -> 200           (the envelope ok:true)
 #   08  an invalid payload POST -> 400              (the Zod seam)
 #   09  a valid workout create -> 200               (the CRUD round-trip)
@@ -91,8 +91,8 @@ body "$BASE/" | grep -q "login" && ok 05 "guest / redirects to the login wall" |
 # 06 — the demo login round-trip (the seed contract's credentials)
 login_code=$(code -c "$COOKIE_JAR" -H "Content-Type: application/json" \
   -d '{"email":"sepnetflix2023@outlook.com","password":"$Abcd1234"}' "$BASE/api/auth/login")
-[ "$login_code" = 200 ] && grep -q "neo_session" "$COOKIE_JAR" \
-  && ok 06 "demo login + the neo_session cookie" || { fail 06 "login"; exit 1; }
+[ "$login_code" = 200 ] && grep -q "wellness_session" "$COOKIE_JAR" \
+  && ok 06 "demo login + the wellness_session cookie" || { fail 06 "login"; exit 1; }
 
 # 07 — the sessioned envelope
 [ "$(code -b "$COOKIE_JAR" "$BASE/api/workouts")" = 200 ] && body -b "$COOKIE_JAR" "$BASE/api/workouts" | grep -q '"ok":true' \

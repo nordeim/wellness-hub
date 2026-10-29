@@ -19,8 +19,9 @@ import { describe, expect, it } from "vitest";
 // - S67-P2 (N-67d): all four public auth routes pre-gate the declared
 //   body size BEFORE req.json() buffers it (the S36-P3 upload precedent
 //   extended to the auth family).
-// - S67-P3 (N-67e): the one route that writes user bytes to disk joins
-//   the rate-limit family, deliberately AFTER the session guard.
+// - S67-P3 (N-67e): RETIRED at WH-4 with the dead upload route family
+//   (zero consumers; the reference carries no upload surface — the
+//   route-census pin owns that surface now).
 // - S67-P4 (N-67f): the /signup page carries no authenticated redirect
 //   (the s23-P2 retirement /login already carries; the superset page is
 //   a pure render).
@@ -45,7 +46,6 @@ const loginRoute = () => stripComments(read("src/app/api/auth/login/route.ts") ?
 const signupRoute = () => stripComments(read("src/app/api/auth/signup/route.ts") ?? "");
 const verifyRoute = () => stripComments(read("src/app/api/auth/verify/route.ts") ?? "");
 const resendRoute = () => stripComments(read("src/app/api/auth/resend/route.ts") ?? "");
-const uploadRoute = () => stripComments(read("src/app/api/upload/route.ts") ?? "");
 const signupPage = () => stripComments(read("src/app/signup/page.tsx") ?? "");
 const loginCard = () => stripComments(read("src/components/layout/login-card.tsx") ?? "");
 
@@ -69,9 +69,13 @@ describe("session-67: the auth-seam contract (the N-67 family)", () => {
     // Session-163 re-anchor: the pre-gate COMPOSED into parseBody()
     // (api.ts) when the auth family moved onto the Zod seam — the
     // behavioral contract (declared-size rejection before req.json()
-    // buffers) is pinned in tests/parse-body.test.ts; this pin now
+    // buffers) is pinned here (the parseBody behavior pins live in this
+    // suite); this pin now
     // asserts every route parses through the seam (the four legacy
     // routes + the two session-163 reset routes).
+    // WH-4 (F-1): the S67-P3 + N-67e upload-route pins retired with the
+    // dead upload route family (zero consumers; the reference carries no
+    // upload surface — the route-census pin now owns that surface).
     const routes: Array<[string, string]> = [
       ["login", loginRoute()],
       ["signup", signupRoute()],
@@ -87,16 +91,6 @@ describe("session-67: the auth-seam contract (the N-67 family)", () => {
     expect(gate).toBeGreaterThanOrEqual(0);
     expect(parse).toBeGreaterThan(0);
     expect(gate).toBeLessThan(parse);
-  });
-
-  it("S67-P3: the upload route is rate-limited after the session guard", () => {
-    const src = uploadRoute();
-    expect(src).toContain("rateLimit(`upload:${clientKey(request)}`, 20, 15 * 60 * 1000)");
-    const guard = src.indexOf("isGuarded(guard)");
-    const limit = src.indexOf("rateLimit(");
-    expect(guard).toBeGreaterThanOrEqual(0);
-    // The deliberate placement: the unauth 401 never burns an IP's bucket.
-    expect(limit).toBeGreaterThan(guard);
   });
 
   it("S67-P4: the /signup page carries no authenticated redirect", () => {
@@ -156,10 +150,5 @@ describe("session-67: the standing auth-seam records (the N-67 keep set)", () =>
     // Date.now() default; the wall-clock call sites ride unchanged)
     expect(src).toContain("export function rateLimit(key: string, limit: number, windowMs: number, now = Date.now())");
     expect(src).toContain("export function clientKey(req: Request): string");
-  });
-
-  it("N-67e: the upload pre-gate ceiling stays (the S36-P3 precedent the auth family now shares)", () => {
-    const src = uploadRoute();
-    expect(src).toContain("MAX_UPLOAD_BYTES + 64 * 1024");
   });
 });

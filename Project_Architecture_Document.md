@@ -85,7 +85,7 @@ evaluated against both.
 - **Context:** The reference uses platform-managed auth; a clone needs an
   equivalent without a vendor.
 - **Decision:** `src/lib/auth.ts` + the pure `password.ts` seam: scrypt
-  password hashes, HMAC-SHA256 signed stateless `neo_session` cookie
+  password hashes, HMAC-SHA256 signed stateless `wellness_session` cookie
   (7-day TTL) with a `tokenVersion` revocation dimension, hashed-at-rest
   OTP and reset tokens, per-IP rate limits on every public auth route.
 - **Rationale:** Zero auth dependencies; every property (TTL, revocation,
@@ -200,20 +200,18 @@ flowchart TB
     end
     subgraph App["Next.js 16 standalone (one process)"]
         RSC[RSC pages: (app) group — 11 modules + login/signup/reset]
-        RH[Route handlers /api/* — 17 families]
+        RH[Route handlers /api/* — 15 families]
         MWL[Layout guards: (app) redirect → login wall]
         INST[Boot gate: instrumentation → boot-env AUTH_SECRET check]
     end
     subgraph Data
         DB[("SQLite — db/custom.db\n(repo root, git-ignored)")]
-        FS[uploads/ — user files, session-gated]
     end
 
     B -->|HTTPS| RSC
     B -->|JSON envelope| RH
     RSC --> RH
     RH -->|Prisma 6.19 via db-path| DB
-    RH --> FS
     INST -.refuses to boot without AUTH_SECRET.-> App
 ```
 
@@ -222,8 +220,9 @@ flowchart TB
 - **App layer:** ONE Node process, no external queue/cache/workers. The
   `(app)` route-group layout is the page-level auth guard; every handler
   re-checks the session (`requireSession`) — defense in depth.
-- **Data layer:** SQLite file at the repo root; `uploads/` for optional
-  user files (ownership-checked on every read).
+- **Data layer:** SQLite file at the repo root (the WH-4 round retired
+  the dead upload route family + its `uploads/` FS surface — zero
+  consumers; the reference carries no upload surface).
 - **External services:** none at runtime. Unsplash thumbnail URLs and the
   reference's placeholder video URLs are static content links, not
   dependencies.
@@ -284,8 +283,8 @@ wellness-hub/
 │   │   ├── layout/          # app-shell, sidebar, mobile-nav (Sheet drawer), login-card,
 │   │   │                    # nav-config, guest-login-redirect, reset-password-screen
 │   │   ├── shared/          # cross-module parts: stat cards, dialogs, calendar, star rating
-│   │   └── ui/              # Radix-based primitives: button, dialog, select, dropdown,
-│   │                        # tabs, toast, input, card, popover, skeleton…
+│   │   └── ui/              # the six live primitives: dialog, input, label,
+│   │                        # select, tabs, toast (Radix rides dialog/select/label)
 │   ├── lib/
 │   │   ├── wellness.ts      # streaks, points, badge eval, reminder status, tag codec
 │   │   ├── badges-server.ts # server-side awarding at the CRUD seams
@@ -299,14 +298,14 @@ wellness-hub/
 │   │   ├── theme tokens in globals.css / theme-store.ts
 │   │   ├── login-reset.ts   # the auth card's view-machine (pinned)
 │   │   ├── page-layout.ts   # per-page layout contracts
-│   │   ├── format.ts  uploads.ts  chunk-recovery.ts
+│   │   ├── format.ts  chunk-recovery.ts
 │   │   ├── boot-env.ts      # the production AUTH_SECRET gate
 │   │   └── site.ts          # canonical origin for SEO metadata
 │   ├── stores/
 │   │   ├── wellness-store.ts # ALL server state; call() envelope client
 │   │   └── theme-store.ts    # CSS-variable writer + UserPrefs sync
 │   └── types/               # shared domain types
-├── tests/                   # Vitest *.test.ts (17 suites, 316 checks)
+├── tests/                   # Vitest *.test.ts (19 suites, 319 checks)
 │   └── e2e/                 # Playwright *.spec.ts (42 checks) + setups
 ├── scripts/
 │   ├── smoke-test.sh        # 14-check ladder against the standalone artifact
@@ -408,9 +407,11 @@ component; tokens keep theming a data problem.
 
 SQLite via Prisma. Fourteen models in three genera:
 
-1. **The auth user** — `User`: email, scrypt `passwordHash`, hashed OTP +
-   attempts + expiry, `tokenVersion`, hashed-at-rest single-use `resetToken`
-   (60-min TTL), role, avatarColor, photoUrl.
+1. **The auth user** — `User`: email, name, scrypt `passwordHash`, hashed
+   OTP + attempts + expiry, `tokenVersion`, hashed-at-rest single-use
+   `resetToken` (60-min TTL), role (`"user"` — display-only, the
+   reference's own account-tab value; the WH-4 round retired the dead
+   CRM-era `avatarColor`/`photoUrl` columns — never rendered).
 2. **Owned entities** (all `userId` + `onDelete: Cascade`): `Workout`,
    `MoodEntry`, `Assignment`, `Event`, `StudyResource`, `Reminder`, `Goal`,
    `UserRoutine`, `UserBadge` (unique `[userId, badgeId]`), `UserPrefs`
@@ -528,26 +529,26 @@ WCAG AA in light mode; dark mode inverts via the `.dark` overrides in
 
 | Rule | Enforcement |
 |------|-------------|
-| Every API route requires a valid session | `requireSession(req)` — HMAC-verified `neo_session` cookie, 401 otherwise |
+| Every API route requires a valid session | `requireSession(req)` — HMAC-verified `wellness_session` cookie, 401 otherwise |
 | Every body validated | `parseBody(zod)` — 400 with a field message; no ad-hoc parsing |
 | Every mutation ownership-checked | The record's `userId` must equal the session's — mismatch answers 404 (no enumeration) |
 | Passwords never stored raw | scrypt `scrypt:salt:hash` (`password.ts`); login miss burns a timing-equalizer scrypt |
 | Session cookies revocable | `tokenVersion` embedded at mint; a password reset increments it and kills all pre-reset cookies |
 | OTP and reset tokens hashed at rest | scrypt (OTP) / SHA-256 (reset); plaintext lives only in the delivery surface |
 | Reset tokens single-use + TTL | 60-min TTL; consumed atomically via a conditional updateMany |
-| Public auth routes rate-limited | per-IP/15-min sliding windows — login 10, signup 10, resend 5, verify 20, forgot 10, reset 10, uploads 20 (`rate-limit.ts`) |
-| Proxy IP keying is explicit | `NEO_PROXY_HOPS` declares trusted depth; unparsable fails closed to 1 |
+| Public auth routes rate-limited | per-IP/15-min sliding windows — login 10, signup 10, resend 5, verify 20, forgot 10, reset 10 (`rate-limit.ts`) |
+| Proxy IP keying is explicit | `WELLNESS_PROXY_HOPS` declares trusted depth; unparsable fails closed to 1 |
 | Production boots refuse weak secrets | `instrumentation.ts` → `boot-env.ts`: missing/short `AUTH_SECRET` = no serve |
-| Uploads served as public capability URLs | POST sessioned + rate-limited (20/IP/15min, Content-Length pre-gated); GET serves content-random 32-hex names (128-bit unguessable) — charset-pinned by `UPLOAD_NAME_RE` (no traversal surface), image content types only, immutable cache — deliberate parity with the reference's public CDN `file_urls` |
+| Dead attack surface retired | The upload/users route families (zero consumers, no reference surface) retired at WH-4 — the route-census pin (`tests/route-census.test.ts`) locks the 15-family API set against re-introduction |
 | CSRF posture | Cookie is SameSite=Lax; mutating routes are POST-only JSON with the content-type gate (the e2e CSRF probe pins it) |
-| Dependency advisories triaged | Re-triaged each ship round (2026-10-29, WH-3): all remaining advisories dev-toolchain transitive, zero runtime request-path exposure; the never-imported jspdf (and its dompurify chain) retired at WH-3 — the dead-dep census pin (`tests/dead-deps.test.ts`) keeps the tree free of zero-import packages |
+| Dependency advisories triaged | Re-triaged each ship round (2026-10-29, WH-4): all remaining advisories dev-toolchain transitive, zero runtime request-path exposure; the never-imported jspdf (and its dompurify chain) retired at WH-3, four more orphaned packages at WH-4 — the dead-dep census pin (`tests/dead-deps.test.ts`) keeps the tree free of zero-import packages |
 
 ### 6.2 Security Utilities
 
 `src/lib/password.ts` (pure scrypt seam) · `src/lib/auth.ts` (mint/verify/
 revoke) · `src/lib/rate-limit.ts` · `src/lib/verification.ts` +
 `verification-server.ts` (hashed OTP ladder with lockout) ·
-`src/lib/uploads.ts` · `src/lib/boot-env.ts`.
+`src/lib/boot-env.ts`.
 
 ### 6.3 Authentication & Authorization
 
@@ -568,8 +569,6 @@ revoke) · `src/lib/rate-limit.ts` · `src/lib/verification.ts` +
 | Session theft | 7-day TTL + `tokenVersion` revocation on reset; HttpOnly cookie |
 | User enumeration | No-enumeration forgot-password 200; ownership mismatch = 404 |
 | OTP brute force | Hashed code + attempt counter with lockout ladder |
-| XSS in uploads | Uploaded files served with pinned image content types only (no HTML/SVG execution surface) |
-| Path traversal | `UPLOAD_NAME_RE` charset-pins served names (`[0-9a-f]{32}.(jpg|png|webp|gif)` — a mismatch is a 404 before any filesystem lookup) |
 | Spoofed gamification | Badges/points award only server-side |
 
 ---
@@ -593,16 +592,16 @@ No queues, workers or cron. Utility services worth naming:
 
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
-| Unit — auth seams (password, verification, reset, rate limit, boot-env) | 6 | ~140 | `tests/auth*.test.ts`, `password-seam`, `rate-limit`, `boot-env` | Vitest |
-| Unit — wellness domain (streaks, points, badges, codecs, schemas, stats, helpers, theme) | 8 | ~150 | `tests/wellness-*.test.ts` | Vitest |
-| Unit — infra (db-path, format, login-reset views, chunk-recovery, login views, dead-dep census) | 5 | ~26 | `tests/*.test.ts` | Vitest |
+| Unit — auth seams (password, verification, reset, contract, rate limit, boot-env) | 6 | 109 | `tests/auth*.test.ts`, `password-seam`, `rate-limit`, `boot-env` | Vitest |
+| Unit — wellness domain (streaks, points, badges, codecs, schemas, stats, helpers, theme) | 5 | 89 | `tests/wellness-*.test.ts` | Vitest |
+| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census, route/ui census, signup role) | 8 | 121 | `tests/*.test.ts` | Vitest |
 | E2E — auth ladder (login wall, lockout, reset funnel, revocation) | 1 spec | 11 | `tests/e2e/auth.spec.ts` | Playwright |
 | E2E — mobile drawer battery | 1 spec | 6 | `tests/e2e/mobile-navigation.spec.ts` | Playwright |
 | E2E — shell (nav, dual-case routes, quick actions) | 1 spec | 6 | `tests/e2e/shell.spec.ts` | Playwright |
 | E2E — auth setup project (one-time demo login; shares the cookie via storageState) | 1 setup | 1 | `tests/e2e/auth.setup.ts` | Playwright |
 | E2E — CRUD cycles + reset-password funnel | 2 specs | 18 | `tests/e2e/wellness-crud.spec.ts`, `reset-password.spec.ts` | Playwright |
 
-Totals: **316 unit checks / 17 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
+Totals: **319 unit checks / 19 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
 
 ### 8.2 Test Patterns
 
@@ -629,7 +628,7 @@ docs, not just the code.
 
 - `bun run lint` → 0 warnings
 - `bun run typecheck` → clean
-- `bun run test` → 316/316
+- `bun run test` → 319/319
 - `bun run build` → succeeds (the type gate)
 - `bun run smoke` → 14/14
 - `CI=1 bun run test:e2e` → 42/42
@@ -662,15 +661,15 @@ hygiene).
 | `DATABASE_URL` | yes | SQLite path, relative resolved against `prisma/schema.prisma` | `file:../db/custom.db` |
 | `AUTH_SECRET` | prod | HMAC session secret, ≥16 chars — boot fails hard without it | dev-only constant (warning) |
 | `NEXT_PUBLIC_SITE_URL` | prod | Canonical origin for SEO metadata (build-time inlined) | `http://localhost:3000` |
-| `NEO_PROXY_HOPS` | no | Trusted proxy depth for rate-limit IP keying | unset = 1 |
-| `NEO_DISABLE_IN_APP_OTP` | no | `1` hides the signup OTP from responses (real mail transport) | `""` |
-| `NEO_DISABLE_IN_APP_RESET` | no | `1` hides the reset link from responses | `""` |
+| `WELLNESS_PROXY_HOPS` | no | Trusted proxy depth for rate-limit IP keying | unset = 1 |
+| `WELLNESS_DISABLE_IN_APP_OTP` | no | `1` hides the signup OTP from responses (real mail transport) | `""` |
+| `WELLNESS_DISABLE_IN_APP_RESET` | no | `1` hides the reset link from responses | `""` |
 
 ### 9.3 Container Configuration
 
 No Dockerfile ships (a single-process Node app; `docs/DEPLOYMENT.md` covers
 the VPS/Docker paths). If containerizing: `oven/bun` base, copy the
-standalone artifact, mount `db/` and `uploads/` as volumes, pass env at
+standalone artifact, mount `db/` as a volume, pass env at
 runtime.
 
 ### 9.4 CI/CD Pipeline
@@ -726,7 +725,8 @@ spec `CI=1 bunx playwright test tests/e2e/<file>`.
 | Priority | Issue | Impact | Status |
 |----------|-------|--------|--------|
 | — | ~~jspdf → dompurify advisory chain~~ | RETIRED at WH-3 — jspdf was a zero-import CRM residue (no PDF export ever shipped in the wellness tree; the reference carries no export UI either — live-probed); removing it removed the chain entirely, and `tests/dead-deps.test.ts` pins the dep tree | Closed (retired) |
-| LOW | Remaining `bun audit` advisories | 9 (4 high / 4 moderate / 1 low — re-triaged 2026-10-29), ALL dev-toolchain transitive (prisma CLI, vitest/vite, eslint plugins, postcss); zero runtime request-path exposure; re-triage each ship round (no mid-rotation bumps posture) | Accepted posture |
+| LOW | Remaining `bun audit` advisories | 9 (4 high / 4 moderate / 1 low — re-triaged 2026-10-29, the WH-4 round), ALL dev-toolchain transitive (prisma CLI, vitest/vite, eslint plugins — the nested zod@4.6.5 copy, postcss); zero runtime request-path exposure (our runtime zod is 4.6.7); re-triage each ship round (no mid-rotation bumps posture) | Accepted posture |
+| LOW | The lockfile's stale `"activity-map"` workspace name (`bun.lock:6` vs package.json `"wellness-hub"`) | Inert carried metadata from a pre-history workspace; probed at WH-4 — `bun install` (including the post-`bun remove` clean reinstall) does NOT sync the name, and a full lockfile regen risks semver drift for zero functional gain | Accepted posture (inert metadata) |
 | LOW | Google OAuth button | Visible for parity but reports "not configured on this deployment" — no OAuth credentials ship by design | Intentional |
 | LOW | "Watch Video" links open placeholder URLs | The reference's own tutorial/video URLs are placeholders (`example-*`); we open them in a new tab with identical behavior | Intentional parity |
 | LOW | Reference's empty-state data | The demo account ships empty lists (the reference's fresh account is also empty); `db:seed --demo` can populate sample rows for exploration | Intentional |

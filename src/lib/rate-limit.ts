@@ -65,7 +65,7 @@ export function clientKey(req: Request): string {
   // header (the e2e suites' dedicated-bucket form) is both first and
   // last — unaffected.
   //
-  // The trust depth is DEPLOY-DECLARED through NEO_PROXY_HOPS: unset
+  // The trust depth is DEPLOY-DECLARED through WELLNESS_PROXY_HOPS: unset
   // (the default) = 1 — exactly one appending proxy. 0 = direct exposure
   // (the client-suppliable header family is ignored entirely — one
   // honest shared bucket instead of a per-request rotation that fully
@@ -88,10 +88,10 @@ export function clientKey(req: Request): string {
 }
 
 /** Session-163 (the digma S69-A port): the declared proxy-topology trust
- *  depth. NEO_PROXY_HOPS: unset/empty = 1; unparsable or negative fails
+ *  depth. WELLNESS_PROXY_HOPS: unset/empty = 1; unparsable or negative fails
  *  CLOSED onto 1; 0 = direct exposure; N >= 2 = N appending proxies. */
 export function proxyHopDepth(): number {
-  const raw = process.env.NEO_PROXY_HOPS;
+  const raw = process.env.WELLNESS_PROXY_HOPS;
   if (raw === undefined || raw === "") return 1;
   const parsed = Number.parseInt(raw, 10);
   if (!Number.isFinite(parsed) || parsed < 0) return 1;

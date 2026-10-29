@@ -18,5 +18,8 @@ export const dynamic = "force-dynamic";
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getSessionUser();
   if (!user) return <GuestLoginRedirect />;
-  return <AppShell user={user}>{children}</AppShell>;
+  // WH-4 (F-1): the shell takes no user prop (it renders no user chip —
+  // the reference's sidebar carries the whole nav); the session read stays
+  // as the guard's own decision.
+  return <AppShell>{children}</AppShell>;
 }

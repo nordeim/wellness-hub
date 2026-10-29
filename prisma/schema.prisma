@@ -21,9 +21,10 @@ model User {
   email        String   @unique
   name         String
   passwordHash String
-  avatarColor  String   @default("#6366f1")
-  photoUrl     String?
   role         String   @default("user") // user (the reference's account tab shows "user")
+  // WH-4 (F-1): avatarColor + photoUrl retired — the CRM-era avatar chain
+  // (set at signup, carried in the session, never rendered: the reference
+  // has no avatar surface and its account card is read-only, live-probed).
   // Email-verification funnel (kept from the chassis): NULL
   // verificationExpiresAt = no verification pending; the code is stored
   // HASHED (scrypt) — the plaintext rides only the server console log.

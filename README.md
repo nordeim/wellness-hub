@@ -5,7 +5,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.19-2D3748?logo=prisma)](https://www.prisma.io/)
-[![Tests](https://img.shields.io/badge/tests-316%20unit%20+%2042%20e2e-brightgreen)](#testing)
+[![Tests](https://img.shields.io/badge/tests-319%20unit%20+%2042%20e2e-brightgreen)](#testing)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
 A complete, self-hostable **student wellbeing application** — a production-grade
@@ -52,12 +52,12 @@ Vitest + Playwright test battery pinning all of it in place.
 | UI runtime | React | 19 | Server components, `useActionState`-free hand-rolled store |
 | Language | TypeScript | 5.9 | Full strict mode; `bun run build` is the type gate |
 | Styling | Tailwind CSS | 4.3 | CSS-first `@theme` config (no `tailwind.config.js`) |
-| Components | Radix UI primitives | 1.3–2.4 | Dialog, dropdown, select, popover, tabs — shadcn-style |
+| Components | Radix UI primitives | 1.3–2.4 | Dialog, select, label (Radix) + hand-rolled input/tabs/toast — shadcn-style |
 | State | Zustand | 5 | Single client store (`src/stores/wellness-store.ts`) |
 | ORM | Prisma | 6.19 | Schema + SQLite driver |
 | Database | SQLite | — | `db/custom.db` at the repo root, git-ignored |
 | Validation | Zod | 4 | Every API body boundary (`parseBody()`) |
-| Unit tests | Vitest | 5 | 316 checks / 17 suites |
+| Unit tests | Vitest | 5 | 319 checks / 19 suites |
 | E2E tests | Playwright | 1.64 | 42 checks (5 specs + the auth setup project) against the production standalone server |
 
 ```mermaid
@@ -78,13 +78,13 @@ wellness-hub/
 │   ├── 📂 (app)/            # Auth-guarded route group: 11 module pages
 │   │   ├── 📂 Dashboard/    # Capitalized aliases mirroring the reference's hrefs
 │   │   └── 📂 dashboard/    # Canonical lowercase folders (re-export aliases)
-│   ├── 📂 api/              # 17 route-handler families (auth, CRUD, dashboard, prefs)
+│   ├── 📂 api/              # 15 route-handler families (auth, CRUD, dashboard, prefs)
 │   ├── 📂 login/  signup/  reset-password/
 │   └── 📄 globals.css       # Tailwind v4 @theme tokens + dark mode
 ├── 📂 src/components/
 │   ├── 📂 layout/           # app-shell, sidebar, mobile-nav (Radix Sheet drawer), login-card
 │   ├── 📂 shared/           # Module pages' shared parts (stat cards, dialogs, calendars)
-│   └── 📂 ui/               # Radix-based primitives (button, dialog, select, toast…)
+│   └── 📂 ui/               # The six live primitives (dialog, input, label, select, tabs, toast)
 ├── 📂 src/lib/              # wellness.ts (streaks/points/badges), auth, api, schemas, db-path, rate-limit
 ├── 📂 src/stores/           # wellness-store.ts, theme-store.ts (CSS-variable engine)
 ├── 📂 prisma/schema.prisma  # 14 models (User → owned wellness entities, cascade)
@@ -139,14 +139,14 @@ Requires **Node.js ≥ 20** and **bun ≥ 1.1**.
 | `DATABASE_URL` | SQLite path, resolved against `prisma/schema.prisma` | Default `file:../db/custom.db` → `<repo>/db/custom.db` |
 | `NEXT_PUBLIC_SITE_URL` | Canonical origin for SEO metadata, sitemap, manifest | Inlined at build time |
 | `AUTH_SECRET` | HMAC session-signing secret | **Required in production** — min 16 chars; boot fails hard without it |
-| `NEO_PROXY_HOPS` | Trusted proxy depth for rate-limit IP keying | Unset = 1; `0` = direct; fails closed |
-| `NEO_DISABLE_IN_APP_OTP` | Set `1` when a real mail transport exists — hides the OTP from signup responses | Optional |
-| `NEO_DISABLE_IN_APP_RESET` | Set `1` when a real mail transport exists — hides the reset link | Optional |
+| `WELLNESS_PROXY_HOPS` | Trusted proxy depth for rate-limit IP keying | Unset = 1; `0` = direct; fails closed |
+| `WELLNESS_DISABLE_IN_APP_OTP` | Set `1` when a real mail transport exists — hides the OTP from signup responses | Optional |
+| `WELLNESS_DISABLE_IN_APP_RESET` | Set `1` when a real mail transport exists — hides the reset link | Optional |
 
 ## Testing
 
 ```bash
-bun run test         # Vitest — 316 checks, 17 suites (node-safe seams)
+bun run test         # Vitest — 319 checks, 19 suites (node-safe seams)
 bun run test:e2e     # Playwright — 42 checks (run `bun run build` first:
                      # boots the PRODUCTION standalone server on an isolated
                      # port with its own scratch db/e2e.db)
@@ -184,7 +184,7 @@ theme store also writes live presets as CSS custom properties on `<html>`.
 - PWA manifest + per-route OpenGraph/Twitter metadata + `sitemap.xml`
 - Accessibility superset: focus rings, aria states, 44px touch targets
 - Zod validation at every API boundary; bounded readers; per-IP rate limits
-- 316 unit + 42 e2e checks pinning the behavior
+- 319 unit + 42 e2e checks pinning the behavior
 
 ## Deployment
 

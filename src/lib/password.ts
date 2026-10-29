@@ -40,7 +40,7 @@ let equalizerHash: string | null = null;
 
 export function timingEqualizerHash(): string {
   if (equalizerHash === null) {
-    equalizerHash = hashPassword("neo-crm-timing-equalizer-constant");
+    equalizerHash = hashPassword("wellness-hub-timing-equalizer-constant");
   }
   return equalizerHash;
 }

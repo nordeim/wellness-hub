@@ -19,7 +19,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (316 checks) | `bun run test` | Vitest, node-safe seams |
+| Unit tests (319 checks) | `bun run test` | Vitest, node-safe seams |
 | Browser E2E (42 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
@@ -29,7 +29,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (316) → `bun run build` → `bun run smoke` →
+`bun run test` (319) → `bun run build` → `bun run smoke` →
 `CI=1 bun run test:e2e` (42: 5 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
@@ -52,12 +52,12 @@ bun run db:seed && bun run dev`. Demo login: `sepnetflix2023@outlook.com` /
 
 - **Auth is hand-rolled** (`src/lib/auth.ts` + the pure `src/lib/password.ts`
   seam): scrypt hashes (`scrypt:salt:hash`) + HMAC-SHA256 signed stateless
-  cookie `neo_session` (7-day TTL) carrying a **tokenVersion** revocation
+  cookie `wellness_session` (7-day TTL) carrying a **tokenVersion** revocation
   dimension — a password reset increments the live row's version and every
   pre-reset cookie dies at the `getSessionUser` comparison. The
   password-reset funnel: `POST /api/auth/forgot-password` (no-enumeration
   200, crypto-random token, 60-min TTL, in-app `resetUrl` delivery behind
-  `NEO_DISABLE_IN_APP_RESET`) + `POST /api/auth/reset-password`
+  `WELLNESS_DISABLE_IN_APP_RESET`) + `POST /api/auth/reset-password`
   (atomic single-use conditional consumption) + the `/reset-password` page.
   The login miss branch burns a timing-equalizer scrypt. `requireSession()`
   guards every route handler; the `(app)` route-group layout redirects
@@ -65,7 +65,7 @@ bun run db:seed && bun run dev`. Demo login: `sepnetflix2023@outlook.com` /
   auth routes are rate-limited per IP/15 min — login 10, signup 10, resend
   5, verify 20, forgot 10, reset 10 (`src/lib/rate-limit.ts`,
   per-process) — keyed on the LAST `x-forwarded-for` hop behind the
-  deploy-declared `NEO_PROXY_HOPS` depth (unset=1, 0=direct, unparsable
+  deploy-declared `WELLNESS_PROXY_HOPS` depth (unset=1, 0=direct, unparsable
   fails closed).
 - **API envelope is `{ ok, data } | { ok, error: { code, message } }`** —
   build responses with `ok()` / `fail()` / `ERR.*` from `src/lib/api.ts`.
@@ -105,13 +105,12 @@ bun run db:seed && bun run dev`. Demo login: `sepnetflix2023@outlook.com` /
   than 16 chars and the server refuses to serve (`src/instrumentation.ts`
   → `src/lib/boot-env.ts`). Dev/test fall back to the insecure dev-only
   constant with a server warning.
-- **The uploads POST half is sessioned AND rate-limited** (20 per IP/15
-  min); the GET serving half is a PUBLIC capability URL — deliberate
-  parity with the reference's public CDN `file_urls` (names are
-  content-random 32-hex = 128-bit unguessable, the stored-name charset
-  is PINNED by `UPLOAD_NAME_RE` so there is no traversal surface, and
-  content types are pinned to images). Study Resources use URL-based
-  fields; the upload endpoint is a superset kept from the scaffold.
+- **The upload route family is RETIRED (WH-4)** — zero consumers, and
+  the reference carries no upload surface anywhere (live-probed: its
+  account card is read-only; Study Resources use URL-based fields).
+  Do NOT re-add `/api/upload` or an avatar surface without a live
+  reference page to mirror; the route-census pin
+  (`tests/route-census.test.ts`) owns the 15-family API set.
 
 ## Tailwind CSS v4 pins (do not remove)
 

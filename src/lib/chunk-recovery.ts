@@ -21,7 +21,7 @@
 // path must never throw.
 
 /** The sessionStorage flag key (the app-namespaced form). */
-export const CHUNK_RELOAD_FLAG = "neo-crm:chunk-reload-at";
+export const CHUNK_RELOAD_FLAG = "wellness-hub:chunk-reload-at";
 
 /** One reload per 10 s — enough to heal, too slow to loop. */
 export const CHUNK_RELOAD_COOLDOWN_MS = 10_000;

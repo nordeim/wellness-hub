@@ -22,7 +22,7 @@ export const dynamic = "force-dynamic";
  * crypto-random hex with a 60-minute TTL. The SELF-HOSTED in-app delivery
  * (the digma ADR-014 family): the resetUrl rides along for existing
  * accounts so the demo flow works end-to-end without a mail transport —
- * NEO_DISABLE_IN_APP_RESET=1 nulls it for production (an email service
+ * WELLNESS_DISABLE_IN_APP_RESET=1 nulls it for production (an email service
  * owns the delivery); the no-enumeration 200 and its message are
  * unchanged either way, and the client's sent card degrades gracefully
  * (it renders the link only when the field is a string).
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
   // instead; (c) signup's 409 openly enumerates by design, so this route
   // is not the enumeration boundary; (d) the route is rate-limited
   // (10/IP/15min).
-  const inAppResetEnabled = process.env.NEO_DISABLE_IN_APP_RESET !== "1";
+  const inAppResetEnabled = process.env.WELLNESS_DISABLE_IN_APP_RESET !== "1";
   let resetUrl: string | null = null;
   const user = await db.user.findUnique({ where: { email } }).catch(() => null);
   if (user) {

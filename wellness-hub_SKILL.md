@@ -1,9 +1,9 @@
 ---
 name: wellness-hub
-description: "Complete engineering skill for the Wellness Hub codebase: Next.js 16 App Router + React 19 + TypeScript strict + Tailwind CSS 4 (CSS-first @theme) + Radix/shadcn primitives + one Zustand store + Prisma 6/SQLite at the repo root + Zod-4-validated API + scrypt/HMAC cookie auth + a three-tier test suite and a single-command quality gate. Distilled from the WH-1 domain replacement (the NEO CRM chassis became the EvolveWell wellness clone), the WH-2 audit round and the WH-3 dead-dep census round. Every rule traces to a verified fact on the 2026-10-29 tree."
-version: 1.1.0
+description: "Complete engineering skill for the Wellness Hub codebase: Next.js 16 App Router + React 19 + TypeScript strict + Tailwind CSS 4 (CSS-first @theme) + Radix/shadcn primitives + one Zustand store + Prisma 6/SQLite at the repo root + Zod-4-validated API + scrypt/HMAC cookie auth + a three-tier test suite and a single-command quality gate. Distilled from the WH-1 domain replacement (the NEO CRM chassis became the EvolveWell wellness clone), the WH-2 audit round, the WH-3 dead-dep census round and the WH-4 dead-surface retirement round. Every rule traces to a verified fact on the 2026-10-29 tree."
+version: 1.2.0
 last_updated: 2026-10-29
-provenance: "Supersedes neo-crm_SKILL.md (the chassis-era distillate, kept at the repo root as provenance for the inherited engineering). Distilled per skills/to-distill-project-into-skill + skills/distill-codebase-skill at the WH-2 ship state (commit 5c3de25 + the WH-2 remediation, gate green at lint 0/0 · tsc 0 · 314/314 unit [16 suites] · build OK · smoke 14/14 · e2e 42/42). Re-validated at WH-3 (2026-10-29): the dead-dep census round — six zero-import packages (jspdf, recharts, html2canvas-pro, fast-check, axe-core, tw-animate-css) + the orphaned dompurify override + the dead chart CSS retired with the TDD pin `tests/dead-deps.test.ts`; gate green at lint 0/0 · tsc 0 · 316/316 unit (17 suites) · build OK · smoke 14/14 · e2e 42/42."
+provenance: "Supersedes neo-crm_SKILL.md (the chassis-era distillate, kept at the repo root as provenance for the inherited engineering). Distilled per skills/to-distill-project-into-skill + skills/distill-codebase-skill at the WH-2 ship state (commit 5c3de25 + the WH-2 remediation, gate green at lint 0/0 · tsc 0 · 314/314 unit [16 suites] · build OK · smoke 14/14 · e2e 42/42). Re-validated at WH-3 (2026-10-29): the dead-dep census round — six zero-import packages (jspdf, recharts, html2canvas-pro, fast-check, axe-core, tw-animate-css) + the orphaned dompurify override + the dead chart CSS retired with the TDD pin `tests/dead-deps.test.ts`; gate green at lint 0/0 · tsc 0 · 316/316 unit (17 suites) · build OK · smoke 14/14 · e2e 42/42. Re-validated at WH-4 (2026-10-29): the dead-surface retirement round — the dead users/uploads route family + the CRM-era avatar chain (avatarColor/photoUrl, never rendered) + seven dead ui modules + four orphaned packages retired with the TDD pin `tests/route-census.test.ts`; the signup CRM-role bug fixed (`role: \"user\"`, `tests/signup-role.test.ts`); the NEO_* env knobs/cookie/namespace renamed to WELLNESS_* / wellness_session; gate green at lint 0/0 · tsc 0 · 319/319 unit (19 suites) · build OK · smoke 14/14 · e2e 42/42."
 ---
 
 # Wellness Hub — Complete Engineering Skill
@@ -35,17 +35,17 @@ provenance: "Supersedes neo-crm_SKILL.md (the chassis-era distillate, kept at th
 | Layer | Technology | Version | Critical note |
 |---|---|---|---|
 | Framework | Next.js (App Router) | 16.4.2 | `output: "standalone"`; the build IS the type gate (`ignoreBuildErrors` unset) |
-| UI runtime | React | 19.3.1 | No `forwardRef`; `"use client"` only at interactive leaves (28 of 52 .tsx files) |
+| UI runtime | React | 19.3.1 | No `forwardRef`; `"use client"` only at interactive leaves (26 of 45 .tsx files) |
 | Language | TypeScript | 5.9.3 | Full strict; never loosen — `tsc --noEmit` + the build both gate |
 | Styling | Tailwind CSS | 4.3.3 | CSS-first: NO `tailwind.config.js`; tokens in `@theme` in `src/app/globals.css`; the v4 bug pins live in the same file |
 | PostCSS | @tailwindcss/postcss | ^4 | The only plugin; missing it = unstyled pages |
-| Primitives | Radix UI (shadcn genus) | dialog 1.3.1 / dropdown 2.2.1 / select 2.4.1 / popover 1.3.1 / label 1.1.17 / slot 1.5.0 | `src/components/ui/*` — the reference's own component genus |
+| Primitives | Radix UI (shadcn genus) | dialog 1.3.1 / label 2.1.17 / select 2.4.1 | `src/components/ui/*` — the SIX live modules (dialog, input, label, select, tabs, toast; input/tabs/toast hand-rolled) — the ui-module census pin locks the set |
 | State | Zustand | 5.0.15 | ONE store (`wellness-store`) + the theme-store writer |
 | ORM / DB | Prisma / SQLite | 6.19.3 | `DATABASE_URL="file:../db/custom.db"` — RELATIVE, resolved against `prisma/schema.prisma` by `src/lib/db-path.ts` (pinned by `tests/db-path.test.ts`); `db/` at the repo root, git-ignored |
 | Validation | Zod | 4.6.7 | Every API body boundary via `parseBody()`; enums from `src/lib/constants.ts` |
 | Charts | — | — | The app renders NO charts — the reference's dashboard carries stat tiles + lists only (live-probed at WH-1 and WH-3); recharts shipped three rounds as a zero-import CRM residue and was retired at WH-3 |
 | Icons | lucide-react | 0.525.0 | The reference's own bundle-decoded version — a PARITY pin; nav icons h-5 w-5 stroke-2, content h-4 w-4 |
-| Unit tests | Vitest | 5.0.5 | Node env; `*.test.ts` only; `@` alias; 316 checks / 17 suites (incl. the dead-dep census pin) |
+| Unit tests | Vitest | 5.0.5 | Node env; `*.test.ts` only; `@` alias; 319 checks / 19 suites (incl. the dead-dep + route/ui-module census pins) |
 | E2E | @playwright/test | 1.64.1 | Production standalone server, isolated port, PINNED `db/e2e.db`; 42 checks (5 specs + the auth setup project) |
 | Runtime | Bun | 1.3.14 | All scripts run from the repo root |
 
@@ -72,11 +72,11 @@ bun run dev                 # http://localhost:3000 — demo: sepnetflix2023@out
 | `DATABASE_URL` | yes | `file:../db/custom.db` — relative, resolved against `prisma/schema.prisma` (never CWD; the standalone server runs from `.next/standalone/`) |
 | `AUTH_SECRET` | **prod: hard** | HMAC session key ≥16 chars; missing/short in production = the boot REFUSES to serve (`src/instrumentation.ts` → `src/lib/boot-env.ts`); dev falls back with a warning |
 | `NEXT_PUBLIC_SITE_URL` | recommended | Canonical origin for metadataBase/OG/sitemap/robots/manifest — INLINED AT BUILD TIME |
-| `NEO_PROXY_HOPS` | prod-behind-proxy | Trusted proxy depth for rate-limit IP keying (unset=1, 0=direct, unparsable fails CLOSED) |
-| `NEO_DISABLE_IN_APP_OTP` | prod | `1` = hide the signup OTP from responses when a real mail transport owns delivery |
-| `NEO_DISABLE_IN_APP_RESET` | prod | `1` = hide the reset link from responses |
+| `WELLNESS_PROXY_HOPS` | prod-behind-proxy | Trusted proxy depth for rate-limit IP keying (unset=1, 0=direct, unparsable fails CLOSED) |
+| `WELLNESS_DISABLE_IN_APP_OTP` | prod | `1` = hide the signup OTP from responses when a real mail transport owns delivery |
+| `WELLNESS_DISABLE_IN_APP_RESET` | prod | `1` = hide the reset link from responses |
 
-`.env` is untracked; `.env.example` mirrors the contract key-for-key (verified bidirectional). The identifiers keep the `NEO_` prefix from the chassis era — they are documented contracts, not drift (a rename would churn every doc, test, and deployment for zero user-visible gain; decided and declined).
+`.env` is untracked; `.env.example` mirrors the contract key-for-key (verified bidirectional). The identifiers carry the app's own `WELLNESS_*` namespace — renamed from the chassis-era `NEO_*` at WH-4 (the earlier keep-the-name decision reversed: the family had zero user-visible gain as `NEO_*` and every doc/test/deployment site changed once, cleanly; live sessions died once at the cookie rename, by design; the boot-env flag-typo guard + fail-closed defaults kept every seam safe through the rename).
 
 ## §4 The Design System (Code-First)
 
@@ -115,7 +115,7 @@ Layer 4  Components        src/components/{layout,shared,ui} + page shells — t
 Layer 5  Routes            src/app/(app)/* dual-case pages + auth pages — aliases only re-export; NO logic
 ```
 
-**Directory map:** `src/components/layout/` (7 files — app-shell, sidebar, mobile-nav, nav-config, login-card, guest-login-redirect, reset-password-screen) · `src/components/shared/` (the cross-module page-parts: stat cards, dialogs, calendar, star rating) · `src/components/ui/` (the Radix wrappers: button, card, dialog, dropdown, input, label, popover, select, skeleton, tabs, toast, table). 52 .tsx files total; 28 are `"use client"` (the interactive leaves + shell).
+**Directory map:** `src/components/layout/` (7 files — app-shell, sidebar, mobile-nav, nav-config, login-card, guest-login-redirect, reset-password-screen) · `src/components/shared/` (the cross-module page-parts: stat cards, dialogs, calendar, star rating) · `src/components/ui/` (the six live primitives: dialog, input, label, select, tabs, toast — Radix rides dialog/select/label; the ui-module census pin in `tests/route-census.test.ts` locks the set; the seven CRM-era modules avatar/badge/button/card/dropdown/icons/table retired at WH-4). 45 .tsx files total; 26 are `"use client"` (the interactive leaves + shell).
 
 **Client vs server decision:** RSC by default; `"use client"` only where interactivity demands it (dialogs, forms, the drawer, the theme boot). The `(app)` layout is a server component that reads the session and redirects; everything below it that mutates is a client island talking to the store.
 
@@ -193,7 +193,7 @@ This codebase has NO custom hooks directory — the reactive seams are the two Z
 ```bash
 bun run lint          # 0 warnings, ALWAYS first
 bun run typecheck     # tsc --noEmit — the fast signal
-bun run test          # 316/316 (17 suites)
+bun run test          # 319/319 (19 suites)
 bun run build         # the type gate + the standalone artifact
 bun run smoke         # 14/14 (the standalone boot + ladder on db/smoke.db)
 CI=1 bun run test:e2e # 42/42 (5 specs + the setup project, db/e2e.db)
@@ -202,7 +202,7 @@ bun audit             # OUTSIDE the gate (network dep); re-triage in the PAD led
 ```
 
 - One command: `bun run gate` (lint → typecheck → test → build → smoke → CI=1 e2e). There is no hosted CI — the local gate is the only gate.
-- Before push: `git status` clean; `.env`/`db/*.db`/`*.key` NEVER in the tree; screenshots refreshed if any visual surface moved; the five docs' counts re-verified (`rg "316|42" README.md AGENTS.md CLAUDE.md Project_Architecture_Document.md wellness-hub_SKILL.md`).
+- Before push: `git status` clean; `.env`/`db/*.db`/`*.key` NEVER in the tree; screenshots refreshed if any visual surface moved; the five docs' counts re-verified (`rg "319|42" README.md AGENTS.md CLAUDE.md Project_Architecture_Document.md wellness-hub_SKILL.md`).
 - Push ONLY via `docs/ssh_git_wrapper_v3.py` (dry-run, then push, then verify the remote ref; the key lives OUTSIDE the repo and is shredded after). Main branch only — no new branches, ever.
 
 ## §12 Lessons Learnt & How to Avoid Them
@@ -335,8 +335,7 @@ The flat scale (enforced by review; no ad-hoc `z-[9999]`):
 | Layer | Value | Where | Purpose |
 |---|---|---|---|
 | Topbar / glass header | z-40 | `src/components/layout/mobile-nav.tsx` | The sticky mobile header |
-| Sheet drawer + dialogs | z-50 | mobile-nav + `ui/dialog.tsx` + `ui/select.tsx` | The drawer and modal surfaces |
-| Dropdown portals | z-[60] | `ui/dropdown.tsx` + `ui/select.tsx` | Radix floating portals |
+| Sheet drawer + dialogs + select portals | z-50 | mobile-nav + `ui/dialog.tsx` + `ui/select.tsx` | The drawer, modal surfaces and the Radix select content (the reference ships z-50 — the scaffold-era z-[60] draft was corrected at WH-1; `ui/dropdown.tsx` retired at WH-4) |
 | Toasts | z-[100] | `ui/toast.tsx` | The notification portal — always on top |
 
 Conflict rule: nothing may exceed 100; a new overlay joins an existing layer, never invents a higher one.
@@ -376,7 +375,7 @@ Plus the ~60-entry v3 palette re-pin block (amber-50 `#fffbeb` → yellow-800 `#
 The domain contract lives in `src/types/index.ts` (mirrors `prisma/schema.prisma` — 14 models):
 
 - **`Result<T, E>`** — the envelope's type: `{ ok: true; data: T } | { ok: false; error: E }`.
-- **`User`** — id, email, name, avatarColor (default `#6366f1`), photoUrl?, role, the verification funnel fields, tokenVersion.
+- **`User`** — id, email, name, role (`"user"` — display-only, the reference's own account-tab value; fresh signups write it directly, no first-boot admin ladder), the verification funnel fields, tokenVersion (the CRM-era avatarColor/photoUrl columns retired at WH-4 — set but never rendered).
 - **Owned entities:** **`Workout`** (type/durationMinutes/intensity/caloriesBurned?/notes?/date) · **`MoodEntry`** (mood/energy 0–10/activities as JSON string?/gratitude?/reflection?) · **`Assignment`** (title/subject?/dueDate?/priority/estimatedHours?/status/completedAt?) · **`EventItem`** (title/description?/date/time "HH:mm"/category/location?) · **`StudyResource`** (title/subject/description?/type/examDate?/url?/tags JSON?/personalNotes?/rating 1–5?) · **`Reminder`** (title/details?/remindAt/type/priority/repeat/completed/completedAt?) · **`Goal`** (title/description?/category/frequency/targetValue/currentValue/unit/deadline?/points/status/completedAt?).
 - **`Badge`** (the catalog row) + earned rows via the API. **`RoutineStep`** · **`RoutineTemplate`** (with steps[]) · **`UserRoutine`** (templateId? nullable — custom routines allowed). **`Tutorial`**. **`UserPrefs`** — the theme singleton: themeMode (light/dark/auto), primaryColor, secondaryColor, fontFamily, sidebarStyle, cardStyle, animationLevel, notificationsEnabled, weeklyReminders.
 - **`DashboardData`** — the aggregate the dashboard route composes: the four stat values, recent activity, upcoming reminders/events.
@@ -405,7 +404,7 @@ The domain contract lives in `src/types/index.ts` (mirrors `prisma/schema.prisma
 | Streak math | `src/lib/wellness.ts` `currentStreak()` — date-keyed, forgiving (today-or-yesterday) |
 | The envelope | `src/lib/api.ts` — `ok` / `fail` / `ERR.*` / `parseBody` / `requireSession` / `isGuarded` |
 | The db-path seam | `src/lib/db-path.ts` (pinned: `tests/db-path.test.ts`) |
-| The rate limiter | `src/lib/rate-limit.ts` — login 10 / signup 10 / resend 5 / verify 20 / forgot 10 / reset 10 / uploads 20 per IP/15min |
+| The rate limiter | `src/lib/rate-limit.ts` — login 10 / signup 10 / resend 5 / verify 20 / forgot 10 / reset 10 per IP/15min (the uploads 20 window retired with the dead route at WH-4) |
 | The boot gate | `src/instrumentation.ts` → `src/lib/boot-env.ts` |
 | SEO surfaces | `src/app/sitemap.xml/route.ts` (14 routes) · `robots.txt/route.ts` · `manifest.json/route.ts` · `src/lib/site.ts` (`pageMetadata()` factory) |
 | The smoke ladder | `scripts/smoke-test.sh` — 14 checks incl. the boot-gate probe + artifact hygiene |

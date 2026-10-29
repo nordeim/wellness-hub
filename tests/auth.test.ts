@@ -55,7 +55,10 @@ describe("session tokens", () => {
   });
 
   it("exports the expected cookie name", () => {
-    expect(SESSION_COOKIE).toBe("neo_session");
+    // WH-4 (F-4): the de-NEO rename — the cookie carries the app's own
+    // namespace (the CRM-era neo_session retired; every live session died
+    // once at the rename, by design).
+    expect(SESSION_COOKIE).toBe("wellness_session");
   });
 });
 
@@ -110,7 +113,7 @@ describe("session token versioning (session-163)", () => {
     // the dev secret (unset AUTH_SECRET in the test environment).
     const payload = { uid: "user_123", iat: Date.now(), exp: Date.now() + 60_000 };
     const body = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
-    const sig = createHmac("sha256", "neo-crm-dev-only-insecure-secret").update(body).digest("hex");
+    const sig = createHmac("sha256", "wellness-hub-dev-only-insecure-secret").update(body).digest("hex");
     const parsed = verifySessionToken(`${body}.${sig}`);
     expect(parsed?.uid).toBe("user_123");
     expect(parsed?.v).toBe(0);
@@ -119,21 +122,21 @@ describe("session token versioning (session-163)", () => {
   it("rejects a non-integer version even under a valid signature", () => {
     const payload = { uid: "user_123", iat: Date.now(), exp: Date.now() + 60_000, v: "x" };
     const body = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
-    const sig = createHmac("sha256", "neo-crm-dev-only-insecure-secret").update(body).digest("hex");
+    const sig = createHmac("sha256", "wellness-hub-dev-only-insecure-secret").update(body).digest("hex");
     expect(verifySessionToken(`${body}.${sig}`)).toBeNull();
   });
 
   it("rejects a fractional version even under a valid signature", () => {
     const payload = { uid: "user_123", iat: Date.now(), exp: Date.now() + 60_000, v: 1.5 };
     const body = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
-    const sig = createHmac("sha256", "neo-crm-dev-only-insecure-secret").update(body).digest("hex");
+    const sig = createHmac("sha256", "wellness-hub-dev-only-insecure-secret").update(body).digest("hex");
     expect(verifySessionToken(`${body}.${sig}`)).toBeNull();
   });
 
   it("rejects a negative version even under a valid signature", () => {
     const payload = { uid: "user_123", iat: Date.now(), exp: Date.now() + 60_000, v: -1 };
     const body = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
-    const sig = createHmac("sha256", "neo-crm-dev-only-insecure-secret").update(body).digest("hex");
+    const sig = createHmac("sha256", "wellness-hub-dev-only-insecure-secret").update(body).digest("hex");
     expect(verifySessionToken(`${body}.${sig}`)).toBeNull();
   });
 
@@ -147,7 +150,7 @@ describe("session token versioning (session-163)", () => {
     expect(process.env.AUTH_SECRET).toBeUndefined();
     const payload = { uid: "pin_check", iat: Date.now(), exp: Date.now() + 60_000 };
     const body = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
-    const sig = createHmac("sha256", "neo-crm-dev-only-insecure-secret").update(body).digest("hex");
+    const sig = createHmac("sha256", "wellness-hub-dev-only-insecure-secret").update(body).digest("hex");
     const parsed = verifySessionToken(`${body}.${sig}`);
     expect(parsed?.uid).toBe("pin_check");
     expect(parsed?.v).toBe(0);

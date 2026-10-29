@@ -5,7 +5,7 @@
 import { PrismaClient } from "@prisma/client";
 import { runtimeDatabaseUrl } from "./db-path";
 
-const globalForPrisma = globalThis as unknown as { __neoCrmPrisma?: PrismaClient };
+const globalForPrisma = globalThis as unknown as { __wellnessPrisma?: PrismaClient };
 
 function createClient(): PrismaClient {
   const url = runtimeDatabaseUrl();
@@ -15,8 +15,8 @@ function createClient(): PrismaClient {
   });
 }
 
-export const db = globalForPrisma.__neoCrmPrisma ?? createClient();
+export const db = globalForPrisma.__wellnessPrisma ?? createClient();
 
 if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.__neoCrmPrisma = db;
+  globalForPrisma.__wellnessPrisma = db;
 }

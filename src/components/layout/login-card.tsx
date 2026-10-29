@@ -86,7 +86,7 @@ export function LoginCard({ mode = "signin" }: { mode?: Mode }) {
   // deliveries — the reset link the forgot-password response carries
   // (rendered in the sent view only when present) and the verification
   // code hint (signup/resend responses). Both degrade to nothing when a
-  // production deploy sets the NEO_DISABLE_* knobs — the sent card and
+  // production deploy sets the WELLNESS_DISABLE_* knobs — the sent card and
   // the verify view render exactly as before.
   const [resetUrl, setResetUrl] = React.useState<string | null>(null);
   const [verifyCodeHint, setVerifyCodeHint] = React.useState("");
@@ -535,7 +535,7 @@ export function LoginCard({ mode = "signin" }: { mode?: Mode }) {
                                 response carries the 6-digit code for the
                                 demo workflow (no mail transport); renders
                                 only when present, and never when the
-                                NEO_DISABLE_IN_APP_OTP knob is set. */}
+                                WELLNESS_DISABLE_IN_APP_OTP knob is set. */}
                             {verifyCodeHint && (
                               <p className="text-sm text-slate-500">
                                 Demo code:{" "}

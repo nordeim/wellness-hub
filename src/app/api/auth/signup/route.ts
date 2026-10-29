@@ -9,8 +9,6 @@ import { generateVerifyCode } from "@/lib/password";
 
 export const dynamic = "force-dynamic";
 
-const NAME_COLORS = ["#2563eb", "#0891b2", "#7c3aed", "#059669", "#d97706", "#dc2626", "#db2777"];
-
 /** Derives the account name from the email's local part — the reference's
  *  signup form collects NO name (Email / Password / Confirm Password only,
  *  DOM-verified), so the account carries the local part until edited. */
@@ -65,8 +63,6 @@ export async function POST(req: Request) {
       return ERR.BAD_REQUEST("A user with this email already exists");
     }
 
-    const count = await db.user.count();
-
     // Session-21 (S21-P5): signup no longer signs the account in — it mints
     // a 6-digit verification code and the login card swaps to the verify
     // view ("Verify your email", live-verified on the reference). The code
@@ -74,14 +70,17 @@ export async function POST(req: Request) {
     // expiry; a self-hosted deployment has no mail transport, so the code
     // is logged to the SERVER console for the demo workflow (never shipped
     // to the client, never committed).
+    // WH-4 (F-2): the role is the reference's own display value
+    // (user, live-probed on its account tab — role is display-only in
+    // both apps; no route gates on it). The CRM-era first-boot role
+    // ladder and its user-count feed retired here.
     const code = generateVerifyCode();
     const user = await db.user.create({
       data: {
         name,
         email,
         passwordHash: hashPassword(password),
-        avatarColor: NAME_COLORS[count % NAME_COLORS.length],
-        role: count === 0 ? "admin" : "rep",
+        role: "user",
         verificationCodeHash: hashVerificationCode(code),
         verificationAttempts: 0,
         verificationExpiresAt: new Date(Date.now() + VERIFICATION_TTL_MS),
@@ -93,9 +92,9 @@ export async function POST(req: Request) {
     // Session-163 (the digma ADR-014 port): the SELF-HOSTED in-app OTP
     // delivery — the code rides the response for existing demo workflows
     // (and the e2e scratch-account funnel) exactly as digma's register
-    // carries it. NEO_DISABLE_IN_APP_OTP=1 nulls it for production (an
+    // carries it. WELLNESS_DISABLE_IN_APP_OTP=1 nulls it for production (an
     // email service owns the delivery); the console log stays either way.
-    const inAppOtpEnabled = process.env.NEO_DISABLE_IN_APP_OTP !== "1";
+    const inAppOtpEnabled = process.env.WELLNESS_DISABLE_IN_APP_OTP !== "1";
     return ok({
       id: user.id,
       email: user.email,

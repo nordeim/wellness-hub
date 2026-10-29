@@ -462,39 +462,6 @@ export const prefsSchema = z.object({
   weeklyReminders: z.boolean({ message: "Weekly reminders must be a boolean" }).optional(),
 });
 
-/** The profile photo URL (the PUT three-state form): absent → undefined
- *  (keep); null/""/whitespace → null (the clear); a value must be the
- *  local uploads prefix or an https URL. */
-const photoUrlField = (message: string, sized: string) =>
-  z
-    .preprocess(
-      (v) => (v === undefined || v === null || (typeof v === "string" && v.trim() === "") ? null : v),
-      z.union(
-        [
-          z.null(),
-          z
-            .string({ message })
-            .trim()
-            .max(500, sized)
-            .refine((v) => v.startsWith("/api/uploads/") || v.startsWith("https://"), message),
-        ],
-        { error: message },
-      ),
-    )
-    .optional();
-
-export const profileUpdateSchema = z.object(
-  {
-    name: z
-      .string({ message: "Name must be at least 2 characters" })
-      .trim()
-      .min(2, "Name must be at least 2 characters")
-      .max(60, "Name must be reasonably sized"),
-    photoUrl: photoUrlField("Invalid photo URL", "Photo URL must be reasonably sized"),
-  },
-  { error: "Name must be at least 2 characters" },
-);
-
 // ---------------------------------------------------------------------------
 // Tutorial view counter (the Watch Now superset touch)
 // ---------------------------------------------------------------------------

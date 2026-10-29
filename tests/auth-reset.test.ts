@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 // literal pinned by a record comment alone is a vacuous pin. The surfaces:
 // - forgot-password: the no-enumeration 200 (same body known/unknown), the
 //   randomBytes(32) token, the 60-min TTL, the P2025-swallow, the
-//   P2024/P2028→503 family, the NEO_DISABLE_IN_APP_RESET knob.
+//   P2024/P2028→503 family, the WELLNESS_DISABLE_IN_APP_RESET knob.
 // - reset-password: the token-FIRST ordering, the atomic conditional
 //   updateMany consumption (token + live expiry in the WHERE, count===0 →
 //   the invalid-token 400), the tokenVersion increment (the eviction), the
@@ -62,9 +62,9 @@ describe("forgot-password route contract (session-163, digma S46/S64/S66/S124)",
     expect(src).not.toContain("resetToken: token,");
   });
 
-  it("gates the in-app resetUrl delivery behind NEO_DISABLE_IN_APP_RESET", () => {
+  it("gates the in-app resetUrl delivery behind WELLNESS_DISABLE_IN_APP_RESET", () => {
     const src = forgotRoute();
-    expect(src).toContain('process.env.NEO_DISABLE_IN_APP_RESET !== "1"');
+    expect(src).toContain('process.env.WELLNESS_DISABLE_IN_APP_RESET !== "1"');
   });
 
   it("renders the reset URL RELATIVE (the standalone-deploy cookie contract)", () => {

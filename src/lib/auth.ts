@@ -1,6 +1,6 @@
 // Hand-rolled session auth (no NextAuth, no JWTs — matches the scaffold
 // family conventions): scrypt password hashes + HMAC-SHA256 signed
-// stateless cookie (`neo_session`, 7-day TTL).
+// stateless cookie (`wellness_session`, 7-day TTL).
 //
 // Cookie payload: base64url(JSON{uid,iat,exp,v}) + "." + hex HMAC — the
 // `v` (session-163, the digma S67-A port) is the revocation dimension: a
@@ -18,10 +18,10 @@ export { hashPassword, timingEqualizerHash, verifyPassword };
 import { cookies } from "next/headers";
 import { db } from "./db";
 
-export const SESSION_COOKIE = "neo_session";
+export const SESSION_COOKIE = "wellness_session";
 export const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
-const DEV_SECRET = "neo-crm-dev-only-insecure-secret";
+const DEV_SECRET = "wellness-hub-dev-only-insecure-secret";
 
 // Session-63 (N-63g): the short-secret case used to fall back as
 // silently as the unset case — production would ship forgeable
@@ -151,10 +151,6 @@ export interface SessionUser {
   id: string;
   email: string;
   name: string;
-  avatarColor: string;
-  // Session-30 (S30-P3): carried so the topbar avatar can render the
-  // uploaded photo (the reference's profile_picture).
-  photoUrl: string | null;
   role: string;
 }
 
@@ -177,8 +173,6 @@ export async function getSessionUser(): Promise<SessionUser | null> {
     id: user.id,
     email: user.email,
     name: user.name,
-    avatarColor: user.avatarColor,
-    photoUrl: user.photoUrl,
     role: user.role,
   };
 }

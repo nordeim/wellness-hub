@@ -14,12 +14,12 @@
 //                   metadata/robots/sitemap/OG family would advertise
 //                   http://localhost:3000; dev is exempt — localhost IS
 //                   the dev origin)
-//   NEO_* unknown   any NEO_-prefixed var outside the closed 3-knob set
+//   WELLNESS_* unknown   any WELLNESS_-prefixed var outside the closed 3-knob set
 //                   -> WARNING (the scandihaven flag-typo guard, warn
 //                   form: a mistyped kill switch silently no-ops today)
-//   NEO_DISABLE_*   values outside ""/"1" -> WARNING (every other value
+//   WELLNESS_DISABLE_*   values outside ""/"1" -> WARNING (every other value
 //                   silently behaves as unset)
-//   NEO_PROXY_HOPS  unparsable/negative -> WARNING (the rate-limit seam
+//   WELLNESS_PROXY_HOPS  unparsable/negative -> WARNING (the rate-limit seam
 //                   already fails CLOSED onto 1 — the boot warning adds
 //                   the visibility)
 //
@@ -34,7 +34,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { applyBootEnvReport, bootEnvCheck, KNOWN_NEO_VARS } from "../src/lib/boot-env";
+import { applyBootEnvReport, bootEnvCheck, KNOWN_WELLNESS_VARS } from "../src/lib/boot-env";
 
 const root = join(import.meta.dirname, "..");
 const read = (p: string) => readFileSync(join(root, p), "utf8");
@@ -113,42 +113,42 @@ describe("session-170 (WP-3): the NEXT_PUBLIC_SITE_URL misconfig warning", () =>
   });
 });
 
-describe("session-170 (WP-3): the NEO_* flag-typo guard (the scandihaven port, warn form)", () => {
+describe("session-170 (WP-3): the WELLNESS_* flag-typo guard (the scandihaven port, warn form)", () => {
   it("the closed known set is the documented 3-knob family", () => {
-    expect([...KNOWN_NEO_VARS].sort()).toEqual([
-      "NEO_DISABLE_IN_APP_OTP",
-      "NEO_DISABLE_IN_APP_RESET",
-      "NEO_PROXY_HOPS",
+    expect([...KNOWN_WELLNESS_VARS].sort()).toEqual([
+      "WELLNESS_DISABLE_IN_APP_OTP",
+      "WELLNESS_DISABLE_IN_APP_RESET",
+      "WELLNESS_PROXY_HOPS",
     ]);
   });
 
-  it("an UNKNOWN NEO_* var warns (a mistyped kill switch would silently no-op)", () => {
-    const report = bootEnvCheck(env({ NEO_DISABLE_INAPP_OTP: "1" })); // the typo form
+  it("an UNKNOWN WELLNESS_* var warns (a mistyped kill switch would silently no-op)", () => {
+    const report = bootEnvCheck(env({ WELLNESS_DISABLE_INAPP_OTP: "1" })); // the typo form
     expect(report.warnings).toHaveLength(1);
-    expect(report.warnings[0]).toContain("NEO_DISABLE_INAPP_OTP");
+    expect(report.warnings[0]).toContain("WELLNESS_DISABLE_INAPP_OTP");
     expect(report.warnings[0]).toContain("known");
   });
 
   it("the KNOWN knobs at their documented values: no warning", () => {
-    const report = bootEnvCheck(env({ NEO_PROXY_HOPS: "2", NEO_DISABLE_IN_APP_OTP: "1" }));
+    const report = bootEnvCheck(env({ WELLNESS_PROXY_HOPS: "2", WELLNESS_DISABLE_IN_APP_OTP: "1" }));
     expect(report.warnings).toHaveLength(0);
   });
 
-  it("NEO_DISABLE_IN_APP_OTP with an off-vocabulary value warns (only ''/'1' are meaningful)", () => {
-    const report = bootEnvCheck(env({ NEO_DISABLE_IN_APP_OTP: "true" }));
+  it("WELLNESS_DISABLE_IN_APP_OTP with an off-vocabulary value warns (only ''/'1' are meaningful)", () => {
+    const report = bootEnvCheck(env({ WELLNESS_DISABLE_IN_APP_OTP: "true" }));
     expect(report.warnings).toHaveLength(1);
-    expect(report.warnings[0]).toContain("NEO_DISABLE_IN_APP_OTP");
+    expect(report.warnings[0]).toContain("WELLNESS_DISABLE_IN_APP_OTP");
     expect(report.warnings[0]).toContain("true");
   });
 
-  it("NEO_PROXY_HOPS unparsable warns (the seam fails closed onto 1 — the boot warning adds visibility)", () => {
-    const report = bootEnvCheck(env({ NEO_PROXY_HOPS: "abc" }));
+  it("WELLNESS_PROXY_HOPS unparsable warns (the seam fails closed onto 1 — the boot warning adds visibility)", () => {
+    const report = bootEnvCheck(env({ WELLNESS_PROXY_HOPS: "abc" }));
     expect(report.warnings).toHaveLength(1);
-    expect(report.warnings[0]).toContain("NEO_PROXY_HOPS");
+    expect(report.warnings[0]).toContain("WELLNESS_PROXY_HOPS");
   });
 
-  it("NEO_PROXY_HOPS negative warns the same way", () => {
-    const report = bootEnvCheck(env({ NEO_PROXY_HOPS: "-1" }));
+  it("WELLNESS_PROXY_HOPS negative warns the same way", () => {
+    const report = bootEnvCheck(env({ WELLNESS_PROXY_HOPS: "-1" }));
     expect(report.warnings).toHaveLength(1);
   });
 });

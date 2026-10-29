@@ -20,19 +20,19 @@
 //
 // WARN-THROW DISCIPLINE (the scandihaven posture): only the
 // forgeable-sessions case is fatal. The metadata-family misconfig
-// (NEXT_PUBLIC_SITE_URL) and the NEO_* toggle family warn — a bad
+// (NEXT_PUBLIC_SITE_URL) and the WELLNESS_* toggle family warn — a bad
 // toggle must never take a working deployment down, and dev/test boot
 // SOFT (the DX posture unchanged: the DEV fallback stays documented in
 // auth.ts; NODE_ENV !== "production" never fatals).
 
-/** The closed NEO_* knob set (the six-knob contract's 3 server knobs). */
-export const KNOWN_NEO_VARS: ReadonlySet<string> = new Set([
-  "NEO_PROXY_HOPS",
-  "NEO_DISABLE_IN_APP_OTP",
-  "NEO_DISABLE_IN_APP_RESET",
+/** The closed WELLNESS_* knob set (the six-knob contract's 3 server knobs). */
+export const KNOWN_WELLNESS_VARS: ReadonlySet<string> = new Set([
+  "WELLNESS_PROXY_HOPS",
+  "WELLNESS_DISABLE_IN_APP_OTP",
+  "WELLNESS_DISABLE_IN_APP_RESET",
 ]);
 
-/** The values the NEO_DISABLE_* kill-switches actually read ("1" = disable). */
+/** The values the WELLNESS_DISABLE_* kill-switches actually read ("1" = disable). */
 const DISABLE_KNOB_VALUES = new Set(["", "1"]);
 
 export interface BootEnvReport {
@@ -69,16 +69,16 @@ export function bootEnvCheck(env: Record<string, string | undefined>): BootEnvRe
     );
   }
 
-  // ---- The NEO_* family: the flag-typo guard (warn form) ----------------
+  // ---- The WELLNESS_* family: the flag-typo guard (warn form) -----------
   for (const key of Object.keys(env)) {
-    if (!key.startsWith("NEO_") || key === "NODE_ENV") continue;
-    if (!KNOWN_NEO_VARS.has(key)) {
+    if (!key.startsWith("WELLNESS_") || key === "NODE_ENV") continue;
+    if (!KNOWN_WELLNESS_VARS.has(key)) {
       warnings.push(
-        `[boot] Unknown NEO_* environment variable ${key} — the known knobs are: ${[...KNOWN_NEO_VARS].join(", ")}. A typo here silently no-ops (the closed set is read verbatim).`,
+        `[boot] Unknown WELLNESS_* environment variable ${key} — the known knobs are: ${[...KNOWN_WELLNESS_VARS].join(", ")}. A typo here silently no-ops (the closed set is read verbatim).`,
       );
     }
   }
-  for (const key of ["NEO_DISABLE_IN_APP_OTP", "NEO_DISABLE_IN_APP_RESET"]) {
+  for (const key of ["WELLNESS_DISABLE_IN_APP_OTP", "WELLNESS_DISABLE_IN_APP_RESET"]) {
     const value = env[key];
     if (value !== undefined && !DISABLE_KNOB_VALUES.has(value)) {
       warnings.push(
@@ -86,10 +86,10 @@ export function bootEnvCheck(env: Record<string, string | undefined>): BootEnvRe
       );
     }
   }
-  const hops = env.NEO_PROXY_HOPS;
+  const hops = env.WELLNESS_PROXY_HOPS;
   if (hops !== undefined && hops !== "" && !/^\d+$/.test(hops)) {
     warnings.push(
-      `[boot] NEO_PROXY_HOPS="${hops}" is unparsable — the rate-limit seam fails CLOSED onto hop 1 (a bad value never widens trust); fix the value to unset, 0, or an N ≥ 1.`,
+      `[boot] WELLNESS_PROXY_HOPS="${hops}" is unparsable — the rate-limit seam fails CLOSED onto hop 1 (a bad value never widens trust); fix the value to unset, 0, or an N ≥ 1.`,
     );
   }
 

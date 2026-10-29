@@ -56,8 +56,8 @@ export async function POST(req: Request) {
 
     // Session-163 (the digma ADR-014 port): the in-app OTP delivery —
     // the fresh code rides the response for the demo workflow (and the
-    // e2e resend funnel), NEO_DISABLE_IN_APP_OTP=1 gated.
-    const inAppOtpEnabled = process.env.NEO_DISABLE_IN_APP_OTP !== "1";
+    // e2e resend funnel), WELLNESS_DISABLE_IN_APP_OTP=1 gated.
+    const inAppOtpEnabled = process.env.WELLNESS_DISABLE_IN_APP_OTP !== "1";
     return ok({
       resent: true,
       message: verificationResentMessage(),

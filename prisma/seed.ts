@@ -476,7 +476,6 @@ async function main() {
     where: { email: "sepnetflix2023@outlook.com" },
     update: {
       name: "sepnetflix2023",
-      avatarColor: "#6366f1",
       role: "user",
       verificationCodeHash: null,
       verificationAttempts: 0,
@@ -488,7 +487,6 @@ async function main() {
       email: "sepnetflix2023@outlook.com",
       name: "sepnetflix2023",
       passwordHash: hashPassword("$Abcd1234"),
-      avatarColor: "#6366f1",
       role: "user",
     },
   });

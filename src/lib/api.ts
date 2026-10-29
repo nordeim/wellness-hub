@@ -69,10 +69,11 @@ export function isGuarded(x: { user: SessionUser } | { response: NextResponse })
  * Session-68 (F-68a2): the SAME ceiling + helper now gate the sessioned
  * CRUD family too — placed after requireSession, before the parse; the
  * honest CRUD bodies are asString-capped fields, far below the ceiling.
- * Session-72 (M-72c2) + session-73 (N-73a1): the family is THIRTEEN
- * routes (accounts/activities/contacts/events/leads x[root+[id]] +
- * settings + users + reset — the users PATCH joined at s72; this
- * comment's "12" enumeration was the s72 record's unlanded half). */
+ * Session-72 (M-72c2) + session-73 (N-73a1): the family wording was
+ * pinned to the CRM tree's route list. WH-4 (F-7): that stale
+ * enumeration retired — the wellness truth: EVERY JSON-parsing route
+ * parses through the seam (the 6-route auth ladder + the sessioned CRUD
+ * families; the route-census pin owns the family set). */
 export const MAX_AUTH_BODY_BYTES = 16 * 1024;
 
 /** True when the request DECLARES a body larger than the auth ceiling —

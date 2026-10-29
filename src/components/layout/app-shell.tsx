@@ -14,7 +14,6 @@ import {
   SHELL_LAYOUT,
 } from "@/lib/page-layout";
 import { APP_NAME } from "@/lib/constants";
-import type { User as AppUser } from "@/types";
 
 /**
  * App chrome — the reference's model: a `min-h-screen` row holds the
@@ -23,8 +22,12 @@ import type { User as AppUser } from "@/types";
  * reference's own sticky glass header (`bg-white/60 backdrop-blur-xl
  * border-b border-gray-100`) with the drawer trigger — no desktop topbar
  * exists (the reference's sidebar carries the whole nav).
+ *
+ * WH-4 (F-1): the `user` prop retired — the shell renders no user chip
+ * (the reference carries none); the store's `hydrate()` owns the session
+ * bootstrap, and the (app) layout's guard owns the auth decision.
  */
-export function AppShell({ user, children }: { user: AppUser; children: React.ReactNode }) {
+export function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
   const hydrate = useWellnessStore((s) => s.hydrate);
 
