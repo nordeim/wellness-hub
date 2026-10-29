@@ -198,8 +198,12 @@ it("WH-6: no duplicated adjacent return statements in src", () => {
 //   - This pin's own text stays OUT of the corpus (its comments narrate
 //     the retirement classes and would otherwise "consume" the names).
 
-/** The census modules — where F-1 actually lived: the layout-constant and
- *  domain-vocab seams that feed components. */
+/** The census modules — where the dead-export classes actually lived: the
+ * layout-constant and domain-vocab seams that feed components (WH-7's
+ * set), widened at WH-8 to every remaining lib seam module + the theme
+ * store (the four same-module data feeds the WH-7 set stopped one layer
+ * short of). api.ts stays out — its surface owns a dedicated canonical-set
+ * check above; types are exempt by the WH-7 decision. */
 const VALUE_CENSUS_MODULES = [
   "src/lib/page-layout.ts",
   "src/lib/constants.ts",
@@ -207,6 +211,19 @@ const VALUE_CENSUS_MODULES = [
   "src/lib/wellness.ts",
   "src/lib/site.ts",
   "src/lib/schemas.ts",
+  "src/lib/auth.ts",
+  "src/lib/badges-server.ts",
+  "src/lib/boot-env.ts",
+  "src/lib/chunk-recovery.ts",
+  "src/lib/db.ts",
+  "src/lib/db-path.ts",
+  "src/lib/login-reset.ts",
+  "src/lib/password.ts",
+  "src/lib/rate-limit.ts",
+  "src/lib/utils.ts",
+  "src/lib/verification.ts",
+  "src/lib/verification-server.ts",
+  "src/stores/theme-store.ts",
   "src/components/shared/page-parts.tsx",
 ] as const;
 
@@ -219,14 +236,18 @@ function exportedValues(source: string): string[] {
 }
 
 it("WH-7: every exported value in the census modules has a consumer", () => {
-  // The consumer corpus: every ts/tsx file under src/ and tests/, minus
-  // each module's own text (same-module consumption does not count — that
-  // is what the `export` keyword un-cures in the data-feed class) and
-  // minus this pin's own text (the class narration above would otherwise
+  // The consumer corpus: every ts/tsx file under src/, tests/, scripts/
+  // and prisma/ (the seed and the CLI wrappers are production consumers
+  // of the lib seam — runtimeDatabaseUrl, hashPassword, db), minus each
+  // module's own text (same-module consumption does not count — that is
+  // what the `export` keyword un-cures in the data-feed class) and minus
+  // this pin's own text (the class narration above would otherwise
   // consume the very names it documents).
   const corpusFiles: string[] = [];
   collect(join(REPO_ROOT, "src"), corpusFiles, [".ts", ".tsx"]);
   collect(join(REPO_ROOT, "tests"), corpusFiles, [".ts", ".tsx"]);
+  collect(join(REPO_ROOT, "scripts"), corpusFiles, [".ts"]);
+  collect(join(REPO_ROOT, "prisma"), corpusFiles, [".ts"]);
   const SELF = "tests/src-census.test.ts";
   const corpus = new Map<string, string>();
   for (const file of corpusFiles) {
@@ -250,6 +271,126 @@ it("WH-7: every exported value in the census modules has a consumer", () => {
   expect(
     dead,
     "exported values with zero consumers anywhere (production, tests, scripts) — the F-1 class: retire the value, or if it is a same-module data feed, drop the export keyword",
+  ).toEqual([]);
+});
+
+// ---- WH-8: the store-member + ui-export liveness censuses ------------------
+//
+// WH-8 found SIX dead members inside WellnessState (two write-only state
+// fields — `user` (nothing read it since WH-4's user-chip retirement; the
+// Profile page's user arrives as a server prop), `prefs` (its only writer
+// was the dead fetchPrefs; the theme store owns the prefs surface through
+// its own /api/prefs client) — and four zero-call-site actions:
+// refreshUser, fetchPrefs, updateWorkout, updateMoodEntry) plus SEVEN dead
+// ui-module exports (DialogPortal, DialogClose, DialogFooterWide, Textarea,
+// SelectGroup, SelectLabel, SelectSeparator — the ui layer's export blocks
+// are invisible to the WH-7 value census, which reads `export const/
+// function` declarations, not `export { … }` blocks).
+//
+// Design (the fake-consumer lesson): the store census is EXTRACTION-based —
+// it reads actual useWellnessStore call sites (destructure names + selector
+// member accesses) in production files outside the store. A word-grep
+// census false-negatives `user` (the word is everywhere) and false-positives
+// on string literals (route-census's "prefs" API-family entry). Tests stay
+// OUT of this corpus — the WH-4 doctrine: tests pin modules, they do not
+// keep them alive. The ui-export census keeps the WH-7 value-census corpus
+// design (src + tests + scripts + prisma — a test-imported export is alive;
+// retirement is a conscious same-commit act).
+
+/** Extract the member names of WellnessState from the store's source. */
+function wellnessStateMembers(source: string): string[] {
+  const iface = source.match(/interface WellnessState \{([\s\S]*?)\n\}/);
+  if (!iface) throw new Error("WellnessState interface not found");
+  const body = iface[1].replace(/\/\/[^\n]*/g, "");
+  return [...body.matchAll(/^\s{2}(\w+):/gm)].map((m) => m[1]);
+}
+
+it("WH-8: every WellnessState member is consumed at a useWellnessStore call site", () => {
+  const storePath = join(REPO_ROOT, "src", "stores", "wellness-store.ts");
+  const storeSrc = readFileSync(storePath, "utf8");
+  const members = wellnessStateMembers(storeSrc);
+  // The interface parses (state fields + actions; comments stripped).
+  expect(members.length).toBeGreaterThan(20);
+
+  // The consumed set: destructures (`const { a, b } = useWellnessStore()`)
+  // and selector accesses (`useWellnessStore((s) => s.x)`) in production
+  // files outside the store itself.
+  const consumed = new Set<string>();
+  const files: string[] = [];
+  collect(join(REPO_ROOT, "src"), files, [".ts", ".tsx"]);
+  for (const file of files) {
+    if (file === storePath) continue;
+    const src = readFileSync(file, "utf8");
+    if (!src.includes("useWellnessStore")) continue;
+    for (const m of src.matchAll(/\{([^{}]+)\}\s*=\s*useWellnessStore\s*\(\s*\)/g)) {
+      for (let raw of m[1].split(",")) {
+        raw = raw.trim().split(":")[0].trim();
+        if (/^\w+$/.test(raw)) consumed.add(raw);
+      }
+    }
+    for (const m of src.matchAll(
+      /useWellnessStore\s*\(\s*\(\s*(\w+)\s*\)\s*=>\s*([^\n)]*)/g,
+    )) {
+      for (const acc of m[2].matchAll(new RegExp(`\\b${m[1]}\\.(\\w+)`, "g"))) {
+        consumed.add(acc[1]);
+      }
+    }
+  }
+
+  const dead = members.filter((m) => !consumed.has(m));
+  expect(
+    dead,
+    "WellnessState members with zero production consumers at useWellnessStore call sites — retire them (write-only fields and zero-call-site actions are drift liability; the WH-4 user-chip retirement made `user` write-only, the theme store's own /api/prefs client made the prefs slice write-only)",
+  ).toEqual([]);
+});
+
+it("WH-8: every ui-module export has a consumer outside its own module", () => {
+  // The six ui primitives (the WH-4 ui-module census set) export through
+  // `export { … }` blocks — invisible to the WH-7 value census's
+  // declaration regex. This check walks the export blocks.
+  const uiDir = join(REPO_ROOT, "src", "components", "ui");
+  const modules = readdirSync(uiDir)
+    .filter((name) => /\.tsx?$/.test(name))
+    .sort();
+
+  // The consumer corpus: src + tests + scripts + prisma, minus each
+  // module's own text (same-module consumption does not count) and minus
+  // this pin's own text (its narration would consume the names).
+  const corpusFiles: string[] = [];
+  collect(join(REPO_ROOT, "src"), corpusFiles, [".ts", ".tsx"]);
+  collect(join(REPO_ROOT, "tests"), corpusFiles, [".ts", ".tsx"]);
+  collect(join(REPO_ROOT, "scripts"), corpusFiles, [".ts"]);
+  collect(join(REPO_ROOT, "prisma"), corpusFiles, [".ts"]);
+  const SELF = "tests/src-census.test.ts";
+  const corpus = new Map<string, string>();
+  for (const file of corpusFiles) {
+    const key = file.replace(REPO_ROOT + "/", "");
+    if (key === SELF) continue;
+    corpus.set(key, readFileSync(file, "utf8"));
+  }
+
+  const dead: string[] = [];
+  for (const mod of modules) {
+    const rel = `src/components/ui/${mod}`;
+    const text = corpus.get(rel);
+    if (!text) throw new Error(`ui module missing from corpus: ${rel}`);
+    const block = text.match(/export \{([^}]+)\}/);
+    const names = (block ? block[1] : "")
+      .split(",")
+      .map((n) => n.trim().split(/\s+as\s+/)[0].trim())
+      .filter((n) => /^\w+$/.test(n));
+    for (const name of names) {
+      const re = new RegExp(`\\b${name}\\b`);
+      const consumed = [...corpus.entries()].some(([file, src]) => {
+        if (file === rel) return false;
+        return re.test(src);
+      });
+      if (!consumed) dead.push(`${rel}: ${name}`);
+    }
+  }
+  expect(
+    dead,
+    "ui-module exports with zero consumers anywhere (production, tests, scripts) — retire them; a re-export nobody imports is the F-5 class (WH-4 pinned module liveness, WH-7 the lib value surface; this pin walks the ui export blocks)",
   ).toEqual([]);
 });
 

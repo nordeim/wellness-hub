@@ -18,7 +18,6 @@ import type {
   StudyResource,
   Tutorial,
   User,
-  UserPrefs,
   UserRoutine,
   Workout,
 } from "@/types";
@@ -64,8 +63,10 @@ export interface AchievementsData {
 }
 
 export interface WellnessState {
-  // session
-  user: User | null;
+  // session bootstrap flag (the auth decision is the (app) layout's
+  // server guard; a page needing the session user takes it as a server
+  // prop — the Profile page's pattern. No user slice: WH-8 retired the
+  // write-only field nothing read since WH-4's user-chip retirement.)
   hydrated: boolean;
 
   // domain slices
@@ -81,12 +82,10 @@ export interface WellnessState {
   tutorials: Tutorial[];
   achievements: AchievementsData | null;
   dashboard: DashboardData | null;
-  prefs: UserPrefs | null;
 
   // actions
   hydrate: () => Promise<void>;
   logout: () => Promise<void>;
-  refreshUser: () => Promise<void>;
   fetchWorkouts: () => Promise<void>;
   fetchMoodEntries: () => Promise<void>;
   fetchAssignments: () => Promise<void>;
@@ -99,14 +98,11 @@ export interface WellnessState {
   fetchTutorials: () => Promise<void>;
   fetchAchievements: () => Promise<void>;
   fetchDashboard: () => Promise<void>;
-  fetchPrefs: () => Promise<void>;
 
   createWorkout: (input: Record<string, unknown>) => Promise<Result<Workout, string>>;
-  updateWorkout: (id: string, input: Record<string, unknown>) => Promise<Result<Workout, string>>;
   deleteWorkout: (id: string) => Promise<Result<null, string>>;
 
   createMoodEntry: (input: Record<string, unknown>) => Promise<Result<MoodEntry, string>>;
-  updateMoodEntry: (id: string, input: Record<string, unknown>) => Promise<Result<MoodEntry, string>>;
   deleteMoodEntry: (id: string) => Promise<Result<null, string>>;
 
   createAssignment: (input: Record<string, unknown>) => Promise<Result<Assignment, string>>;
@@ -166,7 +162,6 @@ export const useWellnessStore = create<WellnessState>()((set, get) => {
   });
 
   return {
-    user: null,
     hydrated: false,
 
     workouts: [],
@@ -181,30 +176,30 @@ export const useWellnessStore = create<WellnessState>()((set, get) => {
     tutorials: [],
     achievements: null,
     dashboard: null,
-    prefs: null,
 
     hydrate: async () => {
       const token = sessionWriteToken;
       const [me] = await Promise.all([call<User>("/api/auth/me")]);
-      if (!me.ok) {
-        guardedSet(() => set({ hydrated: true }), token);
-        return;
+      guardedSet(() => set({ hydrated: true }), token);
+      // The me probe only gates the catalog bootstrap (a dead session
+      // hydrates the flag and stops — pages render their empty lists
+      // instead of loading forever). Content catalogs load once per
+      // session; per-user slices stay lazy (each page fetches its own
+      // on mount). WH-8: the write-only `user` slice retired with this
+      // convergence — the store-member census owns the liveness class.
+      if (me.ok) {
+        await Promise.all([
+          get().fetchRoutineTemplates(),
+          get().fetchTutorials(),
+          get().fetchDashboard(),
+        ]);
       }
-      guardedSet(() => set({ user: me.data, hydrated: true }), token);
-      // Content catalogs load once per session; per-user slices stay
-      // lazy (each page fetches its own on mount).
-      await Promise.all([
-        get().fetchRoutineTemplates(),
-        get().fetchTutorials(),
-        get().fetchDashboard(),
-      ]);
     },
 
     logout: async () => {
       sessionWriteToken++;
       await call("/api/auth/logout", { method: "POST" });
       set({
-        user: null,
         workouts: [],
         moodEntries: [],
         assignments: [],
@@ -215,14 +210,7 @@ export const useWellnessStore = create<WellnessState>()((set, get) => {
         routines: [],
         achievements: null,
         dashboard: null,
-        prefs: null,
       });
-    },
-
-    refreshUser: async () => {
-      const token = sessionWriteToken;
-      const res = await call<User>("/api/auth/me");
-      if (res.ok) guardedSet(() => set({ user: res.data }), token);
     },
 
     fetchWorkouts: async () => {
@@ -289,11 +277,6 @@ export const useWellnessStore = create<WellnessState>()((set, get) => {
       const res = await call<DashboardData>("/api/dashboard");
       if (res.ok) guardedSet(() => set({ dashboard: res.data }), token);
     },
-    fetchPrefs: async () => {
-      const token = sessionWriteToken;
-      const res = await call<UserPrefs>("/api/prefs");
-      if (res.ok) guardedSet(() => set({ prefs: res.data }), token);
-    },
 
     ...(() => {
       const workouts = crud<Workout>("/api/workouts", async () => {
@@ -330,10 +313,8 @@ export const useWellnessStore = create<WellnessState>()((set, get) => {
       });
       return {
         createWorkout: workouts.create,
-        updateWorkout: workouts.update,
         deleteWorkout: workouts.remove,
         createMoodEntry: moods.create,
-        updateMoodEntry: moods.update,
         deleteMoodEntry: moods.remove,
         createAssignment: assignments.create,
         updateAssignment: assignments.update,

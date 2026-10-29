@@ -54,7 +54,7 @@ function shade(hex: string, factor: number): string {
 
 export type ThemeData = Omit<ThemeState, "setTheme" | "reset">;
 
-export function applyTheme(s: ThemeData) {
+function applyTheme(s: ThemeData) {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
   root.style.setProperty("--color-primary", s.primaryColor);

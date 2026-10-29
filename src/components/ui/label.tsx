@@ -11,9 +11,11 @@ function Label({ className, ...props }: React.ComponentProps<typeof LabelPrimiti
     <LabelPrimitive.Root
       // Session-13 (S13-P13): the STOCK shadcn Label — `text-sm font-medium
       // leading-none peer-disabled:cursor-not-allowed
-      // peer-disabled:opacity-70` (reference class dump on the New
-      // Account dialog, 14px). Ours shipped a 12px text-xs custom with a
-      // /80 foreground wash.
+      // peer-disabled:opacity-70` (reference class dump on the reference's
+      // create-dialog labels, 14px — the same Label face the wellness
+      // module dialogs ship; the CRM-era "New Account" measurement-site
+      // narration retired at WH-8). Ours shipped a 12px text-xs custom
+      // with a /80 foreground wash.
       className={cn(
         "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
         className,

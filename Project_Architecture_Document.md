@@ -305,7 +305,7 @@ wellness-hub/
 │   │   ├── wellness-store.ts # ALL server state; call() envelope client
 │   │   └── theme-store.ts    # CSS-variable writer + UserPrefs sync
 │   └── types/               # shared domain types
-├── tests/                   # Vitest *.test.ts (21 suites, 309 checks)
+├── tests/                   # Vitest *.test.ts (21 suites, 312 checks)
 │   └── e2e/                 # Playwright *.spec.ts (42 checks) + setups
 ├── scripts/
 │   ├── smoke-test.sh        # 14-check ladder against the standalone artifact
@@ -547,7 +547,7 @@ WCAG AA in light mode; dark mode inverts via the `.dark` overrides in
 | Production boots refuse weak secrets | `instrumentation.ts` → `boot-env.ts`: missing/short `AUTH_SECRET` = no serve |
 | Dead attack surface retired | The upload/users route families (zero consumers, no reference surface) retired at WH-4 — the route-census pin (`tests/route-census.test.ts`) locks the 15-family API set against re-introduction |
 | CSRF posture | Cookie is SameSite=Lax; mutating routes are POST-only JSON with the content-type gate (the e2e CSRF probe pins it) |
-| Dependency advisories triaged | Re-triaged each ship round (2026-10-29, WH-4): all remaining advisories dev-toolchain transitive, zero runtime request-path exposure; the never-imported jspdf (and its dompurify chain) retired at WH-3, four more orphaned packages at WH-4 — the dead-dep census pin (`tests/dead-deps.test.ts`) keeps the tree free of zero-import packages |
+| Dependency advisories triaged | ZERO since WH-8 (2026-10-30): the four package.json `overrides` (vite 8.3.5, deepmerge-ts 8.0.2, source-map-js 1.2.2, zod 4.6.7) cleared the nine dev-toolchain advisories the WH-4..WH-7 rounds had triaged as accepted; the lockfile-resolution pin (`tests/dead-deps.test.ts`) carries the posture inside the offline gate; `bun audit` re-triages at its periodic cadence outside the gate |
 
 ### 6.2 Security Utilities
 
@@ -600,14 +600,14 @@ No queues, workers or cron. Utility services worth naming:
 |----------|-------|--------|----------|-----------|
 | Unit — auth seams (password, verification, reset, contract, rate limit, boot-env) | 6 | 109 | `tests/auth*.test.ts`, `password-seam`, `rate-limit`, `boot-env` | Vitest |
 | Unit — wellness domain (streaks, points, badges, codecs, schemas, stats, helpers, theme) | 5 | 89 | `tests/wellness-*.test.ts` | Vitest |
-| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census, route/ui census, signup role, docs-counts lockstep, src-surface census) | 10 | 133 | `tests/*.test.ts` | Vitest |
+| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep, src-surface census + store/ui-export censuses) | 10 | 136 | `tests/*.test.ts` | Vitest |
 | E2E — auth ladder (login wall, lockout, reset funnel, revocation) | 1 spec | 11 | `tests/e2e/auth.spec.ts` | Playwright |
 | E2E — mobile drawer battery | 1 spec | 6 | `tests/e2e/mobile-navigation.spec.ts` | Playwright |
 | E2E — shell (nav, dual-case routes, quick actions) | 1 spec | 6 | `tests/e2e/shell.spec.ts` | Playwright |
 | E2E — auth setup project (one-time demo login; shares the cookie via storageState) | 1 setup | 1 | `tests/e2e/auth.setup.ts` | Playwright |
 | E2E — CRUD cycles + reset-password funnel | 2 specs | 18 | `tests/e2e/wellness-crud.spec.ts`, `reset-password.spec.ts` | Playwright |
 
-Totals: **309 unit checks / 21 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
+Totals: **312 unit checks / 21 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
 
 ### 8.2 Test Patterns
 
@@ -634,11 +634,11 @@ docs, not just the code.
 
 - `bun run lint` → 0 warnings
 - `bun run typecheck` → clean
-- `bun run test` → 309/309
+- `bun run test` → 312/312
 - `bun run build` → succeeds (the type gate)
 - `bun run smoke` → 14/14
 - `CI=1 bun run test:e2e` → 42/42
-- `bun audit` (periodic, outside the gate) → re-triaged in §11
+- `bun audit` (periodic, outside the gate) → ZERO since WH-8 (§11)
 - Screenshot/parity pass if ANY visual surface changed
 
 ---
@@ -731,7 +731,7 @@ spec `CI=1 bunx playwright test tests/e2e/<file>`.
 | Priority | Issue | Impact | Status |
 |----------|-------|--------|--------|
 | — | ~~jspdf → dompurify advisory chain~~ | RETIRED at WH-3 — jspdf was a zero-import CRM residue (no PDF export ever shipped in the wellness tree; the reference carries no export UI either — live-probed); removing it removed the chain entirely, and `tests/dead-deps.test.ts` pins the dep tree | Closed (retired) |
-| LOW | Remaining `bun audit` advisories | 9 (4 high / 4 moderate / 1 low — re-triaged 2026-10-29, the WH-7 round), ALL dev-toolchain transitive (prisma CLI, vitest/vite, eslint plugins — the nested zod@4.6.5 copy, postcss); zero runtime request-path exposure (our runtime zod is 4.6.7 — not in the GHSA-mrhx-c7xc-m3w5 range; the affected copy is the eslint-plugin dev chain, no patched target above 4.6.7 exists; every runtime array schema carries `.max(20)`, structurally blocking the advisory's exploit class); re-triage each ship round (no mid-rotation bumps posture) | Accepted posture |
+| LOW | ~~Remaining `bun audit` advisories~~ | ZERO since WH-8 (2026-10-30): the four package.json `overrides` — vite 8.3.5 (the 6-advisory vite/launch-editor family), deepmerge-ts 8.0.2 (the prisma CLI chain, verified live through db:generate/push/seed/census), source-map-js 1.2.2 (postcss, in-range), zod 4.6.7 (the eslint-plugin peer copy joins the direct dep — one zod, 4.6.7) — all registry-latest on 2026-10-30; the superseded WH-7 posture ("9 accepted, all dev-toolchain, no patched zod target above 4.6.7") aged out when 4.6.7 became the fix target for the last in-range copy too. The lockfile-resolution pin in `tests/dead-deps.test.ts` holds the four resolutions offline; a new advisory flips the pin literals + the overrides in the same commit | Closed (zero via overrides) |
 | LOW | The lockfile's stale `"activity-map"` workspace name (`bun.lock:6` vs package.json `"wellness-hub"`) | Inert carried metadata from a pre-history workspace; probed at WH-4 — `bun install` (including the post-`bun remove` clean reinstall) does NOT sync the name, and a full lockfile regen risks semver drift for zero functional gain | Accepted posture (inert metadata) |
 | LOW | Google OAuth button | Visible for parity but reports "not configured on this deployment" — no OAuth credentials ship by design | Intentional |
 | LOW | "Watch Video" links open placeholder URLs | The reference's own tutorial/video URLs are placeholders (`example-*`); we open them in a new tab with identical behavior | Intentional parity |

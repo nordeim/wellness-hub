@@ -13,9 +13,10 @@ export default function NotFound() {
 // ("This Page Does Not Exist | Wellness Hub") is a PRE-DRIFT decode — the
 // reference's CURRENT build (bundle 46bc2d9c, live-verified at both
 // contexts, 3s settles) ships bare "Wellness Hub" on its 404, and the title
-// machinery is byte-equal on every real route (both ship bare "Wellness Hub"
-// on /dashboard — the s10 pins stand; "Accounts | Wellness Hub" on /accounts;
-// "About | Wellness Hub" on /about). The metadata export RETIRES: the root
+// machinery is byte-equal on every real route (both ship the bare app name
+// on the dashboard; every inner route pipes — "Routines | EvolveWell" is
+// the WH-8 probe form; the CRM-era /accounts + /about examples retired
+// with the routes they named). The metadata export RETIRES: the root
 // layout's title.default "Wellness Hub" renders, byte-equal two-app.
 //
 // Session-194 (D-194a5): the 404 is SESSION-INDEPENDENT by design — no

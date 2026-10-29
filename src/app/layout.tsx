@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   title: {
     default: "Wellness Hub",
     // Session-10 (S10-10): the reference's separator is a pipe
-    // ("Accounts | Wellness Hub" — document.title probes on all 10 routes).
+    // ("Routines | EvolveWell" — document.title probes on its routes).
     template: "%s | Wellness Hub",
   },
   description: SITE_DESCRIPTION,

@@ -19,7 +19,7 @@ import { cookies } from "next/headers";
 import { db } from "./db";
 
 export const SESSION_COOKIE = "wellness_session";
-export const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days (same-module feed; WH-8 un-exported — the value census owns the liveness class)
 
 const DEV_SECRET = "wellness-hub-dev-only-insecure-secret";
 

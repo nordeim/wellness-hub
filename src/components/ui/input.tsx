@@ -1,5 +1,5 @@
 import * as React from "react";
-import { DIALOG_TEXTAREA, INPUT_BASE } from "@/lib/page-layout";
+import { INPUT_BASE } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
@@ -26,18 +26,8 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   );
 }
 
-function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
-  return (
-    <textarea
-      // Session-10 (S10-2): transparent bg + ink + placeholder tokens like
-      // the reference's stock textarea (no bg/text color classes there).
-      // Session-15 (S15-P12/P13): the reference's dialog Description
-      // textareas ship `min-h-[60px] rounded-md` (class dump on the live
-      // Event/Activity dialogs) — ours had min-h-[72px] rounded-lg.
-      className={cn(DIALOG_TEXTAREA, className)}
-      {...props}
-    />
-  );
-}
+// WH-8 (F-5): the Textarea wrapper retired — zero importers since the
+// build commit (no wellness surface renders a textarea; the module
+// dialogs ride Input/Select). The ui-export census owns the class.
 
-export { Input, Textarea };
+export { Input };

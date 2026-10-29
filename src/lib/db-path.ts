@@ -41,7 +41,7 @@ import { existsSync, mkdirSync, readFileSync } from "fs";
 import { dirname, join, resolve } from "path";
 import { fileURLToPath } from "url";
 
-export const DEFAULT_DATABASE_URL = "file:../db/custom.db";
+const DEFAULT_DATABASE_URL = "file:../db/custom.db"; // same-module feed (the fallback below); WH-8 un-exported — the value census owns the liveness class
 
 function repoRootFromModule(): string | null {
   try {

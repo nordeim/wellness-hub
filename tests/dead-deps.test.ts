@@ -109,3 +109,54 @@ it("WH-3 (F-1): the toolchain whitelist carries a reason for every entry", () =>
     expect(reason.trim().length, `${name} needs a non-empty whitelist reason`).toBeGreaterThan(10);
   }
 });
+
+// WH-8 (F-3): the lockfile-resolution pin. `bun audit` needs the network,
+// so the gate cannot run it — but the lockfile's RESOLVED versions are the
+// advisory posture, offline-readable. The WH-8 overrides took the tree
+// from 9 accepted dev-toolchain advisories to ZERO:
+//
+//   vite 8.3.0 -> 8.3.5       the 6-advisory vite/launch-editor family
+//                             (GHSA-9jrq-w75r-8gcw, GHSA-rq7h-c2jc-7f22,
+//                             GHSA-698v-4r3x-3vcv, GHSA-r825-w8mm-5pxw,
+//                             GHSA-587h-7wmj-h5pm, GHSA-vfpm-58rq-9qcg)
+//   deepmerge-ts 7.1.5 -> 8.0.2  GHSA-ggr8-5vv4-36mx (the prisma CLI chain)
+//   source-map-js 1.2.1 -> 1.2.2 GHSA-68fv-2mgg-jv7q (postcss's copy)
+//   zod (nested 4.6.5) -> 4.6.7  GHSA-mrhx-c7xc-m3w5 (the eslint-plugin peer
+//                             copy joins the direct dep — one zod, 4.6.7)
+//
+// This pin asserts those resolutions stay: an override removal, a lockfile
+// regen onto a vulnerable range, or a reintroduced nested zod trips the
+// unit gate — the posture is a TESTED contract, not a doc claim. (The
+// s198 dompurify precedent from the chassis, generalized to the four
+// override targets.) Registry re-triage still happens at `bun audit`'s
+// cadence; when a NEW advisory lands, the fix flips these literals and
+// the overrides in the same commit.
+
+/** The WH-8 override resolutions — the advisory-zero posture. */
+const PINNED_RESOLUTIONS = {
+  vite: "8.3.5",
+  "deepmerge-ts": "8.0.2",
+  "source-map-js": "1.2.2",
+  zod: "4.6.7",
+} as const;
+
+it("WH-8 (F-3): the lockfile resolves the advisory-zero versions", () => {
+  const lock = readFileSync(join(REPO_ROOT, "bun.lock"), "utf8");
+
+  // The resolution table form: "name": ["name@X.Y.Z", …
+  for (const [name, version] of Object.entries(PINNED_RESOLUTIONS)) {
+    const re = new RegExp(`"${name}": \\["${name}@${version}"`);
+    expect(
+      re.test(lock),
+      `bun.lock must resolve ${name} at ${version} (the WH-8 advisory-zero override) — found no \\"${name}@${version}\\" resolution`,
+    ).toBe(true);
+  }
+
+  // zod resolves at exactly ONE version: the 4.6.7 direct dep, with no
+  // nested 4.6.x copy surviving (the first-match form would pass a tree
+  // that still carries the vulnerable nested copy — the s198 nested-copy
+  // lesson).
+  const zodResolutions = [...lock.matchAll(/"zod@([\d.]+)"/g)].map((m) => m[1]);
+  expect(zodResolutions.length, "exactly one zod resolution (the direct 4.6.7 — the eslint-plugin peer joins it via the override)").toBe(1);
+  expect(zodResolutions[0]).toBe("4.6.7");
+});

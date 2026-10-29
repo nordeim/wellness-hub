@@ -4,14 +4,17 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { TABS_PILL, TABS_SEGMENTED } from "@/lib/page-layout";
 
-// Native-ARIA tab strip. `variant="underline"` matches the reference's
-// plain text tabs; `variant="segmented"` renders the segmented control
-// used by the Activities priority tabs and the Settings tabs — the
-// reference track is `h-9 grid w-full grid-cols-{n} rounded-lg bg-muted
-// p-1 text-muted-foreground` with an equal-width column per tab and the
-// active tab a raised white pill; `variant="pill"` renders the Reports
-// tab bar — white bordered container `grid grid-cols-2 lg:grid-cols-{n}`,
-// active tab `bg-blue-50 text-blue-700`.
+// Native-ARIA tab strip with three track variants: `underline` (the
+// plain text tabs — API surface, no current consumer), `segmented` (the
+// equal-width grid control — the Profile page's Appearance/Account/
+// Preferences strip; the reference track is `h-9 grid w-full
+// grid-cols-{n} rounded-lg bg-muted p-1 text-muted-foreground` with an
+// equal-width column per tab and the active tab a raised white pill) and
+// `pill` (the white bordered container — API surface, no current
+// consumer; the active tab `bg-blue-50 text-blue-700` class pair it was
+// extracted from never shipped a wellness page). WH-8 (F-2): the
+// CRM-era consumer narrations retired — Activities/Settings/Reports are
+// pages this domain never shipped; the Profile strip is the live face.
 //
 // Session-12 (S12-P4): the tracks carry text-muted-ink (the reference's
 // tablist text-muted-foreground — inactive tabs INHERIT #737373 instead
@@ -32,18 +35,18 @@ import { TABS_PILL, TABS_SEGMENTED } from "@/lib/page-layout";
 // (selection follows focus). This component now wires the same contract:
 // `useId()` generates the trigger/panel id pair, the component renders
 // the reference's wrapper anatomy (`<div class=…>[tablist, panels…]` —
-// the wrapper className is page-specific: space-y-6 on settings/reports,
-// bare on activities where it nests inside the toolbar), and `TabsPanel`
-// renders the wired shells as the wrapper's children. Our roving tabindex
-// (selected tab = 0) remains the documented superset over the reference's
-// all-=-1 platform defect.
+// the wrapper className is page-specific: `mb-6 max-w-xl` on the Profile
+// page, the only live call site), and `TabsPanel` renders the wired
+// shells as the wrapper's children. Our roving tabindex (selected tab =
+// 0) remains the documented superset over the reference's all-=-1
+// platform defect.
 
 interface TabsProps {
   tabs: ReadonlyArray<{ id: string; label: string; count?: number }>;
   value: string;
   onValueChange: (value: string) => void;
   /** The wrapper div's classes — the reference's per-page Tabs region
-   * (space-y-6 on settings/reports; bare on activities). */
+   * (the Profile page ships `mb-6 max-w-xl`; pages own their spacing). */
   className?: string;
   variant?: "underline" | "segmented" | "pill";
   /** Equal-width grid columns for segmented/pill tracks (reference: one per tab). */
@@ -75,8 +78,9 @@ const GRID_COLS: Record<number, string> = {
 // The reference's stock Radix TabsContent classes (byte-extracted from the
 // live reference on 2026-10-01): the focus-visible ring family rides every
 // panel shell; the per-page mt-*/space-y-* classes are appended by the
-// pages (mt-4 space-y-2 on activities, mt-2 space-y-4 on settings, mt-2 on
-// reports — the mt-* collapses against the wrapper's space-y margin).
+// pages (the Profile page's panels ship `mt-6` — the WH-8 truth; the
+// CRM-era activities/settings/reports mt-narration retired with the
+// pages it named).
 // Session-129 (F-129c1): the extracted string's ring-offset-background is
 // the COMPUTED-CONTRACT EXCEPTION, retired per the s11 DIALOG_CLOSE
 // precedent — the reference's ride computes hsl(0 0% 100%) = #ffffff; OUR
@@ -165,11 +169,13 @@ function Tabs({ tabs, value, onValueChange, className, variant = "underline", co
                 {tab.label}
                 {typeof tab.count === "number" && (
                   // Session-66 (N-66d): the reference's literal count span —
-                  // the activities Overdue tab's red badge
-                  // (P.overdue.length>0 && <span className="ml-2 px-2 py-0.5
-                  // text-xs bg-red-100 text-red-800 rounded-full">). Always the
-                  // red tint, active or not; the >0 guard lives at the call
-                  // site exactly like the reference's `>0 &&`.
+                  // the red count badge (`<span className="ml-2 px-2 py-0.5
+                  // text-xs bg-red-100 text-red-800 rounded-full">`,
+                  // byte-extracted from the reference's tab strip). API
+                  // surface — no wellness call site passes `count` today
+                  // (the WH-8 F-2 cure: the CRM-era page narration retired
+                  // with the page it named). Always the red tint, active
+                  // or not; a >0 guard lives at the call site.
                   <span className="ml-2 px-2 py-0.5 text-xs bg-red-100 text-red-800 rounded-full">
                     {tab.count}
                   </span>

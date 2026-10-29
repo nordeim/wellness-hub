@@ -8,7 +8,6 @@ import {
   DIALOG_CLOSE,
   DIALOG_CONTENT,
   DIALOG_FOOTER,
-  DIALOG_FOOTER_WIDE,
   DIALOG_HEADER,
   DIALOG_OVERLAY,
   DIALOG_TITLE,
@@ -16,8 +15,6 @@ import {
 
 const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
-const DialogPortal = DialogPrimitive.Portal;
-const DialogClose = DialogPrimitive.Close;
 
 function DialogOverlay({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
   // Session-15 (S15-P2): the reference ships the STOCK black/80 fade —
@@ -41,13 +38,15 @@ function DialogContent({
   // Session-15 (S15-P1): the STOCK shadcn geometry — `w-full` (FULL-BLEED
   // at phone widths, not calc(100vw-2rem)), `sm:rounded-lg` (0 radius
   // below 640), shadow-lg, and the slide-in/out animations the scaffold
-  // never shipped. The Event/Activity dialogs override the width cap via
+  // never shipped. WH-8: the portal rides the primitive directly — the
+  // DialogPortal re-export retired with its zero importers (the ui-export
+  // census owns the class); the events dialog overrides the width cap via
   // `className={DIALOG_CONTENT.wide}` (max-w-2xl, 672px).
   // Session-71 (L-71d4): the invented `hideClose` prop retired — zero
   // consumers since its scaffold birth, not stock shadcn (the N-57
   // dead-prop class); the close button renders unconditionally.
   return (
-    <DialogPortal>
+    <DialogPrimitive.Portal>
       <DialogOverlay />
       <DialogPrimitive.Content
         className={cn(
@@ -62,7 +61,7 @@ function DialogContent({
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
-    </DialogPortal>
+    </DialogPrimitive.Portal>
   );
 }
 
@@ -74,18 +73,12 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
-  // Session-15 (S15-P5): the STOCK footer for the max-w-lg family
-  // (Lead/Account/Contact) — `flex flex-col-reverse sm:flex-row
-  // sm:justify-end sm:space-x-2` (no gap class: the buttons touch when
-  // stacked on phones, 8px margin at sm). The max-w-2xl family
-  // (Event/Activity) uses DIALOG_FOOTER_WIDE instead.
+  // Session-15 (S15-P5): the STOCK footer for the max-w-lg dialog family
+  // — `flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2`
+  // (no gap class: the buttons touch when stacked on phones, 8px margin
+  // at sm). WH-8 (F-5): the max-w-2xl DialogFooterWide twin retired with
+  // its last CRM-era consumer — the ui-export census owns the class.
   return <div className={cn(DIALOG_FOOTER, className)} {...props} />;
-}
-
-/** Session-15 (S15-P5): the max-w-2xl family footer — `flex justify-end
- *  gap-3 pt-4` (row at all widths, 12px gap, 16px top padding). */
-function DialogFooterWide({ className, ...props }: React.ComponentProps<"div">) {
-  return <div className={cn(DIALOG_FOOTER_WIDE, className)} {...props} />;
 }
 
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
@@ -100,9 +93,10 @@ function DialogDescription({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Description>) {
   // Session-15 (S15-P4): the reference's five CREATE dialogs ship NO
-  // description (h2 only — verified on the live app). The component
-  // stays for our unverifiable-superset surfaces (the contacts
-  // scan-card dialog); entity-dialogs no longer renders it.
+  // description (h2 only — verified on the live app). WH-8 (F-2): the
+  // CRM-era "contacts scan-card" narration retired — in this domain the
+  // description IS live surface: the assignments, study-resources,
+  // mental-health and exercise dialogs render it under their titles.
   // Session-26 (S26-P6): the color realigned to the reference's live
   // import dialog (text-muted-foreground #737373 = our muted-ink token).
   return <DialogPrimitive.Description className={cn("text-sm text-muted-ink", className)} {...props} />;
@@ -110,14 +104,11 @@ function DialogDescription({
 
 export {
   Dialog,
-  DialogPortal,
   DialogOverlay,
   DialogTrigger,
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogFooter,
-  DialogFooterWide,
   DialogTitle,
   DialogDescription,
 };

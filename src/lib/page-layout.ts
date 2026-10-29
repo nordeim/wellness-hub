@@ -251,8 +251,6 @@ export const DIALOG_HEADER = "flex flex-col space-y-1.5 text-center sm:text-left
 
 export const DIALOG_FOOTER = "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2";
 
-export const DIALOG_FOOTER_WIDE = "flex justify-end gap-3 pt-4";
-
 export const DIALOG_TITLE = "text-lg font-semibold leading-none tracking-tight";
 
 export const DIALOG_CLOSE =
@@ -263,8 +261,9 @@ export const DIALOG_GROUP = {
   controlMt: "mt-2 mb-0",
 } as const;
 
-export const DIALOG_TEXTAREA =
-  "flex min-h-20 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50";
+// WH-8 (F-5): DIALOG_FOOTER_WIDE + DIALOG_TEXTAREA retired with their
+// zero-importer wrappers (DialogFooterWide, Textarea) — the value census
+// owns the liveness class.
 
 export const NOT_FOUND_LAYOUT = {
   page: "min-h-screen flex items-center justify-center p-6 bg-slate-50",

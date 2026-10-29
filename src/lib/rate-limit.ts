@@ -93,7 +93,7 @@ export function clientKey(req: Request): string {
 /** Session-163 (the digma S69-A port): the declared proxy-topology trust
  *  depth. WELLNESS_PROXY_HOPS: unset/empty = 1; unparsable or negative fails
  *  CLOSED onto 1; 0 = direct exposure; N >= 2 = N appending proxies. */
-export function proxyHopDepth(): number {
+function proxyHopDepth(): number {
   const raw = process.env.WELLNESS_PROXY_HOPS;
   if (raw === undefined || raw === "") return 1;
   const parsed = Number.parseInt(raw, 10);
