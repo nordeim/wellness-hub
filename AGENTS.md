@@ -19,7 +19,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (319 checks) | `bun run test` | Vitest, node-safe seams |
+| Unit tests (328 checks) | `bun run test` | Vitest, node-safe seams |
 | Browser E2E (42 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
@@ -29,7 +29,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (319) → `bun run build` → `bun run smoke` →
+`bun run test` (328) → `bun run build` → `bun run smoke` →
 `CI=1 bun run test:e2e` (42: 5 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
@@ -37,7 +37,7 @@ is NOT set — a type error fails `bun run build`, and the explicit
 `typecheck` step stays in the chain as the faster signal. `bun audit` runs
 periodically OUTSIDE the gate (network dependency; the gate must stay
 offline-runnable). The known advisory posture (re-triaged 2026-10-29, the
-WH-3 round): all remaining advisories are dev-toolchain transitive only
+WH-5 round): all remaining advisories are dev-toolchain transitive only
 (prisma CLI, vitest/vite, eslint plugins, postcss) with zero runtime
 request-path exposure — and there are ZERO runtime advisory chains since
 the WH-3 retirement of the never-imported jspdf (the dead-dep census pin
@@ -137,8 +137,9 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   real import lands with the package).
 - Icons are lucide-react: sidebar nav icons uniform `h-5 w-5` stroke-2,
   content icons `h-4 w-4`.
-- z-index stays on the flat scale: topbar z-40, drawer/dialogs z-50,
-  dropdown portals z-[60], toasts z-[100].
+- z-index stays on the flat scale: the mobile glass header z-10
+  (app-shell via `MOBILE_HEADER.bar` in `src/lib/page-layout.ts`),
+  drawer/dialogs/select portals z-50, toasts z-[100].
 - Emoji vocab lives in `src/lib/constants.ts` (`MOODS`, `WORKOUT_TYPES`,
   `EVENT_CATEGORIES`, …) — `OptionMeta[]` with the emoji glyph carried as
   the label. Components never hardcode the glyphs.
@@ -150,6 +151,11 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
 - Unit (Vitest): pure seams only — `src/lib/*` and their contracts
   (`tests/*.test.ts`, matched by `vitest.config.ts`). No component tests;
   the RSC layer is covered by e2e instead.
+- The docs-counts pin (`tests/docs-counts.test.ts`) keeps the five docs'
+  live-tense count claims under the unit gate — a stale count anywhere
+  fails `bun run test`. When a total moves (a test added/retired, a
+  model, a route family), update the pin's CANONICAL literals AND every
+  doc site in the SAME commit; the pin is the lockstep enforcer.
 - E2E (Playwright): boots the PRODUCTION standalone server on an isolated
   port with its own `db/e2e.db` (schema-pushed + seeded by the global
   setup). The e2e database is PINNED in `playwright.config.ts` — a stray

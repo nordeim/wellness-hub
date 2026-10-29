@@ -1,9 +1,9 @@
 ---
 name: wellness-hub
-description: "Complete engineering skill for the Wellness Hub codebase: Next.js 16 App Router + React 19 + TypeScript strict + Tailwind CSS 4 (CSS-first @theme) + Radix/shadcn primitives + one Zustand store + Prisma 6/SQLite at the repo root + Zod-4-validated API + scrypt/HMAC cookie auth + a three-tier test suite and a single-command quality gate. Distilled from the WH-1 domain replacement (the NEO CRM chassis became the EvolveWell wellness clone), the WH-2 audit round, the WH-3 dead-dep census round and the WH-4 dead-surface retirement round. Every rule traces to a verified fact on the 2026-10-29 tree."
-version: 1.2.0
+description: "Complete engineering skill for the Wellness Hub codebase: Next.js 16 App Router + React 19 + TypeScript strict + Tailwind CSS 4 (CSS-first @theme) + Radix/shadcn primitives + one Zustand store + Prisma 6/SQLite at the repo root + Zod-4-validated API + scrypt/HMAC cookie auth + a three-tier test suite and a single-command quality gate. Distilled from the WH-1 domain replacement (the NEO CRM chassis became the EvolveWell wellness clone), the WH-2 audit round, the WH-3 dead-dep census round, the WH-4 dead-surface retirement round and the WH-5 doc-lockstep pin round. Every rule traces to a verified fact on the 2026-10-29 tree."
+version: 1.3.0
 last_updated: 2026-10-29
-provenance: "Supersedes neo-crm_SKILL.md (the chassis-era distillate, kept at the repo root as provenance for the inherited engineering). Distilled per skills/to-distill-project-into-skill + skills/distill-codebase-skill at the WH-2 ship state (commit 5c3de25 + the WH-2 remediation, gate green at lint 0/0 · tsc 0 · 314/314 unit [16 suites] · build OK · smoke 14/14 · e2e 42/42). Re-validated at WH-3 (2026-10-29): the dead-dep census round — six zero-import packages (jspdf, recharts, html2canvas-pro, fast-check, axe-core, tw-animate-css) + the orphaned dompurify override + the dead chart CSS retired with the TDD pin `tests/dead-deps.test.ts`; gate green at lint 0/0 · tsc 0 · 316/316 unit (17 suites) · build OK · smoke 14/14 · e2e 42/42. Re-validated at WH-4 (2026-10-29): the dead-surface retirement round — the dead users/uploads route family + the CRM-era avatar chain (avatarColor/photoUrl, never rendered) + seven dead ui modules + four orphaned packages retired with the TDD pin `tests/route-census.test.ts`; the signup CRM-role bug fixed (`role: \"user\"`, `tests/signup-role.test.ts`); the NEO_* env knobs/cookie/namespace renamed to WELLNESS_* / wellness_session; gate green at lint 0/0 · tsc 0 · 319/319 unit (19 suites) · build OK · smoke 14/14 · e2e 42/42."
+provenance: "Supersedes neo-crm_SKILL.md (the chassis-era distillate, kept at the repo root as provenance for the inherited engineering). Distilled per skills/to-distill-project-into-skill + skills/distill-codebase-skill at the WH-2 ship state (commit 5c3de25 + the WH-2 remediation, gate green at lint 0/0 · tsc 0 · 314/314 unit [16 suites] · build OK · smoke 14/14 · e2e 42/42). Re-validated at WH-3 (2026-10-29): the dead-dep census round — six zero-import packages (jspdf, recharts, html2canvas-pro, fast-check, axe-core, tw-animate-css) + the orphaned dompurify override + the dead chart CSS retired with the TDD pin `tests/dead-deps.test.ts`; gate green at lint 0/0 · tsc 0 · 316/316 unit (17 suites) · build OK · smoke 14/14 · e2e 42/42. Re-validated at WH-4 (2026-10-29): the dead-surface retirement round — the dead users/uploads route family + the CRM-era avatar chain (avatarColor/photoUrl, never rendered) + seven dead ui modules + four orphaned packages retired with the TDD pin `tests/route-census.test.ts`; the signup CRM-role bug fixed (`role: \"user\"`, `tests/signup-role.test.ts`); the NEO_* env knobs/cookie/namespace renamed to WELLNESS_* / wellness_session; gate green at lint 0/0 · tsc 0 · 319/319 unit (19 suites) · build OK · smoke 14/14 · e2e 42/42. Re-validated at WH-5 (2026-10-29): the doc-lockstep pin round — the fresh-clone gate run green end-to-end on a clean machine (install → push → seed → census → tsc → unit → build → smoke 14/14 → e2e 42/42 → dev boot), the live reference re-probed (zero new surfaces; mobile-nav parity re-verified on both apps; both headers compute blur(24px)), four doc-drift cures (the 14-models count → 15, PAD §5.3's dead primitives list, SKILL §17's header-blur attribution, the z-40/z-[60] z-map), and the docs-counts lockstep pin landed (`tests/docs-counts.test.ts`) making the five docs' live-tense count claims a tested contract; gate green at lint 0/0 · tsc 0 · 328/328 unit (20 suites) · build OK · smoke 14/14 · e2e 42/42."
 ---
 
 # Wellness Hub — Complete Engineering Skill
@@ -45,7 +45,7 @@ provenance: "Supersedes neo-crm_SKILL.md (the chassis-era distillate, kept at th
 | Validation | Zod | 4.6.7 | Every API body boundary via `parseBody()`; enums from `src/lib/constants.ts` |
 | Charts | — | — | The app renders NO charts — the reference's dashboard carries stat tiles + lists only (live-probed at WH-1 and WH-3); recharts shipped three rounds as a zero-import CRM residue and was retired at WH-3 |
 | Icons | lucide-react | 0.525.0 | The reference's own bundle-decoded version — a PARITY pin; nav icons h-5 w-5 stroke-2, content h-4 w-4 |
-| Unit tests | Vitest | 5.0.5 | Node env; `*.test.ts` only; `@` alias; 319 checks / 19 suites (incl. the dead-dep + route/ui-module census pins) |
+| Unit tests | Vitest | 5.0.5 | Node env; `*.test.ts` only; `@` alias; 328 checks / 20 suites (incl. the dead-dep + route/ui-module + docs-counts pins) |
 | E2E | @playwright/test | 1.64.1 | Production standalone server, isolated port, PINNED `db/e2e.db`; 42 checks (5 specs + the auth setup project) |
 | Runtime | Bun | 1.3.14 | All scripts run from the repo root |
 
@@ -193,7 +193,7 @@ This codebase has NO custom hooks directory — the reactive seams are the two Z
 ```bash
 bun run lint          # 0 warnings, ALWAYS first
 bun run typecheck     # tsc --noEmit — the fast signal
-bun run test          # 319/319 (19 suites)
+bun run test          # 328/328 (20 suites)
 bun run build         # the type gate + the standalone artifact
 bun run smoke         # 14/14 (the standalone boot + ladder on db/smoke.db)
 CI=1 bun run test:e2e # 42/42 (5 specs + the setup project, db/e2e.db)
@@ -202,7 +202,7 @@ bun audit             # OUTSIDE the gate (network dep); re-triage in the PAD led
 ```
 
 - One command: `bun run gate` (lint → typecheck → test → build → smoke → CI=1 e2e). There is no hosted CI — the local gate is the only gate.
-- Before push: `git status` clean; `.env`/`db/*.db`/`*.key` NEVER in the tree; screenshots refreshed if any visual surface moved; the five docs' counts re-verified (`rg "319|42" README.md AGENTS.md CLAUDE.md Project_Architecture_Document.md wellness-hub_SKILL.md`).
+- Before push: `git status` clean; `.env`/`db/*.db`/`*.key` NEVER in the tree; screenshots refreshed if any visual surface moved; the five docs' counts re-verified — the docs-counts pin (`tests/docs-counts.test.ts`) fails `bun run test` on a stale count; when a total moves, update the pin's CANONICAL literals + every doc site in the SAME commit.
 - Push ONLY via `docs/ssh_git_wrapper_v3.py` (dry-run, then push, then verify the remote ref; the key lives OUTSIDE the repo and is shredded after). Main branch only — no new branches, ever.
 
 ## §12 Lessons Learnt & How to Avoid Them
@@ -215,6 +215,7 @@ bun audit             # OUTSIDE the gate (network dep); re-triage in the PAD led
 6. **The override mechanism beats the update for transitive advisories (s198, inherited).** `bun update dompurify` hoisted the root AND left a nested vulnerable copy; `overrides.dompurify` in `package.json` + a clean reinstall reproduced the lockfile exactly. → Transitive fixes ride overrides + pins, never ad-hoc updates. (WH-3 coda: when the chain's root consumer turned out to be a dead dep, the override retired WITH it — the deeper rule is the census: no package without a live import, then the override question never arises.)
 7. **Rate limits shape test architecture (A-8).** The per-IP login limiter forced the storageState doctrine. → Design test fixtures around your own security posture, not against it.
 8. **A dependency is a doc claim (WH-3).** Six packages shipped three rounds with zero imports while five docs claimed their features (charts, PDF export, property tests, axe teeth) — the WH-1 domain replacement deleted the CRM's csv/pdf-export seams but left their packages, and every doc inherited the claim. → The census pin (`tests/dead-deps.test.ts`) makes the dependency tree a TESTED contract: a package without a live import fails the gate, and its doc claims die with it. Never write a feature row for a package the tree does not import.
+9. **Count claims need a pin, not a proofread (WH-5).** The wrong model-count heading (a "14-models" claim) lived in all five docs through four audit rounds while the schema had 15 — and every doc's OWN ENUMERATION listed 15 items under the wrong heading; nobody counts another writer's list. The same round found three more stale technical claims (a dead primitives list, a wrong blur attribution, a z-map naming a z-40 layer no class uses). → The docs-counts pin (`tests/docs-counts.test.ts`) computes what the tree can count and fails `bun run test` on any doc that stops carrying the canonical claims: proofreading is not a gate, a pin is.
 
 ## §13 Pitfalls to Avoid
 
@@ -324,7 +325,7 @@ document.documentElement.style.setProperty("--color-primary-hover", shade(preset
 
 Tailwind v4 defaults (no custom breakpoints — verified): `sm 640px` · `md 768px` · `lg 1024px` · `xl 1280px` · `2xl 1536px`.
 
-- **The one load-bearing breakpoint: `md 768px`** — below it, the shell renders the glassy mobile header (`md:hidden` sticky, backdrop-blur-sm at the re-pinned 4px) + the Radix Sheet drawer; at/above it, the static sidebar. The drawer auto-closes when the viewport grows past md (e2e-pinned).
+- **The one load-bearing breakpoint: `md 768px`** — below it, the shell renders the glassy mobile header (`md:hidden` sticky, `backdrop-blur-xl` — the reference's own computed blur(24px), live-verified on both apps; the 4px `--blur-sm` re-pin serves the LOGIN CARD's glass, §9 A-2) + the Radix Sheet drawer; at/above it, the static sidebar. The drawer auto-closes when the viewport grows past md (e2e-pinned).
 - **The `(app)` main area:** `lg:` grid columns on the dashboard stat tiles and two-panel pages (calendar + upcoming, catalog + detail); `md:` two-column dialogs.
 - **Mobile testing:** the e2e mobile battery runs at 390×844 (iPhone 14-class); the screenshot set carries the 390px faces (`docs/screenshots/13-16`). Test any drawer/shell change at 390×844 before shipping.
 
@@ -334,7 +335,7 @@ The flat scale (enforced by review; no ad-hoc `z-[9999]`):
 
 | Layer | Value | Where | Purpose |
 |---|---|---|---|
-| Topbar / glass header | z-40 | `src/components/layout/mobile-nav.tsx` | The sticky mobile header |
+| Glass header | z-10 | `src/components/layout/app-shell.tsx` (`MOBILE_HEADER.bar`, `src/lib/page-layout.ts`) | The sticky mobile header (the header is NOT in mobile-nav — that file is the drawer) |
 | Sheet drawer + dialogs + select portals | z-50 | mobile-nav + `ui/dialog.tsx` + `ui/select.tsx` | The drawer, modal surfaces and the Radix select content (the reference ships z-50 — the scaffold-era z-[60] draft was corrected at WH-1; `ui/dropdown.tsx` retired at WH-4) |
 | Toasts | z-[100] | `ui/toast.tsx` | The notification portal — always on top |
 
@@ -372,7 +373,7 @@ Plus the ~60-entry v3 palette re-pin block (amber-50 `#fffbeb` → yellow-800 `#
 
 ## §20 The Complete TypeScript Interface Reference
 
-The domain contract lives in `src/types/index.ts` (mirrors `prisma/schema.prisma` — 14 models):
+The domain contract lives in `src/types/index.ts` (mirrors `prisma/schema.prisma` — 15 models):
 
 - **`Result<T, E>`** — the envelope's type: `{ ok: true; data: T } | { ok: false; error: E }`.
 - **`User`** — id, email, name, role (`"user"` — display-only, the reference's own account-tab value; fresh signups write it directly, no first-boot admin ladder), the verification funnel fields, tokenVersion (the CRM-era avatarColor/photoUrl columns retired at WH-4 — set but never rendered).

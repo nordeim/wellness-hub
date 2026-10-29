@@ -97,7 +97,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 | `bun run start` | Boot the standalone server |
 | `bun run lint` | ESLint (`--max-warnings 0`) |
 | `bun run typecheck` | `tsc --noEmit` |
-| `bun run test` | Vitest unit suite (319 checks) |
+| `bun run test` | Vitest unit suite (328 checks) |
 | `bun run test:e2e` | Playwright (42 checks; build first) |
 | `bun run gate` | The full chain in one command |
 
@@ -105,10 +105,10 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 
 ### Test Pyramid
 
-- **Unit (Vitest, 319 checks / 19 suites)**: pure seams — auth helpers,
+- **Unit (Vitest, 328 checks / 20 suites)**: pure seams — auth helpers,
   db-path contract, wellness math (streaks/points/badges), schemas,
   theme engine, formatters, the dead-dependency census, the route/ui
-  module census, the signup role pin.
+  module census, the signup role pin, the docs-counts lockstep pin.
 - **E2E (Playwright, 42 checks — 5 specs + the auth setup project)**: the
   real UI in Chromium against the
   production standalone server — auth ladder, mobile drawer battery, shell
@@ -219,7 +219,7 @@ Hard rules enforced by lint: no synchronous `setState` in `useEffect`;
 - Prisma + SQLite; `db/` at the repo root, git-ignored.
 - `DATABASE_URL="file:../db/custom.db"` — relative, resolved against
   `prisma/schema.prisma` (contract pinned in `tests/db-path.test.ts`).
-- 14 models: `User`, `Workout`, `MoodEntry`, `Assignment`, `Event`,
+- 15 models: `User`, `Workout`, `MoodEntry`, `Assignment`, `Event`,
   `StudyResource`, `Reminder`, `Goal`, `Badge` (catalog), `UserBadge`,
   `RoutineTemplate`, `RoutineStep`, `UserRoutine`, `Tutorial`, `UserPrefs`.
 - All user-owned rows cascade-delete with the user; list reads are bounded.
