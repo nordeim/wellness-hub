@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import type { LucideIcon } from "lucide-react";
-import { PAGE_HEADER, STAT_CARD, SECTION_CARD, EMPTY_STATE, GRADIENT_BUTTON, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_HEADER, SECTION_CARD, EMPTY_STATE, GRADIENT_BUTTON } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 /** The wellness page header — the gradient H1 + subtitle + right actions
@@ -41,58 +41,12 @@ export function GradientButton({
   );
 }
 
-/** The outline secondary (the Cancel family). */
-export function OutlineButton({
-  children,
-  className,
-  ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & { children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      className={cn(
-        BUTTON_CLASSES,
-        "h-10 rounded-md border border-line bg-surface hover:bg-line-soft px-8",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-}
-
-/** The tinted stat card — the reference's pastel family: a tinted card, the
- *  colored icon chip, the label, the big value and an optional subtext
- *  (dashboard/Exercise/MentalHealth/Assignments/Reminders/Goals tiles). */
-export function StatCard({
-  icon: Icon,
-  tint,
-  tintText,
-  cardTint,
-  label,
-  value,
-  sub,
-}: {
-  icon: LucideIcon;
-  tint: string; // the chip bg (bg-red-50)
-  tintText: string; // the chip fg (text-red-500)
-  cardTint: string; // the card wash
-  label: string;
-  value: React.ReactNode;
-  sub?: string;
-}) {
-  return (
-    <div className={cn(STAT_CARD.card, cardTint)}>
-      <div className={cn(STAT_CARD.iconChip, tint, tintText)} aria-hidden="true">
-        <Icon className="h-5 w-5" />
-      </div>
-      <p className={STAT_CARD.label}>{label}</p>
-      <h3 className={STAT_CARD.value}>{value}</h3>
-      {sub && <p className={STAT_CARD.sub}>{sub}</p>}
-    </div>
-  );
-}
+// WH-7: the outline-secondary button and the tinted stat-card component
+// retired — zero JSX consumers across the tree (the dialogs render their
+// cancel/submit pair from BUTTON_CLASSES + DIALOG_FOOTER families, and the
+// stat pages inline their tiles through the STAT_CARD class constants for
+// the authored per-tile tints the reference carries). The export-census pin
+// owns this module's export surface.
 
 /** A white section card with an icon + title header (the Recent Workouts /
  *  Your Journey / Upcoming Events panels). */

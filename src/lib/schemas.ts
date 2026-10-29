@@ -36,10 +36,13 @@ const emailFormat = emailField("Enter a valid email address").regex(
   "Enter a valid email address",
 );
 
-export const emailSchema = emailFormat;
+// WH-7: un-exported — same-module data feeds (signupSchema's email arm
+// and every password-setting schema's floor); the export-census pin owns
+// this module's export surface.
+const emailSchema = emailFormat;
 
 /** Passwords: the 8-char minimum every password-setting surface enforces. */
-export const passwordSchema = z
+const passwordSchema = z
   .string()
   .min(8, "Password must be at least 8 characters");
 

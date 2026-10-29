@@ -2,9 +2,10 @@
 // as the scaffold family). Used by the auth routes with PER-ROUTE limits
 // (all per 15 min / IP — Session-63 (N-63e) corrected this header, which
 // used to claim a flat "10 attempts"): login 10, signup 10, resend 5,
-// verify 20. Session-67 (N-67e) added the sessioned upload route at 20
-// (post-guard); session-68 (F-68a3) recorded it here. Session-163 added
-// forgot 10 + reset 10 (the reset funnel's own buckets).
+// verify 20, forgot 10 + reset 10 (the reset funnel's own buckets,
+// session-163). WH-4 retired the sessioned upload route this header used
+// to enumerate (its 20/15min bucket died with it); WH-7 (F-4) retired the
+// narration — the live route set is exactly the 7-bucket auth ladder.
 //
 // Session-173 (F-173a): rateLimit takes `now = Date.now()` — the
 // session-164 sweepRateLimits form extended to the rateLimit path, the

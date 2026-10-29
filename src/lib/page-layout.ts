@@ -198,18 +198,16 @@ export const LOGIN_LAYOUT = {
   footerLinkStrong: "font-medium text-slate-700 dark:text-slate-200",
 } as const;
 
-/** The pastel tint map for the dashboard's stat cards. */
-export const DASHBOARD_TINTS = [
-  { chip: "bg-red-50", chipText: "text-red-500", card: "bg-red-50 dark:bg-red-950/40" },
-  { chip: "bg-emerald-50", chipText: "text-emerald-500", card: "bg-emerald-50 dark:bg-emerald-950/40" },
-  { chip: "bg-blue-50", chipText: "text-blue-500", card: "bg-blue-50 dark:bg-blue-950/40" },
-  { chip: "bg-amber-50", chipText: "text-amber-500", card: "bg-amber-50 dark:bg-amber-950/40" },
-] as const;
-
 // ---------------------------------------------------------------------------
 // UI-kit records — the stock shadcn-family geometry the ui/ components pin
 // (carried from the chassis; SELECT_TRIGGER's placeholderState arm and the
 // focus rings are the reference's own).
+// WH-7: the dashboard-tint map, the card-title record, the dialog-submit
+// record, the dropdown menu pair and the search-input padding all retired
+// — zero consumers across the tree since the build (the dashboard inlines
+// its tints, the WH-4-retired ui/card was the card record's last consumer,
+// and the reference's dropdown/search surfaces never shipped). The
+// export-census pin owns this module's export surface.
 // ---------------------------------------------------------------------------
 export const SELECT_TRIGGER = {
   base: "flex h-9 items-center justify-between whitespace-nowrap rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background",
@@ -225,10 +223,6 @@ export const CHECKBOX = {
   label: "text-sm cursor-pointer",
 } as const;
 
-export const CARD = {
-  title: "font-semibold leading-none tracking-tight",
-} as const;
-
 /** The tab families — the pill (multi-column page tabs) and the segmented
  *  control (the profile tablist); the pill's active state rides the app's
  *  primary pair (the reference's own active-tint convention). */
@@ -242,10 +236,6 @@ export const TABS_SEGMENTED = {
   track: "h-9 items-center justify-center rounded-lg bg-line-soft p-1 text-muted-ink grid w-full",
   trigger:
     "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow data-[state=active]:bg-white data-[state=active]:text-foreground",
-} as const;
-
-export const DIALOG_SUBMIT = {
-  button: "bg-neutral-900 text-neutral-50 hover:bg-neutral-900/90 shadow h-9 px-4 py-2",
 } as const;
 
 export const DIALOG_CONTENT = {
@@ -275,14 +265,6 @@ export const DIALOG_GROUP = {
 
 export const DIALOG_TEXTAREA =
   "flex min-h-20 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50";
-
-export const MENU_CONTENT =
-  "z-50 min-w-32 overflow-hidden rounded-md border border-line bg-surface p-1 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95";
-
-export const MENU_ITEM =
-  "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-line-soft focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50";
-
-export const SEARCH_INPUT = "pl-9";
 
 export const NOT_FOUND_LAYOUT = {
   page: "min-h-screen flex items-center justify-center p-6 bg-slate-50",

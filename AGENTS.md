@@ -19,7 +19,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (331 checks) | `bun run test` | Vitest, node-safe seams |
+| Unit tests (309 checks) | `bun run test` | Vitest, node-safe seams |
 | Browser E2E (42 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
@@ -29,7 +29,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (331) → `bun run build` → `bun run smoke` →
+`bun run test` (309) → `bun run build` → `bun run smoke` →
 `CI=1 bun run test:e2e` (42: 5 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
@@ -37,11 +37,17 @@ is NOT set — a type error fails `bun run build`, and the explicit
 `typecheck` step stays in the chain as the faster signal. `bun audit` runs
 periodically OUTSIDE the gate (network dependency; the gate must stay
 offline-runnable). The known advisory posture (re-triaged 2026-10-29, the
-WH-6 round): all remaining advisories are dev-toolchain transitive only
+WH-7 round): all remaining advisories are dev-toolchain transitive only
 (prisma CLI, vitest/vite, eslint plugins, postcss) with zero runtime
 request-path exposure — and there are ZERO runtime advisory chains since
 the WH-3 retirement of the never-imported jspdf (the dead-dep census pin
-in `tests/dead-deps.test.ts` keeps dead packages from returning).
+in `tests/dead-deps.test.ts` keeps dead packages from returning). The
+one WH-7 delta: the zod GHSA-mrhx-c7xc-m3w5 chain (memory exhaustion on
+oversized unconstrained arrays; fixed 4.6.6) — our DIRECT dep is 4.6.7
+(not affected); the in-range copy is eslint-plugin-react-hooks'
+transitive 4.6.5 (dev-only lint toolchain, no patched target exists above
+4.6.7); the runtime seam caps every array schema at `.max(20)`, so the
+exploit class is structurally blocked.
 
 First-run setup: `bun install && cp .env.example .env && bun run db:push &&
 bun run db:seed && bun run dev`. Demo login: `sepnetflix2023@outlook.com` /
@@ -163,9 +169,13 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   tree's hygiene under the unit gate: every `tests/*.test.ts` file cited
   in src/scripts/prisma comments must exist (a comment defending code
   with a nonexistent file is a maintenance lie), `src/lib/api.ts`'s
-  export surface is the pinned live twelve, and no duplicated adjacent
-  `return` statements ship. The WH-6 pin — same doctrine as the
-  dead-dep, route/ui and docs-counts census pins.
+  export surface is the pinned live twelve, no duplicated adjacent
+  `return` statements ship, every exported VALUE in the census modules
+  (page-layout, constants, format, wellness, site, schemas +
+  page-parts) has a consumer outside its own module, and every
+  `@utility` block in globals.css has a class consumer. The WH-6/WH-7
+  pin — same doctrine as the dead-dep, route/ui and docs-counts
+  census pins.
 - E2E (Playwright): boots the PRODUCTION standalone server on an isolated
   port with its own `db/e2e.db` (schema-pushed + seeded by the global
   setup). The e2e database is PINNED in `playwright.config.ts` — a stray

@@ -173,3 +173,105 @@ it("WH-6: no duplicated adjacent return statements in src", () => {
     "duplicated adjacent return statements — the second is unreachable dead code (F-2 class, the reminders/assignments/events/study-resources copy-paste)",
   ).toEqual([]);
 });
+
+// ---- WH-7: the exported-value + CSS-utility liveness census -----------------
+//
+// WH-7 found fifteen dead exported VALUES across four census modules
+// (six layout constants, an icon map + a login string, two shared
+// components, three format functions, plus format.ts's CRM-era
+// subgraph) — zero consumers anywhere (production, tests, scripts).
+// Same doctrine as the api-export census above, widened to the modules
+// that hand class strings and domain vocab to components. The WH-6
+// census kept ONE contract module honest; this one walks the whole
+// lib/shared constant surface.
+//
+// Scope decisions (the same false-positive analysis as WH-6's):
+//   - Only exported `const`/`function` VALUES. Types (`interface`/`type`)
+//     are EXEMPT — an internally-consumed type export is an ergonomic,
+//     not drift liability.
+//   - Data feeds consumed ONLY within their own module keep the code but
+//     drop the `export` keyword — the census reads export sites, so the
+//     un-export cure lands mechanically.
+//   - Consumers may live in src/ OR tests/ — tests pin behavior; a value a
+//     test imports is alive (retirement is a conscious act that updates
+//     the test in the same commit).
+//   - This pin's own text stays OUT of the corpus (its comments narrate
+//     the retirement classes and would otherwise "consume" the names).
+
+/** The census modules — where F-1 actually lived: the layout-constant and
+ *  domain-vocab seams that feed components. */
+const VALUE_CENSUS_MODULES = [
+  "src/lib/page-layout.ts",
+  "src/lib/constants.ts",
+  "src/lib/format.ts",
+  "src/lib/wellness.ts",
+  "src/lib/site.ts",
+  "src/lib/schemas.ts",
+  "src/components/shared/page-parts.tsx",
+] as const;
+
+function exportedValues(source: string): string[] {
+  return [
+    ...source.matchAll(/^export (?:async )?function (\w+)|^export const (\w+)/gm),
+  ]
+    .map((m) => m[1] ?? m[2])
+    .filter((name): name is string => Boolean(name));
+}
+
+it("WH-7: every exported value in the census modules has a consumer", () => {
+  // The consumer corpus: every ts/tsx file under src/ and tests/, minus
+  // each module's own text (same-module consumption does not count — that
+  // is what the `export` keyword un-cures in the data-feed class) and
+  // minus this pin's own text (the class narration above would otherwise
+  // consume the very names it documents).
+  const corpusFiles: string[] = [];
+  collect(join(REPO_ROOT, "src"), corpusFiles, [".ts", ".tsx"]);
+  collect(join(REPO_ROOT, "tests"), corpusFiles, [".ts", ".tsx"]);
+  const SELF = "tests/src-census.test.ts";
+  const corpus = new Map<string, string>();
+  for (const file of corpusFiles) {
+    const key = file.replace(REPO_ROOT + "/", "");
+    if (key === SELF) continue;
+    corpus.set(key, readFileSync(file, "utf8"));
+  }
+  const dead: string[] = [];
+  for (const mod of VALUE_CENSUS_MODULES) {
+    const text = corpus.get(mod);
+    if (!text) throw new Error(`census module missing: ${mod}`);
+    for (const name of exportedValues(text)) {
+      const re = new RegExp(`\\b${name}\\b`);
+      const consumed = [...corpus.entries()].some(([file, src]) => {
+        if (file === mod) return false;
+        return re.test(src);
+      });
+      if (!consumed) dead.push(`${mod}: ${name}`);
+    }
+  }
+  expect(
+    dead,
+    "exported values with zero consumers anywhere (production, tests, scripts) — the F-1 class: retire the value, or if it is a same-module data feed, drop the export keyword",
+  ).toEqual([]);
+});
+
+it("WH-7: every @utility block in globals.css has a class consumer in src", () => {
+  const css = readFileSync(join(REPO_ROOT, "src", "app", "globals.css"), "utf8");
+  const names = [...css.matchAll(/^@utility ([\w-]+)/gm)].map((m) => m[1]);
+  // The consumer corpus: every ts/tsx/css file under src/ except globals.css
+  // itself (a utility whose only appearance is its own definition is dead).
+  const consumerFiles: string[] = [];
+  collect(join(REPO_ROOT, "src"), consumerFiles, [".ts", ".tsx"]);
+  const consumers = consumerFiles
+    .map((file) => readFileSync(file, "utf8"))
+    .join("\n");
+  const dead: string[] = [];
+  for (const name of names) {
+    // Hyphenated names must not shadow their prefixes (input-base must not
+    // match a bare `input` token) nor be shadowed by longer tokens.
+    const re = new RegExp(`(?<![\\w-])${name}(?![\\w-])`);
+    if (!re.test(consumers)) dead.push(`@utility ${name}`);
+  }
+  expect(
+    dead,
+    "@utility blocks with zero class consumers — the F-3 class (input-base shipped dead since the build commit; the Input component styles through the page-layout constants, a different surface that shares the name)",
+  ).toEqual([]);
+});

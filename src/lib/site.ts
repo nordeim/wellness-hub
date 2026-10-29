@@ -14,7 +14,9 @@
 
 import type { Metadata } from "next";
 
-export const DEFAULT_SITE_URL = "http://localhost:3000";
+// WH-7: un-exported — a same-module data feed (siteUrl's fallback); the
+// export-census pin owns this module's export surface.
+const DEFAULT_SITE_URL = "http://localhost:3000";
 
 /** The app's meta description — the Wellness Hub mission statement. */
 export const SITE_DESCRIPTION =

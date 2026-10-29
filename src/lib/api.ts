@@ -59,21 +59,23 @@ export function isGuarded(x: { user: SessionUser } | { response: NextResponse })
 
 // ---- the auth-family body pre-gate (session-67, N-67d) ---------------------
 
-/** Session-67 (N-67d): the declared-size ceiling for the public auth
- * routes' JSON bodies — the S36-P3 upload precedent extended to the
- * family that buffers req.json() with no default cap. The honest bodies
+/** Session-67 (N-67d): the declared-size ceiling for the auth
+ * routes' JSON bodies — the chassis-era body-gate precedent extended to
+ * the family that buffers req.json() with no default cap. The honest bodies
  * are tiny (email capped at 160 chars + password + a 6-digit code), so
- * 16KB is beyond generous. Documented limitation (inherited from the
- * upload gate): a chunked body without a Content-Length header bypasses
+ * 16KB is beyond generous. Documented limitation (inherited from that
+ * gate): a chunked body without a Content-Length header bypasses
  * this check; the JSON parse's own failure mode stays the backstop.
  * Session-68 (F-68a2): the SAME ceiling + helper now gate the sessioned
  * CRUD family too — placed after requireSession, before the parse; the
- * honest CRUD bodies are asString-capped fields, far below the ceiling.
+ * honest CRUD bodies carry schema-capped fields, far below the ceiling.
  * Session-72 (M-72c2) + session-73 (N-73a1): the family wording was
  * pinned to the CRM tree's route list. WH-4 (F-7): that stale
  * enumeration retired — the wellness truth: EVERY JSON-parsing route
  * parses through the seam (the 6-route auth ladder + the sessioned CRUD
- * families; the route-census pin owns the family set). */
+ * families; the route-census pin owns the family set). WH-7 (F-4): the
+ * upload-family narration retired with its surface — the upload routes
+ * died at WH-4 and nothing here may read as if they still gate. */
 export const MAX_AUTH_BODY_BYTES = 16 * 1024;
 
 /** True when the request DECLARES a body larger than the auth ceiling —

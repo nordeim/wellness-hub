@@ -305,7 +305,7 @@ wellness-hub/
 │   │   ├── wellness-store.ts # ALL server state; call() envelope client
 │   │   └── theme-store.ts    # CSS-variable writer + UserPrefs sync
 │   └── types/               # shared domain types
-├── tests/                   # Vitest *.test.ts (21 suites, 331 checks)
+├── tests/                   # Vitest *.test.ts (21 suites, 309 checks)
 │   └── e2e/                 # Playwright *.spec.ts (42 checks) + setups
 ├── scripts/
 │   ├── smoke-test.sh        # 14-check ladder against the standalone artifact
@@ -607,7 +607,7 @@ No queues, workers or cron. Utility services worth naming:
 | E2E — auth setup project (one-time demo login; shares the cookie via storageState) | 1 setup | 1 | `tests/e2e/auth.setup.ts` | Playwright |
 | E2E — CRUD cycles + reset-password funnel | 2 specs | 18 | `tests/e2e/wellness-crud.spec.ts`, `reset-password.spec.ts` | Playwright |
 
-Totals: **331 unit checks / 21 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
+Totals: **309 unit checks / 21 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
 
 ### 8.2 Test Patterns
 
@@ -634,7 +634,7 @@ docs, not just the code.
 
 - `bun run lint` → 0 warnings
 - `bun run typecheck` → clean
-- `bun run test` → 331/331
+- `bun run test` → 309/309
 - `bun run build` → succeeds (the type gate)
 - `bun run smoke` → 14/14
 - `CI=1 bun run test:e2e` → 42/42
@@ -731,7 +731,7 @@ spec `CI=1 bunx playwright test tests/e2e/<file>`.
 | Priority | Issue | Impact | Status |
 |----------|-------|--------|--------|
 | — | ~~jspdf → dompurify advisory chain~~ | RETIRED at WH-3 — jspdf was a zero-import CRM residue (no PDF export ever shipped in the wellness tree; the reference carries no export UI either — live-probed); removing it removed the chain entirely, and `tests/dead-deps.test.ts` pins the dep tree | Closed (retired) |
-| LOW | Remaining `bun audit` advisories | 9 (4 high / 4 moderate / 1 low — re-triaged 2026-10-29, the WH-6 round), ALL dev-toolchain transitive (prisma CLI, vitest/vite, eslint plugins — the nested zod@4.6.5 copy, postcss); zero runtime request-path exposure (our runtime zod is 4.6.7); re-triage each ship round (no mid-rotation bumps posture) | Accepted posture |
+| LOW | Remaining `bun audit` advisories | 9 (4 high / 4 moderate / 1 low — re-triaged 2026-10-29, the WH-7 round), ALL dev-toolchain transitive (prisma CLI, vitest/vite, eslint plugins — the nested zod@4.6.5 copy, postcss); zero runtime request-path exposure (our runtime zod is 4.6.7 — not in the GHSA-mrhx-c7xc-m3w5 range; the affected copy is the eslint-plugin dev chain, no patched target above 4.6.7 exists; every runtime array schema carries `.max(20)`, structurally blocking the advisory's exploit class); re-triage each ship round (no mid-rotation bumps posture) | Accepted posture |
 | LOW | The lockfile's stale `"activity-map"` workspace name (`bun.lock:6` vs package.json `"wellness-hub"`) | Inert carried metadata from a pre-history workspace; probed at WH-4 — `bun install` (including the post-`bun remove` clean reinstall) does NOT sync the name, and a full lockfile regen risks semver drift for zero functional gain | Accepted posture (inert metadata) |
 | LOW | Google OAuth button | Visible for parity but reports "not configured on this deployment" — no OAuth credentials ship by design | Intentional |
 | LOW | "Watch Video" links open placeholder URLs | The reference's own tutorial/video URLs are placeholders (`example-*`); we open them in a new tab with identical behavior | Intentional parity |

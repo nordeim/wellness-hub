@@ -4,36 +4,12 @@
 // the reference's {label, icon?, tint} card-chip vocabulary so every page
 // renders the same chip anatomy from one source.
 
-import type { LucideIcon } from "lucide-react";
-import {
-  Dumbbell,
-  HeartPulse,
-  BookOpen,
-  Clock,
-  Bell,
-  Sparkles,
-  Activity,
-  ClipboardList,
-  CalendarDays,
-  Video,
-} from "lucide-react";
-
-// ---------------------------------------------------------------------------
-// Icons — the sidebar nav glyph set (mirrors the reference's shapes).
-// ---------------------------------------------------------------------------
-export const NAV_ICONS = {
-  dashboard: Activity,
-  routines: ClipboardList,
-  exercise: Dumbbell,
-  mentalHealth: HeartPulse,
-  assignments: BookOpen,
-  events: CalendarDays,
-  studyResources: Sparkles,
-  reminders: Bell,
-  learning: Video,
-  goals: Sparkles,
-  profile: Clock,
-} as const satisfies Record<string, LucideIcon>;
+// WH-7: the chassis-era NAV_ICONS glyph map (and its ten lucide-react
+// imports) retired — the sidebar/mobile drawer render from
+// src/components/layout/nav-config.ts, which carries its OWN icon set
+// byte-extracted from the reference's live DOM; this map had zero
+// importers since the build. The export-census pin owns this module's
+// export surface.
 
 // ---------------------------------------------------------------------------
 // Workouts (Exercise Tracker)
@@ -202,7 +178,7 @@ export const GOAL_FREQUENCY_POINTS: Record<string, number> = {
 // ---------------------------------------------------------------------------
 // Routine Templates
 // ---------------------------------------------------------------------------
-export const TEMPLATE_DIFFICULTIES: OptionMeta[] = [
+const TEMPLATE_DIFFICULTIES: OptionMeta[] = [
   { value: "easy", label: "easy", tint: "bg-emerald-50", text: "text-emerald-600" },
   { value: "moderate", label: "moderate", tint: "bg-amber-50", text: "text-amber-600" },
 ];
@@ -291,9 +267,11 @@ export const ANIMATION_LEVELS = [
 ] as const;
 
 // ---------------------------------------------------------------------------
-// App identity (the reference's own strings).
+// App identity (the reference's own strings). WH-7: the login subtitle
+// string retired — the login card renders its reference strings inline
+// (LOGIN_LAYOUT classes + the literal pair); only the strings with real
+// consumers stay exported.
 // ---------------------------------------------------------------------------
 export const APP_NAME = "Wellness Hub";
 export const APP_TAGLINE = "Your personal companion";
 export const APP_LOGIN_TITLE = "Welcome to EvolveWell";
-export const APP_LOGIN_SUBTITLE = "Sign in to continue";
