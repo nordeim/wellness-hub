@@ -1,5 +1,5 @@
 Please carefully read completely and internalized your operating instructions in the attached/pasted text.
-Now, please refresh your local workspace using `git pull` (or run `git clone https://github.com/nordeim/wellness-hub.git` if your local workspace has been reset) , then meticulously review the included `AGENTS.md` , `CLAUDE.md` , `README.md` , `Project_Architecture_Document.md` and `wellness-hub_SKILL.md` to have a good understanding of the purpose of the project and its current codebase design and architecture. Next, meticulously plan to review the included `docs/session_1.md` , `docs/plans/2026-10-24-session178-topbar-search-focus-segmented-active-walk.md` , `worklog.md` , then meticulously validate your deep understanding against the codebase to check for alignment to confirm the current project status. The repo included `skills/` folder is to be excluded from code checking, testing and compilation.
+Now, please refresh your local workspace using `git pull` (or run `git clone https://github.com/nordeim/wellness-hub.git` if your local workspace has been reset) , then meticulously review the included `AGENTS.md` , `CLAUDE.md` , `README.md` , `Project_Architecture_Document.md` and `wellness-hub_SKILL.md` to have a good understanding of the purpose of the project and its current codebase design and architecture. Next, meticulously plan to review the included `docs/session_2.md` , `docs/plans/2026-10-29-session2-remediation-plan.md` , `worklog.md` , then meticulously validate your deep understanding against the codebase to check for alignment to confirm the current project status. The repo included `skills/` folder is to be excluded from code checking, testing and compilation.
 
 Next, meticulously plan to audit and validate the current codebase, particularly on the recent code changes, use the repo skill `skills/web-application/SKILL.md` and other appropriate skills from the repo included `skills/` folder to help you with the code review and audit (refer to the repo included `skills/skills-catalog.md` to look for the relevant skills). Proceed with your best decisions and judgment on any open decisions.
 
@@ -28,4 +28,3 @@ SSH key for `git push`:
 ```
 
 ```
-
