@@ -15,9 +15,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type ThemeMode = "light" | "dark" | "auto";
+type ThemeMode = "light" | "dark" | "auto";
 
-export interface ThemeState {
+interface ThemeState {
   themeMode: ThemeMode;
   primaryColor: string;
   secondaryColor: string;
@@ -52,7 +52,7 @@ function shade(hex: string, factor: number): string {
   return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
 }
 
-export type ThemeData = Omit<ThemeState, "setTheme">;
+type ThemeData = Omit<ThemeState, "setTheme">;
 // WH-9 (F-3): the dead `reset` member retired with the Omit entry that
 // named it — the theme-store member census owns this surface.
 

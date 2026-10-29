@@ -14,7 +14,7 @@
 // ---------------------------------------------------------------------------
 // Workouts (Exercise Tracker)
 // ---------------------------------------------------------------------------
-export interface OptionMeta {
+interface OptionMeta {
   value: string;
   label: string;
   icon?: string; // emoji, when the reference's option carries one
@@ -215,7 +215,7 @@ export function tutorialDifficultyMeta(value: string): OptionMeta {
 // ---------------------------------------------------------------------------
 // Profile & Customization — the Appearance tab vocabulary (live-captured).
 // ---------------------------------------------------------------------------
-export interface ColorPreset {
+interface ColorPreset {
   key: string;
   label: string;
   primary: string;

@@ -117,7 +117,7 @@ export interface Badge {
   earnedAt?: string | null; // present when earned (the /api/achievements merge)
 }
 
-export interface RoutineStep {
+interface RoutineStep {
   id: string;
   templateId: string;
   title: string;
@@ -168,20 +168,6 @@ export interface Tutorial {
   difficulty: string;
   views: number;
   sortOrder: number;
-}
-
-export interface UserPrefs {
-  themeMode: string;
-  primaryColor: string;
-  secondaryColor: string;
-  fontFamily: string;
-  bgImageUrl: string | null;
-  sidebarStyle: string;
-  cardStyle: string;
-  animationLevel: string;
-  notificationsEnabled: boolean;
-  weeklyReminders: boolean;
-  updatedAt: string;
 }
 
 // ---------------------------------------------------------------------------

@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 import type { z } from "zod";
 import { getSessionUser, type SessionUser } from "./auth";
 
-export type ApiError = { code: string; message: string };
-export type ApiResult<T> = { ok: true; data: T } | { ok: false; error: ApiError };
+type ApiError = { code: string; message: string };
+type ApiResult<T> = { ok: true; data: T } | { ok: false; error: ApiError };
 
 export function ok<T>(data: T, init?: number): NextResponse {
   return NextResponse.json({ ok: true, data } satisfies ApiResult<T>, { status: init ?? 200 });
@@ -92,7 +92,7 @@ export function isBodyTooLarge(req: Request): boolean {
  *  too large" 400; `value` carries the parsed JSON (null when
  *  unparseable OR unparseable-by-policy — the sites' historical
  *  `.catch(() => null)` contract, digma's documented form). */
-export type BoundedJson =
+type BoundedJson =
   | { tooLarge: true }
   | { tooLarge: false; value: Record<string, unknown> | null };
 

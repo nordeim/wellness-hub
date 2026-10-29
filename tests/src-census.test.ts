@@ -42,11 +42,11 @@ const REPO_ROOT = join(import.meta.dirname, "..");
  * a new export joins the module, flip this set in the same commit (an
  * export without a consumer is the F-1 class; the route-census liveness
  * pin keeps whole modules honest, this keeps the contract module's
- * surface honest). */
+ * surface honest). WH-11 dropped the three TYPE exports (ApiError/
+ * ApiResult/BoundedJson — zero external consumers; the envelope is
+ * consumed through the ok()/fail() VALUES, and the store's call() types
+ * its envelope through its own Result): 12 → 9, all values. */
 const API_EXPORTS = [
-  "ApiError",
-  "ApiResult",
-  "BoundedJson",
   "ERR",
   "MAX_AUTH_BODY_BYTES",
   "fail",
@@ -137,7 +137,7 @@ it("WH-6: every cited tests/*.test.ts file in the app tree exists", () => {
   ).toEqual([]);
 });
 
-it("WH-6: src/lib/api.ts exports exactly the live contract surface (12)", () => {
+it("WH-6: src/lib/api.ts exports exactly the live contract surface (9)", () => {
   const source = readFileSync(join(REPO_ROOT, "src", "lib", "api.ts"), "utf8");
   const exported = [
     ...source.matchAll(/^export (?:async )?function (\w+)|^export const (\w+)|^export type (\w+)/gm),
@@ -546,5 +546,77 @@ it("WH-9: every ThemeState member is consumed at a useThemeStore call site", () 
   expect(
     dead,
     "ThemeState members with zero production consumers at useThemeStore call sites — retire them (a dead store member is drift liability; the reference's Appearance tab carries no reset surface, live-verified at WH-9)",
+  ).toEqual([]);
+});
+
+// ---- WH-11: the exported-TYPE liveness census --------------------------------
+//
+// WH-11 found the TYPE-declaration surface (`export type` / `export
+// interface`) was never censused: every earlier pin reads value
+// declarations (`export function/const`), export-block NAMES, destructured
+// props, or member accesses — the WH-7 value census's regex sees only
+// `^export (?:async )?function|^export const`, so a hand-written domain
+// interface with ZERO consumers (UserPrefs — the orphan of WH-8's
+// store-slice retirement) and twenty same-module-only exported types
+// (consumed exclusively inside their own modules; the WH-8 data-feed
+// class in type form) sailed through five census-extension rounds.
+//
+// Design (two load-bearing rules):
+//   1. WHOLE-TREE walk — the declaration surface is EVERY ts/tsx under
+//      src/, not a fixed module list. The value census needs its fixed
+//      list because `export const/function` appears in route files as
+//      framework-contract surface (handlers, `dynamic`, config exports);
+//      the TYPE surface has no such contracts (nothing in the App Router
+//      requires an exported type from a route/page/layout file), so the
+//      walk has zero false positives and a NEW module exporting types is
+//      covered at birth — the exact blind-spot class this check cures.
+//   2. The pin's OWN TEXT is excluded from the consumer corpus (the
+//      WH-7 SELF rule, load-bearing here: this file names WellnessState,
+//      ThemeState and the api envelope trio in its own machinery — a
+//      census that counts its own narration as consumption guards
+//      nothing; the audit's first pass hid five offenders behind exactly
+//      that miscount).
+//
+// The liveness rule mirrors the value census: an exported type must be
+// referenced in a corpus file OTHER than its declaring module (src +
+// tests + scripts + prisma). A type consumed only in-module is private
+// machinery — the cure drops the `export` keyword and keeps the
+// declaration (the WH-8 doctrine's type form).
+
+it("WH-11: every exported type in src has a consumer outside its own module", () => {
+  const corpusFiles: string[] = [];
+  collect(join(REPO_ROOT, "src"), corpusFiles, [".ts", ".tsx"]);
+  collect(join(REPO_ROOT, "tests"), corpusFiles, [".ts", ".tsx"]);
+  collect(join(REPO_ROOT, "scripts"), corpusFiles, [".ts"]);
+  collect(join(REPO_ROOT, "prisma"), corpusFiles, [".ts"]);
+  const SELF = "tests/src-census.test.ts";
+  const corpus = new Map<string, string>();
+  for (const file of corpusFiles) {
+    const key = file.replace(REPO_ROOT + "/", "");
+    if (key === SELF) continue;
+    corpus.set(key, readFileSync(file, "utf8"));
+  }
+
+  // The declaration surface: every ts/tsx file under src/ (whole tree).
+  const srcFiles: string[] = [];
+  collect(join(REPO_ROOT, "src"), srcFiles, [".ts", ".tsx"]);
+  const dead: string[] = [];
+  for (const file of srcFiles) {
+    const mod = file.replace(REPO_ROOT + "/", "");
+    const text = corpus.get(mod);
+    if (!text) throw new Error(`census module missing: ${mod}`);
+    for (const m of text.matchAll(/^export (?:type|interface) (\w+)/gm)) {
+      const name = m[1];
+      const re = new RegExp(`\\b${name}\\b`);
+      const consumed = [...corpus.entries()].some(([file, src]) => {
+        if (file === mod) return false;
+        return re.test(src);
+      });
+      if (!consumed) dead.push(`${mod}: ${name}`);
+    }
+  }
+  expect(
+    dead,
+    "exported types with zero consumers outside their own module — the F-1/F-2 class: a fully-unreferenced declaration retires; a same-module-only type cures by dropping the `export` keyword, keeping the declaration",
   ).toEqual([]);
 });

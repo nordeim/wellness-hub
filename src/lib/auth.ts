@@ -59,7 +59,7 @@ function secret(): string {
 
 // ---- session token ---------------------------------------------------------
 
-export interface SessionPayload {
+interface SessionPayload {
   uid: string;
   iat: number;
   exp: number;

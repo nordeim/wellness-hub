@@ -52,7 +52,7 @@ async function call<T>(path: string, init?: RequestInit): Promise<Result<T, stri
 // (no cross-user flash on a fast logout → login).
 let sessionWriteToken = 0;
 
-export interface AchievementsData {
+interface AchievementsData {
   badges: Badge[];
   goalsCompleted: number;
   goalsTotal: number;
@@ -62,7 +62,7 @@ export interface AchievementsData {
   totalPoints: number;
 }
 
-export interface WellnessState {
+interface WellnessState {
   // session bootstrap flag (the auth decision is the (app) layout's
   // server guard; a page needing the session user takes it as a server
   // prop — the Profile page's pattern. No user slice: WH-8 retired the

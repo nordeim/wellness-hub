@@ -52,10 +52,10 @@ export function shouldHardReload(
 
 /** The structural storage minimum the seam reads (a full Storage is
  *  accepted; tests hand doubles that implement just these two). */
-export type ChunkStorage = Pick<Storage, "getItem" | "setItem">;
+type ChunkStorage = Pick<Storage, "getItem" | "setItem">;
 
 /** The injectable dependencies (tests hand doubles; the boundary hands the globals). */
-export interface ReloadDeps {
+interface ReloadDeps {
   storage?: ChunkStorage | null;
   now?: () => number;
   reload?: () => void;

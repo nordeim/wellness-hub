@@ -78,7 +78,7 @@ export function totalPoints(
 // returns the FRESHLY earned keys (for the toast).
 // ---------------------------------------------------------------------------
 
-export interface BadgeCounts {
+interface BadgeCounts {
   workouts: number;
   moodEntries: number;
   moodStreak: number;
@@ -111,7 +111,7 @@ export function unearnedBadges(catalog: Badge[], earnedIds: Set<string>): Badge[
 // stat tiles; derived, never stored).
 // ---------------------------------------------------------------------------
 
-export type ReminderStatus = "upcoming" | "overdue" | "completed";
+type ReminderStatus = "upcoming" | "overdue" | "completed";
 
 export function reminderStatus(
   r: { completed: boolean; remindAt: Date | string },

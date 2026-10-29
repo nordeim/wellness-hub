@@ -35,7 +35,7 @@ export const KNOWN_WELLNESS_VARS: ReadonlySet<string> = new Set([
 /** The values the WELLNESS_DISABLE_* kill-switches actually read ("1" = disable). */
 const DISABLE_KNOB_VALUES = new Set(["", "1"]);
 
-export interface BootEnvReport {
+interface BootEnvReport {
   fatal: string | null;
   warnings: string[];
 }

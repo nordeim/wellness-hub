@@ -35,7 +35,7 @@ const buckets = new Map<string, Bucket>();
 // cost profile changes (the never-weakened guarantee).
 let sweepWatermark = 0;
 
-export interface RateLimitResult {
+interface RateLimitResult {
   allowed: boolean;
   remaining: number;
   retryAfterSec: number;
