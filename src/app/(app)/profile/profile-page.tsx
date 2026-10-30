@@ -3,6 +3,7 @@
 import * as React from "react";
 import {
   Check,
+  Image as ImageIcon,
   LogOut,
   Monitor,
   Moon,
@@ -10,6 +11,7 @@ import {
   Settings,
   Sparkles,
   Sun,
+  Type,
   UserRound,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,7 +23,10 @@ import { Tabs, TabsPanel } from "@/components/ui/tabs";
 import { Label, Checkbox } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
+import {
+  PAGE_THEMES, BUTTON_BASE, BUTTON_CLASSES,
+  PROFILE_PANEL, THEME_MODE_PICKER, PRESET_CARD,
+} from "@/lib/page-layout";
 import {
   COLOR_PRESETS,
   FONT_FAMILIES,
@@ -104,42 +109,57 @@ function AppearancePanel() {
   const theme = useThemeStore();
   return (
     <div className="space-y-6">
-      {/* Theme Mode */}
-      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
-        <h2 className="mb-3 flex items-center gap-2 font-semibold text-foreground">
-          <Monitor className="h-5 w-5 text-muted" aria-hidden="true" /> Theme Mode
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          {THEME_MODES.map((m) => (
-            <button
-              key={m.value}
-              type="button"
-              aria-pressed={theme.themeMode === m.value}
-              onClick={() => theme.setTheme({ themeMode: m.value })}
-              className={cn(
-                BUTTON_CLASSES,
-                "h-10 rounded-md border px-5 text-sm",
-                theme.themeMode === m.value
-                  ? "border-primary bg-primary/10 text-primary"
-                  : "border-line hover:bg-line-soft",
-              )}
-            >
-              {m.value === "light" && <Sun className="h-4 w-4" />}
-              {m.value === "dark" && <Moon className="h-4 w-4" />}
-              {m.value === "auto" && <Monitor className="h-4 w-4" />}
-              {m.label}
-            </button>
-          ))}
+      {/* Theme Mode — WH-17 (F-2): the reference's border-2 card grid
+          (probed live 2026-10-30): grid-cols-3 of p-4 flex-col cards,
+          the FIXED indigo active pair (not preset-themeable — the
+          reference's own preset engine leaves it untouched). */}
+      <section className={PROFILE_PANEL.card}>
+        <div className={PROFILE_PANEL.header}>
+          <h2 className={PROFILE_PANEL.title}>
+            <Moon className="h-5 w-5" aria-hidden="true" /> Theme Mode
+          </h2>
+        </div>
+        <div className={PROFILE_PANEL.body}>
+          <div className={THEME_MODE_PICKER.grid}>
+            {THEME_MODES.map((m) => (
+              <button
+                key={m.value}
+                type="button"
+                aria-pressed={theme.themeMode === m.value}
+                onClick={() => theme.setTheme({ themeMode: m.value })}
+                className={cn(
+                  THEME_MODE_PICKER.card,
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  theme.themeMode === m.value
+                    ? THEME_MODE_PICKER.active
+                    : THEME_MODE_PICKER.inactive,
+                )}
+              >
+                {m.value === "light" && <Sun className={THEME_MODE_PICKER.icon} />}
+                {m.value === "dark" && <Moon className={THEME_MODE_PICKER.icon} />}
+                {m.value === "auto" && <Monitor className={THEME_MODE_PICKER.icon} />}
+                <span className={THEME_MODE_PICKER.label}>{m.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Colors + presets */}
-      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
-        <h2 className="mb-3 flex items-center gap-2 font-semibold text-foreground">
-          <Palette className="h-5 w-5 text-muted" aria-hidden="true" /> Colors
-        </h2>
-        <p className="mb-2 text-sm font-medium text-foreground">Quick Presets</p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {/* Colors + presets — the reference's panel shell; the preset
+          cards at the reference's p-3 rounded-xl hover:shadow-md anatomy
+          (probed live; the reference carries no visible active state —
+          our ring + label is the functional superset, the label at
+          text-foreground for AA, WH-17 F-2). */}
+      <section className={PROFILE_PANEL.card}>
+        <div className={PROFILE_PANEL.header}>
+          <h2 className={PROFILE_PANEL.title}>
+            <Palette className="h-5 w-5" aria-hidden="true" /> Colors
+          </h2>
+        </div>
+        <div className={PROFILE_PANEL.bodySpaced}>
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground">Quick Presets</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {COLOR_PRESETS.map((p) => {
             const active = theme.primaryColor.toLowerCase() === p.primary.toLowerCase();
             return (
@@ -149,29 +169,31 @@ function AppearancePanel() {
                 aria-pressed={active}
                 onClick={() => theme.setTheme({ primaryColor: p.primary, secondaryColor: p.secondary })}
                 className={cn(
-                  "rounded-lg border p-3 text-left transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  active ? "border-primary ring-1 ring-primary" : "border-line",
+                  PRESET_CARD.card,
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  active ? PRESET_CARD.active : "border-line",
                 )}
               >
                 <span
-                  className="mb-2 block h-8 w-full rounded-md bg-gradient-to-r"
+                  className={PRESET_CARD.swatch}
                   style={{
                     backgroundImage: `linear-gradient(to right, ${p.primary}, ${p.secondary})`,
                   }}
                   aria-hidden="true"
                 />
-                <span className="text-xs font-medium text-foreground">{p.label}</span>
+                <span className={PRESET_CARD.label}>{p.label}</span>
                 {active && (
-                  <span className="mt-1 flex items-center gap-1 text-xs text-primary">
+                  <span className={PRESET_CARD.activeLabel}>
                     <Check className="h-3 w-3" /> Active
                   </span>
                 )}
               </button>
             );
           })}
-        </div>
+            </div>
+          </div>
 
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="pref-primary">Primary Color</Label>
             <div className="mt-2 flex items-center gap-2">
@@ -212,14 +234,29 @@ function AppearancePanel() {
           </div>
         </div>
 
-        <p className="mt-4 text-xs text-muted">
-          Preview: Your Custom Theme! 🎨 Every button, heading and gradient follows your pair.
+        {/* The preview tile — the reference's gradient form (probed:
+            `p-6 rounded-xl text-white text-center font-semibold` riding
+            the live preset pair). */}
+        <p
+          className="p-6 rounded-xl text-center font-semibold text-white bg-gradient-to-r"
+          style={{
+            backgroundImage: `linear-gradient(to right, ${theme.primaryColor}, ${theme.secondaryColor})`,
+          }}
+        >
+          Preview: Your Custom Theme! 🎨
         </p>
+        </div>
       </section>
 
-      {/* Typography */}
-      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
-        <h2 className="mb-3 font-semibold text-foreground">Typography</h2>
+      {/* Typography — the reference's panel shell (the type icon header,
+          probed live). */}
+      <section className={PROFILE_PANEL.card}>
+        <div className={PROFILE_PANEL.header}>
+          <h2 className={PROFILE_PANEL.title}>
+            <Type className="h-5 w-5" aria-hidden="true" /> Typography
+          </h2>
+        </div>
+        <div className={PROFILE_PANEL.body}>
         <div className="space-y-2">
           <Label htmlFor="pref-font">Font Family</Label>
           <Select value={theme.fontFamily} onValueChange={(v) => theme.setTheme({ fontFamily: v })}>
@@ -235,15 +272,24 @@ function AppearancePanel() {
             </SelectContent>
           </Select>
         </div>
-        <p className="mt-3 rounded-lg bg-line-soft p-3 text-sm text-muted">
+        {/* WH-17 (F-4 family): gray-600 — gray-500 computed 4.35:1 on the
+            line-soft wash (the same class the Goals badge text carried). */}
+        <p className="mt-3 rounded-lg bg-line-soft p-3 text-sm text-gray-600">
           The quick brown fox jumps over the lazy dog.
         </p>
-        <p className="mt-1 text-xs text-subtle">Preview of {FONT_FAMILIES.find((f) => f.value === theme.fontFamily)?.label}</p>
+        <p className="mt-1 text-xs text-muted">Preview of {FONT_FAMILIES.find((f) => f.value === theme.fontFamily)?.label}</p>
+        </div>
       </section>
 
-      {/* Background image */}
-      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
-        <h2 className="mb-3 font-semibold text-foreground">Background Image</h2>
+      {/* Background image — the reference's panel shell (the image icon
+          header, probed live). */}
+      <section className={PROFILE_PANEL.card}>
+        <div className={PROFILE_PANEL.header}>
+          <h2 className={PROFILE_PANEL.title}>
+            <ImageIcon className="h-5 w-5" aria-hidden="true" /> Background Image
+          </h2>
+        </div>
+        <div className={PROFILE_PANEL.body}>
         <div className="space-y-2">
           <Label htmlFor="pref-bg">Image URL (optional)</Label>
           <Input
@@ -257,11 +303,19 @@ function AppearancePanel() {
         <p className="mt-2 text-xs text-muted">
           Pro tip: Use high-quality images from Unsplash or similar
         </p>
+        </div>
       </section>
 
-      {/* Visual style */}
-      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
-        <h2 className="mb-3 font-semibold text-foreground">Visual Style</h2>
+      {/* Visual style — the reference's panel shell (the sparkles icon
+          header, probed live; the body carries the space-y-6 multi-block
+          form). */}
+      <section className={PROFILE_PANEL.card}>
+        <div className={PROFILE_PANEL.header}>
+          <h2 className={PROFILE_PANEL.title}>
+            <Sparkles className="h-5 w-5" aria-hidden="true" /> Visual Style
+          </h2>
+        </div>
+        <div className={PROFILE_PANEL.body}>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label htmlFor="pref-sidebar">Sidebar Style</Label>
@@ -309,6 +363,7 @@ function AppearancePanel() {
             </Select>
           </div>
         </div>
+        </div>
       </section>
     </div>
   );
@@ -320,10 +375,13 @@ function AppearancePanel() {
 function AccountPanel({ user, onLogout }: { user: AppUser | null; onLogout: () => void }) {
   return (
     <div className="space-y-6">
-      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
-        <h2 className="mb-4 flex items-center gap-2 font-semibold text-foreground">
-          <UserRound className="h-5 w-5 text-muted" aria-hidden="true" /> Account Information
-        </h2>
+      <section className={PROFILE_PANEL.card}>
+        <div className={PROFILE_PANEL.header}>
+          <h2 className={PROFILE_PANEL.title}>
+            <UserRound className="h-5 w-5" aria-hidden="true" /> Account Information
+          </h2>
+        </div>
+        <div className={PROFILE_PANEL.body}>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="ac-name">Full Name</Label>
@@ -338,12 +396,16 @@ function AccountPanel({ user, onLogout }: { user: AppUser | null; onLogout: () =
             <Input id="ac-role" className="mt-2" disabled value={user?.role ?? "user"} />
           </div>
         </div>
+        </div>
       </section>
 
-      <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
-        <h2 className="mb-2 flex items-center gap-2 font-semibold text-foreground">
-          <Settings className="h-5 w-5 text-muted" aria-hidden="true" /> Session
-        </h2>
+      <section className={PROFILE_PANEL.card}>
+        <div className={PROFILE_PANEL.header}>
+          <h2 className={PROFILE_PANEL.title}>
+            <Settings className="h-5 w-5" aria-hidden="true" /> Session
+          </h2>
+        </div>
+        <div className={PROFILE_PANEL.body}>
         <p className="mb-3 text-sm text-muted">
           Sign out of this device. Your wellness data stays safe.
         </p>
@@ -354,6 +416,7 @@ function AccountPanel({ user, onLogout }: { user: AppUser | null; onLogout: () =
         >
           <LogOut className="h-4 w-4" /> Log out
         </button>
+        </div>
       </section>
     </div>
   );
@@ -365,8 +428,11 @@ function AccountPanel({ user, onLogout }: { user: AppUser | null; onLogout: () =
 function PreferencesPanel() {
   const theme = useThemeStore();
   return (
-    <section className="rounded-xl border border-line bg-surface p-5 shadow-lg">
-      <h2 className="mb-4 font-semibold text-foreground">App Preferences</h2>
+    <section className={PROFILE_PANEL.card}>
+      <div className={PROFILE_PANEL.header}>
+        <h2 className={PROFILE_PANEL.title}>App Preferences</h2>
+      </div>
+      <div className={PROFILE_PANEL.body}>
       <div className="space-y-4">
         <label className="flex items-start justify-between gap-4 rounded-lg border border-line bg-line-soft/40 px-4 py-3">
           <span>
@@ -390,6 +456,7 @@ function PreferencesPanel() {
             aria-label="Weekly goal reminders"
           />
         </label>
+      </div>
       </div>
     </section>
   );

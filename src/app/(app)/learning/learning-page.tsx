@@ -114,7 +114,7 @@ export default function LearningClientPage() {
                     type="button"
                     className="absolute inset-0 flex items-center justify-center bg-black/30 transition-colors hover:bg-black/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     onClick={() => void watch(t.id, t.videoUrl, t.title)}
-                    aria-label={`Watch ${t.title}`}
+                    aria-label={`Watch Now: ${t.title}`}
                   >
                     <span className="flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-medium text-gray-900 shadow-lg">
                       <Play className="h-4 w-4" /> Watch Now

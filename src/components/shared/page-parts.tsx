@@ -129,8 +129,13 @@ export function LoadingBlock({ label }: { label: string }) {
   );
 }
 
-/** The chip pair every option vocabulary renders (the tinted pill:
- *  bg-emerald-50 text-emerald-600 rounded-full px-2.5 py-0.5). WH-9 (F-2b):
+/** The chip pair every option vocabulary renders (the WH-17 re-capture:
+ *  the reference's post-redesign Badge anatomy — rounded-md (6px), the 1px
+ *  transparent border, font-semibold — with the bg-*-100/text-*-700 pairs,
+ *  probed live 2026-10-30: every rendered pair passes WCAG AA, where the
+ *  stale rounded-full font-medium -50/-600 form failed on every surface.
+ *  The verified maps live in constants.ts; the WH-17 chip-vocabulary
+ *  census in tests/src-census.test.ts pins the system. WH-9 (F-2b):
  *  the `className` prop retired — zero call sites (studyresources's icon
  *  chip is the only live `icon` consumer; none styles the span). */
 export function OptionChip({
@@ -147,7 +152,7 @@ export function OptionChip({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
+        "inline-flex items-center gap-1 rounded-md border border-transparent px-2.5 py-0.5 text-xs font-semibold",
         tint,
         text,
       )}

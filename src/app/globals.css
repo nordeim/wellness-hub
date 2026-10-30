@@ -153,9 +153,17 @@
      tints, the calendar's violet family and the gray text family. All
      26 verified against the reference's own live compiled stylesheet
      (assets/index-heGLHP2e.css — 17 as hex forms, 9 as its rgb() space
-     forms; the DOM-computed probes agree). The block now carries
-     exactly the 95 used pairs — the equivalence census holds. */
+     forms; the DOM-computed probes agree). WH-17 (the a11y round): +17
+     pins for the chip vocabulary's -100/-700 system (13 verified
+     against the reference's own compiled sheet: amber/blue/cyan/emerald/
+     orange/pink/purple/yellow 100+700 — the teal/sky/indigo pairs carry
+     no reference surface and pin v3 directly) + neutral-600 (the tabs
+     track's accessible superset); the 3 orphaned -50/-600 pins retired
+     with the chip migration (green-600, sky-50, sky-600 — the chips were
+     their only consumers). The block now carries exactly the 109 used
+     pairs — the equivalence census holds. */
   --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
   --color-amber-200: #fde68a;
   --color-amber-300: #fcd34d;
   --color-amber-400: #fbbf24;
@@ -166,13 +174,17 @@
   --color-amber-900: #78350f;
   --color-amber-950: #451a03;
   --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
   --color-blue-500: #3b82f6;
   --color-blue-600: #2563eb;
   --color-blue-700: #1d4ed8;
   --color-cyan-50: #ecfeff;
+  --color-cyan-100: #cffafe;
+  --color-cyan-700: #0e7490;
   --color-cyan-500: #06b6d4;
   --color-cyan-600: #0891b2;
   --color-emerald-50: #ecfdf5;
+  --color-emerald-700: #047857;
   --color-emerald-100: #d1fae5;
   --color-emerald-200: #a7f3d0;
   --color-emerald-500: #10b981;
@@ -191,24 +203,30 @@
   --color-green-100: #dcfce7;
   --color-green-200: #bbf7d0;
   --color-green-500: #22c55e;
-  --color-green-600: #16a34a;
   --color-green-700: #15803d;
   --color-indigo-50: #eef2ff;
+  --color-indigo-100: #e0e7ff;
+  --color-indigo-700: #4338ca;
   --color-indigo-500: #6366f1;
   --color-indigo-600: #4f46e5;
   --color-neutral-50: #fafafa;
+  --color-neutral-600: #525252;
   --color-neutral-700: #404040;
   --color-neutral-800: #262626;
   --color-neutral-900: #171717;
   --color-neutral-950: #0a0a0a;
   --color-orange-50: #fff7ed;
+  --color-orange-700: #c2410c;
   --color-orange-100: #ffedd5;
   --color-orange-500: #f97316;
   --color-orange-600: #ea580c;
   --color-pink-50: #fdf2f8;
+  --color-pink-100: #fce7f3;
+  --color-pink-700: #be185d;
   --color-pink-500: #ec4899;
   --color-pink-600: #db2777;
   --color-purple-50: #faf5ff;
+  --color-purple-700: #7e22ce;
   --color-purple-100: #f3e8ff;
   --color-purple-500: #a855f7;
   --color-purple-600: #9333ea;
@@ -223,8 +241,8 @@
   --color-rose-200: #fecdd3;
   --color-rose-500: #f43f5e;
   --color-rose-600: #e11d48;
-  --color-sky-50: #f0f9ff;
-  --color-sky-600: #0284c7;
+  --color-sky-100: #e0f2fe;
+  --color-sky-700: #0369a1;
   --color-slate-50: #f8fafc;
   --color-slate-100: #f1f5f9;
   --color-slate-200: #e2e8f0;
@@ -236,6 +254,8 @@
   --color-slate-800: #1e293b;
   --color-slate-900: #0f172a;
   --color-teal-50: #f0fdfa;
+  --color-teal-100: #ccfbf1;
+  --color-teal-700: #0f766e;
   --color-teal-500: #14b8a6;
   --color-teal-600: #0d9488;
   --color-violet-50: #f5f3ff;
@@ -245,6 +265,7 @@
   --color-violet-600: #7c3aed;
   --color-violet-700: #6d28d9;
   --color-yellow-50: #fefce8;
+  --color-yellow-700: #a16207;
   --color-yellow-100: #fef9c3;
   --color-yellow-500: #eab308;
   --color-yellow-600: #ca8a04;

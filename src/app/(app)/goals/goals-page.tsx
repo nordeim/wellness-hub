@@ -209,7 +209,7 @@ export default function GoalsClientPage() {
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-foreground">{g.title}</p>
-                      <p className="text-xs text-muted">
+                      <p className="text-xs text-gray-600">
                         {g.currentValue}/{g.targetValue} {g.unit} · {f.label}
                         {g.deadline ? ` · by ${formatDate(g.deadline)}` : ""}
                         {g.description ? ` · ${g.description}` : ""}
@@ -282,7 +282,7 @@ export default function GoalsClientPage() {
                   key={b.id}
                   className={cn(
                     "flex flex-col items-center gap-1.5 rounded-xl border p-4 text-center",
-                    earned ? "border-primary/30 bg-primary/5" : "border-line bg-line-soft/40 opacity-60",
+                    earned ? "border-primary/30 bg-primary/5" : "border-line bg-line-soft/40",
                   )}
                 >
                   <span
@@ -293,7 +293,14 @@ export default function GoalsClientPage() {
                     {b.icon}
                   </span>
                   <p className="text-sm font-semibold text-foreground">{b.name}</p>
-                  <p className="text-xs text-muted">{b.description}</p>
+                  {/* WH-17 (F-4): gray-600 over gray-500 — the muted token
+                      computed 4.48:1 on the line-soft/40 wash (the badge
+                      catalog is our superset surface; the reference ships an
+                      empty state here), and the card-level opacity-60
+                      dimming retired with it (an axe-invisible contrast
+                      hazard — the effective fg compounds far below the
+                      reported ratio). */}
+                  <p className="text-xs text-gray-600">{b.description}</p>
                   {earned && (
                     <p className="text-xs font-medium text-primary">
                       Earned {formatDate(b.earnedAt as string)} · +{b.points} pts

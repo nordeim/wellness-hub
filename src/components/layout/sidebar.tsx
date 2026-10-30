@@ -69,7 +69,7 @@ export function SidebarFooter() {
             <item.icon className={cn(NAV_LAYOUT.icon, "shrink-0")} strokeWidth={2} />
             <span className="flex flex-col">
               <span className="text-sm font-medium leading-tight">{item.label}</span>
-              <span className="text-xs text-subtle">Customize your experience</span>
+              <span className="text-xs text-muted">Customize your experience</span>
             </span>
           </Link>
         );

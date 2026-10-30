@@ -1,8 +1,16 @@
 // Wellness Hub domain vocabularies — every option list, emoji mapping and
-// tint decoded live from the reference app's DOM/comboboxes on 2026-10-29
-// (see docs/plans/2026-10-29-wellness-hub-build.md §1.5). The shape follows
-// the reference's {label, icon?, tint} card-chip vocabulary so every page
-// renders the same chip anatomy from one source.
+// tint. Originally decoded live from the reference app's DOM/comboboxes on
+// 2026-10-29 (see docs/plans/2026-10-29-wellness-hub-build.md §1.5); the
+// chip LAYER re-captured at WH-17 (2026-10-30) after the reference's
+// redesign moved its chips to the Badge anatomy (rounded-md border
+// font-semibold) with bg-*-100/text-*-700 pairs — the build-era -50/-600
+// form failed WCAG AA on every rendered surface (emerald 3.58:1, amber
+// 3.07:1), and three maps changed families (Routines easy green/moderate
+// yellow; the Learning categories blue/pink/emerald/green/purple/orange;
+// the Learning difficulties UNTINTED). The reference-verified maps are
+// pinned byte-exact by the WH-17 chip-vocabulary census
+// (tests/src-census.test.ts); the unverifiable vocabularies (the
+// empty-demo surfaces) keep our color families at the -100/-700 step.
 
 // WH-7: the chassis-era NAV_ICONS glyph map (and its ten lucide-react
 // imports) retired — the sidebar/mobile drawer render from
@@ -23,20 +31,20 @@ interface OptionMeta {
 }
 
 export const WORKOUT_TYPES: OptionMeta[] = [
-  { value: "cardio", label: "Cardio", icon: "🏃", tint: "bg-red-50", text: "text-red-600" },
-  { value: "strength", label: "Strength Training", icon: "💪", tint: "bg-orange-50", text: "text-orange-600" },
-  { value: "yoga", label: "Yoga", icon: "🧘", tint: "bg-emerald-50", text: "text-emerald-600" },
-  { value: "sports", label: "Sports", icon: "⚽", tint: "bg-blue-50", text: "text-blue-600" },
-  { value: "walking", label: "Walking", icon: "🚶", tint: "bg-teal-50", text: "text-teal-600" },
-  { value: "cycling", label: "Cycling", icon: "🚴", tint: "bg-cyan-50", text: "text-cyan-600" },
-  { value: "swimming", label: "Swimming", icon: "🏊", tint: "bg-sky-50", text: "text-sky-600" },
-  { value: "other", label: "Other", icon: "🏋️", tint: "bg-violet-50", text: "text-violet-600" },
+  { value: "cardio", label: "Cardio", icon: "🏃", tint: "bg-red-100", text: "text-red-700" },
+  { value: "strength", label: "Strength Training", icon: "💪", tint: "bg-orange-100", text: "text-orange-700" },
+  { value: "yoga", label: "Yoga", icon: "🧘", tint: "bg-emerald-100", text: "text-emerald-700" },
+  { value: "sports", label: "Sports", icon: "⚽", tint: "bg-blue-100", text: "text-blue-700" },
+  { value: "walking", label: "Walking", icon: "🚶", tint: "bg-teal-100", text: "text-teal-700" },
+  { value: "cycling", label: "Cycling", icon: "🚴", tint: "bg-cyan-100", text: "text-cyan-700" },
+  { value: "swimming", label: "Swimming", icon: "🏊", tint: "bg-sky-100", text: "text-sky-700" },
+  { value: "other", label: "Other", icon: "🏋️", tint: "bg-violet-100", text: "text-violet-700" },
 ];
 
 export const WORKOUT_INTENSITIES: OptionMeta[] = [
-  { value: "light", label: "Light", tint: "bg-emerald-50", text: "text-emerald-600" },
-  { value: "moderate", label: "Moderate", tint: "bg-amber-50", text: "text-amber-600" },
-  { value: "intense", label: "Intense", tint: "bg-red-50", text: "text-red-600" },
+  { value: "light", label: "Light", tint: "bg-emerald-100", text: "text-emerald-700" },
+  { value: "moderate", label: "Moderate", tint: "bg-amber-100", text: "text-amber-700" },
+  { value: "intense", label: "Intense", tint: "bg-red-100", text: "text-red-700" },
 ];
 
 export function workoutTypeMeta(value: string): OptionMeta {
@@ -51,11 +59,11 @@ export function intensityMeta(value: string): OptionMeta {
 // Mental Health Journal
 // ---------------------------------------------------------------------------
 export const MOODS: OptionMeta[] = [
-  { value: "amazing", label: "Amazing", icon: "😄", tint: "bg-green-50", text: "text-green-600" },
-  { value: "good", label: "Good", icon: "😊", tint: "bg-emerald-50", text: "text-emerald-600" },
-  { value: "okay", label: "Okay", icon: "😐", tint: "bg-amber-50", text: "text-amber-600" },
-  { value: "low", label: "Low", icon: "😔", tint: "bg-orange-50", text: "text-orange-600" },
-  { value: "struggling", label: "Struggling", icon: "😢", tint: "bg-red-50", text: "text-red-600" },
+  { value: "amazing", label: "Amazing", icon: "😄", tint: "bg-green-100", text: "text-green-700" },
+  { value: "good", label: "Good", icon: "😊", tint: "bg-emerald-100", text: "text-emerald-700" },
+  { value: "okay", label: "Okay", icon: "😐", tint: "bg-amber-100", text: "text-amber-700" },
+  { value: "low", label: "Low", icon: "😔", tint: "bg-orange-100", text: "text-orange-700" },
+  { value: "struggling", label: "Struggling", icon: "😢", tint: "bg-red-100", text: "text-red-700" },
 ];
 
 export function moodMeta(value: string): OptionMeta {
@@ -66,10 +74,10 @@ export function moodMeta(value: string): OptionMeta {
 // Assignments
 // ---------------------------------------------------------------------------
 export const ASSIGNMENT_PRIORITIES: OptionMeta[] = [
-  { value: "low", label: "Low", tint: "bg-emerald-50", text: "text-emerald-600" },
-  { value: "medium", label: "Medium", tint: "bg-amber-50", text: "text-amber-600" },
-  { value: "high", label: "High", tint: "bg-orange-50", text: "text-orange-600" },
-  { value: "urgent", label: "Urgent", tint: "bg-red-50", text: "text-red-600" },
+  { value: "low", label: "Low", tint: "bg-emerald-100", text: "text-emerald-700" },
+  { value: "medium", label: "Medium", tint: "bg-amber-100", text: "text-amber-700" },
+  { value: "high", label: "High", tint: "bg-orange-100", text: "text-orange-700" },
+  { value: "urgent", label: "Urgent", tint: "bg-red-100", text: "text-red-700" },
 ];
 
 export function priorityMeta(value: string): OptionMeta {
@@ -80,11 +88,11 @@ export function priorityMeta(value: string): OptionMeta {
 // Events
 // ---------------------------------------------------------------------------
 export const EVENT_CATEGORIES: OptionMeta[] = [
-  { value: "personal", label: "Personal", tint: "bg-indigo-50", text: "text-indigo-600" },
-  { value: "work", label: "Work", tint: "bg-blue-50", text: "text-blue-600" },
-  { value: "social", label: "Social", tint: "bg-purple-50", text: "text-purple-600" },
-  { value: "health", label: "Health", tint: "bg-emerald-50", text: "text-emerald-600" },
-  { value: "education", label: "Education", tint: "bg-amber-50", text: "text-amber-600" },
+  { value: "personal", label: "Personal", tint: "bg-indigo-100", text: "text-indigo-700" },
+  { value: "work", label: "Work", tint: "bg-blue-100", text: "text-blue-700" },
+  { value: "social", label: "Social", tint: "bg-purple-100", text: "text-purple-700" },
+  { value: "health", label: "Health", tint: "bg-emerald-100", text: "text-emerald-700" },
+  { value: "education", label: "Education", tint: "bg-amber-100", text: "text-amber-700" },
   { value: "other", label: "Other", tint: "bg-gray-100", text: "text-gray-600" },
 ];
 
@@ -96,13 +104,13 @@ export function eventCategoryMeta(value: string): OptionMeta {
 // Study Resources
 // ---------------------------------------------------------------------------
 export const RESOURCE_TYPES: OptionMeta[] = [
-  { value: "notes", label: "Notes", icon: "📝", tint: "bg-blue-50", text: "text-blue-600" },
-  { value: "video", label: "Video", icon: "🎥", tint: "bg-red-50", text: "text-red-600" },
-  { value: "practice_test", label: "Practice Test", icon: "✍️", tint: "bg-purple-50", text: "text-purple-600" },
-  { value: "textbook", label: "Textbook", icon: "📚", tint: "bg-amber-50", text: "text-amber-600" },
-  { value: "article", label: "Article", icon: "📄", tint: "bg-teal-50", text: "text-teal-600" },
-  { value: "website", label: "Website", icon: "🌐", tint: "bg-cyan-50", text: "text-cyan-600" },
-  { value: "flashcards", label: "Flashcards", icon: "🃏", tint: "bg-pink-50", text: "text-pink-600" },
+  { value: "notes", label: "Notes", icon: "📝", tint: "bg-blue-100", text: "text-blue-700" },
+  { value: "video", label: "Video", icon: "🎥", tint: "bg-red-100", text: "text-red-700" },
+  { value: "practice_test", label: "Practice Test", icon: "✍️", tint: "bg-purple-100", text: "text-purple-700" },
+  { value: "textbook", label: "Textbook", icon: "📚", tint: "bg-amber-100", text: "text-amber-700" },
+  { value: "article", label: "Article", icon: "📄", tint: "bg-teal-100", text: "text-teal-700" },
+  { value: "website", label: "Website", icon: "🌐", tint: "bg-cyan-100", text: "text-cyan-700" },
+  { value: "flashcards", label: "Flashcards", icon: "🃏", tint: "bg-pink-100", text: "text-pink-700" },
   { value: "other", label: "Other", icon: "📎", tint: "bg-gray-100", text: "text-gray-600" },
 ];
 
@@ -114,18 +122,18 @@ export function resourceTypeMeta(value: string): OptionMeta {
 // Reminders
 // ---------------------------------------------------------------------------
 export const REMINDER_TYPES: OptionMeta[] = [
-  { value: "custom", label: "Custom", tint: "bg-indigo-50", text: "text-indigo-600" },
-  { value: "assignment", label: "Assignment", tint: "bg-blue-50", text: "text-blue-600" },
-  { value: "event", label: "Event", tint: "bg-purple-50", text: "text-purple-600" },
-  { value: "goal", label: "Goal", tint: "bg-amber-50", text: "text-amber-600" },
-  { value: "routine", label: "Routine", tint: "bg-emerald-50", text: "text-emerald-600" },
+  { value: "custom", label: "Custom", tint: "bg-indigo-100", text: "text-indigo-700" },
+  { value: "assignment", label: "Assignment", tint: "bg-blue-100", text: "text-blue-700" },
+  { value: "event", label: "Event", tint: "bg-purple-100", text: "text-purple-700" },
+  { value: "goal", label: "Goal", tint: "bg-amber-100", text: "text-amber-700" },
+  { value: "routine", label: "Routine", tint: "bg-emerald-100", text: "text-emerald-700" },
 ];
 
 export const REMINDER_REPEATS: OptionMeta[] = [
   { value: "none", label: "No Repeat", tint: "bg-gray-100", text: "text-gray-600" },
-  { value: "daily", label: "Daily", tint: "bg-blue-50", text: "text-blue-600" },
-  { value: "weekly", label: "Weekly", tint: "bg-indigo-50", text: "text-indigo-600" },
-  { value: "monthly", label: "Monthly", tint: "bg-purple-50", text: "text-purple-600" },
+  { value: "daily", label: "Daily", tint: "bg-blue-100", text: "text-blue-700" },
+  { value: "weekly", label: "Weekly", tint: "bg-indigo-100", text: "text-indigo-700" },
+  { value: "monthly", label: "Monthly", tint: "bg-purple-100", text: "text-purple-700" },
 ];
 
 export function reminderTypeMeta(value: string): OptionMeta {
@@ -140,19 +148,19 @@ export function repeatMeta(value: string): OptionMeta {
 // Goals & Achievements
 // ---------------------------------------------------------------------------
 export const GOAL_CATEGORIES: OptionMeta[] = [
-  { value: "exercise", label: "Exercise", tint: "bg-red-50", text: "text-red-600" },
-  { value: "mental_health", label: "Mental Health", tint: "bg-emerald-50", text: "text-emerald-600" },
-  { value: "learning", label: "Learning", tint: "bg-blue-50", text: "text-blue-600" },
-  { value: "productivity", label: "Productivity", tint: "bg-amber-50", text: "text-amber-600" },
-  { value: "personal", label: "Personal", tint: "bg-indigo-50", text: "text-indigo-600" },
+  { value: "exercise", label: "Exercise", tint: "bg-red-100", text: "text-red-700" },
+  { value: "mental_health", label: "Mental Health", tint: "bg-emerald-100", text: "text-emerald-700" },
+  { value: "learning", label: "Learning", tint: "bg-blue-100", text: "text-blue-700" },
+  { value: "productivity", label: "Productivity", tint: "bg-amber-100", text: "text-amber-700" },
+  { value: "personal", label: "Personal", tint: "bg-indigo-100", text: "text-indigo-700" },
   { value: "other", label: "Other", tint: "bg-gray-100", text: "text-gray-600" },
 ];
 
 export const GOAL_FREQUENCIES: OptionMeta[] = [
-  { value: "daily", label: "Daily", tint: "bg-blue-50", text: "text-blue-600" },
-  { value: "weekly", label: "Weekly", tint: "bg-indigo-50", text: "text-indigo-600" },
-  { value: "monthly", label: "Monthly", tint: "bg-purple-50", text: "text-purple-600" },
-  { value: "yearly", label: "Yearly", tint: "bg-pink-50", text: "text-pink-600" },
+  { value: "daily", label: "Daily", tint: "bg-blue-100", text: "text-blue-700" },
+  { value: "weekly", label: "Weekly", tint: "bg-indigo-100", text: "text-indigo-700" },
+  { value: "monthly", label: "Monthly", tint: "bg-purple-100", text: "text-purple-700" },
+  { value: "yearly", label: "Yearly", tint: "bg-pink-100", text: "text-pink-700" },
   { value: "one_time", label: "One Time", tint: "bg-gray-100", text: "text-gray-600" },
 ];
 
@@ -179,8 +187,8 @@ export const GOAL_FREQUENCY_POINTS: Record<string, number> = {
 // Routine Templates
 // ---------------------------------------------------------------------------
 const TEMPLATE_DIFFICULTIES: OptionMeta[] = [
-  { value: "easy", label: "easy", tint: "bg-emerald-50", text: "text-emerald-600" },
-  { value: "moderate", label: "moderate", tint: "bg-amber-50", text: "text-amber-600" },
+  { value: "easy", label: "easy", tint: "bg-green-100", text: "text-green-700" },
+  { value: "moderate", label: "moderate", tint: "bg-yellow-100", text: "text-yellow-700" },
 ];
 
 export function difficultyMeta(value: string): OptionMeta {
@@ -191,17 +199,17 @@ export function difficultyMeta(value: string): OptionMeta {
 // Learning Center
 // ---------------------------------------------------------------------------
 export const TUTORIAL_CATEGORIES: OptionMeta[] = [
-  { value: "productivity", label: "productivity", tint: "bg-amber-50", text: "text-amber-600" },
-  { value: "life_skills", label: "life skills", tint: "bg-indigo-50", text: "text-indigo-600" },
-  { value: "mental_health", label: "mental health", tint: "bg-emerald-50", text: "text-emerald-600" },
-  { value: "wellness", label: "wellness", tint: "bg-teal-50", text: "text-teal-600" },
-  { value: "study_skills", label: "study skills", tint: "bg-blue-50", text: "text-blue-600" },
-  { value: "exercise", label: "exercise", tint: "bg-red-50", text: "text-red-600" },
+  { value: "productivity", label: "productivity", tint: "bg-blue-100", text: "text-blue-700" },
+  { value: "life_skills", label: "life skills", tint: "bg-pink-100", text: "text-pink-700" },
+  { value: "mental_health", label: "mental health", tint: "bg-emerald-100", text: "text-emerald-700" },
+  { value: "wellness", label: "wellness", tint: "bg-green-100", text: "text-green-700" },
+  { value: "study_skills", label: "study skills", tint: "bg-purple-100", text: "text-purple-700" },
+  { value: "exercise", label: "exercise", tint: "bg-orange-100", text: "text-orange-700" },
 ];
 
 export const TUTORIAL_DIFFICULTIES: OptionMeta[] = [
-  { value: "beginner", label: "beginner", tint: "bg-emerald-50", text: "text-emerald-600" },
-  { value: "intermediate", label: "intermediate", tint: "bg-amber-50", text: "text-amber-600" },
+  { value: "beginner", label: "beginner", tint: "bg-transparent", text: "text-foreground" },
+  { value: "intermediate", label: "intermediate", tint: "bg-transparent", text: "text-foreground" },
 ];
 
 export function tutorialCategoryMeta(value: string): OptionMeta {

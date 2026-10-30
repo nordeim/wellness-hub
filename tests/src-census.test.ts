@@ -1,6 +1,27 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { expect, it } from "vitest";
+import {
+  WORKOUT_TYPES, WORKOUT_INTENSITIES, MOODS, ASSIGNMENT_PRIORITIES,
+  EVENT_CATEGORIES, RESOURCE_TYPES, REMINDER_TYPES, REMINDER_REPEATS,
+  GOAL_CATEGORIES, GOAL_FREQUENCIES,
+  TUTORIAL_CATEGORIES, TUTORIAL_DIFFICULTIES,
+  difficultyMeta,
+} from "../src/lib/constants";
+
+/** The chip vocabularies the WH-17 census walks (imported — the module is
+ * pure/node-safe; the census pins the RUNTIME values, not just the source
+ * text). TEMPLATE_DIFFICULTIES rides its exported accessor (the map itself
+ * is module-private — the WH-8 data-feed doctrine; a test-only re-export
+ * would trip the exported-value census). */
+type ChipMeta = { value: string; label: string; tint: string; text: string };
+const TEMPLATE_DIFFICULTIES = [difficultyMeta("easy"), difficultyMeta("moderate")];
+const CHIP_VOCABULARIES = {
+  WORKOUT_TYPES, WORKOUT_INTENSITIES, MOODS, ASSIGNMENT_PRIORITIES,
+  EVENT_CATEGORIES, RESOURCE_TYPES, REMINDER_TYPES, REMINDER_REPEATS,
+  GOAL_CATEGORIES, GOAL_FREQUENCIES, TEMPLATE_DIFFICULTIES,
+  TUTORIAL_CATEGORIES, TUTORIAL_DIFFICULTIES,
+};
 
 // WH-6 (F-4): the src-surface census pin. The WH-6 audit found three
 // hygiene classes that survived five audit rounds and the full gate
@@ -1260,4 +1281,93 @@ it("WH-16: the hydration-suppression census — the theme store's pre-hydration 
     mainTag.includes("suppressHydrationWarning"),
     "app-shell.tsx's <main> must carry suppressHydrationWarning — applyTheme's bgImageUrl branch materializes a client-only style attribute on it before hydration (the same class one element down)",
   ).toBe(true);
+});
+
+it("WH-17: the chip-vocabulary census — every OptionMeta chip rides the reference's post-redesign -100/-700 system (the AA-passing Badge anatomy)", () => {
+  // WH-17 (F-1): the chip vocabulary was "decoded live from the reference's
+  // DOM" at BUILD time (2026-10-29) and never re-probed through the WH-15
+  // redesign — the reference's chips moved to the shadcn Badge anatomy
+  // (rounded-md border px-2.5 py-0.5 text-xs font-semibold — 6px radius,
+  // 1px transparent border, no visible shadow/hover, computed-verified) with
+  // bg-*-100 / text-*-700 pairs (ALL AA-passing: green 4.57, yellow 4.58,
+  // blue 5.49, purple 5.92, emerald 4.84, pink 5.14), while ours rode the
+  // stale rounded-full font-medium -50/-600 form (emerald 3.58:1, amber
+  // 3.07:1 — every rendered chip failed WCAG AA). The three
+  // reference-verified maps are pinned BYTE-EXACT (probed live this round):
+  // Routines difficulty easy=green/moderate=yellow (NOT emerald/amber), the
+  // Learning categories blue/pink/emerald/green/purple/orange (four of six
+  // families differed from our stale map), and the Learning difficulties
+  // UNTINTED (text-foreground — the reference renders no tint on them). The
+  // unverifiable vocabularies (the empty-demo surfaces) keep our color
+  // families at the same -100/-700 step. The e2e twin (the a11y net in
+  // tests/e2e/a11y.spec.ts) asserts the RENDERED chips pass axe on the
+  // walked surfaces; this census pins the vocabulary system structurally.
+  const {
+    WORKOUT_TYPES, WORKOUT_INTENSITIES, MOODS, ASSIGNMENT_PRIORITIES,
+    EVENT_CATEGORIES, RESOURCE_TYPES, REMINDER_TYPES, REMINDER_REPEATS,
+    GOAL_CATEGORIES, GOAL_FREQUENCIES, TEMPLATE_DIFFICULTIES,
+    TUTORIAL_CATEGORIES, TUTORIAL_DIFFICULTIES,
+  } = CHIP_VOCABULARIES;
+
+  const vocabularies: Record<string, ChipMeta[]> = {
+    WORKOUT_TYPES, WORKOUT_INTENSITIES, MOODS, ASSIGNMENT_PRIORITIES,
+    EVENT_CATEGORIES, RESOURCE_TYPES, REMINDER_TYPES, REMINDER_REPEATS,
+    GOAL_CATEGORIES, GOAL_FREQUENCIES, TEMPLATE_DIFFICULTIES,
+    TUTORIAL_CATEGORIES, TUTORIAL_DIFFICULTIES,
+  };
+
+  // The system: -100 tints (or the neutral/transparent forms) with -700 texts.
+  const tintRe = /^bg-(?:red|orange|amber|yellow|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|pink)-100$|^bg-gray-100$|^bg-transparent$/;
+  const textRe = /^text-(?:red|orange|amber|yellow|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|pink)-700$|^text-gray-600$|^text-foreground$/;
+  const offenders: string[] = [];
+  for (const [name, entries] of Object.entries(vocabularies)) {
+    for (const entry of entries) {
+      if (!tintRe.test(entry.tint)) offenders.push(`${name}.${entry.value}.tint=${entry.tint}`);
+      if (!textRe.test(entry.text)) offenders.push(`${name}.${entry.value}.text=${entry.text}`);
+    }
+  }
+  expect(
+    offenders,
+    "every OptionMeta chip must ride the reference's -100/-700 system (bg-*-100|bg-gray-100|bg-transparent with text-*-700|text-gray-600|text-foreground) — the stale -50/-600 form failed WCAG AA on every rendered surface",
+  ).toEqual([]);
+
+  // The reference-verified maps, byte-exact (probed 2026-10-30).
+  const pair = (tint: string, text: string): ChipMeta => ({ value: "", label: "", tint, text });
+  const expectVocab = (actual: ChipMeta[], expected: Record<string, { tint: string; text: string }>, name: string) => {
+    for (const entry of actual) {
+      const want = expected[entry.value];
+      if (!want) offenders.push(`${name}.${entry.value}: unexpected entry`);
+      else if (entry.tint !== want.tint || entry.text !== want.text) {
+        offenders.push(`${name}.${entry.value}: got ${entry.tint}/${entry.text}, want ${want.tint}/${want.text}`);
+      }
+    }
+  };
+  expectVocab(TEMPLATE_DIFFICULTIES, {
+    easy: pair("bg-green-100", "text-green-700"),
+    moderate: pair("bg-yellow-100", "text-yellow-700"),
+  }, "TEMPLATE_DIFFICULTIES");
+  expectVocab(TUTORIAL_CATEGORIES, {
+    productivity: pair("bg-blue-100", "text-blue-700"),
+    life_skills: pair("bg-pink-100", "text-pink-700"),
+    mental_health: pair("bg-emerald-100", "text-emerald-700"),
+    wellness: pair("bg-green-100", "text-green-700"),
+    study_skills: pair("bg-purple-100", "text-purple-700"),
+    exercise: pair("bg-orange-100", "text-orange-700"),
+  }, "TUTORIAL_CATEGORIES");
+  expectVocab(TUTORIAL_DIFFICULTIES, {
+    beginner: pair("bg-transparent", "text-foreground"),
+    intermediate: pair("bg-transparent", "text-foreground"),
+  }, "TUTORIAL_DIFFICULTIES");
+  expect(
+    offenders,
+    "the reference-verified chip maps (Routines difficulty green/yellow; Learning categories blue/pink/emerald/green/purple/orange; Learning difficulties UNTINTED) are parity contracts — probed live on the reference 2026-10-30",
+  ).toEqual([]);
+
+  // The anatomy: the OptionChip primitive renders the reference's Badge form.
+  const chipSrc = readFileSync(join(REPO_ROOT, "src/components/shared/page-parts.tsx"), "utf8");
+  const chipClass = chipSrc.match(/function OptionChip[\s\S]{0,900}?"([^"]*rounded[^"]*)"/)?.[1] ?? "";
+  expect(chipClass.includes("rounded-md"), "the OptionChip shape is the reference's rounded-md (6px) — the stale rounded-full is the pre-redesign form").toBe(true);
+  expect(chipClass.includes("font-semibold"), "the OptionChip weight is the reference's font-semibold (600) — the stale font-medium is the pre-redesign form").toBe(true);
+  expect(chipClass.includes("border"), "the OptionChip carries the Badge's 1px (transparent) border — computed-verified on the reference").toBe(true);
+  expect(chipClass.includes("rounded-full"), "the stale rounded-full form must not return").toBe(false);
 });

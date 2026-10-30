@@ -19,8 +19,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (325 checks) | `bun run test` | Vitest, node-safe seams |
-| Browser E2E (43 checks) | `bun run test:e2e` | Needs `bun run build` first |
+| Unit tests (326 checks) | `bun run test` | Vitest, node-safe seams |
+| Browser E2E (46 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
 | The full gate in one command | `bun run gate` | lint → tsc → test → build → smoke → e2e |
@@ -29,8 +29,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (325) → `bun run build` → `bun run smoke` →
-`CI=1 bun run test:e2e` (43: 5 specs + the auth setup project) — or the
+`bun run test` (326) → `bun run build` → `bun run smoke` →
+`CI=1 bun run test:e2e` (46: 6 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
 is NOT set — a type error fails `bun run build`, and the explicit
@@ -231,6 +231,16 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   hydration-suppression census in `tests/src-census.test.ts`); a new
   console error on the walked pages fails the gate — cure it or pin a
   documented ignore entry, never silence the net.
+- The a11y net (WH-17, in `tests/e2e/a11y.spec.ts`) walks every module
+  route + the open mobile drawer + the login page with axe-core at
+  WCAG 2.1 A+AA tags asserting ZERO violations — the semantics layer the
+  DOM-asserting checks never read (the chip vocabulary, the Watch-Now
+  labels and the theme-mode chips all shipped AA-failing through sixteen
+  green rounds). `@axe-core/playwright` rides as a devDep WITH its live
+  import (the WH-3 retirement reversed only because the consumer
+  arrived); a new violation fails the gate — cure it or pin a documented
+  ignore entry. The chip vocabulary's `-100/-700` system is pinned
+  structurally by the chip-vocabulary census in `tests/src-census.test.ts`.
 
 ## Git
 

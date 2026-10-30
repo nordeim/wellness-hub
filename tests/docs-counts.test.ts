@@ -58,10 +58,10 @@ const CANONICAL = {
   tsxFiles: 45, // src/**/*.tsx
   clientFiles: 26, // .tsx files headed "use client"
   unitSuites: 21, // tests/*.test.ts (INCLUDING this suite)
-  e2eSpecs: 5, // tests/e2e/*.spec.ts
+  e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 325, // `bun run test` total (WH-16: 324 + the hydration-suppression census)
-  e2eChecks: 43, // `CI=1 bun run test:e2e` total (WH-16: 42 + the console-hygiene net in shell.spec.ts)
+  unitChecks: 326, // `bun run test` total (WH-17: 325 + the chip-vocabulary census)
+  e2eChecks: 46, // `CI=1 bun run test:e2e` total (WH-17: 43 + the a11y net in a11y.spec.ts)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
 } as const;
 
@@ -105,14 +105,14 @@ const DOC_CLAIMS: Record<(typeof DOCS)[number], string[]> = {
     `Unit tests (${CANONICAL.unitChecks} checks)`,
     `Browser E2E (${CANONICAL.e2eChecks} checks)`,
     `(${CANONICAL.unitChecks})`,
-    `${CANONICAL.e2eChecks}: 5 specs`,
+    `${CANONICAL.e2eChecks}: 6 specs`,
     `${CANONICAL.apiRouteFamilies}-family API set`,
     "z-10", // the glass header's true layer (F-4: the docs said z-40)
   ],
   "CLAUDE.md": [
     `Vitest unit suite (${CANONICAL.unitChecks} checks)`,
     `Unit (Vitest, ${CANONICAL.unitChecks} checks / ${CANONICAL.unitSuites} suites)`,
-    `${CANONICAL.e2eChecks} checks — 5 specs`,
+    `${CANONICAL.e2eChecks} checks — 6 specs`,
     `${CANONICAL.models} models`,
   ],
   "Project_Architecture_Document.md": [
@@ -120,12 +120,12 @@ const DOC_CLAIMS: Record<(typeof DOCS)[number], string[]> = {
     `${CANONICAL.models} models`,
     "six live primitives",
     `Vitest *.test.ts (${CANONICAL.unitSuites} suites, ${CANONICAL.unitChecks} checks)`,
-    `${CANONICAL.unitChecks} unit checks / ${CANONICAL.unitSuites} Vitest suites + ${CANONICAL.e2eChecks} e2e checks / 5 specs`,
+    `${CANONICAL.unitChecks} unit checks / ${CANONICAL.unitSuites} Vitest suites + ${CANONICAL.e2eChecks} e2e checks / 6 specs`,
     `${CANONICAL.smokeChecks}/${CANONICAL.smokeChecks}`,
   ],
   "wellness-hub_SKILL.md": [
     `${CANONICAL.unitChecks} checks / ${CANONICAL.unitSuites} suites`,
-    `${CANONICAL.e2eChecks} checks (5 specs + the auth setup project)`,
+    `${CANONICAL.e2eChecks} checks (6 specs + the auth setup project)`,
     `${CANONICAL.models} models`,
     `${CANONICAL.clientFiles} of ${CANONICAL.tsxFiles} .tsx files`,
     `${CANONICAL.tsxFiles} .tsx files total; ${CANONICAL.clientFiles} are`,
@@ -241,7 +241,7 @@ it("WH-10: PAD §8.1's test-distribution rows sum to the canonical totals", () =
   ).toBe(CANONICAL.unitChecks);
 
   const e2eRows = pad.match(/^\| E2E —.*$/gm) ?? [];
-  expect(e2eRows.length, "§8.1 e2e rows").toBe(5);
+  expect(e2eRows.length, "§8.1 e2e rows (auth / mobile / shell / a11y / setup / crud+reset)").toBe(6);
   const e2eChecks = e2eRows.reduce((sum, row) => sum + (bareNumberCells(row)[0] ?? 0), 0);
   expect(e2eChecks, "§8.1 e2e rows' checks sum").toBe(CANONICAL.e2eChecks);
 });

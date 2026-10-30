@@ -228,7 +228,7 @@ export const MOBILE_NAV_SHEET = {
   footerAvatar:
     "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-white",
   footerTitle: "text-sm font-semibold text-foreground leading-tight",
-  footerSubtitle: "text-xs text-subtle",
+  footerSubtitle: "text-xs text-muted",
   icon: "h-5 w-5",
 } as const;
 
@@ -284,6 +284,57 @@ export const SECTION_CARD = {
   header: "flex items-center gap-2 px-5 py-4 border-b border-line",
   title: "font-semibold text-foreground",
   body: "p-5",
+} as const;
+
+/** The Profile appearance panels — WH-17 (F-2): the reference's shadcn
+ *  Card anatomy (probed live 2026-10-30 on every Profile panel):
+ *  `rounded-xl border bg-card border-none shadow-lg` + the header block
+ *  `flex flex-col space-y-1.5 p-6` (title `font-semibold leading-none
+ *  tracking-tight flex items-center gap-2` + the w-5 h-5 lucide header
+ *  icon — moon/palette/type/image/sparkles per panel) + the body
+ *  `p-6 pt-0` (+ space-y-6 on the multi-block panels). Our panels had
+ *  carried the build-era `border border-line bg-surface p-5` shell —
+ *  the WH-15 redesign's card anatomy reached every module page's
+ *  SectionCard but never the Profile panels. */
+export const PROFILE_PANEL = {
+  card: "bg-surface rounded-xl border-none shadow-lg",
+  header: "flex flex-col space-y-1.5 p-6",
+  title: "font-semibold leading-none tracking-tight flex items-center gap-2",
+  body: "p-6 pt-0",
+  bodySpaced: "p-6 pt-0 space-y-6",
+} as const;
+
+/** The Profile Theme Mode picker — WH-17 (F-2): the reference's border-2
+ *  card grid (probed live): `grid grid-cols-3 gap-3` of `p-4 rounded-xl
+ *  border-2 transition-all flex flex-col items-center gap-2` cards with
+ *  the w-6 h-6 icon above the `font-medium` label — active
+ *  `border-indigo-500 bg-indigo-50` (near-black text ≈ 15:1 — FIXED
+ *  palette classes, not preset-themeable: the reference's own preset
+ *  engine does not re-skin them), inactive
+ *  `border-gray-200 hover:border-gray-300`. Our build-era chips (h-10
+ *  rounded-md, active `border-primary bg-primary/10 text-primary`)
+ *  failed WCAG AA at 3.71:1 on the active state. */
+export const THEME_MODE_PICKER = {
+  grid: "grid grid-cols-3 gap-3",
+  card: "p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2",
+  active: "border-indigo-500 bg-indigo-50",
+  inactive: "border-gray-200 hover:border-gray-300",
+  icon: "h-6 w-6",
+  label: "font-medium",
+} as const;
+
+/** The Profile quick-preset cards — the reference's `p-3 rounded-xl
+ *  border hover:shadow-md transition-all text-left` anatomy (probed
+ *  live; the reference carries NO visible active state — our active ring
+ *  + label is the functional superset, restyled at WH-17 so the label
+ *  passes AA: text-foreground over the reference's text-primary at
+ *  4.1:1). */
+export const PRESET_CARD = {
+  card: "p-3 rounded-xl border hover:shadow-md transition-all text-left",
+  active: "border-primary ring-1 ring-primary",
+  swatch: "mb-2 block h-8 w-full rounded-md bg-gradient-to-r",
+  label: "text-xs font-medium text-foreground",
+  activeLabel: "mt-1 flex items-center gap-1 text-xs text-foreground",
 } as const;
 
 /** The primary gradient button — the reference's redesigned family
@@ -401,7 +452,7 @@ export const CHECKBOX = {
  *  `pill` variant, zero call sites since the build) — the value census
  *  owns this module's export surface. */
 export const TABS_SEGMENTED = {
-  track: "h-9 items-center justify-center rounded-lg bg-line-soft p-1 text-muted-ink grid w-full",
+  track: "h-9 items-center justify-center rounded-lg bg-line-soft p-1 text-neutral-600 grid w-full",
   trigger:
     "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow data-[state=active]:bg-white data-[state=active]:text-foreground",
 } as const;
