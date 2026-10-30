@@ -908,3 +908,194 @@ it("WH-13: every schema field is consumed at a READ site (writes do not keep a c
     "schema fields with zero READ sites — the WH-13 class: a column written at a seam (or default-filled) and read by nobody is dead surface (drop it with its writes and wire members in the same commit), or read it consciously",
   ).toEqual([]);
 });
+
+it("WH-14: every @theme token is consumed (a utility hit or a var() read — declarations, overrides and runtime writes do not keep a token alive)", () => {
+  // The DESIGN-SYSTEM census — the surface no earlier pin reads: an
+  // @theme token can be declared, overridden in .dark, even WRITTEN at
+  // runtime by the theme store (setProperty), and read by nobody —
+  // --color-sidebar-accent-foreground was written on every preset apply
+  // for fourteen rounds while no utility or var() ever read it. The
+  // consumption verb for a TOKEN is the UTILITY (a class string in app
+  // source carrying <prefix><name>: text-amber-600, bg-sidebar,
+  // rounded-xl, shadow-sm, backdrop-blur-sm…) or the var() READ (the
+  // globals body rules read --color-foreground/--color-line/
+  // --color-ring/--font-sans; the mental-health slider reads
+  // --color-primary via accent-[var(--color-primary)]).
+  // NOT consumption: the @theme declaration itself, a .dark override (an
+  // override of a dead token is dead weight of the second order — folded
+  // in below), a setProperty WRITE (the WH-8 doctrine's token form), or
+  // presence in the COMPILED css — the compiled stylesheet carries every
+  // declared token's name in its :root dump AND every class string any
+  // tracked file mentions (the markdown-scan pollution the WH-14 @source
+  // pin stops); the compiled sheet is not a liveness oracle.
+  // Keyframes inside @theme must belong to a live --animate-* token
+  // (they die with their tokens — the WH-14 fade-in/slide-in-right pair).
+  const gcssPath = join(REPO_ROOT, "src/app/globals.css");
+  const gcss = readFileSync(gcssPath, "utf8");
+
+  // --- extract @theme blocks (brace-balanced) and their tokens ---
+  const themeTokens = new Map<string, string>();
+  for (const m of gcss.matchAll(/@theme\s*(?:inline)?\s*\{/g)) {
+    let depth = 1;
+    let end = m.index! + m[0].length;
+    while (depth > 0 && end < gcss.length) {
+      if (gcss[end] === "{") depth++;
+      else if (gcss[end] === "}") depth--;
+      end++;
+    }
+    const body = gcss.slice(m.index! + m[0].length, end - 1);
+    for (const t of body.matchAll(/(--[a-zA-Z0-9-]+)\s*:\s*([^;]+);/g)) {
+      themeTokens.set(t[1], t[2].trim());
+    }
+  }
+  expect(themeTokens.size).toBeGreaterThan(50); // the walk found the block
+
+  // --- the app-source class-token corpus (src minus globals.css, no tests) ---
+  const classTokens = new Set<string>();
+  const utilitySources: Array<{ text: string }> = [];
+  const srcFiles2: string[] = [];
+  collect(join(REPO_ROOT, "src"), srcFiles2, [".ts", ".tsx"]);
+  for (const f of srcFiles2) {
+    if (f.endsWith(".test.ts") || f === gcssPath) continue;
+    const text = readFileSync(f, "utf8");
+    utilitySources.push({ text });
+    for (const m of text.matchAll(/"([^"\n]*)"/g)) {
+      for (const tok of m[1].split(/\s+/)) if (tok) classTokens.add(tok);
+    }
+  }
+  const classBlob = [...classTokens].join(" ");
+
+  // --- var() reads in app source (globals base rules included, @theme
+  //     declarations excluded by construction: the map's own values are
+  //     not read here) ---
+  let varReads = new Set<string>();
+  for (const s of utilitySources) {
+    for (const m of s.text.matchAll(/var\((--[a-zA-Z0-9-]+)\)/g)) varReads.add(m[1]);
+  }
+  const gcssNoTheme = gcss.replace(/@theme\s*(?:inline)?\s*\{[\s\S]*?\n\}/g, "");
+  for (const m of gcssNoTheme.matchAll(/var\((--[a-zA-Z0-9-]+)\)/g)) varReads.add(m[1]);
+
+  const UTILITY_PREFIXES: Record<string, string[]> = {
+    color: [
+      "text-", "bg-", "border-", "ring-", "from-", "to-", "via-", "fill-",
+      "stroke-", "outline-", "decoration-", "divide-", "accent-", "caret-",
+      "shadow-", "inset-shadow-", "inset-ring-",
+    ],
+    radius: ["rounded-"],
+    animate: ["animate-"],
+    shadow: ["shadow-"],
+    blur: ["blur-", "backdrop-blur-"],
+    font: ["font-"],
+  };
+
+  const dead: string[] = [];
+  for (const [tok] of themeTokens) {
+    if (varReads.has(tok)) continue;
+    const ns = tok.slice(2).split("-")[0];
+    const name = tok.slice(2 + ns.length + 1);
+    const prefixes = UTILITY_PREFIXES[ns] ?? [];
+    const used = prefixes.some((p) => classBlob.includes(p + name));
+    if (!used) dead.push(tok);
+  }
+
+  // --- .dark overrides must all reference live @theme tokens ---
+  const darkBlock = gcss.match(/\.dark\s*\{([\s\S]*?)\n\s*\}/);
+  const darkOverrides = darkBlock
+    ? [...darkBlock[1].matchAll(/(--[a-zA-Z0-9-]+)\s*:/g)].map((m) => m[1])
+    : [];
+  for (const key of darkOverrides) {
+    if (!themeTokens.has(key)) dead.push(`.dark override of non-token: ${key}`);
+    else if (dead.includes(key)) dead.push(`.dark override of dead token: ${key}`);
+  }
+
+  // --- keyframes inside @theme must belong to a live --animate-* token ---
+  const animateRefs = new Set<string>();
+  for (const [tok, val] of themeTokens) {
+    if (tok.startsWith("--animate-") && !dead.includes(tok)) {
+      for (const m of val.matchAll(/([a-zA-Z0-9-]+)\s+[\d.]+s/g)) animateRefs.add(m[1]);
+    }
+  }
+  for (const m of gcss.matchAll(/@keyframes\s+([a-zA-Z0-9-]+)\s*\{/g)) {
+    if (!animateRefs.has(m[1])) dead.push(`orphan @keyframes in @theme: ${m[1]}`);
+  }
+
+  expect(
+    dead,
+    "@theme tokens with zero consumers — the WH-14 class: a token declared (or overridden, or even written at runtime) and read by nobody is dead design weight (drop it with its .dark override, its keyframes and its setProperty write in the same commit), or consume it consciously",
+  ).toEqual([]);
+});
+
+it("WH-14: the Tailwind source scan is pinned (the @source not directives — tracked markdown must not compile into the stylesheet)", () => {
+  // Tailwind v4's automatic content detection scans EVERY tracked file —
+  // before WH-14 the operator's skills/ catalog (373 skills), docs/ and
+  // the root .md corpus compiled 1,013 of 1,419 selectors (71% of
+  // 160,639 bytes) of markdown-born dead weight into the production
+  // stylesheet. The three exclusion directives pin the scan to authored
+  // surfaces. Structural pin, the lockfile-resolution pin's config form:
+  // if these lines are removed the census trips in the same run.
+  const gcss = readFileSync(join(REPO_ROOT, "src/app/globals.css"), "utf8");
+  const required = [
+    '@source not "../../skills";',
+    '@source not "../../docs";',
+    '@source not "../**/*.md";',
+  ];
+  const missing = required.filter((line) => !gcss.includes(line));
+  expect(
+    missing,
+    "the @source not directives are gone from globals.css — without them the tracked markdown corpus compiles back into the production stylesheet (the WH-14 71%-dead-weight class); remove an exclusion only together with this pin, in the same commit",
+  ).toEqual([]);
+});
+
+it("WH-14: every used palette pair is pinned to its v3 value (the session-88 contract, both directions)", () => {
+  // The session-88 palette block's own documented contract: "every
+  // literal (family, step) pair used in src/ is re-pinned to its v3
+  // value." WH-14 found the contract violated in both directions: 44
+  // pinned pairs with zero usage (dead weight — retired by the token
+  // census above) and 19 USED pairs riding the v4 re-derived defaults
+  // (a live-probed drift: the reference's own compiled stylesheet
+  // computes the v3 values — e.g. teal-600 rgb(13 148 136) vs our
+  // unpinned #009588). This check pins the completion direction: a used
+  // pair without a @theme pin trips here. Together with the token
+  // census (a pinned pair without usage trips there), the pins⇔usage
+  // equivalence is enforced in BOTH directions.
+  const PALETTE_FAMILIES = new Set([
+    "amber", "blue", "cyan", "emerald", "fuchsia", "gray", "green",
+    "indigo", "lime", "neutral", "orange", "pink", "purple", "red",
+    "rose", "sky", "slate", "stone", "teal", "violet", "yellow", "zinc",
+  ]);
+  const gcss = readFileSync(join(REPO_ROOT, "src/app/globals.css"), "utf8");
+  const pinned = new Set(
+    [...gcss.matchAll(/--color-([a-z]+-\d+):\s*#[0-9a-fA-F]+/g)].map((m) => m[1]),
+  );
+
+  // the app-source class-token corpus (same extraction as the token census)
+  const gcssPath = join(REPO_ROOT, "src/app/globals.css");
+  const classTokens = new Set<string>();
+  const srcFiles3: string[] = [];
+  collect(join(REPO_ROOT, "src"), srcFiles3, [".ts", ".tsx"]);
+  for (const f of srcFiles3) {
+    if (f.endsWith(".test.ts") || f === gcssPath) continue;
+    const text = readFileSync(f, "utf8");
+    for (const m of text.matchAll(/"([^"\n]*)"/g)) {
+      for (const tok of m[1].split(/\s+/)) if (tok) classTokens.add(tok);
+    }
+  }
+
+  const used = new Set<string>();
+  for (const tok of classTokens) {
+    for (const seg of tok.split(/(?:::|:)/)) {
+      // strip variants is unnecessary — the seg split above handles the
+      // colon form; match the utility-prefixed palette pair directly
+      const m = seg.match(
+        /^(?:text|bg|border|ring|from|to|via|fill|stroke|outline|decoration|divide|accent|caret|shadow|inset-ring)-([a-z]+-\d+)(?:\/\d+)?$/,
+      );
+      if (m && PALETTE_FAMILIES.has(m[1].split("-")[0])) used.add(m[1]);
+    }
+  }
+
+  const unpinned = [...used].filter((p) => !pinned.has(p)).sort();
+  expect(
+    unpinned,
+    "used palette pairs without a v3 @theme pin — the WH-14 pin-gap class: the surface computes the v4 re-derived default instead of the reference's own v3 value (add the pin in the session-88 block, in the same commit as the usage)",
+  ).toEqual([]);
+});

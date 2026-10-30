@@ -305,7 +305,7 @@ wellness-hub/
 │   │   ├── wellness-store.ts # ALL server state; call() envelope client
 │   │   └── theme-store.ts    # CSS-variable writer + UserPrefs sync
 │   └── types/               # shared domain types
-├── tests/                   # Vitest *.test.ts (21 suites, 318 checks)
+├── tests/                   # Vitest *.test.ts (21 suites, 321 checks)
 │   └── e2e/                 # Playwright *.spec.ts (42 checks) + setups
 ├── scripts/
 │   ├── smoke-test.sh        # 14-check ladder against the standalone artifact
@@ -502,6 +502,7 @@ erDiagram
 | `--color-sidebar` | `rgb(250 250 250)` | `#111113` | The light sidebar face |
 | `--color-sidebar-hover` | `#f4f4f5` | `#1c1c1f` | Nav hover |
 | `--shadow-sm` | `0 1px 2px 0 rgb(0 0 0 / 0.05)` | same | The v4 re-pin — the reference's computed outline |
+| Source scan | three `@source not` directives (skills/docs/*.md) | same | WH-14 — v4's auto-detection scanned every tracked file; the markdown corpus compiled 71% of the stylesheet as dead weight (160,639 → ~74 KB) |
 
 Contrast: body text `#171717` on white; secondary `#71717a`; both clear
 WCAG AA in light mode; dark mode inverts via the `.dark` overrides in
@@ -603,14 +604,14 @@ No queues, workers or cron. Utility services worth naming:
 |----------|-------|--------|----------|-----------|
 | Unit — auth seams (password, verification, reset, contract, rate limit, boot-env) | 6 | 109 | `tests/auth*.test.ts`, `password-seam`, `rate-limit`, `boot-env` | Vitest |
 | Unit — wellness domain (streaks, points, badges, codecs, schemas, stats, helpers, theme) | 5 | 89 | `tests/wellness-*.test.ts` | Vitest |
-| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member/type-export/pass-site/schema-field censuses) | 10 | 120 | `tests/*.test.ts` | Vitest |
+| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member/type-export/pass-site/schema-field/design-token/source-scan/palette-pin censuses) | 10 | 123 | `tests/*.test.ts` | Vitest |
 | E2E — auth ladder (login wall, lockout, reset funnel, revocation) | 1 spec | 11 | `tests/e2e/auth.spec.ts` | Playwright |
 | E2E — mobile drawer battery | 1 spec | 6 | `tests/e2e/mobile-navigation.spec.ts` | Playwright |
 | E2E — shell (nav, dual-case routes, quick actions) | 1 spec | 6 | `tests/e2e/shell.spec.ts` | Playwright |
 | E2E — auth setup project (one-time demo login; shares the cookie via storageState) | 1 setup | 1 | `tests/e2e/auth.setup.ts` | Playwright |
 | E2E — CRUD cycles + reset-password funnel | 2 specs | 18 | `tests/e2e/wellness-crud.spec.ts`, `reset-password.spec.ts` | Playwright |
 
-Totals: **318 unit checks / 21 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
+Totals: **321 unit checks / 21 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
 
 ### 8.2 Test Patterns
 
@@ -637,7 +638,7 @@ docs, not just the code.
 
 - `bun run lint` → 0 warnings
 - `bun run typecheck` → clean
-- `bun run test` → 318/318
+- `bun run test` → 321/321
 - `bun run build` → succeeds (the type gate)
 - `bun run smoke` → 14/14
 - `CI=1 bun run test:e2e` → 42/42

@@ -63,7 +63,9 @@ function applyTheme(s: ThemeData) {
   root.style.setProperty("--color-secondary", s.secondaryColor);
   root.style.setProperty("--color-primary-hover", shade(s.primaryColor, 0.88));
   root.style.setProperty("--color-secondary-hover", shade(s.secondaryColor, 0.88));
-  root.style.setProperty("--color-sidebar-accent-foreground", s.primaryColor);
+  // WH-14: the --color-sidebar-accent-foreground write retired with its
+  // token — written on every preset apply since the build, read by no
+  // utility or var() (the token-liveness census owns this surface).
   root.style.setProperty(
     "--font-sans",
     FONT_STACKS[s.fontFamily] ?? FONT_STACKS.system,

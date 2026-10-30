@@ -19,7 +19,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (318 checks) | `bun run test` | Vitest, node-safe seams |
+| Unit tests (321 checks) | `bun run test` | Vitest, node-safe seams |
 | Browser E2E (42 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
@@ -29,7 +29,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (318) → `bun run build` → `bun run smoke` →
+`bun run test` (321) → `bun run build` → `bun run smoke` →
 `CI=1 bun run test:e2e` (42: 5 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
@@ -129,6 +129,10 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
 - `--blur-sm: 4px;` — same family; keeps the login card's glass at the
   reference's strength.
 - `@theme` holds LITERAL hex values — no `var()` chains inside `@theme`.
+- The three `@source not` directives (WH-14) — Tailwind v4's automatic
+  content detection scans every TRACKED file; without the exclusions the
+  `skills/` + `docs/` markdown corpus compiles into the production
+  stylesheet (71% dead weight before the pin). Pinned by the src-census.
 - Dark mode = `.dark` class token overrides, same file.
 
 ## Conventions that differ from defaults
@@ -194,7 +198,13 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   column alive: the completedAt quartet retired with its seam writes and
   wire members; `@updatedAt` is the stock-schema boundary and
   `Tutorial.views` rides the SCHEMA_PARITY_KEEPS list — the reference's
-  own entity carries it, verified live). The
+  own entity carries it, verified live), and every @theme token is
+  consumed (the WH-14 design-token census — a utility hit or a var()
+  read; declarations, `.dark` overrides and runtime setProperty writes
+  are authorship, not consumption), and the Tailwind source scan stays
+  pinned (the three `@source not` directives) and every used palette
+  pair carries its v3 pin (the pins⇔usage equivalence, both
+  directions). The
   WH-6/WH-7/WH-8/WH-9/WH-11/WH-12/WH-13 pin — same doctrine as the
   dead-dep, route/ui and docs-counts census pins.
 - E2E (Playwright): boots the PRODUCTION standalone server on an isolated
