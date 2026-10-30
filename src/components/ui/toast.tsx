@@ -141,7 +141,7 @@ function ToastCard({ item }: { item: ToastItem }) {
         // surface is DOM-DEAD (F-131c1 — no live face to parity), so the
         // fix rides OUR superset by the trio precedent + internal
         // consistency: the LAST live hover:text-foreground ride in src/.
-        className="shrink-0 rounded-md p-1 text-subtle transition-colors hover:bg-line-soft hover:text-neutral-900"
+        className="shrink-0 rounded-md p-1 text-subtle transition-colors hover:bg-line-soft hover:text-neutral-900 dark:hover:text-neutral-100"
         aria-label="Dismiss notification"
       >
         <X className="h-3.5 w-3.5" />

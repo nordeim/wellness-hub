@@ -612,3 +612,274 @@ test.describe("a11y net — the auto-mode listener (the OS scheme flip)", () => 
     ).not.toHaveClass(/dark/);
   });
 });
+
+// WH-20 (F-6): the interaction-states net — the fourth assertion-surface
+// class the gate never read (DOM → console → semantics → interaction).
+// The dark e2e walks render EMPTY module lists (the demo account ships
+// empty by design), so the ROW surfaces — the delete buttons, the chips —
+// never render in any walk; no net anywhere walks a HOVER state or reads a
+// FOCUS ring's color. Four legs, all computed-contrast (oklab-aware, the
+// WH-19 instrument): (a) the data-bearing dark row walk (one workout
+// created through the API with the storageState cookie — the e2e db stays
+// the seeded contract; one API row is invisible to every other spec, the
+// CRUD spec's own rows demonstrate the pattern is safe), (b) the dark
+// login focus ring (real keyboard Tab — program focus() does not match
+// :focus-visible after mouse use; ≥400 ms settle on every read, the
+// transition-all box-shadow interpolation artifact), (c) the dark footer
+// (the F-3 class: a white strip on every dark page passed every walk
+// because its self-contrast is AA-fine), (d) the toast hover (real
+// agent-browser hover — synthetic mouseenter does not set :hover; the
+// F-2 class: the glyph vanishes exactly when the user aims at it).
+const ELEMENT_PROBE = String.raw`
+(function (sel, settle) {
+  function oklabToRgb(L, a, b) {
+    const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+    const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+    const s_ = L - 0.0894841775 * a - 1.291485548 * b;
+    const l = l_ * l_ * l_, m = m_ * m_ * m_, s = s_ * s_ * s_;
+    const enc = (x) => {
+      x = Math.min(1, Math.max(0, x));
+      return Math.round(255 * (x <= 0.0031308 ? 12.92 * x : 1.055 * Math.pow(x, 1 / 2.4) - 0.055));
+    };
+    return [enc(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+            enc(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+            enc(-0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s)];
+  }
+  function parseColor(str) {
+    if (!str) return null;
+    let m = str.match(/rgba?\((\d+), (\d+), (\d+)(?:, ([\d.]+))?\)/);
+    if (m) return { rgb: [+m[1], +m[2], +m[3]], alpha: m[4] === undefined ? 1 : +m[4] };
+    m = str.match(/oklab\(([\d.-]+) ([\d.e-]+) ([\d.e-]+)(?: \/ ([\d.]+))?\)/);
+    if (m) return { rgb: oklabToRgb(+m[1], +m[2], +m[3]), alpha: m[4] === undefined ? 1 : +m[4] };
+    m = str.match(/oklch\(([\d.-]+) ([\d.e-]+) ([\d.e-]+)(?: \/ ([\d.]+))?\)/);
+    if (m) {
+      const rad = (+m[3] / 360) * 2 * Math.PI;
+      const c = oklabToRgb(+m[1], Math.cos(rad) * +m[2], Math.sin(rad) * +m[2]);
+      return { rgb: c, alpha: m[4] === undefined ? 1 : +m[4] };
+    }
+    if (str === 'transparent') return { rgb: [0, 0, 0], alpha: 0 };
+    return null;
+  }
+  function lum(rgb) {
+    const c = (x) => { x /= 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); };
+    return 0.2126 * c(rgb[0]) + 0.7152 * c(rgb[1]) + 0.0722 * c(rgb[2]);
+  }
+  const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  function effBg(el) {
+    let n = el;
+    while (n && n !== document.documentElement) {
+      const s = getComputedStyle(n);
+      if (s.backgroundImage && s.backgroundImage !== 'none') return { kind: 'gradient', rgb: [255, 255, 255] };
+      const p = parseColor(s.backgroundColor);
+      if (p && p.alpha > 0.6) return { kind: 'solid', rgb: p.rgb };
+      n = n.parentElement;
+    }
+    const p = parseColor(getComputedStyle(document.body).backgroundColor);
+    return { kind: 'body', rgb: p ? p.rgb : [255, 255, 255] };
+  }
+  const el = document.querySelector(sel);
+  if (!el) return { error: 'missing: ' + sel };
+  const s = getComputedStyle(el);
+  const ink = parseColor(s.color);
+  const bg = effBg(el);
+  if (!ink || ink.alpha === 0) return { error: 'no ink: ' + sel };
+  return {
+    sel, ink: s.color, bg: 'rgb(' + bg.rgb.join(', ') + ')',
+    ratio: +ratio(lum(ink.rgb), lum(bg.rgb)).toFixed(2),
+  };
+})`;
+
+/** Evaluate the element probe for one selector, after the settle delay
+ * (transition-all interpolates box-shadow/color — a synchronous read
+ * returns the t≈0 frame; every ring/ink read settles ≥400 ms). The
+ * probe source rides the evaluate ARGS — page.evaluate serializes the
+ * function body only; a Node-side closure constant is invisible in the
+ * page context (the first RED run's ReferenceError). */
+async function elementContrast(page: import("@playwright/test").Page, sel: string, settleMs = 450) {
+  await page.waitForTimeout(settleMs);
+  return (await page.evaluate(
+    ([s, src]) => window.eval(src)(s),
+    [sel, ELEMENT_PROBE],
+  )) as { sel: string; ink?: string; bg?: string; ratio?: number; error?: string };
+}
+
+/** WCAG ratio in Node (the (b) leg's ring math — the probe already
+ * returned the effective bg; the ring layer parses in Node). */
+function nodeContrast(r: number, g: number, b: number, bg: readonly [number, number, number]): number {
+  const chan = (x: number) => { x /= 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); };
+  const lum = (v: readonly [number, number, number]) => 0.2126 * chan(v[0]) + 0.7152 * chan(v[1]) + 0.0722 * chan(v[2]);
+  const L = (a: number, bb: number) => (Math.max(a, bb) + 0.05) / (Math.min(a, bb) + 0.05);
+  return +L(lum([r, g, b]), lum(bg)).toFixed(2);
+}
+
+test.describe("a11y net — the interaction states (the WH-20 widening)", () => {
+  // The hygiene protocol (the dark-state describe's own form): (a)/(c)/(d)
+  // flip the account's server prefs through the real Profile UI — the
+  // revert VERIFIES THE PUT LANDED so a failure mid-walk cannot leave the
+  // dark state for the specs that follow. The (a)/(d) legs also leave
+  // WORKOUT ROWS in the shared e2e db (the API row + the real-form save)
+  // — the CRUD spec that runs later asserts the "Total Workouts" stat at
+  // exactly 1, so every row this describe creates is deleted FIRST, and
+  // the deletion is VERIFIED (the WH-16 lesson: a revert that races the
+  // teardown is no revert). A failed leg still cleans (afterEach runs
+  // regardless); the next RUN's global-setup reseed is the backstop.
+  test.afterEach(async ({ page }) => {
+    try {
+      await page.evaluate(async () => {
+        const list = await fetch("/api/workouts").then((r) => r.json());
+        for (const w of list?.data ?? []) {
+          await fetch(`/api/workouts/${w.id}`, { method: "DELETE" });
+        }
+        const after = await fetch("/api/workouts").then((r) => r.json());
+        if ((after?.data ?? []).length > 0) throw new Error("workout cleanup incomplete");
+      });
+    } catch {
+      /* best-effort — the reseed backstop below */
+    }
+    try {
+      await page.goto("/Profile", { waitUntil: "networkidle" });
+      await page.getByRole("button", { name: "Light", exact: true }).click({ timeout: 5000 });
+      await expect(page.locator("html")).not.toHaveClass(/dark/, { timeout: 5000 });
+      await expect
+        .poll(
+          async () => {
+            const body = await page.evaluate(async () => {
+              const res = await fetch("/api/prefs");
+              return res.json();
+            });
+            return body?.data?.themeMode ?? "(unsaved)";
+          },
+          { timeout: 5000 },
+        )
+        .toBe("light");
+    } catch {
+      /* best-effort — the next test's normalization is the backstop */
+    }
+  });
+
+  test("(a) the data-bearing dark row walk — the delete icon ≥3:1 on the rendered row", async ({ page }) => {
+    // Normalize light FIRST (the shared-suite hygiene), then flip dark
+    // through the real UI.
+    await page.goto("/Profile", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Light", exact: true }).click();
+    await page.getByRole("button", { name: "Dark", exact: true }).click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+
+    // One row through the API (the storageState cookie) — the empty-list
+    // class the state walks render is the whole reason this leg exists.
+    await page.evaluate(async () => {
+      const res = await fetch("/api/workouts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "cardio", durationMinutes: 30, intensity: "moderate", date: new Date().toISOString() }),
+      });
+      if (!res.ok) throw new Error("row create failed " + res.status);
+    });
+
+    await page.goto("/Exercise", { waitUntil: "networkidle" });
+    const rowBtn = page.locator('button[aria-label^="Delete "]').first();
+    await expect(rowBtn, "the row must render (the data-bearing leg's whole point — the empty lists the state walks see)").toBeVisible();
+    const del = await elementContrast(page, 'button[aria-label^="Delete "]');
+    expect(del.error, "the delete button probe must resolve").toBeFalsy();
+    expect(
+      del.ratio,
+      `the dark row's delete icon must compute ≥3:1 (got ${del.ratio}:1, ink ${del.ink} on ${del.bg}) — the F-4 class: the light-only red-600 rode 3.1:1 marginal with a red-50 light-island hover`,
+    ).toBeGreaterThanOrEqual(3);
+  });
+
+  test("(b) the dark login focus ring — the keyboard ring layer ≥3:1 (real Tab, settled)", async ({ page }) => {
+    // The persisted dark state seeds the logged-out surface (the
+    // ThemeBoot path); NO server flip needed — the probe-hygiene form.
+    await page.addInitScript(() => {
+      localStorage.setItem("wellness-theme", JSON.stringify({ state: { themeMode: "dark" }, version: 0 }));
+    });
+    await page.goto("/login", { waitUntil: "networkidle" });
+    await expect(page.locator("html")).toHaveClass(/dark/);
+
+    // Real keyboard Tab to the email input — :focus-visible is the state
+    // the indicator rides; program focus() does not match it after mouse
+    // use. Tab from the body until #email carries the focus.
+    for (let i = 0; i < 12; i++) {
+      if (await page.evaluate(() => document.activeElement?.id === "email")) break;
+      await page.keyboard.press("Tab");
+    }
+    await expect(page.locator("#email")).toBeFocused();
+    // Settle ≥400 ms — transition-all interpolates box-shadow; a
+    // synchronous read returns the t≈0 transparent frame (the round's
+    // methodology find).
+    await page.waitForTimeout(450);
+    const layers = await page.evaluate(() => {
+      const el = document.querySelector("#email");
+      return el ? getComputedStyle(el).boxShadow : "(missing)";
+    });
+    // The ring layer: split the computed string on top-level commas that
+    // precede a color (each element = one shadow layer), drop the
+    // transparent Tailwind empties, and take the OUTERMOST opaque layer
+    // by spread radius — the offset renders as the inner white layer, the
+    // ring as the wider colored one (debug-verified: `rgba(0,0,0,0) 0 0 0
+    // 0, rgba(0,0,0,0) 0 0 0 0, rgb(255,255,255) 0 0 0 2px, rgb(82,82,82)
+    // 0 0 0 4px` — the FIRST RED run's lookahead regex matched nothing on
+    // this form; split, don't lookahead).
+    const probe = await page.evaluate(
+      ([probeSrc]) => window.eval(probeSrc)("#email"),
+      [ELEMENT_PROBE],
+    );
+    const layerList = String(layers)
+      .split(/,\s*(?=rgba?\()/)
+      .filter((l) => /^rgba?\(\d+, \d+, \d+, 0\)/.test(l) === false && /^rgba?\(/.test(l));
+    expect(layerList.length, `the focused input must carry the offset + ring layers (boxShadow: ${String(layers)})`).toBeGreaterThanOrEqual(2);
+    const spreadOf = (l: string) => Number(l.match(/0px 0px 0px (\d+)px/)?.[1] ?? 0);
+    const ringLayer = [...layerList].sort((a, b) => spreadOf(a) - spreadOf(b)).at(-1)!; // outermost opaque = the ring
+    const ringRgb = ringLayer.match(/rgba?\((\d+), (\d+), (\d+)/)!.slice(1).map(Number);
+    const cardBg = (probe as { bg: string }).bg.match(/\d+, \d+, \d+/)![0].split(", ").map(Number) as [number, number, number];
+    const ratio = nodeContrast(ringRgb[0]!, ringRgb[1]!, ringRgb[2]!, cardBg);
+    expect(
+      ratio,
+      `the dark login ring layer must compute ≥3:1 against the dark card (ring ${ringLayer} on ${probe.bg}) — the F-1 class: WH-19 shipped the paired arm at 2.29:1 (neutral-600); the cure is neutral-400 at 7.11:1`,
+    ).toBeGreaterThanOrEqual(3);
+  });
+
+  test("(c) the dark footer — the strip must be the dark pair, not a white island", async ({ page }) => {
+    await page.goto("/Profile", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Light", exact: true }).click();
+    await page.getByRole("button", { name: "Dark", exact: true }).click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+
+    for (const route of ["/Dashboard", "/Exercise", "/Profile"]) {
+      await page.goto(route, { waitUntil: "networkidle" });
+      await page.waitForTimeout(250);
+      const footer = await page.evaluate(() => {
+        const f = document.querySelector("footer");
+        return f ? getComputedStyle(f).backgroundColor : "(missing)";
+      });
+      expect(footer, `${route}: the dark footer must be the dark pair (the F-3 class: a white strip on every dark page passed every walk because its self-contrast is AA-fine)`).toBe("rgb(10, 10, 10)");
+    }
+  });
+
+  test("(d) the toast hover — the dismiss glyph ≥3:1 under a REAL hover", async ({ page }) => {
+    await page.goto("/Profile", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Light", exact: true }).click();
+    await page.getByRole("button", { name: "Dark", exact: true }).click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+
+    // Trigger a live toast through the real form (the save path), then
+    // hover its dismiss button with a REAL pointer event.
+    await page.goto("/Exercise", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: /Log Workout/ }).click();
+    const dialog = page.locator('[role="dialog"]');
+    await dialog.waitFor({ state: "visible" });
+    await page.locator("#workout-duration").fill("30");
+    await dialog.getByRole("button", { name: /Save|Log/i }).click();
+    const toast = page.locator('[role="status"]').first();
+    await expect(toast, "the save toast must appear (the live hover surface)").toBeVisible({ timeout: 5000 });
+
+    const dismiss = toast.locator('button[aria-label="Dismiss notification"]');
+    await dismiss.hover(); // a real pointer — synthetic mouseenter never sets :hover
+    const x = await elementContrast(page, '[role="status"] button[aria-label="Dismiss notification"]');
+    expect(x.error, "the dismiss probe must resolve").toBeFalsy();
+    expect(
+      x.ratio,
+      `the HOVERED dismiss glyph must compute ≥3:1 (got ${x.ratio}:1, ink ${x.ink} on ${x.bg}) — the F-2 class: the glyph vanished at 1.05:1 exactly when the user aims at it`,
+    ).toBeGreaterThanOrEqual(3);
+  });
+});

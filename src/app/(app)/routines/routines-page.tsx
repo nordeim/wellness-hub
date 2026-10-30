@@ -144,7 +144,7 @@ export default function RoutinesClientPage() {
                 <div className="flex items-center gap-1">
                   <button
                     type="button"
-                    className={cn(BUTTON_CLASSES, "h-8 rounded-md px-3 text-xs text-emerald-600 hover:bg-emerald-50")}
+                    className={cn(BUTTON_CLASSES, "h-8 rounded-md px-3 text-xs text-emerald-600 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950/50")}
                     onClick={() => void completeRoutine(r)}
                     aria-label={`Complete ${r.title}`}
                   >
@@ -152,7 +152,7 @@ export default function RoutinesClientPage() {
                   </button>
                   <button
                     type="button"
-                    className={cn(BUTTON_CLASSES, "h-8 rounded-md px-3 text-xs text-red-600 hover:bg-red-50")}
+                    className={cn(BUTTON_CLASSES, "h-8 rounded-md px-3 text-xs text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/50")}
                     onClick={() => void removeRoutine(r)}
                     aria-label={`Delete ${r.title}`}
                   >

@@ -27,9 +27,13 @@ export const SHELL_LAYOUT = {
 } as const;
 
 export const APP_FOOTER = {
+  // WH-20 (F-3): the footer shipped ZERO dark pairs — a white strip on
+  // every dark module page (the loudest possible island; both dark walks
+  // passed it because its self-contrast is AA-fine — the WH-19
+  // light-island class, the 404's twin, on the most-travelled surface).
   footer:
-    "border-t border-gray-200 bg-white px-4 sm:px-8 py-4 text-sm text-gray-500 flex flex-wrap items-center gap-x-5 gap-y-2",
-  link: "hover:text-gray-800 transition-colors",
+    "border-t border-gray-200 bg-white px-4 sm:px-8 py-4 text-sm text-gray-500 flex flex-wrap items-center gap-x-5 gap-y-2 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-400",
+  link: "hover:text-gray-800 transition-colors dark:hover:text-neutral-200",
   copyright: "© 2026 Wellness Hub",
   note: "Made with 💜 for your wellbeing",
 } as const;
@@ -418,7 +422,7 @@ export const LOGIN_LAYOUT = {
   inputWrap: "relative",
   inputIcon: "absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 dark:text-neutral-400",
   input:
-    "h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-3 placeholder:text-slate-600 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 text-base md:text-sm sm:h-12 dark:border-neutral-700 dark:bg-neutral-800/60 dark:placeholder:text-slate-500 dark:focus:border-neutral-600 dark:focus:ring-neutral-600",
+    "h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-3 placeholder:text-slate-600 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 text-base md:text-sm sm:h-12 dark:border-neutral-700 dark:bg-neutral-800/60 dark:placeholder:text-slate-500 dark:focus:border-neutral-500 dark:focus:ring-neutral-400",
   submit:
     "flex h-11 w-full items-center justify-center gap-1 rounded-xl bg-slate-900 font-medium text-white shadow-sm transition-all duration-200 hover:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-sm sm:h-12 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200",
   footer: "flex flex-col items-center justify-between gap-2 sm:flex-row sm:gap-0",
@@ -518,7 +522,7 @@ export const NOT_FOUND_LAYOUT = {
   pathSpan: "font-medium text-slate-700 dark:text-slate-300",
   buttonGroup: "pt-6",
   homeButton:
-    "inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 dark:text-slate-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:bg-neutral-800 dark:hover:border-neutral-600 dark:focus:ring-neutral-600",
+    "inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 dark:text-slate-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:bg-neutral-800 dark:hover:border-neutral-500 dark:focus:ring-neutral-400",
   homeIcon: "w-4 h-4 mr-2",
   homeHref: "/",
 } as const;

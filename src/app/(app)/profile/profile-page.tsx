@@ -412,7 +412,7 @@ function AccountPanel({ user, onLogout }: { user: AppUser | null; onLogout: () =
         <button
           type="button"
           onClick={onLogout}
-          className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-red-200 bg-red-50 px-6 text-red-600 hover:bg-red-100")}
+          className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-red-200 bg-red-50 px-6 text-red-600 hover:bg-red-100 dark:border-red-900 dark:bg-red-950/50 dark:text-red-400 dark:hover:bg-red-900/60")}
         >
           <LogOut className="h-4 w-4" /> Log out
         </button>

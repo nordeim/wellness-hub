@@ -307,8 +307,8 @@ wellness-hub/
 │   │   ├── wellness-store.ts # ALL server state; call() envelope client
 │   │   └── theme-store.ts    # CSS-variable writer + UserPrefs sync
 │   └── types/               # shared domain types
-├── tests/                   # Vitest *.test.ts (22 suites, 330 checks)
-│   └── e2e/                 # Playwright *.spec.ts (53 checks) + setups
+├── tests/                   # Vitest *.test.ts (23 suites, 335 checks)
+│   └── e2e/                 # Playwright *.spec.ts (57 checks) + setups
 ├── scripts/
 │   ├── smoke-test.sh        # 14-check ladder against the standalone artifact
 │   └── prisma-env.ts  census.ts
@@ -635,15 +635,15 @@ No queues, workers or cron. Utility services worth naming:
 |----------|-------|--------|----------|-----------|
 | Unit — auth seams (password, verification, reset, contract, rate limit, boot-env) | 6 | 109 | `tests/auth*.test.ts`, `password-seam`, `rate-limit`, `boot-env` | Vitest |
 | Unit — wellness domain (streaks, points, badges, codecs, schemas, stats, helpers, theme, the preset-axis contrast arithmetic) | 6 | 90 | `tests/wellness-*.test.ts`, `preset-contrast` | Vitest |
-| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member/type-export/pass-site/schema-field/design-token/source-scan/palette-pin/page-theme/hydration-suppression/chip-vocabulary/dark-variant + ThemeBoot-mount + dark-pair-completeness censuses) | 10 | 131 | `tests/*.test.ts` | Vitest |
+| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member/type-export/pass-site/schema-field/design-token/source-scan/palette-pin/page-theme/hydration-suppression/chip-vocabulary/dark-variant + ThemeBoot-mount + dark-pair-completeness + interaction-arm dark-pair censuses, the interaction-contrast arithmetic pin) | 11 | 136 | `tests/*.test.ts` | Vitest |
 | E2E — auth ladder (login wall, lockout, reset funnel, revocation) | 1 spec | 11 | `tests/e2e/auth.spec.ts` | Playwright |
 | E2E — mobile drawer battery | 1 spec | 6 | `tests/e2e/mobile-navigation.spec.ts` | Playwright |
 | E2E — shell (nav, dual-case routes, quick actions, console-hygiene net) | 1 spec | 7 | `tests/e2e/shell.spec.ts` | Playwright |
-| E2E — a11y net (axe-core, WCAG 2.1+2.2 A+AA: the module routes, the open drawer, the login page — plus the WH-18 dark-state walks: the dark module routes + drawer, the OS-dark corner, the dark login, the dark select/toast interactions — plus the WH-19 widenings: the dark corners (signup/reset/404), the light computed-contrast leg (the alpha-card family) and the auto-mode listener) | 1 spec | 10 | `tests/e2e/a11y.spec.ts` | Playwright |
+| E2E — a11y net (axe-core, WCAG 2.1+2.2 A+AA: the module routes, the open drawer, the login page — plus the WH-18 dark-state walks: the dark module routes + drawer, the OS-dark corner, the dark login, the dark select/toast interactions — plus the WH-19 widenings: the dark corners (signup/reset/404), the light computed-contrast leg (the alpha-card family) and the auto-mode listener — plus the WH-20 interaction-states legs: the data-bearing dark row walk, the dark login focus ring, the dark footer and the toast-hover probe) | 1 spec | 14 | `tests/e2e/a11y.spec.ts` | Playwright |
 | E2E — auth setup project (one-time demo login; shares the cookie via storageState) | 1 setup | 1 | `tests/e2e/auth.setup.ts` | Playwright |
 | E2E — CRUD cycles + reset-password funnel | 2 specs | 18 | `tests/e2e/wellness-crud.spec.ts`, `reset-password.spec.ts` | Playwright |
 
-Totals: **330 unit checks / 22 Vitest suites + 53 e2e checks / 6 specs + 1 setup project**.
+Totals: **335 unit checks / 23 Vitest suites + 57 e2e checks / 6 specs + 1 setup project**.
 
 ### 8.2 Test Patterns
 
@@ -670,7 +670,7 @@ docs, not just the code.
 
 - `bun run lint` → 0 warnings
 - `bun run typecheck` → clean
-- `bun run test` → 330/330
+- `bun run test` → 335/335
 - `bun run build` → succeeds (the type gate)
 - `bun run smoke` → 14/14
 - `CI=1 bun run test:e2e` → 50/50
@@ -778,7 +778,10 @@ spec `CI=1 bunx playwright test tests/e2e/<file>`.
 | LOW | Reference's z-100 toast viewport intercepts clicks | Its empty toast portal container is `pointer-events: auto` across the full top strip (live-caught: the drawer trigger's upper click point covered — "Element is covered by <div.fixed.top-0 …z-[100]>"); ours is the shadcn `pointer-events-none` form and never intercepts | Our superset (not mirrored) |
 | — | ~~Dark mode broken (the variant strategy mismatch)~~ | RETIRED at WH-18: every `dark:*` utility compiled to the `prefers-color-scheme` media query (v4's default) while the theme engine flips a `.dark` class — 138 axe violation nodes in dark, gray-400-on-white for every OS-dark user in light. The `@custom-variant dark` pin + the missing dark pairs (toast, select focus, tab track, calendar cells, the login family) + ThemeBoot (the login-surface mount) + the auto-mode listener cured it; the dark-state a11y walks pin it forever | Closed (the WH-18 cure) |
 | — | ~~The dark corners: the surfaces outside the WH-18 walk set~~ | RETIRED at WH-19: the signup/verify/reset/sent views and the whole 404 shipped with the same broken class (LOGIN_SIGNUP_LAYOUT's title computed 1.0:1 on the dark card — an invisible "Create your account"; LOGIN_LAYOUT.subtitle 3.77:1 on /login with axe FALSE-PASSING it — the alpha card over the page gradient returns color-contrast incomplete; the 404 a full light island). Cured by the dark-pair completeness census (every chromatic arm of the five login-family records carries its dark twin) + the computed-contrast e2e leg (the axe-ambiguous alpha-card family, both modes) | Closed (the WH-19 cure) |
-| — | ~~The 404's hydration text mismatch~~ | RETIRED at WH-19: usePathname() on the SERVER for an unmatched route returns Next's internal "_not-found" — the span SSR'd the meaningless internal route name while the client rendered the real path → React #418 → the whole-tree client regeneration → the patch DELETED applyTheme's pre-hydration writes off <html> (the .dark class, the preset style block, the data attrs — MutationObserver-caught: written t≈150, deleted t≈200). The 404 rendered light regardless of the persisted theme. Cured by the isClient guard (useSyncExternalStore's server snapshot — the React-blessed client-only pattern); the dark corners walk pins the class surviving on the 404 | Closed (the WH-19 cure) |
+| — | ~~The interaction states: focus rings, hover arms, the row surfaces~~ | RETIRED at WH-20: the WH-19 round paired the login family's ARMS (census-complete) but the chosen ring COLOR shipped sub-contrast (dark:focus:ring-neutral-600 — 2.29:1 vs the dark card, below the 3:1 non-text bar of 1.4.11); the toast's HOVERED dismiss glyph rendered 1.05:1 on the dark card (invisible exactly when the user aims at it); APP_FOOTER shipped ZERO dark pairs (a white strip on every dark page); nine module action buttons painted light-island flashes in dark. The class: axe never hovers and never focuses — the state walks render resting pages only. Cured by the arm-level dark-pair census (every palette hover:/focus: arm carries its dark twin) + the interaction-contrast arithmetic pin (pairing is not contrast — the pin computes the VALUE) + the four e2e legs (the data-bearing dark row, the dark login ring, the dark footer, the toast hover) | Closed (the WH-20 cure) |
+| LOW | Light login focus ring (reference-shared) | The light login input's ring (white 2px offset + slate-400 2px) computes 2.56:1 (ring vs its white offset) / 2.45:1 (vs the slate-50 page) — below 3:1 but byte-identical to the reference's own computed ring (probed on both apps: `rgb(255,255,255) 0 0 0 2px, rgb(148,163,184) 0 0 0 4px` — the reference's one working focus surface, mirrored exactly). Per the parity doctrine (the preset-axis precedent): documented, NOT cured — deviating would fork our login focus identity from the reference's own. The arithmetic is pinned (tests/interaction-contrast.test.ts asserts the documented ratios; a change to the light arms forces this ledger + the pin to move together) | Reference-shared (documented, pinned) |
+| LOW | The reference's keyboard focus is INVISIBLE | Live-probed at WH-20: its nav links carry `outline: 2px rgba(0,0,0,0)` transparent with no ring classes, and its primary submit focuses to a 3px WHITE outline invisible on the white card. Our focus-visible superset (token rings 12–20:1, measured both modes) exists to beat this defect class | Our superset (not mirrored) |
+| LOW | The 1px ring family vs WCAG 2.4.13 Focus Appearance | The ui primitives' `ring-1 ring-ring` arms pass the claimed WCAG 2.1+2.2 A+AA set everywhere (measured 11.99–19.8:1, both modes); 2.4.13 Focus Appearance is Level AAA in WCAG 2.2 (verified against the W3C Understanding doc) — outside the claimed conformance. The 2px surfaces (sidebar links, the login family, the tabs) already exceed it. Recorded so the decision is written down, not re-litigated | Deferred AAA upgrade (out of claimed A+AA) |
 
 No CRITICAL or HIGH issues are open.
 

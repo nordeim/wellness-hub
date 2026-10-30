@@ -293,7 +293,7 @@ export default function StudyResourcesClientPage() {
                     </button>
                     <button
                       type="button"
-                      className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-red-600 hover:bg-red-50")}
+                      className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/50")}
                       onClick={() => void remove(r)}
                       aria-label={`Delete ${r.title}`}
                     >

@@ -152,7 +152,7 @@ export default function ExerciseClientPage() {
                     <OptionChip label={i.label} tint={i.tint} text={i.text} />
                     <button
                       type="button"
-                      className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-red-600 hover:bg-red-50")}
+                      className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/50")}
                       onClick={async () => {
                         const res = await deleteWorkout(w.id);
                         if (!res.ok) toast.error(res.error);

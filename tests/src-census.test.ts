@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { join, relative } from "node:path";
 import { expect, it } from "vitest";
 import {
   WORKOUT_TYPES, WORKOUT_INTENSITIES, MOODS, ASSIGNMENT_PRIORITIES,
@@ -1486,5 +1486,86 @@ it("WH-19: the dark-pair completeness census — every chromatic arm of the logi
   expect(
     failures,
     "every chromatic arm of the login-family records must carry its dark twin — the WH-19 dark-corners cure (the arm's variant chain and utility type must appear in dark: form in the same member)",
+  ).toEqual([]);
+});
+
+it("WH-20: the interaction-arm dark-pair census — every palette hover:/focus: arm in the whole tree carries its dark twin", () => {
+  // WH-20 (F-1..F-4): the WH-19 census pinned the login-family RECORDS'
+  // pairing — but pairing is not contrast (the WH-19 dark twins included
+  // a sub-3:1 ring: neutral-600 at 2.32:1 on the dark card, owned by the
+  // interaction-contrast pin), and the surfaces OUTSIDE those records
+  // shipped interaction arms with NO dark twin at all: the toast's
+  // hover:text-neutral-900 rendered the hovered dismiss X at 1.05:1 on
+  // the dark card (invisible exactly when the user aims at it), APP_FOOTER
+  // was a white strip on every dark page, and nine module action buttons
+  // painted red-50/emerald-50 light-island flashes on hover in dark. The
+  // class: axe never hovers and never focuses — the interaction states
+  // are the fourth assertion surface the gate never read (DOM → console
+  // → semantics → interaction).
+  //
+  // The rule: every PALETTE-colored hover:/focus:/focus-visible: arm of
+  // the ink/surface utility families (text|bg|border|ring|outline) in any
+  // quoted class string anywhere under src/ must carry its dark:hover:/
+  // dark:focus: sibling in the SAME string. Three structural exemptions,
+  // written down so future audits re-litigate the rule, not instances:
+  //   (a) TOKEN-REFERENCING ARMS are invisible to the palette regex by
+  //       construction (hover:bg-line-soft, hover:bg-sidebar-hover,
+  //       hover:text-foreground, hover:bg-primary-hover …) — the token
+  //       flips in dark with the .dark override block; no twin needed.
+  //   (b) THE BOTH-MODE LIGHT-GRAY FAMILY — gray-200/300/400 arms — the
+  //       reference's own faint-affordance anatomy (the unchecked
+  //       circle's gray-300 → hover gray-400): both steps are light
+  //       values, visible on light AND dark surfaces alike; a dark twin
+  //       would be churn, not information.
+  //   (c) THE BLACK OVERLAY SCRIM — an arm matching hover:/focus:bg-black
+  //       (any opacity) WITH a resting bg-black/… layer in the same
+  //       string (the video-overlay anatomy: bg-black/30 →
+  //       hover:bg-black/40 carrying text-white — the dialog overlay's
+  //       interactive form). A black scrim is black in BOTH modes by
+  //       construction; the white overlay ink rides the same scrim in
+  //       dark. A dark twin would repaint the scrim, not adapt it — the
+  //       exact class the learning/routines video overlays ship.
+  // The gradient-stop utilities (from/via/to) stay OUT of the census: the
+  // brand/module gradient families are mode-independent by design (the
+  // WH-15 identity map — the same vivid stops ride both modes).
+  const CHROMA = "(?:white|black|slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)";
+  const ARM = new RegExp(
+    `((?:(?:hover|focus-visible|focus):)+)(text|bg|border|ring|outline)-(${CHROMA})(?:-\\d+)?`,
+    "g",
+  );
+  const BOTH_MODE_GRAYS = /^(?:hover|focus-visible|focus):(?:text|bg|border|ring|outline)-gray-(?:200|300|400)$/;
+  // (c): the scrim's interactive arm, exempted ONLY when the string also
+  // carries the resting layer — a bare hover:bg-black elsewhere (a button
+  // face, not a scrim) still needs its twin.
+  const SCRIM_ARM = /^(?:hover|focus-visible|focus):bg-black(?:\.\d+)?$/;
+  const SCRIM_REST = /(?:^|\s)bg-black\/./;
+  const failures: string[] = [];
+  const files = readdirSync(join(REPO_ROOT, "src"), { recursive: true })
+    .filter((f) => /\.(ts|tsx)$/.test(String(f)))
+    .map((f) => join(REPO_ROOT, "src", String(f)));
+  for (const file of files) {
+    const src = readFileSync(file, "utf8");
+    // Strip line + block comments first (the WH-13 lesson: a census's
+    // comment exemption must match the file type's comment FORMS).
+    const stripped = src.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+    for (const m of stripped.matchAll(/"([^"\n]*)"|`([^`\n]*)`/g)) {
+      const cls = m[1] ?? m[2] ?? "";
+      if (!/(hover:|focus-visible:|focus:)/.test(cls)) continue;
+      const arms = [...cls.matchAll(ARM)].map((a) => a[0]).filter((a) => !a.startsWith("dark:"));
+      for (const arm of arms) {
+        if (BOTH_MODE_GRAYS.test(arm)) continue;
+        if (SCRIM_ARM.test(arm) && SCRIM_REST.test(cls)) continue;
+        // The arm's (variants, utility) head, e.g. "hover:bg-".
+        const head = arm.replace(new RegExp(`-(${CHROMA}).*$`), "-");
+        const twin = new RegExp(`dark:${head.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:${CHROMA})`);
+        if (!twin.test(cls)) {
+          failures.push(`${relative(REPO_ROOT, file)}: "${arm}" has no dark twin (no ${`dark:${head}…`} in the same class string)`);
+        }
+      }
+    }
+  }
+  expect(
+    failures,
+    "every palette-colored interaction arm (hover:/focus: text|bg|border|ring|outline) must carry its dark twin — the WH-20 interaction-states cure; token arms and the gray-200/300/400 both-mode family are the documented exemptions",
   ).toEqual([]);
 });

@@ -54,11 +54,11 @@ const CANONICAL = {
   models: 15, // prisma/schema.prisma `^model` declarations
   apiRouteFamilies: 15, // directories under src/app/api/
   uiModules: 6, // .tsx modules under src/components/ui/
-  unitSuites: 22, // tests/*.test.ts (INCLUDING this suite — WH-19: +tests/preset-contrast.test.ts)
+  unitSuites: 23, // tests/*.test.ts (INCLUDING this suite — WH-20: +tests/interaction-contrast.test.ts)
   e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 330, // `bun run test` total (WH-19: 328 + the dark-pair completeness census + the preset-axis arithmetic pin)
-  e2eChecks: 53, // `CI=1 bun run test:e2e` total (WH-19: 50 + the dark corners, the light contrast leg and the auto-listener walks in a11y.spec.ts)
+  unitChecks: 335, // `bun run test` total (WH-20: 330 + the interaction-arm dark-pair census + the interaction-contrast arithmetic pin's four checks)
+  e2eChecks: 57, // `CI=1 bun run test:e2e` total (WH-20: 53 + the four interaction-state legs in a11y.spec.ts)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
   // WH-18: ThemeBoot joined src/components/layout/ — the counts move with it.
   layoutComponents: 8, // modules under src/components/layout/

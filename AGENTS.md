@@ -19,8 +19,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (330 checks) | `bun run test` | Vitest, node-safe seams |
-| Browser E2E (53 checks) | `bun run test:e2e` | Needs `bun run build` first |
+| Unit tests (335 checks) | `bun run test` | Vitest, node-safe seams |
+| Browser E2E (57 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
 | The full gate in one command | `bun run gate` | lint → tsc → test → build → smoke → e2e |
@@ -29,8 +29,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (330) → `bun run build` → `bun run smoke` →
-`CI=1 bun run test:e2e` (53: 6 specs + the auth setup project) — or the
+`bun run test` (335) → `bun run build` → `bun run smoke` →
+`CI=1 bun run test:e2e` (57: 6 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
 is NOT set — a type error fails `bun run build`, and the explicit
@@ -263,7 +263,23 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   family axe returns color-contrast INCOMPLETE for — measured directly,
   oklab-aware, both modes, the WCAG large-text rule applied per element)
   and the AUTO-MODE listener walk (page.emulateMedia flips mid-flight;
-  explicit choices ignore the OS).
+  explicit choices ignore the OS). The WH-20 widening: the
+  INTERACTION-STATES legs — the fourth assertion-surface class the gate
+  never read (DOM → console → semantics → interaction; axe never hovers,
+  never focuses, and the state walks render resting pages only): the
+  data-bearing dark row walk (one row created through the API — the empty
+  lists the state walks render never showed the delete buttons), the
+  dark login focus ring (real keyboard Tab, ≥400 ms settle — the
+  transition-all box-shadow interpolation reads t≈0 transparent if
+  sampled synchronously), the dark footer (the white strip that passed
+  every walk because its self-contrast is AA-fine) and the toast-hover
+  probe (a REAL pointer event; synthetic mouseenter never sets :hover).
+  The unit side pins the same axis: the interaction-arm dark-pair census
+  (every palette hover:/focus: arm carries its dark twin — token arms,
+  the gray-200/300/400 both-mode family and the black-scrim overlays are
+  the documented structural exemptions) + the interaction-contrast
+  arithmetic pin (pairing is not contrast — the pin computes the twin's
+  VALUE from the v3 palette pins against the rendered surface).
 
 ## Git
 
