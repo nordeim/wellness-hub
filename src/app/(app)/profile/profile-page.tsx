@@ -274,7 +274,7 @@ function AppearancePanel() {
         </div>
         {/* WH-17 (F-4 family): gray-600 — gray-500 computed 4.35:1 on the
             line-soft wash (the same class the Goals badge text carried). */}
-        <p className="mt-3 rounded-lg bg-line-soft p-3 text-sm text-gray-600">
+        <p className="mt-3 rounded-lg bg-line-soft p-3 text-sm text-gray-600 dark:text-gray-400">
           The quick brown fox jumps over the lazy dog.
         </p>
         <p className="mt-1 text-xs text-muted">Preview of {FONT_FAMILIES.find((f) => f.value === theme.fontFamily)?.label}</p>

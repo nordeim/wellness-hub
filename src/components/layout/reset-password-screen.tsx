@@ -140,7 +140,7 @@ export function ResetPasswordScreen() {
                         className={LOGIN_LAYOUT.input}
                       />
                     </div>
-                    <p className="text-sm text-slate-500">Must be at least 8 characters</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Must be at least 8 characters</p>
                   </div>
                   <div className={LOGIN_LAYOUT.field}>
                     <label htmlFor="confirmPassword" className={LOGIN_LAYOUT.label}>
@@ -178,7 +178,7 @@ export function ResetPasswordScreen() {
 
                 <button
                   type="button"
-                  className="w-full text-sm text-slate-600 hover:text-slate-900"
+                  className="w-full text-sm text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
                   onClick={() => router.push("/login")}
                 >
                   Back to login

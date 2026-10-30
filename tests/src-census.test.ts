@@ -1371,3 +1371,59 @@ it("WH-17: the chip-vocabulary census — every OptionMeta chip rides the refere
   expect(chipClass.includes("border"), "the OptionChip carries the Badge's 1px (transparent) border — computed-verified on the reference").toBe(true);
   expect(chipClass.includes("rounded-full"), "the stale rounded-full form must not return").toBe(false);
 });
+
+it("WH-18: the dark-variant pin — globals.css declares the class-based dark variant (the dark-mode strategy cure)", () => {
+  // WH-18 (F-1): the compiled production stylesheet wrapped EVERY dark:*
+  // utility in @media (prefers-color-scheme:dark) — Tailwind v4's DEFAULT
+  // dark variant — while the theme engine flips a .dark CLASS on <html>.
+  // The two strategies never met: a mode=dark user got swapped tokens
+  // (surface #18181b) with light text values (138 axe violation nodes
+  // across 8 routes), and an OS-dark user in mode=light got gray-400 on
+  // WHITE cards (2.54:1) — the media query firing without the class. The
+  // 77-utility dark: vocabulary (the WH-15 page-root washes, the login
+  // family's dark set, the WH-14 950 washes) was un-activatable by the
+  // mode toggle through seventeen green rounds because every net, capture
+  // and e2e walked light mode only (the rendered-STATES gap, WH-16/17's
+  // error class one surface over: the console → the semantics → the
+  // states). The declaration is the sixth Tailwind v4 pin (the canonical
+  // class-based form, documented in the repo's own skills corpus —
+  // skills/react19-vite-spa-fastify-drizzle-sqlite/SKILL.md); the e2e
+  // twin (the dark-mode a11y net in tests/e2e/a11y.spec.ts) asserts the
+  // RENDERED dark state passes axe; this census pins the strategy
+  // structurally. Structural pin, the @source-not pin's form: if this
+  // line is removed the census trips in the same run.
+  const gcss = readFileSync(join(REPO_ROOT, "src/app/globals.css"), "utf8");
+  expect(
+    gcss.includes("@custom-variant dark (&:where(.dark, .dark *));"),
+    "globals.css must declare the class-based dark variant — without it every dark:* utility compiles to the prefers-color-scheme media query (v4's default) and the .dark class flip the theme store performs can never activate them (the dark-mode round's root cause)",
+  ).toBe(true);
+});
+
+it("WH-18: the ThemeBoot mount census — the root layout renders the theme boot so the login family carries the chosen mode", () => {
+  // WH-18 (F-3): the theme store mounted only inside the (app) group
+  // (AppShell + the Profile page) — /login, /signup and /reset-password
+  // never loaded it, so the .dark class and the preset custom properties
+  // never applied on the app's root face (live-verified: the class
+  // vanished on /login mid-walk). The LOGIN_LAYOUT's authored dark
+  // vocabulary (dark:bg-neutral-900/95, dark:from-neutral-900…) could
+  // only ever fire on the OS preference — the wrong trigger. ThemeBoot is
+  // the side-effect client component in the ROOT layout: the store's
+  // persist middleware rehydrates synchronously from localStorage at
+  // module init and applies the class + vars (the pre-hydration write
+  // class WH-16 already suppressed on <html>/<main> — no new suppression
+  // needed). The e2e twin (the dark-login check in a11y.spec.ts) asserts
+  // the seeded dark state applies on /login; this census pins the mount
+  // structurally.
+  const bootPath = join(REPO_ROOT, "src/components/layout/theme-boot.tsx");
+  expect(existsSync(bootPath), "src/components/layout/theme-boot.tsx must exist — the login-surface theme mount").toBe(true);
+  const bootSrc = readFileSync(bootPath, "utf8");
+  expect(
+    bootSrc.includes("@/stores/theme-store"),
+    "ThemeBoot must import the theme store — the persist middleware's rehydrate + applyTheme is the whole point",
+  ).toBe(true);
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/app/layout.tsx"), "utf8");
+  expect(
+    /<ThemeBoot\s*\/>/.test(layoutSrc),
+    "the root layout must render <ThemeBoot /> — without it the login/signup/reset surfaces ignore the user's chosen mode (the store only mounts inside the (app) group)",
+  ).toBe(true);
+});

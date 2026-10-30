@@ -209,7 +209,7 @@ export default function GoalsClientPage() {
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-foreground">{g.title}</p>
-                      <p className="text-xs text-gray-600">
+                      <p className="text-xs text-gray-600 dark:text-gray-400">
                         {g.currentValue}/{g.targetValue} {g.unit} · {f.label}
                         {g.deadline ? ` · by ${formatDate(g.deadline)}` : ""}
                         {g.description ? ` · ${g.description}` : ""}
@@ -300,7 +300,7 @@ export default function GoalsClientPage() {
                       dimming retired with it (an axe-invisible contrast
                       hazard — the effective fg compounds far below the
                       reported ratio). */}
-                  <p className="text-xs text-gray-600">{b.description}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">{b.description}</p>
                   {earned && (
                     <p className="text-xs font-medium text-primary">
                       Earned {formatDate(b.earnedAt as string)} · +{b.points} pts

@@ -5,7 +5,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.19-2D3748?logo=prisma)](https://www.prisma.io/)
-[![Tests](https://img.shields.io/badge/tests-326%20unit%20+%2046%20e2e-brightgreen)](#testing)
+[![Tests](https://img.shields.io/badge/tests-328%20unit%20+%2050%20e2e-brightgreen)](#testing)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
 A complete, self-hostable **student wellbeing application** — a production-grade
@@ -57,8 +57,8 @@ Vitest + Playwright test battery pinning all of it in place.
 | ORM | Prisma | 6.19 | Schema + SQLite driver |
 | Database | SQLite | — | `db/custom.db` at the repo root, git-ignored |
 | Validation | Zod | 4 | Every API body boundary (`parseBody()`) |
-| Unit tests | Vitest | 5 | 326 checks / 21 suites |
-| E2E tests | Playwright | 1.64 | 46 checks (6 specs + the auth setup project) against the production standalone server |
+| Unit tests | Vitest | 5 | 328 checks / 21 suites |
+| E2E tests | Playwright | 1.64 | 50 checks (6 specs + the auth setup project) against the production standalone server |
 
 ```mermaid
 flowchart TB
@@ -146,8 +146,8 @@ Requires **Node.js ≥ 20** and **bun ≥ 1.1**.
 ## Testing
 
 ```bash
-bun run test         # Vitest — 326 checks, 21 suites (node-safe seams)
-bun run test:e2e     # Playwright — 46 checks (run `bun run build` first:
+bun run test         # Vitest — 328 checks, 21 suites (node-safe seams)
+bun run test:e2e     # Playwright — 50 checks (run `bun run build` first:
                      # boots the PRODUCTION standalone server on an isolated
                      # port with its own scratch db/e2e.db)
 bun run lint         # eslint, --max-warnings 0
@@ -160,9 +160,12 @@ lockout ladder, reset funnel, session revocation), the mobile drawer (open,
 navigate, escape, viewport-grow auto-close, scroll-lock), the shell (sidebar
 nav, dual-case routes, active state, quick actions, the console-hygiene net —
 every module route walked with zero console errors/warnings), the a11y net
-(axe-core at WCAG 2.1 A+AA across every module route, the open mobile drawer
-and the login page — zero violations), and a CRUD cycle through every
-wellness module including goal completion → points.
+(axe-core at WCAG 2.1+2.2 A+AA across every module route, the open mobile
+drawer and the login page — zero violations — plus the dark-state walks:
+every module route + the drawer in dark mode, the OS-dark-in-light corner,
+the dark login and the transient select/toast surfaces, all strict zero),
+and a CRUD cycle through every wellness module including goal completion →
+points.
 
 ## Design System
 
@@ -181,10 +184,15 @@ the preset-themeable 135deg `--primary → --secondary` pair.
 | Page wash | `bg-gradient-to-br from-<m1>-50 via-white to-<m2>-50/30` | Every page root (dark: the neutral token family) |
 | Font | `--font-sans` (system stack + Apple/Segoe/Noto emoji) | Whole app — matches the reference's computed stack |
 
-Dark mode rides the `.dark` class token overrides in `globals.css`; the
+Dark mode rides the `.dark` class token overrides in `globals.css` — and
+the class-based `dark:` variant is declared explicitly
+(`@custom-variant dark (&:where(.dark, .dark *))`, the Tailwind v4 pin:
+without it v4 compiles every `dark:` utility to the `prefers-color-scheme`
+media query and the Appearance tab's mode flip never activates them). The
 theme store also writes live presets as CSS custom properties on `<html>`
 (brand surfaces only — the module pairs are fixed, exactly as the
-reference's own preset engine behaves).
+reference's own preset engine behaves), and mounts at the ROOT layout
+(ThemeBoot) so the login family carries the chosen mode too.
 
 ## Superset over the Reference
 
@@ -194,9 +202,9 @@ reference's own preset engine behaves).
 - Points + streaks + 8-badge auto-award achievements engine
 - Robust search/filters on Assignments, Study Resources, Learning
 - PWA manifest + per-route OpenGraph/Twitter metadata + `sitemap.xml`
-- Accessibility superset: focus rings, aria states, 44px touch targets — pinned by the axe a11y net (WCAG 2.1 A+AA, zero violations)
+- Accessibility superset: focus rings, aria states, 44px touch targets — pinned by the axe a11y net (WCAG 2.1+2.2 A+AA, zero violations, light AND dark states)
 - Zod validation at every API boundary; bounded readers; per-IP rate limits
-- 326 unit + 46 e2e checks pinning the behavior
+- 328 unit + 50 e2e checks pinning the behavior
 
 ## Deployment
 
@@ -213,6 +221,7 @@ absolute `DATABASE_URL` before building — the details live in
 | Production boot refuses to start (`AUTH_SECRET` error) | Generate one: `openssl rand -hex 32`, set it in the environment — the boot gate is intentional |
 | Mobile drawer hover styles look "stuck" | Tailwind v4 hover fix is `@custom-variant hover (&:hover)` in `globals.css` — do not remove the session-80 unwrap pin |
 | `shadow-sm` looks too heavy | Already re-pinned in `globals.css` (`--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05)`) — keep the re-pin |
+| Dark mode looks half-dark (dark cards, light text) | The class-based dark variant pin is `@custom-variant dark (&:where(.dark, .dark *))` in `globals.css` — without it Tailwind v4 compiles `dark:` utilities to the OS media query and the mode toggle never activates them |
 
 ## Contributing
 

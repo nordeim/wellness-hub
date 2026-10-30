@@ -97,7 +97,7 @@ export default function LearningClientPage() {
                 key={t.id}
                 className="overflow-hidden rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all"
               >
-                <div className="relative aspect-video bg-gradient-to-br from-gray-100 to-gray-200">
+                <div className="relative aspect-video bg-gradient-to-br from-gray-100 to-gray-200 dark:from-neutral-800 dark:to-neutral-900">
                   {t.thumbnail ? (
                     <img src={t.thumbnail} alt={t.title} className="h-full w-full object-cover" loading="lazy" />
                   ) : (

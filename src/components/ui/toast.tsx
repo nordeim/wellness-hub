@@ -114,9 +114,13 @@ function ToastCard({ item }: { item: ToastItem }) {
         // path) — no reference surface contracts an animation; retired per
         // the D-124a7 dead-code doctrine. The tw-animate.css vendor import
         // stays (the Radix dialog family rides it).
-        item.variant === "success" && "border-emerald-200 bg-white",
-        item.variant === "error" && "border-rose-200 bg-white",
-        item.variant === "info" && "border-line bg-white",
+        // WH-18: the toast's dark pairs — the fixed bg-white carried token
+        // text (text-foreground flips to #fafafa in dark: WHITE ON WHITE,
+        // every CRUD confirmation invisible). The dark card keeps the
+        // variant borders at the -800 step (pinned in globals.css).
+        item.variant === "success" && "border-emerald-200 bg-white dark:border-emerald-800 dark:bg-neutral-900",
+        item.variant === "error" && "border-rose-200 bg-white dark:border-rose-800 dark:bg-neutral-900",
+        item.variant === "info" && "border-line bg-white dark:bg-neutral-900",
       )}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}

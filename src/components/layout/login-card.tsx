@@ -528,7 +528,7 @@ export function LoginCard({ mode = "signin" }: { mode?: Mode }) {
                                   value={digit}
                                   onChange={(e) => onCodeDigit(idx, e.target.value)}
                                   onKeyDown={(e) => onCodeKeyDown(idx, e)}
-                                  className={`flex rounded-lg border border-input bg-white px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${LOGIN_VERIFY_LAYOUT.codeInput}`}
+                                  className={`flex rounded-lg border border-input bg-white dark:border-neutral-700 dark:bg-neutral-800 px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${LOGIN_VERIFY_LAYOUT.codeInput}`}
                                 />
                               ))}
                             </div>
@@ -542,9 +542,9 @@ export function LoginCard({ mode = "signin" }: { mode?: Mode }) {
                                 only when present, and never when the
                                 WELLNESS_DISABLE_IN_APP_OTP knob is set. */}
                             {verifyCodeHint && (
-                              <p className="text-sm text-slate-500">
+                              <p className="text-sm text-slate-500 dark:text-slate-400">
                                 Demo code:{" "}
-                                <span className="font-semibold text-slate-700">{verifyCodeHint}</span>
+                                <span className="font-semibold text-slate-700 dark:text-slate-200">{verifyCodeHint}</span>
                               </p>
                             )}
                           </div>
@@ -604,7 +604,7 @@ export function LoginCard({ mode = "signin" }: { mode?: Mode }) {
                           {resetUrl && (
                             <a
                               href={resetUrl}
-                              className="mt-2 block break-all text-sm font-medium text-blue-600 underline underline-offset-2 hover:text-blue-700"
+                              className="mt-2 block break-all text-sm font-medium text-blue-600 underline underline-offset-2 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                             >
                               Open your password reset link
                             </a>

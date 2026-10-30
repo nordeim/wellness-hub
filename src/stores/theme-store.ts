@@ -10,7 +10,11 @@
 // AND mirrors to /api/prefs for cross-device sync.
 //
 // Mode handling: "auto" resolves through matchMedia(prefers-color-scheme)
-// and flips the .dark class live (the listener stays attached).
+// and flips the .dark class live — the listener below re-resolves on every
+// OS scheme change (WH-18, F-4: the header comment used to narrate a
+// listener that did not exist — the stale-narration class; auto users
+// got the mode at load only. The listener re-runs applyTheme when the
+// mode is "auto", flipping the class as the OS flips).
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -187,4 +191,17 @@ export async function syncPrefsFromServer() {
   } catch {
     /* offline boot keeps local defaults */
   }
+}
+
+// WH-18 (F-4): the auto-mode live-flip listener — attached once at module
+// init, client-only. An OS scheme change while the app is open re-resolves
+// the .dark class through applyTheme (only in "auto" mode — explicit
+// Light/Dark choices ignore the OS, exactly as the picker promises).
+if (typeof window !== "undefined" && typeof window.matchMedia === "function") {
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", () => {
+      const s = useThemeStore.getState();
+      if (s.themeMode === "auto") applyTheme(s);
+    });
 }

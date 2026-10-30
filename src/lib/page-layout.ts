@@ -317,8 +317,14 @@ export const PROFILE_PANEL = {
 export const THEME_MODE_PICKER = {
   grid: "grid grid-cols-3 gap-3",
   card: "p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2",
-  active: "border-indigo-500 bg-indigo-50",
-  inactive: "border-gray-200 hover:border-gray-300",
+  // WH-18: the active card's explicit near-black — the fixed indigo-50
+  // chip in dark mode inherits the DARK foreground (#fafafa on
+  // #eef2ff = 1.2:1); the near-black is mode-independent (the WH-17
+  // "fixed indigo active pair" completed for the dark state).
+  active: "border-indigo-500 bg-indigo-50 text-neutral-900",
+  // WH-18: the inactive card's dark border pair (coherence — the fixed
+  // gray-200 border rides the light token set).
+  inactive: "border-gray-200 hover:border-gray-300 dark:border-neutral-700 dark:hover:border-neutral-600",
   icon: "h-6 w-6",
   label: "font-medium",
 } as const;
@@ -404,7 +410,7 @@ export const LOGIN_LAYOUT = {
   divider: "relative my-6",
   dividerLine: "shrink-0 h-[1px] w-full bg-slate-200 dark:bg-neutral-700",
   dividerLabel: "relative flex justify-center text-xs uppercase",
-  dividerLabelSpan: "bg-white px-3 font-medium tracking-wider text-slate-500 dark:bg-neutral-900",
+  dividerLabelSpan: "bg-white px-3 font-medium tracking-wider text-slate-500 dark:bg-neutral-900 dark:text-slate-400",
   form: "w-full space-y-4 sm:space-y-5",
   fields: "space-y-3 sm:space-y-4",
   field: "[&>*+*]:mt-1.5",
@@ -452,9 +458,13 @@ export const CHECKBOX = {
  *  `pill` variant, zero call sites since the build) — the value census
  *  owns this module's export surface. */
 export const TABS_SEGMENTED = {
-  track: "h-9 items-center justify-center rounded-lg bg-line-soft p-1 text-neutral-600 grid w-full",
+  // WH-18: the dark pairs — the track's text-neutral-600 and the active
+  // trigger's fixed bg-white both fail on the dark token set (the class
+  // flip the theme store performs; the dark: variant itself was the
+  // round's root-cause fix).
+  track: "h-9 items-center justify-center rounded-lg bg-line-soft p-1 text-neutral-600 dark:text-neutral-400 grid w-full",
   trigger:
-    "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow data-[state=active]:bg-white data-[state=active]:text-foreground",
+    "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow data-[state=active]:bg-white data-[state=active]:text-foreground dark:data-[state=active]:bg-neutral-800",
 } as const;
 
 export const DIALOG_CONTENT = {

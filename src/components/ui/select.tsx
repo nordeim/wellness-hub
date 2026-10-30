@@ -118,8 +118,12 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
       // focus:bg-line-soft (#f5f5f5 = its accent) +
       // focus:text-neutral-900 (#171717 — the s80 badge precedent for
       // expressing its accent-foreground).
+      // WH-18: the dark focus pair — the line-soft token flips to
+      // #1c1c1f in dark while the fixed neutral-900 text stayed
+      // near-black: the highlighted option was UNREADABLE. The light
+      // pair is untouched (the reference's own computed form).
       className={cn(
-        "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-line-soft focus:text-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-line-soft focus:text-neutral-900 dark:focus:text-neutral-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         className,
       )}
       {...props}

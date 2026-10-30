@@ -34,6 +34,24 @@
    tests/wellness-theme.test.ts). */
 @custom-variant hover (&:hover);
 
+/* WH-18 (F-1): the class-based dark variant — the sixth v4 pin. Tailwind
+   v4's DEFAULT dark: variant compiles to @media (prefers-color-scheme:
+   dark) — the OS preference — while this app's theme engine (the
+   Appearance tab's Light/Dark/Auto picker, src/stores/theme-store.ts)
+   flips a .dark CLASS on <html>. The two strategies never met: the
+   production bundle wrapped all 77 dark:* utilities (the WH-15 page-root
+   washes, the login family's dark vocabulary, the WH-14 950 washes) in
+   the media query — un-activatable by the mode toggle. A mode=dark user
+   got swapped tokens (surface #18181b) with light text values (138 axe
+   violation nodes across 8 routes); an OS-dark user in mode=light got
+   the reverse leak (gray-400 on WHITE cards, 2.54:1). The declaration
+   re-targets every dark:* utility at the .dark class (the canonical v4
+   form — skills/react19-vite-spa-fastify-drizzle-sqlite/SKILL.md); the
+   .dark token overrides below then flip in the same cascade the class
+   rides. Pinned by tests/src-census.test.ts (the dark-variant pin) +
+   the e2e dark-state walks (tests/e2e/a11y.spec.ts). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ---------------------------------------------------------------------------
    Wellness Hub design tokens — Tailwind CSS v4 CSS-first configuration.
    Rules (validated against docs/Tailwind-V4-Validation-Report.md):
@@ -160,8 +178,13 @@
      no reference surface and pin v3 directly) + neutral-600 (the tabs
      track's accessible superset); the 3 orphaned -50/-600 pins retired
      with the chip migration (green-600, sky-50, sky-600 — the chips were
-     their only consumers). The block now carries exactly the 109 used
-     pairs — the equivalence census holds. */
+     their only consumers). WH-18 (the dark-mode round): +6 pins for the
+     dark pairs (blue-300/400 the reset link, emerald-800/rose-800 the
+     toast borders, neutral-100/400 the select-focus + tab-track twins —
+     all our superset surfaces pinned to the standard v3 values; the
+     107-at-WH-17 count in this narration had drifted to 109 — the
+     census's own arithmetic is the truth, not the prose). The block now
+     carries exactly the 113 used pairs — the equivalence census holds. */
   --color-amber-50: #fffbeb;
   --color-amber-100: #fef3c7;
   --color-amber-200: #fde68a;
@@ -175,6 +198,8 @@
   --color-amber-950: #451a03;
   --color-blue-50: #eff6ff;
   --color-blue-100: #dbeafe;
+  --color-blue-300: #93c5fd; /* WH-18: the dark reset-link hover pair */
+  --color-blue-400: #60a5fa; /* WH-18: the dark reset-link pair (the light blue-600 fails on the dark card) */
   --color-blue-500: #3b82f6;
   --color-blue-600: #2563eb;
   --color-blue-700: #1d4ed8;
@@ -185,6 +210,7 @@
   --color-cyan-600: #0891b2;
   --color-emerald-50: #ecfdf5;
   --color-emerald-700: #047857;
+  --color-emerald-800: #065f46; /* WH-18: the success toast's dark border pair */
   --color-emerald-100: #d1fae5;
   --color-emerald-200: #a7f3d0;
   --color-emerald-500: #10b981;
@@ -210,6 +236,8 @@
   --color-indigo-500: #6366f1;
   --color-indigo-600: #4f46e5;
   --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5; /* WH-18: the Select item's dark focus text (the light neutral-900 focus pair's dark twin) */
+  --color-neutral-400: #a3a3a3; /* WH-18: the segmented tab track's dark pair (the light neutral-600's twin) */
   --color-neutral-600: #525252;
   --color-neutral-700: #404040;
   --color-neutral-800: #262626;
@@ -241,6 +269,7 @@
   --color-rose-200: #fecdd3;
   --color-rose-500: #f43f5e;
   --color-rose-600: #e11d48;
+  --color-rose-800: #9f1239; /* WH-18: the error toast's dark border pair */
   --color-sky-100: #e0f2fe;
   --color-sky-700: #0369a1;
   --color-slate-50: #f8fafc;

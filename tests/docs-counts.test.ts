@@ -54,15 +54,16 @@ const CANONICAL = {
   models: 15, // prisma/schema.prisma `^model` declarations
   apiRouteFamilies: 15, // directories under src/app/api/
   uiModules: 6, // .tsx modules under src/components/ui/
-  layoutComponents: 7, // modules under src/components/layout/
-  tsxFiles: 45, // src/**/*.tsx
-  clientFiles: 26, // .tsx files headed "use client"
   unitSuites: 21, // tests/*.test.ts (INCLUDING this suite)
   e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 326, // `bun run test` total (WH-17: 325 + the chip-vocabulary census)
-  e2eChecks: 46, // `CI=1 bun run test:e2e` total (WH-17: 43 + the a11y net in a11y.spec.ts)
+  unitChecks: 328, // `bun run test` total (WH-18: 326 + the dark-variant pin + the ThemeBoot mount census)
+  e2eChecks: 50, // `CI=1 bun run test:e2e` total (WH-18: 46 + the four dark-state walks in a11y.spec.ts)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
+  // WH-18: ThemeBoot joined src/components/layout/ — the counts move with it.
+  layoutComponents: 8, // modules under src/components/layout/
+  tsxFiles: 46, // src/**/*.tsx
+  clientFiles: 27, // .tsx files headed "use client"
 } as const;
 
 /** Count spellings that can never be true of this tree — each one is a

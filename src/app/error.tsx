@@ -35,16 +35,16 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50">
+    <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50 dark:bg-neutral-950">
       <div className="max-w-md w-full">
         <div className="text-center space-y-6">
           <div className="space-y-2">
-            <h1 className="text-4xl font-light text-slate-300">Something went wrong</h1>
-            <div className="h-0.5 w-16 bg-slate-200 mx-auto" aria-hidden="true" />
+            <h1 className="text-4xl font-light text-slate-300 dark:text-neutral-600">Something went wrong</h1>
+            <div className="h-0.5 w-16 bg-slate-200 dark:bg-neutral-800 mx-auto" aria-hidden="true" />
           </div>
           <div className="space-y-3">
-            <h2 className="text-2xl font-medium text-slate-800">An unexpected error occurred</h2>
-            <p className="text-slate-600 leading-relaxed">
+            <h2 className="text-2xl font-medium text-slate-800 dark:text-neutral-100">An unexpected error occurred</h2>
+            <p className="text-slate-600 dark:text-neutral-400 leading-relaxed">
               We have logged the issue{error.digest ? ` (ref: ${error.digest})` : ""}. Please
               try again.
             </p>

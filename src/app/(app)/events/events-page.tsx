@@ -185,7 +185,7 @@ export default function EventsClientPage() {
               the month's days as the full cells (no trailing week). */}
           <div className="grid grid-cols-7 gap-2 p-4 pt-2">
             {WEEKDAYS.map((d) => (
-              <div key={d} className="text-center text-sm font-semibold text-gray-600 py-2">
+              <div key={d} className="text-center text-sm font-semibold text-gray-600 dark:text-gray-400 py-2">
                 {d}
               </div>
             ))}
@@ -202,13 +202,13 @@ export default function EventsClientPage() {
                     "min-h-24 p-2 rounded-lg border transition-all cursor-pointer",
                     isToday
                       ? "bg-gradient-to-br from-violet-100 to-purple-100 border-violet-300"
-                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50",
+                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50 dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-neutral-800",
                   )}
                 >
                   <span
                     className={cn(
                       "text-sm font-medium",
-                      isToday ? "text-violet-700" : "text-gray-700",
+                      isToday ? "text-violet-700" : "text-gray-700 dark:text-gray-400",
                     )}
                   >
                     {day.getDate()}

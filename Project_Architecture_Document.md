@@ -281,6 +281,8 @@ wellness-hub/
 │   │   └── instrumentation.ts  # the boot gate (AUTH_SECRET fail-fast)
 │   ├── components/
 │   │   ├── layout/          # app-shell, sidebar, mobile-nav (Sheet drawer), login-card,
+                          # theme-boot (the root-layout mount that carries the chosen
+                          # mode onto the login family — WH-18),
 │   │   │                    # nav-config, guest-login-redirect, reset-password-screen
 │   │   ├── shared/          # cross-module parts: stat cards, dialogs, calendar, star rating
 │   │   └── ui/              # the six live primitives: dialog, input, label,
@@ -305,8 +307,8 @@ wellness-hub/
 │   │   ├── wellness-store.ts # ALL server state; call() envelope client
 │   │   └── theme-store.ts    # CSS-variable writer + UserPrefs sync
 │   └── types/               # shared domain types
-├── tests/                   # Vitest *.test.ts (21 suites, 326 checks)
-│   └── e2e/                 # Playwright *.spec.ts (46 checks) + setups
+├── tests/                   # Vitest *.test.ts (21 suites, 328 checks)
+│   └── e2e/                 # Playwright *.spec.ts (50 checks) + setups
 ├── scripts/
 │   ├── smoke-test.sh        # 14-check ladder against the standalone artifact
 │   └── prisma-env.ts  census.ts
@@ -633,15 +635,15 @@ No queues, workers or cron. Utility services worth naming:
 |----------|-------|--------|----------|-----------|
 | Unit — auth seams (password, verification, reset, contract, rate limit, boot-env) | 6 | 109 | `tests/auth*.test.ts`, `password-seam`, `rate-limit`, `boot-env` | Vitest |
 | Unit — wellness domain (streaks, points, badges, codecs, schemas, stats, helpers, theme) | 5 | 89 | `tests/wellness-*.test.ts` | Vitest |
-| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member/type-export/pass-site/schema-field/design-token/source-scan/palette-pin/page-theme/hydration-suppression/chip-vocabulary censuses) | 10 | 128 | `tests/*.test.ts` | Vitest |
+| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member/type-export/pass-site/schema-field/design-token/source-scan/palette-pin/page-theme/hydration-suppression/chip-vocabulary/dark-variant + ThemeBoot-mount censuses) | 10 | 130 | `tests/*.test.ts` | Vitest |
 | E2E — auth ladder (login wall, lockout, reset funnel, revocation) | 1 spec | 11 | `tests/e2e/auth.spec.ts` | Playwright |
 | E2E — mobile drawer battery | 1 spec | 6 | `tests/e2e/mobile-navigation.spec.ts` | Playwright |
 | E2E — shell (nav, dual-case routes, quick actions, console-hygiene net) | 1 spec | 7 | `tests/e2e/shell.spec.ts` | Playwright |
-| E2E — a11y net (axe-core, WCAG 2.1 A+AA: the module routes, the open drawer, the login page) | 1 spec | 3 | `tests/e2e/a11y.spec.ts` | Playwright |
+| E2E — a11y net (axe-core, WCAG 2.1+2.2 A+AA: the module routes, the open drawer, the login page — plus the WH-18 dark-state walks: the dark module routes + drawer, the OS-dark corner, the dark login, the dark select/toast interactions) | 1 spec | 7 | `tests/e2e/a11y.spec.ts` | Playwright |
 | E2E — auth setup project (one-time demo login; shares the cookie via storageState) | 1 setup | 1 | `tests/e2e/auth.setup.ts` | Playwright |
 | E2E — CRUD cycles + reset-password funnel | 2 specs | 18 | `tests/e2e/wellness-crud.spec.ts`, `reset-password.spec.ts` | Playwright |
 
-Totals: **326 unit checks / 21 Vitest suites + 46 e2e checks / 6 specs + 1 setup project**.
+Totals: **328 unit checks / 21 Vitest suites + 50 e2e checks / 6 specs + 1 setup project**.
 
 ### 8.2 Test Patterns
 
@@ -668,10 +670,10 @@ docs, not just the code.
 
 - `bun run lint` → 0 warnings
 - `bun run typecheck` → clean
-- `bun run test` → 326/326
+- `bun run test` → 328/328
 - `bun run build` → succeeds (the type gate)
 - `bun run smoke` → 14/14
-- `CI=1 bun run test:e2e` → 46/46
+- `CI=1 bun run test:e2e` → 50/50
 - `bun audit` (periodic, outside the gate) → ZERO since WH-8 (§11)
 - Screenshot/parity pass if ANY visual surface changed
 
@@ -771,6 +773,8 @@ spec `CI=1 bunx playwright test tests/e2e/<file>`.
 | LOW | "Watch Video" links open placeholder URLs | The reference's own tutorial/video URLs are placeholders (`example-*`); we open them in a new tab with identical behavior | Intentional parity |
 | LOW | Reference's empty-state data | The demo account ships empty lists (the reference's fresh account is also empty); `db:seed --demo` can populate sample rows for exploration | Intentional |
 | LOW | Profile tab-strip inactive contrast | The reference's own inactive tabs fail WCAG AA (#737373 on the muted strip, 4.35:1 — axe-verified on the reference itself at WH-17); we supersede with `text-neutral-600` (6.4:1) — the same class as our roving-tabindex keyboard superset over the reference's `tabIndex=-1` defect (documented in `tabs.tsx`'s header) | Accessible superset (documented deviation) |
+| LOW | Preset white-on-gradient contrast (Golden Yellow) | The reference's own preset engine ships the identical 8-preset catalog (byte-verified live at WH-18: Indigo Dream/Ocean Blue/Forest Green/Sunset Orange/Rose Pink/Royal Purple/Crimson Red/Golden Yellow) with the same white-text-on-gradient brand family — the Golden Yellow pair computes ≈1.8:1 for white text on #eab308, a reference-shared class (and axe-incomplete: gradients). Deviating would fork our preset engine from the reference's own | Reference-shared (documented) |
+| — | ~~Dark mode broken (the variant strategy mismatch)~~ | RETIRED at WH-18: every `dark:*` utility compiled to the `prefers-color-scheme` media query (v4's default) while the theme engine flips a `.dark` class — 138 axe violation nodes in dark, gray-400-on-white for every OS-dark user in light. The `@custom-variant dark` pin + the missing dark pairs (toast, select focus, tab track, calendar cells, the login family) + ThemeBoot (the login-surface mount) + the auto-mode listener cured it; the dark-state a11y walks pin it forever | Closed (the WH-18 cure) |
 
 No CRITICAL or HIGH issues are open.
 

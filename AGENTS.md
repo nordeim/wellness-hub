@@ -19,8 +19,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (326 checks) | `bun run test` | Vitest, node-safe seams |
-| Browser E2E (46 checks) | `bun run test:e2e` | Needs `bun run build` first |
+| Unit tests (328 checks) | `bun run test` | Vitest, node-safe seams |
+| Browser E2E (50 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
 | The full gate in one command | `bun run gate` | lint → tsc → test → build → smoke → e2e |
@@ -29,8 +29,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (326) → `bun run build` → `bun run smoke` →
-`CI=1 bun run test:e2e` (46: 6 specs + the auth setup project) — or the
+`bun run test` (328) → `bun run build` → `bun run smoke` →
+`CI=1 bun run test:e2e` (50: 6 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
 is NOT set — a type error fails `bun run build`, and the explicit
@@ -130,12 +130,19 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
 - `--blur-sm: 4px;` — same family; keeps the login card's glass at the
   reference's strength.
 - `@theme` holds LITERAL hex values — no `var()` chains inside `@theme`.
+- `@custom-variant dark (&:where(.dark, .dark *));` — the WH-18 pin: v4's
+  DEFAULT dark variant compiles every `dark:` utility to the
+  `prefers-color-scheme` media query (the OS preference), but this app's
+  theme engine flips a `.dark` CLASS on `<html>` — without the pin the two
+  strategies never meet (dark mode shipped broken through seventeen green
+  rounds: swapped tokens with light text values in dark, gray-400 on white
+  cards for every OS-dark user in light).
 - The three `@source not` directives (WH-14) — Tailwind v4's automatic
   content detection scans every TRACKED file; without the exclusions the
   `skills/` + `docs/` markdown corpus compiles into the production
   stylesheet (71% dead weight before the pin). Pinned by the src-census.
 - Dark mode = `.dark` class token overrides, same file. The WH-15 washes carry `dark:` neutral variants (our superset over the reference's partially-broken dark).
-- The 26 redesign palette pairs joined the session-88 pin block (95 pairs total, all v3-verified against the reference's own compiled stylesheet) — the pins⇔usage census holds in both directions.
+- The 26 redesign palette pairs joined the session-88 pin block (113 pairs total, all v3-verified — the equivalence census holds in both directions) — the pins⇔usage census holds in both directions.
 
 ## Conventions that differ from defaults
 
@@ -233,7 +240,7 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   documented ignore entry, never silence the net.
 - The a11y net (WH-17, in `tests/e2e/a11y.spec.ts`) walks every module
   route + the open mobile drawer + the login page with axe-core at
-  WCAG 2.1 A+AA tags asserting ZERO violations — the semantics layer the
+  WCAG 2.1+2.2 A+AA tags asserting ZERO violations — the semantics layer the
   DOM-asserting checks never read (the chip vocabulary, the Watch-Now
   labels and the theme-mode chips all shipped AA-failing through sixteen
   green rounds). `@axe-core/playwright` rides as a devDep WITH its live
@@ -241,6 +248,13 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   arrived); a new violation fails the gate — cure it or pin a documented
   ignore entry. The chip vocabulary's `-100/-700` system is pinned
   structurally by the chip-vocabulary census in `tests/src-census.test.ts`.
+  The WH-18 widening: the net also walks the DARK state (every module
+  route + the drawer, flipped through the Profile UI and reverted with a
+  PUT-landing verification), the OS-dark corner (`colorScheme: "dark"` +
+  mode light — pure light, no `.dark` class), the dark login (the seeded
+  persisted state — the ThemeBoot mount's pin) and the transient
+  select/toast surfaces — the rendered-STATES axis the light-only walks
+  never read (dark mode shipped broken through seventeen green rounds).
 
 ## Git
 

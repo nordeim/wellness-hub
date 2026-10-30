@@ -103,26 +103,28 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 | `bun run start` | Boot the standalone server |
 | `bun run lint` | ESLint (`--max-warnings 0`) |
 | `bun run typecheck` | `tsc --noEmit` |
-| `bun run test` | Vitest unit suite (326 checks) |
-| `bun run test:e2e` | Playwright (46 checks; build first) |
+| `bun run test` | Vitest unit suite (328 checks) |
+| `bun run test:e2e` | Playwright (50 checks; build first) |
 | `bun run gate` | The full chain in one command |
 
 ## Testing Strategy
 
 ### Test Pyramid
 
-- **Unit (Vitest, 326 checks / 21 suites)**: pure seams — auth helpers,
+- **Unit (Vitest, 328 checks / 21 suites)**: pure seams — auth helpers,
   db-path contract, wellness math (streaks/points/badges), schemas,
   theme engine, formatters, the dead-dependency census, the route/ui
   module census, the signup role pin, the docs-counts lockstep pin,
   the src-surface census pin.
-- **E2E (Playwright, 46 checks — 6 specs + the auth setup project)**: the
+- **E2E (Playwright, 50 checks — 6 specs + the auth setup project)**: the
   real UI in Chromium against the
   production standalone server — auth ladder, mobile drawer battery, shell
   nav (both route-case families, + the console-hygiene net: zero console
   errors/warnings on every module route), the a11y net (axe-core at
-  WCAG 2.1 A+AA: zero violations on every module route, the open drawer
-  and the login page), and a CRUD cycle through every module.
+  WCAG 2.1+2.2 A+AA: zero violations on every module route, the open drawer
+  and the login page — plus the WH-18 dark-state walks: the dark module
+  routes + drawer, the OS-dark corner, the dark login, the transient
+  select/toast surfaces), and a CRUD cycle through every module.
 
 ### Test Commands
 

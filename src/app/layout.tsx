@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { ThemeBoot } from "@/components/layout/theme-boot";
 import { Toaster } from "@/components/ui/toast";
 import { PWA_META, SITE_DESCRIPTION, siteUrl } from "@/lib/site";
 import "./globals.css";
@@ -103,6 +104,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           (this class + the retired html rule in globals.css) rendered
           thinner text than the reference on macOS. */}
       <body className="min-h-screen bg-background font-sans text-foreground">
+        {/* WH-18 (F-3): ThemeBoot — the login-family theme mount. The
+            store only loaded inside the (app) group; the root face
+            (/login, /signup, /reset-password) never applied the chosen
+            mode. The side-effect import rehydrates the persisted theme
+            at module init — the same pre-hydration write class the
+            suppressHydrationWarning above already covers. Renders
+            nothing. Pinned by the ThemeBoot mount census. */}
+        <ThemeBoot />
         {children}
         <Toaster />
       </body>
