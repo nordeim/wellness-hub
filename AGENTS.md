@@ -19,8 +19,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (328 checks) | `bun run test` | Vitest, node-safe seams |
-| Browser E2E (50 checks) | `bun run test:e2e` | Needs `bun run build` first |
+| Unit tests (330 checks) | `bun run test` | Vitest, node-safe seams |
+| Browser E2E (53 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
 | The full gate in one command | `bun run gate` | lint → tsc → test → build → smoke → e2e |
@@ -29,8 +29,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (328) → `bun run build` → `bun run smoke` →
-`CI=1 bun run test:e2e` (50: 6 specs + the auth setup project) — or the
+`bun run test` (330) → `bun run build` → `bun run smoke` →
+`CI=1 bun run test:e2e` (53: 6 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
 is NOT set — a type error fails `bun run build`, and the explicit
@@ -142,7 +142,7 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   `skills/` + `docs/` markdown corpus compiles into the production
   stylesheet (71% dead weight before the pin). Pinned by the src-census.
 - Dark mode = `.dark` class token overrides, same file. The WH-15 washes carry `dark:` neutral variants (our superset over the reference's partially-broken dark).
-- The 26 redesign palette pairs joined the session-88 pin block (113 pairs total, all v3-verified — the equivalence census holds in both directions) — the pins⇔usage census holds in both directions.
+- The 26 redesign palette pairs joined the session-88 pin block (121 pairs total, all v3-verified — the equivalence census holds in both directions; WH-19 added the login-family dark-pair pins: emerald-400/950, green-400/900/950, neutral-500, red-400/900) — the pins⇔usage census holds in both directions.
 
 ## Conventions that differ from defaults
 
@@ -255,6 +255,15 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   persisted state — the ThemeBoot mount's pin) and the transient
   select/toast surfaces — the rendered-STATES axis the light-only walks
   never read (dark mode shipped broken through seventeen green rounds).
+  The WH-19 widening: the DARK CORNERS (the surfaces outside the walk set —
+  /signup, /reset-password and the 404, whose pathname span was also the
+  app's one SSR/client hydration mismatch: React #418's whole-tree
+  regeneration deleted applyTheme's pre-hydration writes off <html>; cured
+  by the isClient guard), the LIGHT computed-contrast leg (the alpha-card
+  family axe returns color-contrast INCOMPLETE for — measured directly,
+  oklab-aware, both modes, the WCAG large-text rule applied per element)
+  and the AUTO-MODE listener walk (page.emulateMedia flips mid-flight;
+  explicit choices ignore the OS).
 
 ## Git
 

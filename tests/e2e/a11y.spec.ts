@@ -365,3 +365,250 @@ test.describe("a11y net — the dark interactions (select + toast)", () => {
     await expect(page.locator("html")).not.toHaveClass(/dark/);
   });
 });
+
+// ---------------------------------------------------------------------------
+// WH-19 (F-1/F-3/F-5): the DARK CORNERS — the surfaces OUTSIDE the WH-18
+// walk set. Lesson 22's own coda: the net walked what it knew, and the
+// records outside the walk set shipped with the same broken class — the
+// signup view's title computed 1.0:1 on the dark card (an invisible
+// "Create your account"), LOGIN_LAYOUT.subtitle 3.77:1 on /login with axe
+// FALSE-PASSING it (the alpha card over the page gradient returns
+// color-contrast incomplete, not a violation — the WH-18 dark-login walk
+// stayed green with a real AA failure on the page), the whole 404 a light
+// island in dark (its page root stays bg-slate-50).
+//
+// The computed-contrast leg (F-3): axe's color-contrast rule returns
+// INCOMPLETE for text over semi-transparent cards on gradient pages — the
+// login family (bg-white/95 over the slate-50→slate-100 page gradient, in
+// dark bg-neutral-900/95 over neutral-900→950) is the axe-ambiguous
+// family. The leg measures the RENDERED pages directly: ink vs the
+// nearest opaque ancestor background (oklab-aware — Tailwind v4 computes
+// oklch/oklab colors), the WCAG large-text rule applied per element
+// (≥24px regular or ≥18.66px bold → 3:1, else 4.5:1). The same leg covers
+// the LIGHT mode of the same routes — the alpha ambiguity is mode-blind.
+//
+// F-5: the 404's display heading — the reference's own 404 ships
+// slate-300 on slate-50 at 1.42:1 (72px font-light, live-probed on the
+// reference: rgb(203,213,225) on rgb(248,250,252)), an axe-RESOLVABLE
+// failure no walk ever read (the net walked module routes only). Our tree
+// is held to ZERO — the WH-17 superset doctrine: we supersede with a
+// documented deviation (the tab-strip precedent), and the net pins it.
+const CONTRAST_PROBE = String.raw`
+(function () {
+  function oklabToRgb(L, a, b) {
+    const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+    const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+    const s_ = L - 0.0894841775 * a - 1.291485548 * b;
+    const l = l_ * l_ * l_, m = m_ * m_ * m_, s = s_ * s_ * s_;
+    const enc = (x) => {
+      x = Math.min(1, Math.max(0, x));
+      return Math.round(255 * (x <= 0.0031308 ? 12.92 * x : 1.055 * Math.pow(x, 1 / 2.4) - 0.055));
+    };
+    return [enc(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+            enc(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+            enc(-0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s)];
+  }
+  function parseColor(str) {
+    if (!str) return null;
+    let m = str.match(/rgba?\((\d+), (\d+), (\d+)(?:, ([\d.]+))?\)/);
+    if (m) return { rgb: [+m[1], +m[2], +m[3]], alpha: m[4] === undefined ? 1 : +m[4] };
+    m = str.match(/oklab\(([\d.-]+) ([\d.e-]+) ([\d.e-]+)(?: \/ ([\d.]+))?\)/);
+    if (m) return { rgb: oklabToRgb(+m[1], +m[2], +m[3]), alpha: m[4] === undefined ? 1 : +m[4] };
+    m = str.match(/oklch\(([\d.-]+) ([\d.e-]+) ([\d.e-]+)(?: \/ ([\d.]+))?\)/);
+    if (m) {
+      const rad = (+m[3] / 360) * 2 * Math.PI;
+      const c = oklabToRgb(+m[1], Math.cos(rad) * +m[2], Math.sin(rad) * +m[2]);
+      return { rgb: c, alpha: m[4] === undefined ? 1 : +m[4] };
+    }
+    if (str === 'transparent') return { rgb: [0, 0, 0], alpha: 0 };
+    return null;
+  }
+  function lum(rgb) {
+    const c = (x) => { x /= 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); };
+    return 0.2126 * c(rgb[0]) + 0.7152 * c(rgb[1]) + 0.0722 * c(rgb[2]);
+  }
+  const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  function effBg(el) {
+    let n = el;
+    while (n && n !== document.documentElement) {
+      const s = getComputedStyle(n);
+      if (s.backgroundImage && s.backgroundImage !== 'none') return { kind: 'gradient' };
+      const p = parseColor(s.backgroundColor);
+      if (p && p.alpha > 0.6) return { kind: 'solid', rgb: p.rgb };
+      n = n.parentElement;
+    }
+    const p = parseColor(getComputedStyle(document.body).backgroundColor);
+    return { kind: 'body', rgb: p ? p.rgb : [255, 255, 255] };
+  }
+  const out = [];
+  for (const el of document.querySelectorAll('body *')) {
+    if (el.offsetParent === null) continue;
+    if (!(el.childElementCount === 0 && el.textContent && el.textContent.trim())) continue;
+    const s = getComputedStyle(el);
+    const ink = parseColor(s.color);
+    if (!ink) continue;
+    const bg = effBg(el);
+    if (bg.kind === 'gradient') continue; // the axe-incomplete gradient family — measured separately (the preset axis)
+    const px = parseFloat(s.fontSize);
+    const bold = parseInt(s.fontWeight, 10) >= 700;
+    const large = px >= 24 || (px >= 18.66 && bold);
+    const need = large ? 3 : 4.5;
+    const r = ratio(lum(ink.rgb), lum(bg.rgb));
+    if (r < need) out.push({
+      text: el.textContent.trim().slice(0, 28),
+      ink: s.color, bg: 'rgb(' + bg.rgb.join(', ') + ')',
+      need: need, got: +r.toFixed(2),
+    });
+  }
+  return out;
+})()`;
+
+/** Run the computed-contrast probe in the page and return the offenders
+ * (the axe-ambiguous alpha-card family — F-3). */
+async function contrastOffenders(page: import("@playwright/test").Page, label: string) {
+  const found = (await page.evaluate(CONTRAST_PROBE)) as Array<Record<string, unknown>>;
+  return found.map((f) => `${label} :: ${String(f.text)} :: ink ${String(f.ink)} on ${String(f.bg)} :: needs ${String(f.need)}:1, got ${String(f.got)}:1`);
+}
+
+test.describe("a11y net — the dark corners (the WH-19 widening)", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("/signup, /reset-password and the 404 pass in dark mode (axe + computed contrast, console-clean)", async ({ page }) => {
+    const console_offenders: string[] = [];
+    page.on("console", (msg) => {
+      if (msg.type() === "error" || msg.type() === "warning") {
+        const text = msg.text().split("\n")[0];
+        // The ONE documented ignore entry (the console-net doctrine): the
+        // walk DELIBERATELY visits an unmatched route — the browser's
+        // network-level "Failed to load resource: 404" message for the
+        // document request itself is the expected status, not an app
+        // error. Page errors and every other message stay strict-zero.
+        if (/^Failed to load resource.*404/.test(text) && msg.location().url.includes("wh19-no-such-route")) return;
+        console_offenders.push(`[${msg.type()}] ${text}`);
+      }
+    });
+    page.on("pageerror", (err) => console_offenders.push(`[pageerror] ${String(err)}`));
+
+    // Seed the persisted dark state (the ThemeBoot path — the logged-out
+    // surfaces read the store, never the server prefs).
+    await page.addInitScript(() => {
+      localStorage.setItem(
+        "wellness-theme",
+        JSON.stringify({ state: { themeMode: "dark" }, version: 0 }),
+      );
+    });
+
+    const offenders: string[] = [];
+    for (const [label, route] of [
+      ["signup", "/signup"],
+      ["reset-password", "/reset-password"],
+      ["404", "/wh19-no-such-route"],
+    ] as const) {
+      await page.goto(route, { waitUntil: "networkidle" });
+      await page.waitForTimeout(250);
+      const hasDark = await page.evaluate(() => document.documentElement.classList.contains("dark"));
+      if (!hasDark) offenders.push(`${label} [dark] :: html carries no .dark class (ThemeBoot must apply the persisted state on every logged-out surface)`);
+      const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
+      offenders.push(...describeViolations(`${label} [dark]`, results.violations));
+      offenders.push(...(await contrastOffenders(page, `${label} [dark]`)));
+    }
+
+    expect(
+      offenders,
+      "a11y net: the dark corners — /signup, /reset-password and the 404 — must pass WCAG 2.1+2.2 A+AA AND the computed-contrast leg in dark mode (the surfaces outside the WH-18 walk set; the signup title shipped 1.0:1 and the 404 was a light island)",
+    ).toEqual([]);
+    expect(
+      console_offenders,
+      "console net (dark corners): the logged-out dark surfaces must boot console-clean",
+    ).toEqual([]);
+  });
+});
+
+test.describe("a11y net — the light computed-contrast leg (the alpha-card family)", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("/login, /signup, /reset-password and the 404 pass the computed-contrast leg in light mode", async ({ page }) => {
+    const offenders: string[] = [];
+    for (const [label, route] of [
+      ["login", "/login"],
+      ["signup", "/signup"],
+      ["reset-password", "/reset-password"],
+      ["404", "/wh19-no-such-route"],
+    ] as const) {
+      await page.goto(route, { waitUntil: "networkidle" });
+      await page.waitForTimeout(250);
+      offenders.push(...(await contrastOffenders(page, `${label} [light]`)));
+      // The 404's flat page bg is axe-RESOLVABLE — axe catches what the
+      // probe skips (the display heading rode slate-300 on slate-50 at
+      // 1.42:1 through every green round: F-5).
+      if (label === "404") {
+        const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
+        offenders.push(...describeViolations("404 [light]", results.violations));
+      }
+    }
+
+    expect(
+      offenders,
+      "a11y net: the light-mode computed-contrast leg — axe returns color-contrast INCOMPLETE for text over the alpha cards on gradient pages (the WH-18 dark-login walk stayed green with a real 3.77:1 failure on the page); the leg measures the rendered pages directly, both modes, WCAG large-text rule applied per element",
+    ).toEqual([]);
+  });
+});
+
+// WH-19 (F-4): the auto-mode live-flip listener — the WH-18 cure (the real
+// matchMedia change listener at store init) has no test. This walk flips
+// the OS scheme MID-FLIGHT (page.emulateMedia) with mode=auto: the class
+// must follow; an explicit Light choice must ignore the OS (the picker's
+// promise — the store's own header contract).
+test.describe("a11y net — the auto-mode listener (the OS scheme flip)", () => {
+  test.afterEach(async ({ page }) => {
+    try {
+      await page.goto("/Profile", { waitUntil: "networkidle" });
+      await page.getByRole("button", { name: "Light", exact: true }).click({ timeout: 5000 });
+      await expect(page.locator("html")).not.toHaveClass(/dark/, { timeout: 5000 });
+      await expect
+        .poll(
+          async () => {
+            const body = await page.evaluate(async () => {
+              const res = await fetch("/api/prefs");
+              return res.json();
+            });
+            return body?.data?.themeMode ?? "(unsaved)";
+          },
+          { timeout: 5000 },
+        )
+        .toBe("light");
+    } catch {
+      /* best-effort — the next test's normalization is the backstop */
+    }
+  });
+
+  test("an OS scheme flip re-resolves the class in auto mode; explicit choices ignore the OS", async ({ page }) => {
+    // Auto through the real Profile UI.
+    await page.goto("/Profile", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Auto", exact: true }).click();
+    await expect(page.locator("html")).not.toHaveClass(/dark/); // OS defaults light in this context
+
+    // The OS flips dark mid-flight — the listener must apply the class.
+    await page.emulateMedia({ colorScheme: "dark" });
+    await expect(
+      page.locator("html"),
+      "mode=auto + OS dark: the listener must re-resolve applyTheme and flip the class (the WH-18 F-4 cure's whole point — the narrated listener that never existed)",
+    ).toHaveClass(/dark/, { timeout: 5000 });
+
+    // The OS flips back light — the class must clear.
+    await page.emulateMedia({ colorScheme: "light" });
+    await expect(
+      page.locator("html"),
+      "mode=auto + OS light: the class must clear with the scheme",
+    ).not.toHaveClass(/dark/, { timeout: 5000 });
+
+    // Explicit Light: the picker's promise — the OS must be ignored.
+    await page.getByRole("button", { name: "Light", exact: true }).click();
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.waitForTimeout(400);
+    await expect(
+      page.locator("html"),
+      "explicit Light + OS dark: the class must NOT appear — explicit choices ignore the OS (the store's own header contract)",
+    ).not.toHaveClass(/dark/);
+  });
+});

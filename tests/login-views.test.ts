@@ -176,8 +176,8 @@ describe("session-21: the signup view vocabulary (S21-P4)", () => {
     // v3 margin-TOP space-y-4 collapses 16-8). `mb-2` expresses the SAME
     // computed 8px gap directly.
     expect(L.back).toBe(
-      "flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 font-medium transition-colors mb-2",
-    );
+      "flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition-colors mb-2",
+    ); // WH-19: + the dark pairs
     expect(L.backIcon).toBe(LOGIN_RESET_LAYOUT.backIcon);
   });
 
@@ -189,7 +189,7 @@ describe("session-21: the signup view vocabulary (S21-P4)", () => {
 
   it("the h2 reuses the s11 title vocabulary", async () => {
     const L = await signupLayout();
-    expect(L.title).toBe("text-xl sm:text-2xl font-bold text-slate-900");
+    expect(L.title).toBe("text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100"); // WH-19: + the dark pair
   });
 
   it("the form is the tighter space-y-3 sm:space-y-4 with a space-y-3 fields group", async () => {
@@ -225,16 +225,16 @@ describe("session-21: the verify view vocabulary (S21-P5)", () => {
   it("the icon tile is the sent view's envelope circle", async () => {
     const L = await verifyLayout();
     expect(L.iconWrap).toBe(
-      "mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-slate-100 rounded-full flex items-center justify-center mb-3 sm:mb-4",
+      "mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-slate-100 dark:bg-neutral-800 rounded-full flex items-center justify-center mb-3 sm:mb-4",
     );
-    expect(L.icon).toBe("h-7 w-7 sm:h-8 sm:w-8 text-slate-700");
+    expect(L.icon).toBe("h-7 w-7 sm:h-8 sm:w-8 text-slate-700 dark:text-slate-300"); // WH-19: + the dark pairs
   });
 
   it("the heading stack + email line mirror the sent view's family", async () => {
     const L = await verifyLayout();
-    expect(L.title).toBe("text-xl sm:text-2xl font-bold text-slate-900");
-    expect(L.emailLine).toBe("text-slate-600 text-sm sm:text-base");
-    expect(L.emailSpan).toBe("font-medium text-slate-900");
+    expect(L.title).toBe("text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100"); // WH-19: + the dark pair
+    expect(L.emailLine).toBe("text-slate-600 dark:text-slate-400 text-sm sm:text-base");
+    expect(L.emailSpan).toBe("font-medium text-slate-900 dark:text-slate-200"); // WH-19: + the dark pairs
   });
 
   it("the six code inputs: wrap + stock-input + center/size overrides", async () => {
@@ -245,10 +245,10 @@ describe("session-21: the verify view vocabulary (S21-P5)", () => {
 
   it("the resend line: slate-600 text + the slate-700 medium button", async () => {
     const L = await verifyLayout();
-    expect(L.resendLine).toBe("text-sm text-slate-600");
+    expect(L.resendLine).toBe("text-sm text-slate-600 dark:text-slate-400");
     expect(L.resendButton).toBe(
-      "font-medium text-slate-700 hover:text-slate-900 disabled:opacity-50 transition-colors",
-    );
+      "font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100 disabled:opacity-50 transition-colors",
+    ); // WH-19: + the dark pairs
   });
 
   it("the verify submit reuses the one-size-down send family", async () => {

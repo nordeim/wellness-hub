@@ -629,7 +629,7 @@ export function LoginCard({ mode = "signin" }: { mode?: Mode }) {
             <div className={LOGIN_LAYOUT.logoWrap}>
               <div className={LOGIN_LAYOUT.logoGlow} aria-hidden="true" />
               <span className={LOGIN_LAYOUT.logoBadge} aria-hidden="true">
-                <Sprout className="h-12 w-12 text-slate-900 sm:h-14 sm:w-14" strokeWidth={1.75} />
+                <Sprout className="h-12 w-12 text-slate-900 dark:text-slate-300 sm:h-14 sm:w-14" strokeWidth={1.75} />
               </span>
             </div>
 

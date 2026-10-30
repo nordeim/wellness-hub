@@ -307,8 +307,8 @@ wellness-hub/
 │   │   ├── wellness-store.ts # ALL server state; call() envelope client
 │   │   └── theme-store.ts    # CSS-variable writer + UserPrefs sync
 │   └── types/               # shared domain types
-├── tests/                   # Vitest *.test.ts (21 suites, 328 checks)
-│   └── e2e/                 # Playwright *.spec.ts (50 checks) + setups
+├── tests/                   # Vitest *.test.ts (22 suites, 330 checks)
+│   └── e2e/                 # Playwright *.spec.ts (53 checks) + setups
 ├── scripts/
 │   ├── smoke-test.sh        # 14-check ladder against the standalone artifact
 │   └── prisma-env.ts  census.ts
@@ -634,16 +634,16 @@ No queues, workers or cron. Utility services worth naming:
 | Category | Files | Checks | Location | Framework |
 |----------|-------|--------|----------|-----------|
 | Unit — auth seams (password, verification, reset, contract, rate limit, boot-env) | 6 | 109 | `tests/auth*.test.ts`, `password-seam`, `rate-limit`, `boot-env` | Vitest |
-| Unit — wellness domain (streaks, points, badges, codecs, schemas, stats, helpers, theme) | 5 | 89 | `tests/wellness-*.test.ts` | Vitest |
-| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member/type-export/pass-site/schema-field/design-token/source-scan/palette-pin/page-theme/hydration-suppression/chip-vocabulary/dark-variant + ThemeBoot-mount censuses) | 10 | 130 | `tests/*.test.ts` | Vitest |
+| Unit — wellness domain (streaks, points, badges, codecs, schemas, stats, helpers, theme, the preset-axis contrast arithmetic) | 6 | 90 | `tests/wellness-*.test.ts`, `preset-contrast` | Vitest |
+| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member/type-export/pass-site/schema-field/design-token/source-scan/palette-pin/page-theme/hydration-suppression/chip-vocabulary/dark-variant + ThemeBoot-mount + dark-pair-completeness censuses) | 10 | 131 | `tests/*.test.ts` | Vitest |
 | E2E — auth ladder (login wall, lockout, reset funnel, revocation) | 1 spec | 11 | `tests/e2e/auth.spec.ts` | Playwright |
 | E2E — mobile drawer battery | 1 spec | 6 | `tests/e2e/mobile-navigation.spec.ts` | Playwright |
 | E2E — shell (nav, dual-case routes, quick actions, console-hygiene net) | 1 spec | 7 | `tests/e2e/shell.spec.ts` | Playwright |
-| E2E — a11y net (axe-core, WCAG 2.1+2.2 A+AA: the module routes, the open drawer, the login page — plus the WH-18 dark-state walks: the dark module routes + drawer, the OS-dark corner, the dark login, the dark select/toast interactions) | 1 spec | 7 | `tests/e2e/a11y.spec.ts` | Playwright |
+| E2E — a11y net (axe-core, WCAG 2.1+2.2 A+AA: the module routes, the open drawer, the login page — plus the WH-18 dark-state walks: the dark module routes + drawer, the OS-dark corner, the dark login, the dark select/toast interactions — plus the WH-19 widenings: the dark corners (signup/reset/404), the light computed-contrast leg (the alpha-card family) and the auto-mode listener) | 1 spec | 10 | `tests/e2e/a11y.spec.ts` | Playwright |
 | E2E — auth setup project (one-time demo login; shares the cookie via storageState) | 1 setup | 1 | `tests/e2e/auth.setup.ts` | Playwright |
 | E2E — CRUD cycles + reset-password funnel | 2 specs | 18 | `tests/e2e/wellness-crud.spec.ts`, `reset-password.spec.ts` | Playwright |
 
-Totals: **328 unit checks / 21 Vitest suites + 50 e2e checks / 6 specs + 1 setup project**.
+Totals: **330 unit checks / 22 Vitest suites + 53 e2e checks / 6 specs + 1 setup project**.
 
 ### 8.2 Test Patterns
 
@@ -670,7 +670,7 @@ docs, not just the code.
 
 - `bun run lint` → 0 warnings
 - `bun run typecheck` → clean
-- `bun run test` → 328/328
+- `bun run test` → 330/330
 - `bun run build` → succeeds (the type gate)
 - `bun run smoke` → 14/14
 - `CI=1 bun run test:e2e` → 50/50
@@ -773,8 +773,12 @@ spec `CI=1 bunx playwright test tests/e2e/<file>`.
 | LOW | "Watch Video" links open placeholder URLs | The reference's own tutorial/video URLs are placeholders (`example-*`); we open them in a new tab with identical behavior | Intentional parity |
 | LOW | Reference's empty-state data | The demo account ships empty lists (the reference's fresh account is also empty); `db:seed --demo` can populate sample rows for exploration | Intentional |
 | LOW | Profile tab-strip inactive contrast | The reference's own inactive tabs fail WCAG AA (#737373 on the muted strip, 4.35:1 — axe-verified on the reference itself at WH-17); we supersede with `text-neutral-600` (6.4:1) — the same class as our roving-tabindex keyboard superset over the reference's `tabIndex=-1` defect (documented in `tabs.tsx`'s header) | Accessible superset (documented deviation) |
-| LOW | Preset white-on-gradient contrast (Golden Yellow) | The reference's own preset engine ships the identical 8-preset catalog (byte-verified live at WH-18: Indigo Dream/Ocean Blue/Forest Green/Sunset Orange/Rose Pink/Royal Purple/Crimson Red/Golden Yellow) with the same white-text-on-gradient brand family — the Golden Yellow pair computes ≈1.8:1 for white text on #eab308, a reference-shared class (and axe-incomplete: gradients). Deviating would fork our preset engine from the reference's own | Reference-shared (documented) |
+| LOW | The 404 display heading's ink | The reference's own 404 ships slate-300 on slate-50 at 1.42:1 (72px font-light, live-probed on the reference: rgb(203,213,225) on rgb(248,250,252)) — an axe-resolvable AA failure (large text needs 3:1) no walk ever read. We supersede with slate-500 in light (4.54:1) and neutral-500 in dark (4.18:1) — the WH-17 superset doctrine (the tab-strip precedent) | Accessible superset (documented deviation) |
+| LOW | Preset white-on-gradient contrast (ALL 8 presets, measured) | The reference's own preset engine ships the identical 8-preset catalog (byte-verified live at WH-18: Indigo Dream/Ocean Blue/Forest Green/Sunset Orange/Rose Pink/Royal Purple/Crimson Red/Golden Yellow) with the same white-text-on-gradient brand family. Measured at WH-19 (worst stop governs — the probe walks each preset through the real Profile UI, then computes WCAG relative luminance on the computed gradient stops): Indigo Dream 3.96, Ocean Blue 2.77, Forest Green 1.98, Sunset Orange 2.80, Rose Pink 3.53, Royal Purple 4.23, Crimson Red 2.80, Golden Yellow 1.92 — ALL 8 fail WCAG AA 4.5:1 (the WH-18 entry understated the class as "Golden Yellow ≈1.8:1" only; Forest Green is worse at 1.98). Reference-shared and axe-incomplete (gradients) on both apps; the arithmetic is pinned (tests/preset-contrast.test.ts computes the table from COLOR_PRESETS — a value change forces this ledger + the pin to move together). Deviating would fork our preset engine from the reference's own | Reference-shared (documented, pinned) |
+| LOW | Reference's z-100 toast viewport intercepts clicks | Its empty toast portal container is `pointer-events: auto` across the full top strip (live-caught: the drawer trigger's upper click point covered — "Element is covered by <div.fixed.top-0 …z-[100]>"); ours is the shadcn `pointer-events-none` form and never intercepts | Our superset (not mirrored) |
 | — | ~~Dark mode broken (the variant strategy mismatch)~~ | RETIRED at WH-18: every `dark:*` utility compiled to the `prefers-color-scheme` media query (v4's default) while the theme engine flips a `.dark` class — 138 axe violation nodes in dark, gray-400-on-white for every OS-dark user in light. The `@custom-variant dark` pin + the missing dark pairs (toast, select focus, tab track, calendar cells, the login family) + ThemeBoot (the login-surface mount) + the auto-mode listener cured it; the dark-state a11y walks pin it forever | Closed (the WH-18 cure) |
+| — | ~~The dark corners: the surfaces outside the WH-18 walk set~~ | RETIRED at WH-19: the signup/verify/reset/sent views and the whole 404 shipped with the same broken class (LOGIN_SIGNUP_LAYOUT's title computed 1.0:1 on the dark card — an invisible "Create your account"; LOGIN_LAYOUT.subtitle 3.77:1 on /login with axe FALSE-PASSING it — the alpha card over the page gradient returns color-contrast incomplete; the 404 a full light island). Cured by the dark-pair completeness census (every chromatic arm of the five login-family records carries its dark twin) + the computed-contrast e2e leg (the axe-ambiguous alpha-card family, both modes) | Closed (the WH-19 cure) |
+| — | ~~The 404's hydration text mismatch~~ | RETIRED at WH-19: usePathname() on the SERVER for an unmatched route returns Next's internal "_not-found" — the span SSR'd the meaningless internal route name while the client rendered the real path → React #418 → the whole-tree client regeneration → the patch DELETED applyTheme's pre-hydration writes off <html> (the .dark class, the preset style block, the data attrs — MutationObserver-caught: written t≈150, deleted t≈200). The 404 rendered light regardless of the persisted theme. Cured by the isClient guard (useSyncExternalStore's server snapshot — the React-blessed client-only pattern); the dark corners walk pins the class surviving on the 404 | Closed (the WH-19 cure) |
 
 No CRITICAL or HIGH issues are open.
 

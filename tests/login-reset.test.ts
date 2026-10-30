@@ -62,8 +62,8 @@ describe("login reset flow — reference class vocabulary", () => {
     // directly. (Session-11 VLM round: the clone rendered -8px until the
     // re-pin; session-79: the flat mb-4 was 8px too tall at phones.)
     expect(LOGIN_RESET_LAYOUT.back).toBe(
-      "flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 font-medium transition-colors mb-2 sm:mb-4",
-    );
+      "flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition-colors mb-2 sm:mb-4",
+    ); // WH-19: + the dark pairs
     expect(LOGIN_RESET_LAYOUT.backIcon).toBe("h-4 w-4");
   });
 
@@ -71,8 +71,8 @@ describe("login reset flow — reference class vocabulary", () => {
     // DOM: <h2 class="text-xl sm:text-2xl font-bold text-slate-900">
     //   Reset your password</h2> — one step below the login card's
     // text-2xl sm:text-3xl title.
-    expect(LOGIN_RESET_LAYOUT.title).toBe("text-xl sm:text-2xl font-bold text-slate-900");
-    expect(LOGIN_RESET_LAYOUT.description).toBe("text-slate-600 text-sm sm:text-base");
+    expect(LOGIN_RESET_LAYOUT.title).toBe("text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100");
+    expect(LOGIN_RESET_LAYOUT.description).toBe("text-slate-600 dark:text-slate-400 text-sm sm:text-base"); // WH-19: + the dark pairs
   });
 
   it("the Send reset link button is one size below Sign in (h-10 sm:h-11)", () => {
@@ -83,8 +83,8 @@ describe("login reset flow — reference class vocabulary", () => {
     // (14px at all widths, live-measured) + the disabled/keyboard-ring
     // chrome the reference's stock Button carries.
     expect(LOGIN_RESET_LAYOUT.send).toBe(
-      "w-full h-10 sm:h-11 bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm rounded-xl transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-sm",
-    );
+      "w-full h-10 sm:h-11 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200 text-white font-medium shadow-sm rounded-xl transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-sm",
+    ); // WH-19: + the dark pairs
   });
 
   it("the reset email input is the login input one size down (h-10 sm:h-11)", () => {
@@ -99,7 +99,7 @@ describe("login reset flow — reference class vocabulary", () => {
     expect(LOGIN_RESET_LAYOUT.resetInput).toContain("pl-10");
     expect(LOGIN_RESET_LAYOUT.resetInput).toContain("bg-slate-50/50");
     expect(LOGIN_RESET_LAYOUT.resetInput).toContain("placeholder:text-slate-400");
-    expect(LOGIN_RESET_LAYOUT.resetInput).not.toContain("h-11 ");
+    expect(LOGIN_RESET_LAYOUT.resetInput).not.toContain("h-11 w-full"); // WH-19: the guard retargeted — the bare "h-11 " token now matches our own "sm:h-11 dark:…" suffix; the login form this guard excludes is h-11-BASED ("h-11 w-full"), the sm:h-11 responsive arm is ours
     expect(LOGIN_RESET_LAYOUT.resetInput).not.toContain("sm:h-12");
     expect(LOGIN_RESET_LAYOUT.resetInput).not.toContain("placeholder:text-slate-600");
   });
@@ -109,9 +109,9 @@ describe("login reset flow — reference class vocabulary", () => {
     // rounded-full flex items-center justify-center"> wrapping
     // <svg lucide-mail class="h-7 w-7 sm:h-8 sm:w-8 text-slate-700">.
     expect(LOGIN_RESET_LAYOUT.sentIconWrap).toBe(
-      "mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-slate-100 rounded-full flex items-center justify-center",
+      "mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-slate-100 dark:bg-neutral-800 rounded-full flex items-center justify-center",
     );
-    expect(LOGIN_RESET_LAYOUT.sentIcon).toBe("h-7 w-7 sm:h-8 sm:w-8 text-slate-700");
+    expect(LOGIN_RESET_LAYOUT.sentIcon).toBe("h-7 w-7 sm:h-8 sm:w-8 text-slate-700 dark:text-slate-300"); // WH-19: + the dark pairs
   });
 
   it("the sent view's email line + green callout match the reference", () => {
@@ -122,18 +122,18 @@ describe("login reset flow — reference class vocabulary", () => {
     // border-green-200 rounded-xl"> (no icon actually renders on the
     // reference — the [&>svg] children classes are defensive) wrapping
     // <div class="[&_p]:leading-relaxed text-green-700 text-sm">.
-    expect(LOGIN_RESET_LAYOUT.sentEmailLine).toBe("text-slate-600 text-sm sm:text-base");
-    expect(LOGIN_RESET_LAYOUT.sentEmailSpan).toBe("font-medium text-slate-900");
+    expect(LOGIN_RESET_LAYOUT.sentEmailLine).toBe("text-slate-600 dark:text-slate-400 text-sm sm:text-base");
+    expect(LOGIN_RESET_LAYOUT.sentEmailSpan).toBe("font-medium text-slate-900 dark:text-slate-200"); // WH-19: + the dark pairs
     // Session-111 (D5, the s111 re-walk): the reference's sent callout
     // carries the FULL inert [&>svg] arm family (the same form the
     // error/info callouts ship — the s11 extraction's asymmetry; no svg
     // ever renders on the auth surfaces).
     expect(LOGIN_RESET_LAYOUT.sentCallout).toBe(
-      "relative w-full border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground text-foreground bg-green-50/70 border-green-200 rounded-xl",
-    );
+      "relative w-full border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground text-foreground bg-green-50/70 border-green-200 dark:bg-green-950/50 dark:border-green-900 rounded-xl",
+    ); // WH-19: + the dark pairs
     expect(LOGIN_RESET_LAYOUT.sentCalloutText).toBe(
-      "[&_p]:leading-relaxed text-green-700 text-sm",
-    );
+      "[&_p]:leading-relaxed text-green-700 dark:text-green-400 text-sm",
+    ); // WH-19: + the dark pair
   });
 
   it("the sent view's Back to sign in is the full-width centered variant", () => {
@@ -141,8 +141,8 @@ describe("login reset flow — reference class vocabulary", () => {
     // text-sm text-slate-500 hover:text-slate-700 font-medium
     // transition-colors"> — unlike the reset view's left-aligned -mb-2 one.
     expect(LOGIN_RESET_LAYOUT.sentBack).toBe(
-      "w-full flex items-center justify-center gap-2 text-sm text-slate-500 hover:text-slate-700 font-medium transition-colors",
-    );
+      "w-full flex items-center justify-center gap-2 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-medium transition-colors",
+    ); // WH-19: + the dark pairs
   });
 
   it("the shared view scaffold replaces the login column (no logo / google / divider)", () => {

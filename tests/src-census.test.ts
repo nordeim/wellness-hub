@@ -1399,6 +1399,7 @@ it("WH-18: the dark-variant pin — globals.css declares the class-based dark va
   ).toBe(true);
 });
 
+
 it("WH-18: the ThemeBoot mount census — the root layout renders the theme boot so the login family carries the chosen mode", () => {
   // WH-18 (F-3): the theme store mounted only inside the (app) group
   // (AppShell + the Profile page) — /login, /signup and /reset-password
@@ -1426,4 +1427,64 @@ it("WH-18: the ThemeBoot mount census — the root layout renders the theme boot
     /<ThemeBoot\s*\/>/.test(layoutSrc),
     "the root layout must render <ThemeBoot /> — without it the login/signup/reset surfaces ignore the user's chosen mode (the store only mounts inside the (app) group)",
   ).toBe(true);
+});
+
+it("WH-19: the dark-pair completeness census — every chromatic arm of the login-family records carries its dark twin (the dark-corners cure)", () => {
+  // WH-19 (F-1): the WH-18 cure paired the surfaces the net WALKED —
+  // but the walk set is a surface of its own. The records outside it
+  // shipped with the same broken class: LOGIN_SIGNUP_LAYOUT's title
+  // computed 1.0:1 on the dark card (an invisible "Create your
+  // account"), LOGIN_LAYOUT.subtitle 3.77:1 on /login — with axe
+  // FALSE-PASSING it (the alpha card over the page gradient returns
+  // color-contrast incomplete, not a violation: the WH-18 dark-login
+  // walk stayed green with a real AA failure on the page) — the sent
+  // view, the verify view, and the whole 404 (a light island in dark:
+  // its page root stays bg-slate-50). This census pins the INVARIANT,
+  // not the instances (the WH-2 doctrine): every chromatic arm (a
+  // color utility with its variant chain — hover:/focus:/placeholder:/
+  // …) present in the light form of a member must be present in the
+  // dark form of the SAME member, utility-type for utility-type. The
+  // decorative members pair too (the accent hairline, the glow, the
+  // badge tile, the input icons) — no exemptions: a blanket census is
+  // structurally simpler than an exemption list that drifts. The
+  // records walked: LOGIN_LAYOUT + NOT_FOUND_LAYOUT (page-layout.ts),
+  // LOGIN_SIGNUP_LAYOUT + LOGIN_RESET_LAYOUT + LOGIN_VERIFY_LAYOUT
+  // (login-reset.ts). The inline component sites (the sprout icon, the
+  // state circles, the error callout) are pinned by the e2e twin — the
+  // computed-contrast leg reads the RENDERED pages, which is the only
+  // layer that can see an inline class.
+  const FILES = {
+    "src/lib/page-layout.ts": ["LOGIN_LAYOUT", "NOT_FOUND_LAYOUT"],
+    "src/lib/login-reset.ts": ["LOGIN_SIGNUP_LAYOUT", "LOGIN_RESET_LAYOUT", "LOGIN_VERIFY_LAYOUT"],
+  } as const;
+  const CHROMA = "(?:white|black|slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)";
+  // An arm = optional variant chain + utility family + a chromatic scale
+  // value (or the white/black pair forms). Arms already dark-prefixed
+  // are the dark twins themselves — skipped.
+  const ARM = new RegExp(`((?:(?:hover|focus|focus-visible|active|disabled|placeholder|group-[a-z-]+|data-\\[[^\\]]+\\]):)*)(text|bg|border|from|via|to|ring|fill|stroke|outline|decoration|caret|accent|shadow)-(${CHROMA})(?:-\\d+)?`, "g");
+  const failures: string[] = [];
+  for (const [file, records] of Object.entries(FILES)) {
+    const src = readFileSync(join(REPO_ROOT, file), "utf8");
+    for (const rec of records) {
+      const block = src.match(new RegExp(`export const ${rec} = \\{([\\s\\S]*?)\\} as const;`));
+      expect(block, `${file}: the ${rec} record must exist (the census walks it)`).toBeTruthy();
+      for (const m of block![1].matchAll(/(?:^|\n)\s*(\w+):\s*"([^"]*)"/g)) {
+        const [, member, cls] = m;
+        const arms = [...cls.matchAll(ARM)].map((a) => a[0]).filter((a) => !a.startsWith("dark:"));
+        if (arms.length === 0) continue; // not a color-bearing member
+        for (const arm of arms) {
+          // The arm's (variants, utility) head, e.g. "hover:bg-" or "placeholder:text-".
+          const head = arm.replace(new RegExp(`-(${CHROMA}).*$`), "-");
+          const twin = new RegExp(`dark:${head.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:${CHROMA})`);
+          if (!twin.test(cls)) {
+            failures.push(`${file} ${rec}.${member}: "${arm}" has no dark twin (no ${`dark:${head}…`} in the member)`);
+          }
+        }
+      }
+    }
+  }
+  expect(
+    failures,
+    "every chromatic arm of the login-family records must carry its dark twin — the WH-19 dark-corners cure (the arm's variant chain and utility type must appear in dark: form in the same member)",
+  ).toEqual([]);
 });

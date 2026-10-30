@@ -5,7 +5,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.19-2D3748?logo=prisma)](https://www.prisma.io/)
-[![Tests](https://img.shields.io/badge/tests-328%20unit%20+%2050%20e2e-brightgreen)](#testing)
+[![Tests](https://img.shields.io/badge/tests-330%20unit%20+%2053%20e2e-brightgreen)](#testing)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
 A complete, self-hostable **student wellbeing application** — a production-grade
@@ -57,8 +57,8 @@ Vitest + Playwright test battery pinning all of it in place.
 | ORM | Prisma | 6.19 | Schema + SQLite driver |
 | Database | SQLite | — | `db/custom.db` at the repo root, git-ignored |
 | Validation | Zod | 4 | Every API body boundary (`parseBody()`) |
-| Unit tests | Vitest | 5 | 328 checks / 21 suites |
-| E2E tests | Playwright | 1.64 | 50 checks (6 specs + the auth setup project) against the production standalone server |
+| Unit tests | Vitest | 5 | 330 checks / 22 suites |
+| E2E tests | Playwright | 1.64 | 53 checks (6 specs + the auth setup project) against the production standalone server |
 
 ```mermaid
 flowchart TB
@@ -146,8 +146,8 @@ Requires **Node.js ≥ 20** and **bun ≥ 1.1**.
 ## Testing
 
 ```bash
-bun run test         # Vitest — 328 checks, 21 suites (node-safe seams)
-bun run test:e2e     # Playwright — 50 checks (run `bun run build` first:
+bun run test         # Vitest — 330 checks, 22 suites (node-safe seams)
+bun run test:e2e     # Playwright — 53 checks (run `bun run build` first:
                      # boots the PRODUCTION standalone server on an isolated
                      # port with its own scratch db/e2e.db)
 bun run lint         # eslint, --max-warnings 0
@@ -163,7 +163,10 @@ every module route walked with zero console errors/warnings), the a11y net
 (axe-core at WCAG 2.1+2.2 A+AA across every module route, the open mobile
 drawer and the login page — zero violations — plus the dark-state walks:
 every module route + the drawer in dark mode, the OS-dark-in-light corner,
-the dark login and the transient select/toast surfaces, all strict zero),
+the dark login and the transient select/toast surfaces, all strict zero —
+plus the WH-19 widenings: the dark corners (signup, reset-password and the
+404), the light computed-contrast leg (the alpha-card family axe cannot
+resolve, both modes) and the auto-mode listener),
 and a CRUD cycle through every wellness module including goal completion →
 points.
 
@@ -202,9 +205,9 @@ reference's own preset engine behaves), and mounts at the ROOT layout
 - Points + streaks + 8-badge auto-award achievements engine
 - Robust search/filters on Assignments, Study Resources, Learning
 - PWA manifest + per-route OpenGraph/Twitter metadata + `sitemap.xml`
-- Accessibility superset: focus rings, aria states, 44px touch targets — pinned by the axe a11y net (WCAG 2.1+2.2 A+AA, zero violations, light AND dark states)
+- Accessibility superset: focus rings, aria states, 44px touch targets — pinned by the axe a11y net + the computed-contrast leg (WCAG 2.1+2.2 A+AA, zero violations, light AND dark states, every login-family route)
 - Zod validation at every API boundary; bounded readers; per-IP rate limits
-- 328 unit + 50 e2e checks pinning the behavior
+- 330 unit + 53 e2e checks pinning the behavior
 
 ## Deployment
 

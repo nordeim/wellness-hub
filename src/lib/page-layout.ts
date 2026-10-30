@@ -394,18 +394,18 @@ export const LOGIN_LAYOUT = {
   page: "min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4 dark:from-neutral-900 dark:to-neutral-950",
   card: "relative overflow-hidden rounded-2xl border-0 bg-white/95 shadow-2xl backdrop-blur-sm dark:bg-neutral-900/95",
   accent:
-    "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200",
+    "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800",
   inner: "p-8 sm:p-10 md:pt-12 md:pb-10 md:px-10",
   centered: "flex flex-col items-center text-center space-y-6 sm:space-y-8",
   logoWrap: "relative group",
   logoGlow:
-    "absolute inset-0 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 opacity-30 blur-xl transition-opacity duration-300 group-hover:opacity-40",
+    "absolute inset-0 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 opacity-30 blur-xl transition-opacity duration-300 group-hover:opacity-40 dark:from-neutral-800 dark:to-neutral-900",
   logoBadge:
-    "relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-slate-200 to-slate-300 text-slate-900 shadow-lg sm:h-24 sm:w-24",
+    "relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-slate-200 to-slate-300 text-slate-900 shadow-lg sm:h-24 sm:w-24 dark:from-neutral-800 dark:to-neutral-900 dark:text-slate-300",
   title: "text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight dark:text-slate-100",
-  subtitle: "text-slate-500 text-sm sm:text-base font-medium",
+  subtitle: "text-slate-500 dark:text-slate-400 text-sm sm:text-base font-medium",
   google:
-    "flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3.5 font-medium text-slate-700 text-[16px] transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-slate-200 dark:hover:bg-neutral-700",
+    "flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3.5 font-medium text-slate-700 text-[16px] transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-slate-200 dark:hover:bg-neutral-700 dark:hover:border-neutral-600",
   googleIcon: "-ml-4 transition-transform duration-200",
   divider: "relative my-6",
   dividerLine: "shrink-0 h-[1px] w-full bg-slate-200 dark:bg-neutral-700",
@@ -416,13 +416,13 @@ export const LOGIN_LAYOUT = {
   field: "[&>*+*]:mt-1.5",
   label: "text-sm font-medium text-slate-700 dark:text-slate-300",
   inputWrap: "relative",
-  inputIcon: "absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500",
+  inputIcon: "absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 dark:text-neutral-400",
   input:
-    "h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-3 placeholder:text-slate-600 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 text-base md:text-sm sm:h-12 dark:border-neutral-700 dark:bg-neutral-800/60",
+    "h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-3 placeholder:text-slate-600 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 text-base md:text-sm sm:h-12 dark:border-neutral-700 dark:bg-neutral-800/60 dark:placeholder:text-slate-500 dark:focus:border-neutral-600 dark:focus:ring-neutral-600",
   submit:
     "flex h-11 w-full items-center justify-center gap-1 rounded-xl bg-slate-900 font-medium text-white shadow-sm transition-all duration-200 hover:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-sm sm:h-12 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200",
   footer: "flex flex-col items-center justify-between gap-2 sm:flex-row sm:gap-0",
-  footerLink: "text-sm text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-400",
+  footerLink: "text-sm text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200",
   footerLinkStrong: "font-medium text-slate-700 dark:text-slate-200",
 } as const;
 
@@ -495,19 +495,30 @@ export const DIALOG_GROUP = {
 // owns the liveness class.
 
 export const NOT_FOUND_LAYOUT = {
-  page: "min-h-screen flex items-center justify-center p-6 bg-slate-50",
+  // WH-19 (F-1/F-5): the 404 joins the dark family (it was a full light
+  // island under a dark html — the page root stayed bg-slate-50, the
+  // error-pages decision's third member error.tsx/global-error.tsx
+  // never reached). AND the display heading's light ink is superseded:
+  // the reference's own 404 ships slate-300 on slate-50 at 1.42:1 (72px
+  // font-light, live-probed on the reference: rgb(203,213,225) on
+  // rgb(248,250,252)) — an axe-resolvable AA failure (large text needs
+  // 3:1) no walk ever read. Our tree is held to ZERO (the WH-17
+  // superset doctrine, the tab-strip precedent): slate-500 in light
+  // (4.54:1), neutral-500 in dark (4.18:1) — the documented deviation,
+  // PAD §11's ledger.
+  page: "min-h-screen flex items-center justify-center p-6 bg-slate-50 dark:bg-neutral-950",
   card: "max-w-md w-full",
   center: "text-center space-y-6",
   headingGroup: "space-y-2",
-  h1: "text-7xl font-light text-slate-300",
-  divider: "h-0.5 w-16 bg-slate-200 mx-auto",
+  h1: "text-7xl font-light text-slate-500 dark:text-neutral-500",
+  divider: "h-0.5 w-16 bg-slate-200 dark:bg-neutral-800 mx-auto",
   textGroup: "space-y-3",
-  h2: "text-2xl font-medium text-slate-800",
-  p: "text-slate-600 leading-relaxed",
-  pathSpan: "font-medium text-slate-700",
+  h2: "text-2xl font-medium text-slate-800 dark:text-slate-100",
+  p: "text-slate-600 dark:text-slate-400 leading-relaxed",
+  pathSpan: "font-medium text-slate-700 dark:text-slate-300",
   buttonGroup: "pt-6",
   homeButton:
-    "inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500",
+    "inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 dark:text-slate-300 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:bg-neutral-800 dark:hover:border-neutral-600 dark:focus:ring-neutral-600",
   homeIcon: "w-4 h-4 mr-2",
   homeHref: "/",
 } as const;

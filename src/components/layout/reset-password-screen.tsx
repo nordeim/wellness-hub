@@ -69,8 +69,8 @@ export function ResetPasswordScreen() {
           <div className={LOGIN_LAYOUT.inner}>
             <div className={LOGIN_LAYOUT.centered}>
               <div className="flex flex-col items-center gap-4 text-center">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-50">
-                  <CircleAlert className="h-5 w-5 text-red-600" aria-hidden="true" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-50 dark:bg-red-950/50">
+                  <CircleAlert className="h-5 w-5 text-red-600 dark:text-red-400" aria-hidden="true" />
                 </div>
                 <h1 className={LOGIN_LAYOUT.title}>Invalid reset link</h1>
                 <p className={LOGIN_LAYOUT.subtitle}>
@@ -99,8 +99,8 @@ export function ResetPasswordScreen() {
           <div className={LOGIN_LAYOUT.centered}>
             {done ? (
               <div className="flex flex-col items-center gap-4 text-center">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50">
-                  <Lock className="h-5 w-5 text-emerald-600" aria-hidden="true" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/50">
+                  <Lock className="h-5 w-5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                 </div>
                 <h1 className={LOGIN_LAYOUT.title}>Password reset</h1>
                 <p className={LOGIN_LAYOUT.subtitle}>
@@ -166,7 +166,7 @@ export function ResetPasswordScreen() {
                 {error && (
                   <div
                     role="alert"
-                    className="rounded-lg border border-red-200 bg-red-50/70 px-4 py-3 text-sm text-red-700"
+                    className="rounded-lg border border-red-200 bg-red-50/70 dark:border-red-900 dark:bg-red-950/50 px-4 py-3 text-sm text-red-700 dark:text-red-400"
                   >
                     {error}
                   </div>

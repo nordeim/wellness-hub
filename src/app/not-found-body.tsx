@@ -1,5 +1,6 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { NOT_FOUND_LAYOUT } from "@/lib/page-layout";
@@ -42,9 +43,34 @@ import { NOT_FOUND_LAYOUT } from "@/lib/page-layout";
  * view is its platform template's own origin — the one non-lucide
  * icon family in its tree). OUR aria-hidden stays (the s19 superset
  * family — the reference's svg carries none, its own a11y gap).
+ *
+ * WH-19 (the 404's hydration cure): the pathname span was the app's one
+ * SSR/client text mismatch — on the SERVER, usePathname() for an
+ * unmatched route returns Next's INTERNAL name ("/_not-found" → the
+ * replace strips the slash → the span SSR'd "_not-found"), while the
+ * client returns the real path. React #418 (the text-mismatch hydration
+ * failure) → the whole-tree client regeneration → the patch DELETED
+ * applyTheme's pre-hydration writes off <html> (the .dark class, the
+ * preset style block, the data attrs — live-caught by a
+ * MutationObserver: written at t≈150, deleted at t≈200): the 404
+ * rendered light regardless of the persisted theme, and the SSR view
+ * showed the meaningless "_not-found" path. The cure: the span renders
+ * through an isClient guard (useSyncExternalStore's server snapshot —
+ * the React-blessed client-only pattern; no effect, no setState, the
+ * hydration renders the same "…" placeholder the server did, then the
+ * subscription flips it to the real path). Pinned by the e2e dark
+ * corners walk (the .dark class must survive on the 404).
  */
+const emptySubscribe = () => () => {};
+
 export function NotFoundBody() {
   const pathname = usePathname();
+  const isClient = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+  const displayPath = isClient ? pathname.replace(/^\//, "") : "…";
   return (
     <div className={NOT_FOUND_LAYOUT.page}>
       <div className={NOT_FOUND_LAYOUT.card}>
@@ -57,7 +83,7 @@ export function NotFoundBody() {
             <h2 className={NOT_FOUND_LAYOUT.h2}>Page Not Found</h2>
             <p className={NOT_FOUND_LAYOUT.p}>
               The page{" "}
-              <span className={NOT_FOUND_LAYOUT.pathSpan}>&quot;{pathname.replace(/^\//, "")}&quot;</span> could not be
+              <span className={NOT_FOUND_LAYOUT.pathSpan}>&quot;{displayPath}&quot;</span> could not be
               found in this application.
             </p>
           </div>
