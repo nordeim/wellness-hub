@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
 import { PageHeader, SectionCard, LoadingBlock } from "@/components/shared/page-parts";
-import { PAGE_ROOT, PAGE_KPI_GRIDS, STAT_CARD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, SECTION_CARD } from "@/lib/page-layout";
 import { formatMonthDayYearTime, formatDateShort } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { DashboardData } from "@/types";
@@ -40,7 +40,7 @@ export default function DashboardClientPage() {
 
   if (!hydrated || !dashboard) {
     return (
-      <div className={PAGE_ROOT.standard}>
+      <div className={PAGE_THEMES.dashboard.root}>
         <LoadingBlock label="Loading your wellness overview…" />
       </div>
     );
@@ -49,40 +49,48 @@ export default function DashboardClientPage() {
   const d: DashboardData = dashboard;
 
   return (
-    <div className={PAGE_ROOT.standard}>
+    <div className={PAGE_THEMES.dashboard.root}>
+      <div className={PAGE_THEMES.dashboard.container}>
       <PageHeader
         title="Welcome Back!"
         subtitle="Here's your wellness overview for today"
+        theme={PAGE_THEMES.dashboard}
       />
 
-      {/* The stat tiles — the reference's four pastel cards. */}
+      {/* The stat tiles — the redesign's white cards with the 5%-opacity
+          module washes + the rounded-2xl gradient icon tiles (probed:
+          orange→red, emerald→teal, blue→cyan, yellow→amber-600). */}
       <div className={PAGE_KPI_GRIDS.four}>
-        <div className={cn(STAT_CARD.card, "bg-red-50 dark:bg-red-950/40")}>
-          <div className={cn(STAT_CARD.iconChip, "bg-red-500 text-white")} aria-hidden="true">
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <div className={cn(STAT_CARD.wash, "from-orange-500 to-red-500")} aria-hidden="true" />
+          <div className={cn(STAT_CARD.iconTile, "from-orange-500 to-red-500")} aria-hidden="true">
             <Dumbbell className="h-5 w-5" fill="currentColor" strokeWidth={1} />
           </div>
           <p className={STAT_CARD.label}>Workouts This Week</p>
           <h3 className={STAT_CARD.value}>{d.workoutsThisWeek}</h3>
           <p className={STAT_CARD.sub}>{d.workoutMinutesThisWeek} total minutes</p>
         </div>
-        <div className={cn(STAT_CARD.card, "bg-emerald-50 dark:bg-emerald-950/40")}>
-          <div className={cn(STAT_CARD.iconChip, "bg-emerald-500 text-white")} aria-hidden="true">
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <div className={cn(STAT_CARD.wash, "from-emerald-500 to-teal-500")} aria-hidden="true" />
+          <div className={cn(STAT_CARD.iconTile, "from-emerald-500 to-teal-500")} aria-hidden="true">
             <HeartPulse className="h-5 w-5" fill="currentColor" strokeWidth={1} />
           </div>
           <p className={STAT_CARD.label}>Mood Entries</p>
           <h3 className={STAT_CARD.value}>{d.moodEntries}</h3>
           <p className={STAT_CARD.sub}>Total check-ins</p>
         </div>
-        <div className={cn(STAT_CARD.card, "bg-blue-50 dark:bg-blue-950/40")}>
-          <div className={cn(STAT_CARD.iconChip, "bg-blue-500 text-white")} aria-hidden="true">
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <div className={cn(STAT_CARD.wash, "from-blue-500 to-cyan-500")} aria-hidden="true" />
+          <div className={cn(STAT_CARD.iconTile, "from-blue-500 to-cyan-500")} aria-hidden="true">
             <BookOpen className="h-5 w-5" fill="currentColor" strokeWidth={1} />
           </div>
           <p className={STAT_CARD.label}>Active Assignments</p>
           <h3 className={STAT_CARD.value}>{d.activeAssignments}</h3>
           <p className={STAT_CARD.sub}>Need attention</p>
         </div>
-        <div className={cn(STAT_CARD.card, "bg-amber-50 dark:bg-amber-950/40")}>
-          <div className={cn(STAT_CARD.iconChip, "bg-amber-500 text-white")} aria-hidden="true">
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <div className={cn(STAT_CARD.wash, "from-yellow-500 to-amber-600")} aria-hidden="true" />
+          <div className={cn(STAT_CARD.iconTile, "from-yellow-500 to-amber-600")} aria-hidden="true">
             <Target className="h-5 w-5" fill="currentColor" strokeWidth={1} />
           </div>
           <p className={STAT_CARD.label}>Goals Completed</p>
@@ -97,7 +105,7 @@ export default function DashboardClientPage() {
           {/* Quick Actions — the reference's own construction: ONE white
               card, the "+" header, a 2x2 grid of centered icon+label
               cells with thin dividers. */}
-          <section className="rounded-xl bg-surface shadow-lg">
+          <section className={SECTION_CARD.card}>
             <div className="flex items-center gap-2 px-5 py-4 border-b border-line">
               <Plus className="h-5 w-5 text-foreground" aria-hidden="true" />
               <h2 className="font-semibold text-foreground">Quick Actions</h2>
@@ -184,6 +192,7 @@ export default function DashboardClientPage() {
             )}
           </SectionCard>
         </div>
+      </div>
       </div>
     </div>
   );

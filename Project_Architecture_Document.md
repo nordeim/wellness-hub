@@ -305,7 +305,7 @@ wellness-hub/
 │   │   ├── wellness-store.ts # ALL server state; call() envelope client
 │   │   └── theme-store.ts    # CSS-variable writer + UserPrefs sync
 │   └── types/               # shared domain types
-├── tests/                   # Vitest *.test.ts (21 suites, 321 checks)
+├── tests/                   # Vitest *.test.ts (21 suites, 324 checks)
 │   └── e2e/                 # Playwright *.spec.ts (42 checks) + setups
 ├── scripts/
 │   ├── smoke-test.sh        # 14-check ladder against the standalone artifact
@@ -496,13 +496,38 @@ erDiagram
 
 | Token | Light | Dark | Usage |
 |-------|-------|------|-------|
-| `--primary` | `#6366f1` indigo-500 | kept | Buttons, active nav, links, chips |
+| `--primary` | `#6366f1` indigo-500 | kept | The BRAND family: wordmark, badge, gradient active pills, drawer/mobile titles (135deg to-br gradients) — the preset-re-skinnable surfaces |
 | `--secondary` | `#a855f7` purple-500 | kept | Gradient partner |
-| Brand gradient | `linear-gradient(135deg, #6366f1, #a855f7)` | kept | Page headings (gradient text), hero tiles, drawer active pill |
-| `--color-sidebar` | `rgb(250 250 250)` | `#111113` | The light sidebar face |
-| `--color-sidebar-hover` | `#f4f4f5` | `#1c1c1f` | Nav hover |
+| Brand gradient | `bg-gradient-to-br from-primary to-secondary` | kept | Sidebar/mobile/drawer brand + the desktop + drawer active pills (WH-15: the desktop active item is the gradient pill, white text) |
+| Module gradients | `PAGE_THEMES` (fixed v3 pairs) | same | The per-module H1s, buttons, washes + the routines category map — NOT preset-themeable (verified live: the reference's Ocean Blue re-skinned its brand while the Exercise button stayed orange→red) |
+| Page wash | `bg-gradient-to-br from-<m1>-50 via-white to-<m2>-50/30` | `dark:from-neutral-900 via-neutral-950` | Every page root (the reference's 2026-10-30 redesign; our dark variants are the documented superset) |
+| Shell washes | root `from-slate-50 via-white to-slate-50` · sidebar `from-white via-gray-50 to-white` | neutral family | WH-15 — the shell's two washes (ours shipped solid tokens) |
+| `--color-surface` | `#ffffff` | `#18181b` | The white list/panel cards (the redesign's borderless `border-none shadow-lg` form) |
 | `--shadow-sm` | `0 1px 2px 0 rgb(0 0 0 / 0.05)` | same | The v4 re-pin — the reference's computed outline |
 | Source scan | three `@source not` directives (skills/docs/*.md) | same | WH-14 — v4's auto-detection scanned every tracked file; the markdown corpus compiled 71% of the stylesheet as dead weight (160,639 → ~74 KB) |
+
+**The per-module identity map** (WH-15, probed live on the redeployed
+reference — every page's H1 stops / button pair / wash pair / container):
+
+| Module | H1 gradient | Button pair | Page wash | Container |
+|--------|-------------|-------------|-----------|-----------|
+| Dashboard | indigo-600→purple-600→pink-600 | — | slate-50→indigo-50/30 | max-w-7xl |
+| Routines | purple-600→pink-600→rose-600 | per-category | purple-50→pink-50/30 | max-w-7xl |
+| Exercise | orange-600→red-600 | orange-500→red-500 | orange-50→red-50/30 | max-w-6xl |
+| Mental Health | emerald-600→teal-600 | emerald-500→teal-500 | emerald-50→teal-50/30 | max-w-6xl |
+| Assignments | blue-600→cyan-600 | blue-500→cyan-500 | blue-50→cyan-50/30 | max-w-6xl |
+| Events | violet-600→purple-600 | violet-500→purple-500 | violet-50→purple-50/30 | max-w-7xl |
+| Study Resources | blue-600→indigo-600 | blue-500→indigo-500 | blue-50→indigo-50/30 | max-w-7xl |
+| Reminders | rose-600→purple-600 | rose-500→purple-500 | rose-50→purple-50/30 | max-w-6xl |
+| Learning | amber-600→orange-600 | — | amber-50→orange-50/30 | max-w-7xl |
+| Goals | yellow-600→amber-600→orange-600 | yellow-500→amber-600 | yellow-50→amber-50/30 | max-w-7xl |
+| Profile | indigo-600→purple-600 | indigo-500→purple-500 | slate-50→indigo-50/30 | max-w-5xl |
+
+The routines category map (the card top bars + buttons): morning
+amber-500→orange-500 · exercise red-500→pink-500 · study
+blue-500→cyan-500 · evening indigo-500→purple-500 · self_care
+emerald-500→teal-500 · creative pink-500→rose-500 · productivity
+violet-500→purple-500.
 
 Contrast: body text `#171717` on white; secondary `#71717a`; both clear
 WCAG AA in light mode; dark mode inverts via the `.dark` overrides in
@@ -517,8 +542,12 @@ WCAG AA in light mode; dark mode inverts via the `.dark` overrides in
   (`src/components/layout/mobile-nav.tsx`); the seven CRM-era modules
   (avatar/badge/button/card/dropdown/icons/table) retired at WH-4 and
   the ui-module census pin (`tests/route-census.test.ts`) locks the set.
-- Stat tiles: pastel backgrounds + saturated chip text + solid glyphs —
-  the reference's computed style, captured in `docs/screenshots/02-dashboard.png`.
+- Stat tiles (WH-15): the white `border-none shadow-lg` card + the
+  5%-opacity module wash (10% on hover) + the `rounded-2xl` gradient icon
+  tile — Dashboard's four; the module pages carry ONE solid-gradient hero
+  tile (white text, the module's -100 label tint) + two white tiles
+  (Reminders: three white, no hero); captured in
+  `docs/screenshots/02-dashboard.png`.
 - Sidebar: `rounded-xl` menu buttons with the gradient active pill;
   mobile is a Radix Sheet drawer behind the glass `md:hidden` header
   (`backdrop-blur-xl` — the reference's own blur(24px); the 4px
@@ -604,14 +633,14 @@ No queues, workers or cron. Utility services worth naming:
 |----------|-------|--------|----------|-----------|
 | Unit — auth seams (password, verification, reset, contract, rate limit, boot-env) | 6 | 109 | `tests/auth*.test.ts`, `password-seam`, `rate-limit`, `boot-env` | Vitest |
 | Unit — wellness domain (streaks, points, badges, codecs, schemas, stats, helpers, theme) | 5 | 89 | `tests/wellness-*.test.ts` | Vitest |
-| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member/type-export/pass-site/schema-field/design-token/source-scan/palette-pin censuses) | 10 | 123 | `tests/*.test.ts` | Vitest |
+| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member/type-export/pass-site/schema-field/design-token/source-scan/palette-pin/page-theme censuses) | 10 | 126 | `tests/*.test.ts` | Vitest |
 | E2E — auth ladder (login wall, lockout, reset funnel, revocation) | 1 spec | 11 | `tests/e2e/auth.spec.ts` | Playwright |
 | E2E — mobile drawer battery | 1 spec | 6 | `tests/e2e/mobile-navigation.spec.ts` | Playwright |
 | E2E — shell (nav, dual-case routes, quick actions) | 1 spec | 6 | `tests/e2e/shell.spec.ts` | Playwright |
 | E2E — auth setup project (one-time demo login; shares the cookie via storageState) | 1 setup | 1 | `tests/e2e/auth.setup.ts` | Playwright |
 | E2E — CRUD cycles + reset-password funnel | 2 specs | 18 | `tests/e2e/wellness-crud.spec.ts`, `reset-password.spec.ts` | Playwright |
 
-Totals: **321 unit checks / 21 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
+Totals: **324 unit checks / 21 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
 
 ### 8.2 Test Patterns
 
@@ -638,7 +667,7 @@ docs, not just the code.
 
 - `bun run lint` → 0 warnings
 - `bun run typecheck` → clean
-- `bun run test` → 321/321
+- `bun run test` → 324/324
 - `bun run build` → succeeds (the type gate)
 - `bun run smoke` → 14/14
 - `CI=1 bun run test:e2e` → 42/42

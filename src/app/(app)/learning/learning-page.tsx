@@ -6,7 +6,7 @@ import { useWellnessStore } from "@/stores/wellness-store";
 import { toast } from "@/components/ui/toast";
 import { PageHeader, LoadingBlock, OptionChip, EmptyState } from "@/components/shared/page-parts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_ROOT } from "@/lib/page-layout";
+import { PAGE_THEMES, SECTION_CARD } from "@/lib/page-layout";
 import {
   TUTORIAL_CATEGORIES,
   TUTORIAL_DIFFICULTIES,
@@ -44,18 +44,19 @@ export default function LearningClientPage() {
 
   if (!hydrated) {
     return (
-      <div className={PAGE_ROOT.standard}>
+      <div className={PAGE_THEMES.learning.root}>
         <LoadingBlock label="Loading tutorials…" />
       </div>
     );
   }
 
   return (
-    <div className={PAGE_ROOT.standard}>
-      <PageHeader title="Learning Center" subtitle="Explore helpful tutorials and resources" />
+    <div className={PAGE_THEMES.learning.root}>
+      <div className={PAGE_THEMES.learning.container}>
+      <PageHeader title="Learning Center" subtitle="Explore helpful tutorials and resources" theme={PAGE_THEMES.learning} />
 
       {/* The toolbar — search + category combobox. */}
-      <div className="mb-6 flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden="true" />
           <input
@@ -83,7 +84,7 @@ export default function LearningClientPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="rounded-xl border border-line bg-surface shadow-lg">
+        <div className={SECTION_CARD.card}>
           <EmptyState icon={Video} hint="No tutorials found. Try a different search!" />
         </div>
       ) : (
@@ -94,14 +95,13 @@ export default function LearningClientPage() {
             return (
               <section
                 key={t.id}
-                className="overflow-hidden rounded-xl border border-line bg-surface shadow-lg"
+                className="overflow-hidden rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all"
               >
-                <div className="relative">
+                <div className="relative aspect-video bg-gradient-to-br from-gray-100 to-gray-200">
                   {t.thumbnail ? (
-                     
-                    <img src={t.thumbnail} alt={t.title} className="h-40 w-full object-cover" loading="lazy" />
+                    <img src={t.thumbnail} alt={t.title} className="h-full w-full object-cover" loading="lazy" />
                   ) : (
-                    <div className="flex h-40 w-full items-center justify-center bg-primary/10 text-primary">
+                    <div className="flex h-full w-full items-center justify-center text-gray-400">
                       <Video className="h-10 w-10" aria-hidden="true" />
                     </div>
                   )}
@@ -134,6 +134,7 @@ export default function LearningClientPage() {
           })}
         </div>
       )}
+      </div>
     </div>
   );
 }

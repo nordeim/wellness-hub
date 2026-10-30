@@ -23,7 +23,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_ROOT, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, BUTTON_CLASSES } from "@/lib/page-layout";
 import { RESOURCE_TYPES, resourceTypeMeta } from "@/lib/constants";
 import { matchesQuery, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -162,26 +162,28 @@ export default function StudyResourcesClientPage() {
 
   if (!hydrated) {
     return (
-      <div className={PAGE_ROOT.standard}>
+      <div className={PAGE_THEMES.studyresources.root}>
         <LoadingBlock label="Loading resources…" />
       </div>
     );
   }
 
   return (
-    <div className={PAGE_ROOT.standard}>
+    <div className={PAGE_THEMES.studyresources.root}>
+      <div className={PAGE_THEMES.studyresources.container}>
       <PageHeader
         title="Study Resources"
         subtitle="Organize all your study materials in one place"
+        theme={PAGE_THEMES.studyresources}
         actions={
-          <GradientButton onClick={openCreate}>
+          <GradientButton onClick={openCreate} gradient={PAGE_THEMES.studyresources.button}>
             <Plus className="h-4 w-4" /> Add Resource
           </GradientButton>
         }
       />
 
       {/* The toolbar — search + subject + type (the reference's trio). */}
-      <div className="mb-6 flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden="true" />
           <input
@@ -471,12 +473,13 @@ export default function StudyResourcesClientPage() {
             >
               Cancel
             </button>
-            <GradientButton onClick={() => void submit()} disabled={saving}>
+            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.studyresources.button}>
               {saving ? "Saving…" : editing ? "Save Changes" : "Add Resource"}
             </GradientButton>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

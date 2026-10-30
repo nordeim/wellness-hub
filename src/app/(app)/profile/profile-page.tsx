@@ -21,7 +21,7 @@ import { Tabs, TabsPanel } from "@/components/ui/tabs";
 import { Label, Checkbox } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {PAGE_ROOT, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
 import {
   COLOR_PRESETS,
   FONT_FAMILIES,
@@ -57,10 +57,12 @@ export default function ProfileClientPage({ user }: { user: AppUser | null }) {
   const [tab, setTab] = React.useState("appearance");
 
   return (
-    <div className={PAGE_ROOT.standard}>
+    <div className={PAGE_THEMES.profile.root}>
+      <div className={PAGE_THEMES.profile.container}>
       <PageHeader
         title="Profile & Customization"
         subtitle="Make this app truly yours! ✨"
+        theme={PAGE_THEMES.profile}
       />
 
       <Tabs
@@ -72,7 +74,7 @@ export default function ProfileClientPage({ user }: { user: AppUser | null }) {
         value={tab}
         onValueChange={setTab}
         cols={3}
-        className="mb-6 max-w-xl"
+        className="max-w-xl"
       >
         <TabsPanel tab="appearance" className="mt-6">
           <AppearancePanel />
@@ -85,10 +87,11 @@ export default function ProfileClientPage({ user }: { user: AppUser | null }) {
         </TabsPanel>
       </Tabs>
 
-      <div className="mt-6">
+      <div>
         <GradientButton onClick={() => void save()} disabled={saving}>
           <Sparkles className="h-4 w-4" /> {saving ? "Saving…" : "Save All Changes ✨"}
         </GradientButton>
+      </div>
       </div>
     </div>
   );

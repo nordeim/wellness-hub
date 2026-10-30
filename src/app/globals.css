@@ -56,7 +56,6 @@
   --color-primary: #6366f1;
   --color-secondary: #a855f7;
   --color-primary-hover: #4f46e5;
-  --color-secondary-hover: #9333ea;
 
   /* The light sidebar family (live-probed: bg rgb(250,250,250), border-r
      rgb(229,229,229), menu text rgb(63,63,70), rounded-xl 12px). */
@@ -147,26 +146,37 @@
      against the reference's live compiled stylesheet this round, the
      other 5 are our superset surfaces pinned to the standard v3
      values). The pins⇔usage equivalence is census-enforced in both
-     directions (tests/src-census.test.ts, WH-14). */
+     directions (tests/src-census.test.ts, WH-14).
+     WH-15 (the per-module page-identity round): +26 pins for the
+     reference's 2026-10-30 redesign vocabulary — the module H1/button/
+     wash pairs, the category-gradient map, the hero-tile -100 label
+     tints, the calendar's violet family and the gray text family. All
+     26 verified against the reference's own live compiled stylesheet
+     (assets/index-heGLHP2e.css — 17 as hex forms, 9 as its rgb() space
+     forms; the DOM-computed probes agree). The block now carries
+     exactly the 95 used pairs — the equivalence census holds. */
   --color-amber-50: #fffbeb;
+  --color-amber-200: #fde68a;
   --color-amber-300: #fcd34d;
   --color-amber-400: #fbbf24;
   --color-amber-500: #f59e0b;
   --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
   --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
   --color-amber-950: #451a03;
   --color-blue-50: #eff6ff;
   --color-blue-500: #3b82f6;
   --color-blue-600: #2563eb;
   --color-blue-700: #1d4ed8;
-  --color-blue-950: #172554;
   --color-cyan-50: #ecfeff;
+  --color-cyan-500: #06b6d4;
   --color-cyan-600: #0891b2;
   --color-emerald-50: #ecfdf5;
+  --color-emerald-100: #d1fae5;
   --color-emerald-200: #a7f3d0;
   --color-emerald-500: #10b981;
   --color-emerald-600: #059669;
-  --color-emerald-950: #022c22;
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;
@@ -174,13 +184,17 @@
   --color-gray-400: #9ca3af;
   --color-gray-500: #6b7280;
   --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
   --color-gray-800: #1f2937;
   --color-gray-900: #111827;
   --color-green-50: #f0fdf4;
+  --color-green-100: #dcfce7;
   --color-green-200: #bbf7d0;
+  --color-green-500: #22c55e;
   --color-green-600: #16a34a;
   --color-green-700: #15803d;
   --color-indigo-50: #eef2ff;
+  --color-indigo-500: #6366f1;
   --color-indigo-600: #4f46e5;
   --color-neutral-50: #fafafa;
   --color-neutral-700: #404040;
@@ -188,10 +202,15 @@
   --color-neutral-900: #171717;
   --color-neutral-950: #0a0a0a;
   --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-500: #f97316;
   --color-orange-600: #ea580c;
   --color-pink-50: #fdf2f8;
+  --color-pink-500: #ec4899;
   --color-pink-600: #db2777;
   --color-purple-50: #faf5ff;
+  --color-purple-100: #f3e8ff;
+  --color-purple-500: #a855f7;
   --color-purple-600: #9333ea;
   --color-red-50: #fef2f2;
   --color-red-100: #fee2e2;
@@ -200,7 +219,10 @@
   --color-red-600: #dc2626;
   --color-red-700: #b91c1c;
   --color-red-950: #450a0a;
+  --color-rose-50: #fff1f2;
   --color-rose-200: #fecdd3;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #e11d48;
   --color-sky-50: #f0f9ff;
   --color-sky-600: #0284c7;
   --color-slate-50: #f8fafc;
@@ -214,9 +236,18 @@
   --color-slate-800: #1e293b;
   --color-slate-900: #0f172a;
   --color-teal-50: #f0fdfa;
+  --color-teal-500: #14b8a6;
   --color-teal-600: #0d9488;
   --color-violet-50: #f5f3ff;
+  --color-violet-100: #ede9fe;
+  --color-violet-300: #c4b5fd;
+  --color-violet-500: #8b5cf6;
   --color-violet-600: #7c3aed;
+  --color-violet-700: #6d28d9;
+  --color-yellow-50: #fefce8;
+  --color-yellow-100: #fef9c3;
+  --color-yellow-500: #eab308;
+  --color-yellow-600: #ca8a04;
 }
 
 /* ---------------------------------------------------------------------------

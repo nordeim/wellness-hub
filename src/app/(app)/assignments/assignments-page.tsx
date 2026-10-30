@@ -16,7 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_ROOT, PAGE_KPI_GRIDS, DIALOG_GROUP, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, DIALOG_GROUP, BUTTON_CLASSES } from "@/lib/page-layout";
 import { ASSIGNMENT_PRIORITIES, priorityMeta } from "@/lib/constants";
 import { isAssignmentUrgent } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -128,7 +128,7 @@ export default function AssignmentsClientPage() {
 
   if (!hydrated) {
     return (
-      <div className={PAGE_ROOT.standard}>
+      <div className={PAGE_THEMES.assignments.root}>
         <LoadingBlock label="Loading assignments…" />
       </div>
     );
@@ -142,38 +142,31 @@ export default function AssignmentsClientPage() {
   });
 
   return (
-    <div className={PAGE_ROOT.standard}>
+    <div className={PAGE_THEMES.assignments.root}>
+      <div className={PAGE_THEMES.assignments.container}>
       <PageHeader
         title="Assignments"
         subtitle="Manage your tasks and deadlines"
+        theme={PAGE_THEMES.assignments}
         actions={
-          <GradientButton onClick={openCreate}>
+          <GradientButton onClick={openCreate} gradient={PAGE_THEMES.assignments.button}>
             <ClipboardList className="h-4 w-4" /> New Assignment
           </GradientButton>
         }
       />
 
       <div className={PAGE_KPI_GRIDS.three}>
-        <div className="rounded-xl bg-blue-50 dark:bg-blue-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500 text-white" aria-hidden="true">
-            <BookOpen className="h-5 w-5" fill="currentColor" strokeWidth={1} />
-          </div>
-          <p className="text-sm font-medium text-muted">Pending</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{pending.length}</h3>
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <p className={STAT_CARD.label}>Pending</p>
+          <h3 className={cn(STAT_CARD.value, "mt-1")}>{pending.length}</h3>
         </div>
-        <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500 text-white" aria-hidden="true">
-            <CheckCircle2 className="h-5 w-5" />
-          </div>
-          <p className="text-sm font-medium text-muted">Completed</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{completed.length}</h3>
+        <div className={cn(STAT_CARD.hero, "from-green-500 to-emerald-500 p-5")}>
+          <p className={cn(STAT_CARD.heroLabel, "text-green-100")}>Completed</p>
+          <h3 className={cn(STAT_CARD.heroValue, "mt-1")}>{completed.length}</h3>
         </div>
-        <div className="rounded-xl bg-red-50 dark:bg-red-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-red-500 text-white" aria-hidden="true">
-            <AlertTriangle className="h-5 w-5" fill="currentColor" strokeWidth={1} />
-          </div>
-          <p className="text-sm font-medium text-muted">Urgent</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{urgent}</h3>
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <p className={STAT_CARD.label}>Urgent</p>
+          <h3 className={cn(STAT_CARD.value, "mt-1")}>{urgent}</h3>
         </div>
       </div>
 
@@ -334,12 +327,13 @@ export default function AssignmentsClientPage() {
             >
               Cancel
             </button>
-            <GradientButton onClick={() => void submit()} disabled={saving}>
+            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.assignments.button}>
               {saving ? "Saving…" : editing ? "Save Changes" : "Create Assignment"}
             </GradientButton>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

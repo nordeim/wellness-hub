@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { CalendarPlus, Dumbbell, Flame, Trash2 } from "lucide-react";
+import { Dumbbell, Trash2 } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
 import { toast } from "@/components/ui/toast";
 import {
@@ -16,7 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_ROOT, PAGE_KPI_GRIDS, DIALOG_GROUP, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, DIALOG_GROUP, BUTTON_CLASSES } from "@/lib/page-layout";
 import { WORKOUT_TYPES, WORKOUT_INTENSITIES, workoutTypeMeta, intensityMeta } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -86,45 +86,38 @@ export default function ExerciseClientPage() {
 
   if (!hydrated) {
     return (
-      <div className={PAGE_ROOT.standard}>
+      <div className={PAGE_THEMES.exercise.root}>
         <LoadingBlock label="Loading workouts…" />
       </div>
     );
   }
 
   return (
-    <div className={PAGE_ROOT.standard}>
+    <div className={PAGE_THEMES.exercise.root}>
+      <div className={PAGE_THEMES.exercise.container}>
       <PageHeader
         title="Exercise Tracker"
         subtitle="Track your workouts and stay active"
+        theme={PAGE_THEMES.exercise}
         actions={
-          <GradientButton onClick={() => setOpen(true)}>
+          <GradientButton onClick={() => setOpen(true)} gradient={PAGE_THEMES.exercise.button}>
             <Dumbbell className="h-4 w-4" /> Log Workout
           </GradientButton>
         }
       />
 
       <div className={PAGE_KPI_GRIDS.three}>
-        <div className="rounded-xl bg-red-50 dark:bg-red-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-red-500 text-white" aria-hidden="true">
-            <Dumbbell className="h-5 w-5" fill="currentColor" strokeWidth={1} />
-          </div>
-          <p className="text-sm font-medium text-muted">Total Workouts</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{workouts.length}</h3>
+        <div className={cn(STAT_CARD.hero, "from-orange-500 to-red-500 p-5")}>
+          <p className={cn(STAT_CARD.heroLabel, "text-orange-100")}>Total Workouts</p>
+          <h3 className={cn(STAT_CARD.heroValue, "mt-1")}>{workouts.length}</h3>
         </div>
-        <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500 text-white" aria-hidden="true">
-            <CalendarPlus className="h-5 w-5" fill="currentColor" strokeWidth={1} />
-          </div>
-          <p className="text-sm font-medium text-muted">Total Minutes</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{totalMinutes}</h3>
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <p className={STAT_CARD.label}>Total Minutes</p>
+          <h3 className={cn(STAT_CARD.value, "mt-1")}>{totalMinutes}</h3>
         </div>
-        <div className="rounded-xl bg-amber-50 dark:bg-amber-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500 text-white" aria-hidden="true">
-            <Flame className="h-5 w-5" fill="currentColor" strokeWidth={1} />
-          </div>
-          <p className="text-sm font-medium text-muted">Calories Burned</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{totalCalories}</h3>
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <p className={STAT_CARD.label}>Calories Burned</p>
+          <h3 className={cn(STAT_CARD.value, "mt-1")}>{totalCalories}</h3>
         </div>
       </div>
 
@@ -268,12 +261,13 @@ export default function ExerciseClientPage() {
             >
               Cancel
             </button>
-            <GradientButton onClick={() => void submit()} disabled={saving}>
+            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.exercise.button}>
               {saving ? "Saving…" : "Save Workout"}
             </GradientButton>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

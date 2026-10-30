@@ -12,10 +12,16 @@
 
 /** The app shell — the reference's model: the LIGHT sidebar is an in-flow
  *  flex child (visible from md), the main column's `main` owns scrolling,
- *  and on phones the chrome is the sticky glass header. */
+ *  and on phones the chrome is the sticky glass header. WH-15: the
+ *  redeployed reference carries two shell washes (probed live — the root
+ *  from-slate-50 via-white to-slate-50 at to-br; the sidebar from-white
+ *  via-gray-50 to-white) where ours shipped solid tokens; the dark
+ *  variants ride our neutral tokens (the reference's own dark mode is
+ *  the partially-broken surface our token system supersedes). */
 export const SHELL_LAYOUT = {
-  root: "flex min-h-screen bg-background",
-  sidebar: "hidden md:flex w-64 shrink-0 bg-sidebar text-sidebar-foreground flex-col border-r border-line",
+  root: "flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
+  sidebar:
+    "hidden md:flex w-64 shrink-0 bg-gradient-to-br from-white via-gray-50 to-white dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 text-sidebar-foreground flex-col border-r border-line",
   mainColumn: "flex-1 flex flex-col min-w-0",
   main: "flex-1 overflow-y-auto bg-background",
 } as const;
@@ -28,26 +34,158 @@ export const APP_FOOTER = {
   note: "Made with 💜 for your wellbeing",
 } as const;
 
-export const PAGE_ROOT = {
-  standard: "p-4 sm:p-6 lg:p-8 bg-background min-h-screen",
-  bare: "p-4 sm:p-6 lg:p-8",
-} as const;
+/** The per-module page identity — the reference's 2026-10-30 redesign
+ *  (probed live on all 11 pages after its redeployment: the stylesheet
+ *  moved index-eZhxKCJC.css → index-heGLHP2e.css). Every module page
+ *  carries: a page-root WASH (`bg-gradient-to-br from-<m1>-50 via-white
+ *  to-<m2>-50/30` — the dark variants ride our neutral tokens, the
+ *  documented superset over the reference's partially-broken dark), a
+ *  HEADING gradient (the module's 600-family stops on a `text-4xl` H1
+ *  with `mb-2`), a BUTTON pair (the module's 500-family stops — the
+ *  FIXED palette classes, NOT theme tokens: verified live, applying the
+ *  reference's Ocean Blue preset re-skinned its brand surfaces while the
+ *  Exercise button stayed orange→red), and a CONTAINER (`max-w-{5,6,7}xl
+ *  mx-auto space-y-8` — the reference's per-page width). `stacked`
+ *  selects the header form: the four pages whose H1 spans the full row
+ *  (Dashboard, Routines, Learning, Profile — probed at 960px block)
+ *  vs the seven action pages whose flex-col md:flex-row header
+ *  shrink-wraps it. */
+export type PageTheme = {
+  /** The page root: the module wash + the reference's `p-4 md:p-8`. */
+  root: string;
+  /** The H1's gradient stops (composed onto PAGE_HEADER.title). */
+  heading: string;
+  /** The primary button's gradient classes (composed onto
+   *  GRADIENT_BUTTON_COMPACT via GradientButton's `gradient` prop). */
+  button: string;
+  /** The content container. */
+  container: string;
+  /** The header form: block (H1 full-width) vs the flex action row. */
+  stacked: boolean;
+};
 
-/** Sidebar navigation — the reference's LIGHT sidebar: bg neutral-50,
- *  zinc-700 menu text, rounded-xl menu buttons, an indigo wash + indigo
- *  bold text on the active item (live-probed 2026-10-29). */
+export const PAGE_THEMES: Record<
+  "dashboard" | "routines" | "exercise" | "mentalhealth" | "assignments" | "events" | "studyresources" | "reminders" | "learning" | "goals" | "profile",
+  PageTheme
+> = {
+  dashboard: {
+    root: "min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 p-4 md:p-8 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
+    heading: "from-indigo-600 via-purple-600 to-pink-600",
+    button: "",
+    container: "max-w-7xl mx-auto space-y-8",
+    stacked: true,
+  },
+  routines: {
+    root: "min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50/30 p-4 md:p-8 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
+    heading: "from-purple-600 via-pink-600 to-rose-600",
+    button: "",
+    container: "max-w-7xl mx-auto space-y-8",
+    stacked: true,
+  },
+  exercise: {
+    root: "min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50/30 p-4 md:p-8 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
+    heading: "from-orange-600 to-red-600",
+    button: "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600",
+    container: "max-w-6xl mx-auto space-y-8",
+    stacked: false,
+  },
+  mentalhealth: {
+    root: "min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50/30 p-4 md:p-8 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
+    heading: "from-emerald-600 to-teal-600",
+    button: "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600",
+    container: "max-w-6xl mx-auto space-y-8",
+    stacked: false,
+  },
+  assignments: {
+    root: "min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50/30 p-4 md:p-8 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
+    heading: "from-blue-600 to-cyan-600",
+    button: "bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600",
+    container: "max-w-6xl mx-auto space-y-8",
+    stacked: false,
+  },
+  events: {
+    root: "min-h-screen bg-gradient-to-br from-violet-50 via-white to-purple-50/30 p-4 md:p-8 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
+    heading: "from-violet-600 to-purple-600",
+    button: "bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600",
+    container: "max-w-7xl mx-auto space-y-8",
+    stacked: false,
+  },
+  studyresources: {
+    root: "min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50/30 p-4 md:p-8 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
+    heading: "from-blue-600 to-indigo-600",
+    button: "bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600",
+    container: "max-w-7xl mx-auto space-y-8",
+    stacked: false,
+  },
+  reminders: {
+    root: "min-h-screen bg-gradient-to-br from-rose-50 via-white to-purple-50/30 p-4 md:p-8 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
+    heading: "from-rose-600 to-purple-600",
+    button: "bg-gradient-to-r from-rose-500 to-purple-500 hover:from-rose-600 hover:to-purple-600",
+    container: "max-w-6xl mx-auto space-y-8",
+    stacked: false,
+  },
+  learning: {
+    root: "min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50/30 p-4 md:p-8 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
+    heading: "from-amber-600 to-orange-600",
+    button: "",
+    container: "max-w-7xl mx-auto space-y-8",
+    stacked: true,
+  },
+  goals: {
+    root: "min-h-screen bg-gradient-to-br from-yellow-50 via-white to-amber-50/30 p-4 md:p-8 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
+    heading: "from-yellow-600 via-amber-600 to-orange-600",
+    button: "bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700",
+    container: "max-w-7xl mx-auto space-y-8",
+    stacked: false,
+  },
+  profile: {
+    root: "min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 p-4 md:p-8 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
+    heading: "from-indigo-600 to-purple-600",
+    button: "",
+    container: "max-w-5xl mx-auto space-y-8",
+    stacked: true,
+  },
+};
+
+/** The routines page's per-category gradients (the reference's card
+ *  top bars + "Use This Template" buttons, probed on all 11 seeded
+ *  templates in grid order — the category→pair mapping is exact). */
+export const ROUTINE_CATEGORY_GRADIENTS: Record<string, string> = {
+  morning: "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600",
+  exercise: "bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600",
+  study: "bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600",
+  evening: "bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600",
+  self_care: "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600",
+  creative: "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600",
+  productivity: "bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600",
+};
+
+/** The bare gradient-stop pair for a routine category (the card's h-2
+ *  top bar — the buttonless form of ROUTINE_CATEGORY_GRADIENTS). */
+export const routineCategoryStops = (category: string): string =>
+  (ROUTINE_CATEGORY_GRADIENTS[category] ?? ROUTINE_CATEGORY_GRADIENTS.morning)
+    .split(" ")
+    .filter((cls) => cls.startsWith("from-") || cls.startsWith("to-"))
+    .join(" ");
+
+/** Sidebar navigation — the reference's LIGHT sidebar: zinc-700 menu
+ *  text, rounded-xl menu buttons. WH-15 (the redesign, probed live on the
+ *  redeployed reference): the brand wordmark and badge ride the 135deg
+ *  to-br brand gradient (ours shipped to-r), the badge is rounded-2xl
+ *  (16px), and the ACTIVE item is the gradient pill — white text on the
+ *  to-br brand gradient (the pre-redesign indigo wash is gone). */
 export const NAV_LAYOUT = {
   brand: "px-6 pt-6 pb-4 flex items-center gap-3",
   brandBadge:
-    "w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-lg",
+    "w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-lg",
   brandWordmark:
-    "font-bold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent",
+    "font-bold text-lg bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent",
   brandSubtitle: "text-xs text-muted -mt-0.5",
   container: "flex-1 px-3 space-y-1 flex flex-col overflow-y-auto scrollbar-thin",
   group: "space-y-1",
   link: "flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
   linkActive:
-    "flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium bg-primary/10 text-primary font-semibold transition-colors hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+    "flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-br from-primary to-secondary shadow-lg transition-colors hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
   icon: "h-5 w-5 shrink-0",
   label: "truncate",
   footerGroup: "space-y-1 border-t border-line px-3 pt-3 pb-4",
@@ -55,11 +193,13 @@ export const NAV_LAYOUT = {
     "flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-muted transition-colors hover:bg-sidebar-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
 } as const;
 
-/** The mobile glass header (the reference's own chrome). */
+/** The mobile glass header (the reference's own chrome). WH-15: the
+ *  title rides the 135deg to-br brand gradient (probed — ours shipped
+ *  to-r). */
 export const MOBILE_HEADER = {
   bar: "sticky top-0 z-10 md:hidden bg-white/60 dark:bg-black/50 backdrop-blur-xl border-b border-gray-100 px-4 py-4 flex items-center justify-between",
   title:
-    "font-bold text-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent",
+    "font-bold text-lg bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent",
   trigger:
     "md:hidden inline-flex items-center justify-center rounded-md h-10 w-10 text-muted hover:bg-sidebar-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
 } as const;
@@ -76,13 +216,13 @@ export const MOBILE_NAV_SHEET = {
   content:
     "fixed z-50 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out inset-y-0 left-0 h-full data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left w-72 border-0 bg-sidebar p-0 text-sidebar-foreground",
   header: "flex flex-col space-y-1 p-6",
-  title: "text-left text-lg font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-0",
+  title: "text-left text-lg font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent mb-0",
   description: "text-xs text-muted",
   nav: "flex flex-col gap-1 px-3",
   navFooter: "mt-4 flex flex-col gap-1 border-t border-line px-3 pt-4 pb-6",
   link: "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-sidebar-foreground/80 transition-colors hover:bg-sidebar-hover hover:text-sidebar-foreground",
   linkActive:
-    "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-primary to-secondary shadow-lg transition-colors",
+    "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-white bg-gradient-to-br from-primary to-secondary shadow-lg transition-colors hover:opacity-95",
   footerLink:
     "flex items-center gap-3 rounded-xl px-4 py-3 transition-colors hover:bg-sidebar-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
   footerAvatar:
@@ -92,43 +232,74 @@ export const MOBILE_NAV_SHEET = {
   icon: "h-5 w-5",
 } as const;
 
-/** Page header — the reference's anatomy: a gradient H1 (text-3xl
- *  sm:text-4xl, clipped), a muted subtitle, right-aligned actions. */
+/** Page header — the redesign's anatomy: a `text-4xl` gradient H1 (the
+ *  module's stops land via the theme, `mb-2` against the subtitle), a
+ *  `text-gray-600` subtitle, right-aligned actions. The ROW form is the
+ *  seven action pages' flex header; the four stacked pages (Dashboard,
+ *  Routines, Learning, Profile) render the bare block so the H1 spans
+ *  the full container width — the gradient covers the row, exactly the
+ *  reference's probed geometry (960px span, ~310px text). */
 export const PAGE_HEADER = {
-  row: "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6",
+  row: "flex flex-col md:flex-row justify-between items-start md:items-center gap-4",
   title:
-    "text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent",
-  subtitle: "text-muted mt-1",
-  actions: "flex gap-2 w-full sm:w-auto",
-  buttonStretch: "w-full sm:w-auto",
+    "text-4xl font-bold bg-gradient-to-r bg-clip-text text-transparent mb-2",
+  subtitle: "text-gray-600 dark:text-gray-400 mt-1",
+  actions: "flex gap-2 w-full md:w-auto",
+  buttonStretch: "w-full md:w-auto",
 } as const;
 
-/** KPI stat-card rows. */
+/** KPI stat-card rows. WH-15: the container's `space-y-8` owns the
+ *  vertical rhythm (the reference's per-page container) — the grids
+ *  carry no margin of their own, and the gap rides the reference's
+ *  `gap-6` (probed: 3×304 + 2×24 = 960). */
 export const PAGE_KPI_GRIDS = {
-  three: "grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6",
-  four: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6",
+  three: "grid grid-cols-1 sm:grid-cols-3 gap-6",
+  four: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6",
 } as const;
 
-/** The tinted stat card — the reference's pastel family. */
+/** The stat-card family — the redesign's two forms (probed live):
+ *  the WHITE tile (a borderless bg-surface card with a 5%-opacity gradient
+ *  WASH that intensifies to 10% on hover, a `rounded-2xl` gradient icon
+ *  tile, a gray-600 label, a gray-900 value and a gray-500 sub) and the
+ *  module HERO tile (the solid gradient card with white text, the label
+ *  in the module's -100 tint — the per-module label tints are authored
+ *  at the call sites exactly as the reference's per-tile tints are). */
 export const STAT_CARD = {
-  card: "rounded-xl p-5 shadow-lg",
-  iconChip: "w-10 h-10 rounded-lg flex items-center justify-center mb-3",
+  card: "relative overflow-hidden rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all duration-300 group",
+  wash: "absolute inset-0 bg-gradient-to-br opacity-5 group-hover:opacity-10 transition-opacity",
+  iconTile: "p-3 rounded-2xl bg-gradient-to-br shadow-lg flex items-center justify-center text-white mb-4",
   value: "text-3xl font-bold text-gray-900 dark:text-gray-100",
-  label: "text-sm font-medium text-muted",
-  sub: "text-xs text-subtle",
+  label: "text-sm font-medium text-gray-600 dark:text-gray-400",
+  sub: "text-sm text-gray-500 dark:text-gray-400",
+  hero: "rounded-xl border-none shadow-lg bg-gradient-to-br text-white",
+  heroLabel: "text-sm font-medium",
+  heroValue: "text-4xl font-bold text-white",
 } as const;
 
-/** Section card — the white list/panel cards. */
+/** Section card — the white list/panel cards. WH-15: the redesign's
+ *  borderless form (probed: `border-none shadow-lg` on every list
+ *  card). */
 export const SECTION_CARD = {
-  card: "bg-surface rounded-xl shadow-lg",
+  card: "bg-surface rounded-xl border-none shadow-lg",
   header: "flex items-center gap-2 px-5 py-4 border-b border-line",
   title: "font-semibold text-foreground",
   body: "p-5",
 } as const;
 
-/** The primary gradient button (the reference's own family). */
-export const GRADIENT_BUTTON =
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 rounded-md px-8 bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:from-primary-hover hover:to-secondary-hover";
+/** The primary gradient button — the reference's redesigned family
+ *  (probed live): the FIXED palette pairs with -600 hovers (the preset
+ *  engine does NOT re-skin these — verified: Ocean Blue left the
+ *  reference's indigo/purple save button untouched while the brand
+ *  wordmark went sky/cyan). The BIG form is Profile's save (h-10 px-8,
+ *  the indigo/purple pair); the COMPACT form is the module pages'
+ *  primaries and the dialogs' submits (h-9 px-4 py-2, the pair passed
+ *  at the call site via GradientButton's `gradient` prop). */
+const GRADIENT_BUTTON_BASE =
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-white shadow-lg";
+
+export const GRADIENT_BUTTON = `${GRADIENT_BUTTON_BASE} h-10 rounded-md px-8 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600`;
+
+export const GRADIENT_BUTTON_COMPACT = `${GRADIENT_BUTTON_BASE} h-9 rounded-md px-4 py-2`;
 
 export const BUTTON_BASE = {
   focusRing: "focus-visible:ring-1 focus-visible:ring-ring",
@@ -166,15 +337,14 @@ export const LOGIN_LAYOUT = {
   page: "min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4 dark:from-neutral-900 dark:to-neutral-950",
   card: "relative overflow-hidden rounded-2xl border-0 bg-white/95 shadow-2xl backdrop-blur-sm dark:bg-neutral-900/95",
   accent:
-    "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-secondary",
+    "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200",
   inner: "p-8 sm:p-10 md:pt-12 md:pb-10 md:px-10",
   centered: "flex flex-col items-center text-center space-y-6 sm:space-y-8",
   logoWrap: "relative group",
   logoGlow:
-    "absolute inset-0 rounded-full bg-gradient-to-br from-primary to-secondary opacity-30 blur-xl transition-opacity duration-300 group-hover:opacity-40",
-  logo: "relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-lg ring-4 ring-white/50 transition-all duration-300 group-hover:shadow-xl sm:h-24 sm:w-24",
+    "absolute inset-0 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 opacity-30 blur-xl transition-opacity duration-300 group-hover:opacity-40",
   logoBadge:
-    "flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-white sm:h-14 sm:w-14",
+    "relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-slate-200 to-slate-300 text-slate-900 shadow-lg sm:h-24 sm:w-24",
   title: "text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight dark:text-slate-100",
   subtitle: "text-slate-500 text-sm sm:text-base font-medium",
   google:

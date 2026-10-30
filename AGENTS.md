@@ -19,7 +19,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (321 checks) | `bun run test` | Vitest, node-safe seams |
+| Unit tests (324 checks) | `bun run test` | Vitest, node-safe seams |
 | Browser E2E (42 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
@@ -29,7 +29,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (321) → `bun run build` → `bun run smoke` →
+`bun run test` (324) → `bun run build` → `bun run smoke` →
 `CI=1 bun run test:e2e` (42: 5 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
@@ -95,6 +95,7 @@ bun run db:seed && bun run dev`. Demo login: `sepnetflix2023@outlook.com` /
   an ERROR here). Patterns in use: dialogs remount their form via `key`
   changes; loaders use `startTransition`; every list fetch goes through
   the store.
+- **The per-module page identity is a MAP, not scattered literals (WH-15)**: every module page consumes its `PAGE_THEMES` entry from `src/lib/page-layout.ts` (the page-root wash, the H1 gradient stops, the button pair, the container width, the header form) — the reference's 2026-10-30 redesign, probed live. The MODULE pairs are fixed v3 classes (NOT preset-themeable — verified on the reference's own preset engine); only the brand family (wordmark, badge, active pills, mobile/drawer titles) rides `--primary`/`--secondary`. The page-theme census pins the map's coverage, pin-completeness and consumption.
 - **Route aliases are intentional**: each module has a canonical lowercase
   folder (`src/app/(app)/dashboard/`) AND a capitalized alias folder
   (`src/app/(app)/Dashboard/`) mirroring the reference app's own hrefs
@@ -133,7 +134,8 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   content detection scans every TRACKED file; without the exclusions the
   `skills/` + `docs/` markdown corpus compiles into the production
   stylesheet (71% dead weight before the pin). Pinned by the src-census.
-- Dark mode = `.dark` class token overrides, same file.
+- Dark mode = `.dark` class token overrides, same file. The WH-15 washes carry `dark:` neutral variants (our superset over the reference's partially-broken dark).
+- The 26 redesign palette pairs joined the session-88 pin block (95 pairs total, all v3-verified against the reference's own compiled stylesheet) — the pins⇔usage census holds in both directions.
 
 ## Conventions that differ from defaults
 

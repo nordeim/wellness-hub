@@ -316,6 +316,11 @@ export function LoginCard({ mode = "signin" }: { mode?: Mode }) {
   return (
     <div className="w-full max-w-md">
       <div className={LOGIN_LAYOUT.card}>
+        {/* WH-15: the reference's login card carries the monochrome slate
+            accent strip at its top edge (probed 448×4 on the redeployed
+            reference — the reset-password screen had rendered it all
+            along; the login view now matches). */}
+        <div className={LOGIN_LAYOUT.accent} aria-hidden="true" />
         <div className={LOGIN_LAYOUT.inner}>
           <div className={LOGIN_LAYOUT.centered}>
             {view !== "signin" ? (
@@ -616,12 +621,15 @@ export function LoginCard({ mode = "signin" }: { mode?: Mode }) {
               </>
             ) : (
               <>
-            {/* Logo — the EvolveWell gradient badge with a soft primary
-                glow, ringed and shadowed like the reference avatar. */}
+            {/* Logo — the reference's redesigned monochrome slate tile
+                with a soft slate glow (WH-15: the accent, the glow and
+                the tile all went slate on the redeployed reference; our
+                Sprout icon stays the documented stand-in for its hosted
+                logo image, now dark-on-slate like the original). */}
             <div className={LOGIN_LAYOUT.logoWrap}>
               <div className={LOGIN_LAYOUT.logoGlow} aria-hidden="true" />
-              <span className={LOGIN_LAYOUT.logo} aria-hidden="true">
-                <Sprout className="h-12 w-12 text-emerald-500 sm:h-14 sm:w-14" strokeWidth={1.75} />
+              <span className={LOGIN_LAYOUT.logoBadge} aria-hidden="true">
+                <Sprout className="h-12 w-12 text-slate-900 sm:h-14 sm:w-14" strokeWidth={1.75} />
               </span>
             </div>
 

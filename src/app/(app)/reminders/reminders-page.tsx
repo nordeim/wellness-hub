@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { AlertTriangle, Bell, BellRing, CheckCircle2, Pencil, Plus, Trash2 } from "lucide-react";
+import { Bell, BellRing, CheckCircle2, Pencil, Plus, Trash2 } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
 import { toast } from "@/components/ui/toast";
 import {
@@ -16,7 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {PAGE_ROOT, PAGE_KPI_GRIDS, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
 import {
   REMINDER_TYPES,
   REMINDER_REPEATS,
@@ -130,7 +130,7 @@ export default function RemindersClientPage() {
 
   if (!hydrated) {
     return (
-      <div className={PAGE_ROOT.standard}>
+      <div className={PAGE_THEMES.reminders.root}>
         <LoadingBlock label="Loading reminders…" />
       </div>
     );
@@ -144,38 +144,31 @@ export default function RemindersClientPage() {
   });
 
   return (
-    <div className={PAGE_ROOT.standard}>
+    <div className={PAGE_THEMES.reminders.root}>
+      <div className={PAGE_THEMES.reminders.container}>
       <PageHeader
         title="Reminders"
         subtitle="Never miss an important task or deadline"
+        theme={PAGE_THEMES.reminders}
         actions={
-          <GradientButton onClick={openCreate}>
+          <GradientButton onClick={openCreate} gradient={PAGE_THEMES.reminders.button}>
             <Plus className="h-4 w-4" /> New Reminder
           </GradientButton>
         }
       />
 
       <div className={PAGE_KPI_GRIDS.three}>
-        <div className="rounded-xl bg-blue-50 dark:bg-blue-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500 text-white" aria-hidden="true">
-            <Bell className="h-5 w-5" fill="currentColor" strokeWidth={1} />
-          </div>
-          <p className="text-sm font-medium text-muted">Upcoming</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{upcoming}</h3>
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <p className={STAT_CARD.label}>Upcoming</p>
+          <h3 className={cn(STAT_CARD.value, "mt-1")}>{upcoming}</h3>
         </div>
-        <div className="rounded-xl bg-red-50 dark:bg-red-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-red-500 text-white" aria-hidden="true">
-            <AlertTriangle className="h-5 w-5" fill="currentColor" strokeWidth={1} />
-          </div>
-          <p className="text-sm font-medium text-muted">Overdue</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{overdue}</h3>
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <p className={STAT_CARD.label}>Overdue</p>
+          <h3 className={cn(STAT_CARD.value, "mt-1")}>{overdue}</h3>
         </div>
-        <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500 text-white" aria-hidden="true">
-            <CheckCircle2 className="h-5 w-5" />
-          </div>
-          <p className="text-sm font-medium text-muted">Completed</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{completed}</h3>
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <p className={STAT_CARD.label}>Completed</p>
+          <h3 className={cn(STAT_CARD.value, "mt-1")}>{completed}</h3>
         </div>
       </div>
 
@@ -359,12 +352,13 @@ export default function RemindersClientPage() {
             >
               Cancel
             </button>
-            <GradientButton onClick={() => void submit()} disabled={saving}>
+            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.reminders.button}>
               {saving ? "Saving…" : editing ? "Save Changes" : "Create Reminder"}
             </GradientButton>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

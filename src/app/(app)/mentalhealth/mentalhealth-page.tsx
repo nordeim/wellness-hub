@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Flame, HeartPulse, Trash2 } from "lucide-react";
+import { HeartPulse, Trash2 } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
 import { toast } from "@/components/ui/toast";
 import {
@@ -14,7 +14,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PAGE_ROOT, PAGE_KPI_GRIDS, DIALOG_GROUP, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, DIALOG_GROUP, BUTTON_CLASSES } from "@/lib/page-layout";
 import { MOODS, moodMeta } from "@/lib/constants";
 import { averageEnergy, currentStreak, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -89,46 +89,39 @@ export default function MentalHealthClientPage() {
 
   if (!hydrated) {
     return (
-      <div className={PAGE_ROOT.standard}>
+      <div className={PAGE_THEMES.mentalhealth.root}>
         <LoadingBlock label="Loading your journal…" />
       </div>
     );
   }
 
   return (
-    <div className={PAGE_ROOT.standard}>
+    <div className={PAGE_THEMES.mentalhealth.root}>
+      <div className={PAGE_THEMES.mentalhealth.container}>
       <PageHeader
         title="Mental Health Journal"
         subtitle="Track your mood and emotional wellness"
+        theme={PAGE_THEMES.mentalhealth}
         actions={
-          <GradientButton onClick={() => setOpen(true)}>
+          <GradientButton onClick={() => setOpen(true)} gradient={PAGE_THEMES.mentalhealth.button}>
             <HeartPulse className="h-4 w-4" /> New Entry
           </GradientButton>
         }
       />
 
       <div className={PAGE_KPI_GRIDS.three}>
-        <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500 text-white" aria-hidden="true">
-            <HeartPulse className="h-5 w-5" fill="currentColor" strokeWidth={1} />
-          </div>
-          <p className="text-sm font-medium text-muted">Total Entries</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{moodEntries.length}</h3>
+        <div className={cn(STAT_CARD.hero, "from-emerald-500 to-teal-500 p-5")}>
+          <p className={cn(STAT_CARD.heroLabel, "text-emerald-100")}>Total Entries</p>
+          <h3 className={cn(STAT_CARD.heroValue, "mt-1")}>{moodEntries.length}</h3>
         </div>
-        <div className="rounded-xl bg-blue-50 dark:bg-blue-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500 text-white" aria-hidden="true">
-            <Flame className="h-5 w-5" fill="currentColor" strokeWidth={1} />
-          </div>
-          <p className="text-sm font-medium text-muted">Avg Energy</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{avgEnergy}/10</h3>
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <p className={STAT_CARD.label}>Avg Energy</p>
+          <h3 className={cn(STAT_CARD.value, "mt-1")}>{avgEnergy}/10</h3>
         </div>
-        <div className="rounded-xl bg-amber-50 dark:bg-amber-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500 text-white" aria-hidden="true">
-            <Flame className="h-5 w-5" fill="currentColor" strokeWidth={1} />
-          </div>
-          <p className="text-sm font-medium text-muted">Current Streak</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{streak}</h3>
-          <p className="text-xs text-subtle">days</p>
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <p className={STAT_CARD.label}>Current Streak</p>
+          <h3 className={cn(STAT_CARD.value, "mt-1")}>{streak}</h3>
+          <p className={STAT_CARD.sub}>days</p>
         </div>
       </div>
 
@@ -146,33 +139,43 @@ export default function MentalHealthClientPage() {
               return (
                 <li
                   key={m.id}
-                  className="flex flex-wrap items-start justify-between gap-2 rounded-lg border border-line bg-line-soft/50 px-4 py-3"
+                  className="p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition dark:border-neutral-800"
                 >
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-foreground">
-                      {meta.icon} {meta.label}
-                      <span className="ml-2 font-normal text-muted">Energy {m.energy}/10</span>
-                    </p>
-                    <p className="text-xs text-muted">{formatDate(m.date)}</p>
-                    {acts.length > 0 && (
-                      <p className="mt-1 text-xs text-muted">Activities: {acts.join(", ")}</p>
-                    )}
-                    {m.gratitude && (
-                      <p className="mt-1 text-xs text-muted">Grateful for: {m.gratitude}</p>
-                    )}
-                    {m.reflection && <p className="mt-1 text-xs text-muted">{m.reflection}</p>}
+                  <div className="flex items-start gap-4">
+                    <div
+                      className="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-3xl shadow-lg"
+                      aria-hidden="true"
+                    >
+                      {meta.icon}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="mb-2 flex items-center justify-between gap-2">
+                        <p className="text-sm font-semibold text-foreground">
+                          {meta.label}
+                          <span className="ml-2 font-normal text-muted">{formatDate(m.date)}</span>
+                        </p>
+                        <button
+                          type="button"
+                          className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40")}
+                          onClick={async () => {
+                            const res = await deleteMoodEntry(m.id);
+                            if (!res.ok) toast.error(res.error);
+                          }}
+                          aria-label={`Delete ${meta.label} entry`}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Energy Level: {m.energy}/10</p>
+                      {acts.length > 0 && (
+                        <p className="text-xs text-muted">Activities: {acts.join(", ")}</p>
+                      )}
+                      {m.gratitude && (
+                        <p className="mt-1 text-xs text-muted">Grateful for: {m.gratitude}</p>
+                      )}
+                      {m.reflection && <p className="mt-1 text-xs text-muted">{m.reflection}</p>}
+                    </div>
                   </div>
-                  <button
-                    type="button"
-                    className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-red-600 hover:bg-red-50")}
-                    onClick={async () => {
-                      const res = await deleteMoodEntry(m.id);
-                      if (!res.ok) toast.error(res.error);
-                    }}
-                    aria-label={`Delete ${meta.label} entry`}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
                 </li>
               );
             })}
@@ -311,12 +314,13 @@ export default function MentalHealthClientPage() {
             >
               Cancel
             </button>
-            <GradientButton onClick={() => void submit()} disabled={saving}>
+            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.mentalhealth.button}>
               {saving ? "Saving…" : "Save Entry"}
             </GradientButton>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

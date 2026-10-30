@@ -66,7 +66,11 @@ and Tailwind v4 CSS-first theming.
 - **Tailwind v4**: CSS-first — NO `tailwind.config.js`. Tokens live in
   `@theme` inside `src/app/globals.css` as LITERAL hex values (no `var()`
   chains inside `@theme`). Keep the pinned fixes: `@custom-variant hover`,
-  `--shadow-sm`, `--blur-sm` re-pins.
+  `--shadow-sm`, `--blur-sm` re-pins, the three `@source not` directives.
+  **The per-module page identity (WH-15)**: every module page consumes its
+  `PAGE_THEMES` entry (`src/lib/page-layout.ts`) — wash, H1 stops, button
+  pair, container, header form. The module pairs are FIXED v3 classes; only
+  the brand family rides `--primary`/`--secondary`.
 - **Zod ^4**: every mutating route validates through `parseBody()` +
   `src/lib/schemas.ts`. No route parses URL params (the CRM-era
   `asString`/`asDate` family retired at WH-6 — `tests/src-census.test.ts`
@@ -99,7 +103,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 | `bun run start` | Boot the standalone server |
 | `bun run lint` | ESLint (`--max-warnings 0`) |
 | `bun run typecheck` | `tsc --noEmit` |
-| `bun run test` | Vitest unit suite (321 checks) |
+| `bun run test` | Vitest unit suite (324 checks) |
 | `bun run test:e2e` | Playwright (42 checks; build first) |
 | `bun run gate` | The full chain in one command |
 
@@ -107,7 +111,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 
 ### Test Pyramid
 
-- **Unit (Vitest, 321 checks / 21 suites)**: pure seams — auth helpers,
+- **Unit (Vitest, 324 checks / 21 suites)**: pure seams — auth helpers,
   db-path contract, wellness math (streaks/points/badges), schemas,
   theme engine, formatters, the dead-dependency census, the route/ui
   module census, the signup role pin, the docs-counts lockstep pin,

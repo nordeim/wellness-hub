@@ -16,7 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {PAGE_ROOT, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, SECTION_CARD, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
 import { EVENT_CATEGORIES, eventCategoryMeta } from "@/lib/constants";
 import { monthGrid, isSameCalendarDay, formatTimeString } from "@/lib/wellness";
 import { formatMonthYear, formatDateShort } from "@/lib/format";
@@ -118,25 +118,32 @@ export default function EventsClientPage() {
 
   if (!hydrated) {
     return (
-      <div className={PAGE_ROOT.standard}>
+      <div className={PAGE_THEMES.events.root}>
         <LoadingBlock label="Loading your calendar…" />
       </div>
     );
   }
 
   const weeks = monthGrid(cursor.getFullYear(), cursor.getMonth());
+  // The reference's grid: the month's days only, with EMPTY leading
+  // spacers for the first week's out-month positions (probed — no
+  // trailing week, no leading numbers).
+  const monthDays = weeks.flat().filter((d) => d.getMonth() === cursor.getMonth());
+  const leading = weeks[0].filter((d) => d.getMonth() !== cursor.getMonth()).length;
   const today = new Date();
   const upcoming = events
     .filter((e) => new Date(e.date) >= new Date(today.getFullYear(), today.getMonth(), today.getDate()))
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   return (
-    <div className={PAGE_ROOT.standard}>
+    <div className={PAGE_THEMES.events.root}>
+      <div className={PAGE_THEMES.events.container}>
       <PageHeader
         title="Events Calendar"
         subtitle="Organize your schedule and important dates"
+        theme={PAGE_THEMES.events}
         actions={
-          <GradientButton onClick={openCreate}>
+          <GradientButton onClick={openCreate} gradient={PAGE_THEMES.events.button}>
             <Plus className="h-4 w-4" /> New Event
           </GradientButton>
         }
@@ -144,7 +151,7 @@ export default function EventsClientPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* The month grid — the reference's Sun-anchored 6x7 matrix. */}
-        <section className="lg:col-span-2 rounded-xl border border-line bg-surface shadow-lg">
+        <section className={cn(SECTION_CARD.card, "lg:col-span-2")}>
           <div className="flex items-center justify-between px-5 py-4">
             <h2 className="font-semibold text-foreground">{formatMonthYear(cursor)}</h2>
             <div className="flex items-center gap-1">
@@ -173,30 +180,35 @@ export default function EventsClientPage() {
               </button>
             </div>
           </div>
-          <div className="grid grid-cols-7 border-t border-line">
+          {/* The redesign's calendar (probed live): ONE grid — the 7
+              weekday headers, the month's leading EMPTY spacers, then
+              the month's days as the full cells (no trailing week). */}
+          <div className="grid grid-cols-7 gap-2 p-4 pt-2">
             {WEEKDAYS.map((d) => (
-              <div key={d} className="px-2 py-2 text-center text-xs font-medium text-muted">
+              <div key={d} className="text-center text-sm font-semibold text-gray-600 py-2">
                 {d}
               </div>
             ))}
-          </div>
-          <div className="grid grid-cols-7 border-t border-line">
-            {weeks.flat().map((day) => {
-              const inMonth = day.getMonth() === cursor.getMonth();
+            {Array.from({ length: leading }, (_, i) => (
+              <div key={`lead-${i}`} aria-hidden="true" />
+            ))}
+            {monthDays.map((day) => {
               const isToday = isSameCalendarDay(day, today);
               const dayEvents = events.filter((e) => isSameCalendarDay(e.date, day));
               return (
                 <div
                   key={day.toISOString()}
                   className={cn(
-                    "min-h-20 border-b border-r border-line p-1.5 last:border-r-0",
-                    !inMonth && "bg-line-soft/40 text-subtle",
+                    "min-h-24 p-2 rounded-lg border transition-all cursor-pointer",
+                    isToday
+                      ? "bg-gradient-to-br from-violet-100 to-purple-100 border-violet-300"
+                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50",
                   )}
                 >
                   <span
                     className={cn(
-                      "inline-flex h-6 w-6 items-center justify-center rounded-full text-xs",
-                      isToday && "bg-primary text-white font-semibold",
+                      "text-sm font-medium",
+                      isToday ? "text-violet-700" : "text-gray-700",
                     )}
                   >
                     {day.getDate()}
@@ -205,7 +217,7 @@ export default function EventsClientPage() {
                     {dayEvents.slice(0, 3).map((e) => (
                       <span
                         key={e.id}
-                        className="h-1.5 w-1.5 rounded-full bg-primary"
+                        className="h-1.5 w-1.5 rounded-full bg-violet-500"
                         aria-label={e.title}
                         title={e.title}
                       />
@@ -358,12 +370,13 @@ export default function EventsClientPage() {
             >
               Cancel
             </button>
-            <GradientButton onClick={() => void submit()} disabled={saving}>
+            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.events.button}>
               {saving ? "Saving…" : editing ? "Save Changes" : "Create Event"}
             </GradientButton>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

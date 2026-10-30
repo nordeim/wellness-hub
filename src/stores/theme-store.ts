@@ -62,7 +62,10 @@ function applyTheme(s: ThemeData) {
   root.style.setProperty("--color-primary", s.primaryColor);
   root.style.setProperty("--color-secondary", s.secondaryColor);
   root.style.setProperty("--color-primary-hover", shade(s.primaryColor, 0.88));
-  root.style.setProperty("--color-secondary-hover", shade(s.secondaryColor, 0.88));
+  // WH-15: the --color-secondary-hover write retired with its only
+  // reader (the pre-redesign GRADIENT_BUTTON's hover:to-secondary-hover
+  // — the reference's redesigned buttons ride fixed palette pairs with
+  // -600 hovers; a write without a reader is the WH-14 write-only class).
   // WH-14: the --color-sidebar-accent-foreground write retired with its
   // token — written on every preset apply since the build, read by no
   // utility or var() (the token-liveness census owns this surface).

@@ -5,7 +5,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.19-2D3748?logo=prisma)](https://www.prisma.io/)
-[![Tests](https://img.shields.io/badge/tests-321%20unit%20+%2042%20e2e-brightgreen)](#testing)
+[![Tests](https://img.shields.io/badge/tests-324%20unit%20+%2042%20e2e-brightgreen)](#testing)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
 A complete, self-hostable **student wellbeing application** — a production-grade
@@ -57,7 +57,7 @@ Vitest + Playwright test battery pinning all of it in place.
 | ORM | Prisma | 6.19 | Schema + SQLite driver |
 | Database | SQLite | — | `db/custom.db` at the repo root, git-ignored |
 | Validation | Zod | 4 | Every API body boundary (`parseBody()`) |
-| Unit tests | Vitest | 5 | 321 checks / 21 suites |
+| Unit tests | Vitest | 5 | 324 checks / 21 suites |
 | E2E tests | Playwright | 1.64 | 42 checks (5 specs + the auth setup project) against the production standalone server |
 
 ```mermaid
@@ -146,7 +146,7 @@ Requires **Node.js ≥ 20** and **bun ≥ 1.1**.
 ## Testing
 
 ```bash
-bun run test         # Vitest — 321 checks, 21 suites (node-safe seams)
+bun run test         # Vitest — 324 checks, 21 suites (node-safe seams)
 bun run test:e2e     # Playwright — 42 checks (run `bun run build` first:
                      # boots the PRODUCTION standalone server on an isolated
                      # port with its own scratch db/e2e.db)
@@ -163,16 +163,25 @@ through every wellness module including goal completion → points.
 
 ## Design System
 
+The reference deployed a **per-module gradient identity** (2026-10-30,
+re-probed live on every page): each module carries its own H1 gradient,
+primary-button pair, page-root wash and container width, while the BRAND
+family (sidebar wordmark, badge, active pills, mobile/drawer titles) rides
+the preset-themeable 135deg `--primary → --secondary` pair.
+
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--primary` | `#6366f1` (indigo-500) | Buttons, active nav, links |
+| `--primary` | `#6366f1` (indigo-500) | The brand family: wordmark, badge, active nav pills, drawer titles (135deg gradients) |
 | `--secondary` | `#a855f7` (purple-500) | Gradient partner, accents |
-| Gradient | `linear-gradient(135deg, #6366f1, #a855f7)` | Headings, hero tiles, active pills |
-| `--color-sidebar` | `rgb(250 250 250)` | The light sidebar face (dark: `#111113`) |
+| Brand gradient | `bg-gradient-to-br from-primary to-secondary` | Sidebar/mobile/drawer brand + active pills (the preset-re-skinnable family) |
+| Module gradients | `PAGE_THEMES` in `src/lib/page-layout.ts` | Per-page H1s, buttons, washes + the routines category map (fixed v3 pairs, not preset-themeable) |
+| Page wash | `bg-gradient-to-br from-<m1>-50 via-white to-<m2>-50/30` | Every page root (dark: the neutral token family) |
 | Font | `--font-sans` (system stack + Apple/Segoe/Noto emoji) | Whole app — matches the reference's computed stack |
 
 Dark mode rides the `.dark` class token overrides in `globals.css`; the
-theme store also writes live presets as CSS custom properties on `<html>`.
+theme store also writes live presets as CSS custom properties on `<html>`
+(brand surfaces only — the module pairs are fixed, exactly as the
+reference's own preset engine behaves).
 
 ## Superset over the Reference
 
@@ -184,7 +193,7 @@ theme store also writes live presets as CSS custom properties on `<html>`.
 - PWA manifest + per-route OpenGraph/Twitter metadata + `sitemap.xml`
 - Accessibility superset: focus rings, aria states, 44px touch targets
 - Zod validation at every API boundary; bounded readers; per-IP rate limits
-- 321 unit + 42 e2e checks pinning the behavior
+- 324 unit + 42 e2e checks pinning the behavior
 
 ## Deployment
 

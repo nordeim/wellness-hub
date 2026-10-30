@@ -461,8 +461,8 @@ const PROPPED_COMPONENTS: Record<string, string[]> = {
     "value",
   ],
   "src/components/ui/tabs.tsx:TabsPanel": ["children", "className", "tab"],
-  "src/components/shared/page-parts.tsx:PageHeader": ["actions", "subtitle", "title"],
-  "src/components/shared/page-parts.tsx:GradientButton": ["children"],
+  "src/components/shared/page-parts.tsx:PageHeader": ["actions", "subtitle", "theme", "title"],
+  "src/components/shared/page-parts.tsx:GradientButton": ["children", "gradient"],
   "src/components/shared/page-parts.tsx:SectionCard": ["action", "children", "icon", "title"],
   "src/components/shared/page-parts.tsx:EmptyState": ["hint", "icon"],
   "src/components/shared/page-parts.tsx:OptionChip": ["icon", "label", "text", "tint"],
@@ -1098,4 +1098,132 @@ it("WH-14: every used palette pair is pinned to its v3 value (the session-88 con
     unpinned,
     "used palette pairs without a v3 @theme pin — the WH-14 pin-gap class: the surface computes the v4 re-derived default instead of the reference's own v3 value (add the pin in the session-88 block, in the same commit as the usage)",
   ).toEqual([]);
+});
+
+it("WH-15: the page-theme census — the 11 module pages carry their per-module identity (the reference's 2026-10-30 redesign)", () => {
+  // The reference redeployed between WH-14 and WH-15 (its stylesheet
+  // moved index-eZhxKCJC.css → index-heGLHP2e.css) with a per-module
+  // gradient identity: every page carries module-specific H1 gradients,
+  // primary-button pairs, page-root washes and containers — probed live
+  // on all 11 pages (computed background-image + element geometry). The
+  // MODULE pairs are FIXED palette classes, not theme tokens (verified:
+  // applying the reference's Ocean Blue preset re-skinned its brand
+  // surfaces to sky/cyan while the Exercise button stayed orange→red).
+  // This census pins the map: PAGE_THEMES covers exactly the 11 live
+  // modules, every module page consumes its theme, every palette pair
+  // the map carries is pinned in @theme, and the routines
+  // category-gradient map covers exactly the 7 seed categories.
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+
+  const THEMES_BLOCK = layoutSrc.match(
+    /export const PAGE_THEMES[^=]*= \{([\s\S]*?)\n\};/,
+  );
+  expect(THEMES_BLOCK, "PAGE_THEMES must exist in page-layout.ts (the WH-15 redesign contract)").toBeTruthy();
+  const themeKeys = [...THEMES_BLOCK![1].matchAll(/^  ([a-z]+): \{/gm)].map((m) => m[1]);
+
+  const MODULES = [
+    "dashboard", "routines", "exercise", "mentalhealth", "assignments",
+    "events", "studyresources", "reminders", "learning", "goals", "profile",
+  ];
+  expect(themeKeys.sort(), "PAGE_THEMES must cover exactly the 11 live modules").toEqual([...MODULES].sort());
+
+  // every module page consumes its theme
+  const missing: string[] = [];
+  for (const mod of MODULES) {
+    const pageFile = join(REPO_ROOT, `src/app/(app)/${mod}/${mod}-page.tsx`);
+    const src = readFileSync(pageFile, "utf8");
+    if (!src.includes(`PAGE_THEMES.${mod}`)) missing.push(mod);
+  }
+  expect(
+    missing,
+    "module pages that do not consume their PAGE_THEMES entry — every page must reference PAGE_THEMES.<module> (the wash, the heading gradient, the container)",
+  ).toEqual([]);
+
+  // every palette pair in the map's class strings carries a @theme pin
+  const gcss = readFileSync(join(REPO_ROOT, "src/app/globals.css"), "utf8");
+  const pinned = new Set(
+    [...gcss.matchAll(/--color-([a-z]+-\d+):\s*#[0-9a-fA-F]+/g)].map((m) => m[1]),
+  );
+  const PALETTE_PAIR = /(?:from|to|via)-([a-z]+-\d+)(?:\/\d+)?/g;
+  const unpinnedPairs = new Set<string>();
+  for (const m of THEMES_BLOCK![1].matchAll(/"([^"\n]*)"/g)) {
+    for (const p of m[1].matchAll(PALETTE_PAIR)) {
+      if (!pinned.has(p[1])) unpinnedPairs.add(p[1]);
+    }
+  }
+  expect(
+    [...unpinnedPairs].sort(),
+    "PAGE_THEMES palette pairs without a v3 @theme pin — the theme's surfaces would compute the v4 re-derived defaults instead of the reference's own values (add the pins in the session-88 block)",
+  ).toEqual([]);
+
+  // the routines category-gradient map covers exactly the 7 seed categories
+  const CAT_BLOCK = layoutSrc.match(
+    /export const ROUTINE_CATEGORY_GRADIENTS[^=]*= \{([\s\S]*?)\n\};/,
+  );
+  expect(CAT_BLOCK, "ROUTINE_CATEGORY_GRADIENTS must exist in page-layout.ts (the reference's per-category card bars + buttons)").toBeTruthy();
+  const catKeys = [...CAT_BLOCK![1].matchAll(/^  ([a-z_]+): /gm)].map((m) => m[1]);
+  expect(catKeys.sort(), "the category-gradient map must cover exactly the 7 seed categories").toEqual(
+    ["creative", "evening", "exercise", "morning", "productivity", "self_care", "study"].sort(),
+  );
+});
+
+it("WH-15: the shell-contract census — the brand family rides the 135deg to-br angle, the rounded-2xl badge, the gradient active pill and the shell washes (the redesign's shell)", () => {
+  // Probed live on the redeployed reference: the sidebar wordmark, the
+  // mobile header title, the drawer title, the drawer active pill and
+  // the footer avatars all render linear-gradient(135deg, …) — to-br —
+  // (ours shipped to-r); the brand badge is rounded-2xl (16px, ours
+  // rounded-xl); the DESKTOP active nav item is now the gradient pill
+  // (white text on the 135deg brand gradient — ours was the
+  // bg-primary/10 wash); and the app shell carries two washes (the root
+  // from-slate-50 via-white to-slate-50, the sidebar from-white
+  // via-gray-50 to-white — ours were solid tokens).
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const record = (name: string): string => {
+    // the leading `\n  ` anchors the key at its record indentation — a
+    // bare `title:` would also match inside `subtitle:` (the collision
+    // the first version of this check hit on brandSubtitle).
+    const m = layoutSrc.match(new RegExp(`\\n  ${name}:\\s*"([^"\\n]*)"`));
+    return m ? m[1] : "";
+  };
+
+  const TO_BR = "bg-gradient-to-br from-primary to-secondary";
+  expect(record("brandWordmark"), "the sidebar wordmark rides the 135deg to-br brand gradient").toContain(TO_BR);
+  expect(record("brandBadge"), "the brand badge rides the to-br gradient").toContain(TO_BR);
+  expect(record("brandBadge"), "the brand badge is rounded-2xl (the reference's 16px)").toContain("rounded-2xl");
+  expect(record("title"), "the mobile header title rides the to-br brand gradient").toContain(TO_BR);
+  expect(record("linkActive"), "the desktop active nav item is the gradient pill (white on to-br)").toContain(TO_BR);
+  expect(record("linkActive"), "the gradient active pill carries white text").toContain("text-white");
+  expect(record("footerAvatar"), "the drawer footer avatar rides the to-br brand gradient").toContain(TO_BR);
+
+  expect(record("root"), "the app-root wash (from-slate-50 via-white to-slate-50 at to-br)").toContain(
+    "bg-gradient-to-br from-slate-50 via-white to-slate-50",
+  );
+  expect(record("sidebar"), "the sidebar wash (from-white via-gray-50 to-white at to-br)").toContain(
+    "bg-gradient-to-br from-white via-gray-50 to-white",
+  );
+});
+
+it("WH-15: the login-monochrome census — the login accent/glow/badge ride the slate pairs (the redesign's login)", () => {
+  // The reference's login went monochrome with the redesign: the card
+  // accent bar from-slate-200 via-slate-300 to-slate-200 (ours was the
+  // brand pair), the logo glow and the logo tile from-slate-200
+  // to-slate-300. The logo itself became a hosted <img> — our Sprout
+  // badge stays the documented stand-in; the GRADIENT surfaces are the
+  // parity targets. The rest of the card (white/95, shadow-2xl, the
+  // slate-900 submit, the Google outline) was verified unchanged.
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const record = (name: string): string => {
+    const m = layoutSrc.match(new RegExp(`\\n  ${name}:\\s*"([^"\\n]*)"`));
+    return m ? m[1] : "";
+  };
+
+  expect(record("accent"), "the login accent bar is the 3-stop slate pair").toContain(
+    "bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200",
+  );
+  expect(record("logoGlow"), "the login logo glow is the slate pair").toContain(
+    "bg-gradient-to-br from-slate-200 to-slate-300",
+  );
+  expect(record("logoBadge"), "the login logo badge tile is the slate pair").toContain(
+    "bg-gradient-to-br from-slate-200 to-slate-300",
+  );
 });

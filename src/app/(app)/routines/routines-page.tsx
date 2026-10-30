@@ -22,7 +22,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PAGE_ROOT, DIALOG_GROUP, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, ROUTINE_CATEGORY_GRADIENTS, routineCategoryStops, DIALOG_GROUP, BUTTON_CLASSES } from "@/lib/page-layout";
 import { difficultyMeta } from "@/lib/constants";
 import { parseJsonArray } from "@/lib/wellness";
 import { formatDateShort } from "@/lib/format";
@@ -97,7 +97,7 @@ export default function RoutinesClientPage() {
 
   if (!hydrated) {
     return (
-      <div className={PAGE_ROOT.standard}>
+      <div className={PAGE_THEMES.routines.root}>
         <LoadingBlock label="Loading templates…" />
       </div>
     );
@@ -106,10 +106,12 @@ export default function RoutinesClientPage() {
   const upcoming = routines.filter((r) => !r.completed);
 
   return (
-    <div className={PAGE_ROOT.standard}>
+    <div className={PAGE_THEMES.routines.root}>
+      <div className={PAGE_THEMES.routines.container}>
       <PageHeader
         title="Routine Templates"
         subtitle="Start small, build momentum. These templates make it easy to begin—perfect for beating procrastination! 💪"
+        theme={PAGE_THEMES.routines}
       />
 
       {/* My routines (the scheduled list — the reference stores these; the
@@ -163,10 +165,12 @@ export default function RoutinesClientPage() {
         )}
       </SectionCard>
 
-      <h2 className="text-xl font-semibold text-foreground mt-8 mb-1">Browse Templates</h2>
-      <p className="text-sm text-muted mb-6">
-        Choose a template that resonates with you. Remember: starting is the hardest part, but you've got this! 🌟
-      </p>
+      <div>
+        <h2 className="text-xl font-semibold text-foreground">Browse Templates</h2>
+        <p className="text-sm text-muted">
+          Choose a template that resonates with you. Remember: starting is the hardest part, but you've got this! 🌟
+        </p>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {routineTemplates.map((t) => {
@@ -175,11 +179,11 @@ export default function RoutinesClientPage() {
           return (
             <section
               key={t.id}
-              className="overflow-hidden rounded-xl border border-line bg-surface shadow-lg"
+              className="overflow-hidden rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all h-full flex flex-col"
             >
+              <div className={cn("h-2 bg-gradient-to-r", routineCategoryStops(t.category))} aria-hidden="true" />
               {t.thumbnail && (
-                <div className="relative">
-                  { }
+                <div className="relative h-40 overflow-hidden">
                   <img
                     src={t.thumbnail}
                     alt={t.name}
@@ -200,39 +204,41 @@ export default function RoutinesClientPage() {
                   )}
                 </div>
               )}
-              <div className="p-5">
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <h3 className="font-semibold text-foreground">{t.name}</h3>
+              <div className="flex flex-col space-y-1.5 p-6">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <h3 className="font-semibold tracking-tight text-lg text-foreground">{t.name}</h3>
                   <OptionChip label={diff.label} tint={diff.tint} text={diff.text} />
                 </div>
-                <p className="text-sm text-muted">{t.description}</p>
-                <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted">
-                  <span className="inline-flex items-center gap-1">
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t.description}</p>
+              </div>
+              <div className="p-6 pt-0 flex-1 flex flex-col">
+                <div className="space-y-3 mb-4">
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <Clock className="h-3.5 w-3.5" aria-hidden="true" /> {t.duration}
-                  </span>
-                  <span className="inline-flex items-center gap-1">
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <Sun className="h-3.5 w-3.5" aria-hidden="true" /> {t.timeOfDay}
-                  </span>
+                  </div>
                 </div>
                 {t.tipsForProcrastinators && (
-                  <div className="mt-4 rounded-lg bg-amber-50 dark:bg-amber-950/40 p-3 text-sm">
-                    <p className="font-medium text-amber-800 dark:text-amber-300">💡 Pro Tip:</p>
-                    <p className="mt-1 text-amber-800/90 dark:text-amber-300/90">
+                  <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 rounded-lg p-3 mb-4">
+                    <p className="text-xs font-semibold text-amber-800 dark:text-amber-300 mb-1">💡 Pro Tip:</p>
+                    <p className="text-xs text-amber-700 dark:text-amber-400">
                       {t.tipsForProcrastinators}
                     </p>
                   </div>
                 )}
-                <p className="mt-4 text-sm font-medium text-foreground">Benefits:</p>
-                <ul className="mt-1 space-y-1">
+                <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">Benefits:</p>
+                <ul className="space-y-1 mb-4">
                   {benefits.map((b) => (
-                    <li key={b} className="flex items-center gap-2 text-sm text-muted">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" aria-hidden="true" />
+                    <li key={b} className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+                      <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" aria-hidden="true" />
                       {b}
                     </li>
                   ))}
                 </ul>
-                <div className="mt-5 flex items-center justify-between gap-2">
-                  <GradientButton onClick={() => openSchedule(t)}>
+                <div className="mt-auto flex items-center justify-between gap-2">
+                  <GradientButton onClick={() => openSchedule(t)} gradient={ROUTINE_CATEGORY_GRADIENTS[t.category] ?? ROUTINE_CATEGORY_GRADIENTS.morning}>
                     Use This Template
                   </GradientButton>
                   {t.videoUrl && !t.thumbnail && (
@@ -334,6 +340,7 @@ export default function RoutinesClientPage() {
           )}
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Award, CheckCircle2, Pencil, Plus, Target, Trash2, Trophy } from "lucide-react";
+import { Award, CheckCircle2, Pencil, Plus, Target, Trash2 } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
 import { toast } from "@/components/ui/toast";
 import {
@@ -16,7 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {PAGE_ROOT, PAGE_KPI_GRIDS, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
 import { GOAL_CATEGORIES, GOAL_FREQUENCIES, goalCategoryMeta, goalFrequencyMeta } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -155,47 +155,40 @@ export default function GoalsClientPage() {
 
   if (!hydrated) {
     return (
-      <div className={PAGE_ROOT.standard}>
+      <div className={PAGE_THEMES.goals.root}>
         <LoadingBlock label="Loading your goals…" />
       </div>
     );
   }
 
   return (
-    <div className={PAGE_ROOT.standard}>
+    <div className={PAGE_THEMES.goals.root}>
+      <div className={PAGE_THEMES.goals.container}>
       <PageHeader
         title="Goals & Achievements"
         subtitle="Track your progress and celebrate wins"
+        theme={PAGE_THEMES.goals}
         actions={
-          <GradientButton onClick={openCreate}>
+          <GradientButton onClick={openCreate} gradient={PAGE_THEMES.goals.button}>
             <Plus className="h-4 w-4" /> New Goal
           </GradientButton>
         }
       />
 
       <div className={PAGE_KPI_GRIDS.three}>
-        <div className="rounded-xl bg-amber-50 dark:bg-amber-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500 text-white" aria-hidden="true">
-            <Trophy className="h-5 w-5" fill="currentColor" strokeWidth={1} />
-          </div>
-          <p className="text-sm font-medium text-muted">Total Points</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{totalPoints}</h3>
+        <div className={cn(STAT_CARD.hero, "from-yellow-500 to-amber-600 p-5")}>
+          <p className={cn(STAT_CARD.heroLabel, "text-yellow-100")}>Total Points</p>
+          <h3 className={cn(STAT_CARD.heroValue, "mt-1")}>{totalPoints}</h3>
         </div>
-        <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500 text-white" aria-hidden="true">
-            <CheckCircle2 className="h-5 w-5" />
-          </div>
-          <p className="text-sm font-medium text-muted">Goals Completed</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{completedCount}</h3>
-          <p className="text-xs text-subtle">of {goalsTotal} total</p>
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <p className={STAT_CARD.label}>Goals Completed</p>
+          <h3 className={cn(STAT_CARD.value, "mt-1")}>{completedCount}</h3>
+          <p className={STAT_CARD.sub}>of {goalsTotal} total</p>
         </div>
-        <div className="rounded-xl bg-blue-50 dark:bg-blue-950/40 p-5 shadow-lg">
-          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500 text-white" aria-hidden="true">
-            <Award className="h-5 w-5" fill="currentColor" strokeWidth={1} />
-          </div>
-          <p className="text-sm font-medium text-muted">Badges Earned</p>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{badgesEarned}</h3>
-          <p className="text-xs text-subtle">of {badgesTotal} total</p>
+        <div className={cn(STAT_CARD.card, "p-5")}>
+          <p className={STAT_CARD.label}>Badges Earned</p>
+          <h3 className={cn(STAT_CARD.value, "mt-1")}>{badgesEarned}</h3>
+          <p className={STAT_CARD.sub}>of {badgesTotal} total</p>
         </div>
       </div>
 
@@ -421,12 +414,13 @@ export default function GoalsClientPage() {
             >
               Cancel
             </button>
-            <GradientButton onClick={() => void submit()} disabled={saving}>
+            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.goals.button}>
               {saving ? "Saving…" : editing ? "Save Changes" : "Create Goal"}
             </GradientButton>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

@@ -67,8 +67,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <MobileNav open={mobileNavOpen} onOpenChange={setMobileNavOpen} />
 
         {/* Main column: the phone glass header + the main scroller. The
-            pages own their padding (PAGE_ROOT); the footer follows the
-            page children inside main (the chassis placement). */}
+            pages own their padding + wash (PAGE_THEMES.<module>.root); the
+            footer follows the page children inside main (the chassis
+            placement). */}
         <div className={SHELL_LAYOUT.mainColumn}>
           <header className={MOBILE_HEADER.bar}>
             <DialogTrigger asChild>

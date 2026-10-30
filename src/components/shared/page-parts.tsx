@@ -2,24 +2,37 @@
 
 import * as React from "react";
 import type { LucideIcon } from "lucide-react";
-import { PAGE_HEADER, SECTION_CARD, EMPTY_STATE, GRADIENT_BUTTON } from "@/lib/page-layout";
+import {
+  PAGE_HEADER,
+  SECTION_CARD,
+  EMPTY_STATE,
+  GRADIENT_BUTTON,
+  GRADIENT_BUTTON_COMPACT,
+} from "@/lib/page-layout";
+import type { PageTheme } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
-/** The wellness page header — the gradient H1 + subtitle + right actions
- *  (the reference's anatomy on every page). */
+/** The wellness page header — the redesign's anatomy: the module's
+ *  gradient H1 (text-4xl, clipped) + a gray-600 subtitle + right
+ *  actions. The theme selects the header form: the four stacked pages
+ *  (Dashboard/Routines/Learning/Profile) render the bare block — the
+ *  H1 spans the full container width — while the seven action pages
+ *  render the flex row (WH-15, probed on the redeployed reference). */
 export function PageHeader({
   title,
   subtitle,
   actions,
+  theme,
 }: {
   title: string;
   subtitle?: string;
   actions?: React.ReactNode;
+  theme: PageTheme;
 }) {
   return (
-    <div className={PAGE_HEADER.row}>
+    <div className={theme.stacked ? undefined : PAGE_HEADER.row}>
       <div>
-        <h1 className={PAGE_HEADER.title}>{title}</h1>
+        <h1 className={cn(PAGE_HEADER.title, theme.heading)}>{title}</h1>
         {subtitle && <p className={PAGE_HEADER.subtitle}>{subtitle}</p>}
       </div>
       {actions && <div className={PAGE_HEADER.actions}>{actions}</div>}
@@ -27,17 +40,26 @@ export function PageHeader({
   );
 }
 
-/** The primary gradient button (the reference's own: indigo→purple,
- *  shadow-lg, rounded-md h-10 px-8). WH-12 (F-1): the `className` param
- *  retired — zero pass sites across all 17 call sites in 9 files (every
- *  site passes onClick/disabled + children; the pass-site census owns
- *  the class — the OptionChip.className precedent, same file). */
+/** The primary gradient button (the reference's redesigned family —
+ *  see page-layout.ts). WH-15: the `gradient` prop selects the COMPACT
+ *  module form (h-9 px-4 py-2 + the module's pair); the bare form is
+ *  the BIG brand pair (h-10 px-8, indigo/purple — Profile's save). The
+ *  pairs are FIXED palette classes: the reference's own preset engine
+ *  does not re-skin them (verified live), and neither does ours. */
 export function GradientButton({
   children,
+  gradient,
   ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & { children: React.ReactNode }) {
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  children: React.ReactNode;
+  gradient?: string;
+}) {
   return (
-    <button type="button" className={GRADIENT_BUTTON} {...props}>
+    <button
+      type="button"
+      className={gradient ? cn(GRADIENT_BUTTON_COMPACT, gradient) : GRADIENT_BUTTON}
+      {...props}
+    >
       {children}
     </button>
   );

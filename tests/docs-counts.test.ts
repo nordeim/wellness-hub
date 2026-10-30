@@ -60,7 +60,7 @@ const CANONICAL = {
   unitSuites: 21, // tests/*.test.ts (INCLUDING this suite)
   e2eSpecs: 5, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 321, // `bun run test` total (WH-14: 318 + the @theme token census + the source-scan pin + the palette pin-completeness check)
+  unitChecks: 324, // `bun run test` total (WH-15: 321 + the page-theme census + the shell-contract census + the login-monochrome census)
   e2eChecks: 42, // `CI=1 bun run test:e2e` total
   smokeChecks: 14, // scripts/smoke-test.sh ladder
 } as const;
