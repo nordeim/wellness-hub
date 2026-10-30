@@ -85,3 +85,47 @@ test("the dashboard quick actions deep-link to their modules", async ({ page }) 
   await page.getByRole("link", { name: "Log Exercise" }).click();
   await expect(page.getByRole("heading", { name: "Exercise Tracker" })).toBeVisible();
 });
+
+// WH-16 (F-3): the console-hygiene net. The suite's assertions see the
+// DOM — an error class that only surfaces in the console ships invisibly
+// (F-1's hydration mismatch rode fifteen green rounds exactly this way).
+// This check walks every module route with the console + pageerror
+// collectors attached and asserts ZERO error/warning messages: any React
+// error (hydration races, bad aria props, key warnings), any browser
+// error class on the walked surfaces, fails the gate here. Strict by
+// design — the production standalone build's console is clean (verified
+// cold/warm/stored-preset/throttled before the net landed); a "benign"
+// warning that appears later gets cured or pinned as a documented ignore
+// entry, never silently allowed.
+test("the module pages boot with a clean console (the console-hygiene net)", async ({ page }) => {
+  const offenders: string[] = [];
+  page.on("console", (msg) => {
+    if (msg.type() === "error" || msg.type() === "warning") {
+      offenders.push(`[${msg.type()}] ${msg.text().split("\n")[0]}`);
+    }
+  });
+  page.on("pageerror", (err) => offenders.push(`[pageerror] ${String(err)}`));
+
+  const routes = [
+    "/Dashboard",
+    "/Routines",
+    "/Exercise",
+    "/MentalHealth",
+    "/Assignments",
+    "/Events",
+    "/StudyResources",
+    "/Reminders",
+    "/Learning",
+    "/Goals",
+    "/Profile",
+  ];
+  for (const route of routes) {
+    await page.goto(route);
+    // settle each page: the theme store's boot writes, hydration and the
+    // per-module fetches all complete before the next navigation
+    await expect(page.locator("main")).toBeVisible();
+    await page.waitForTimeout(250);
+  }
+
+  expect(offenders, offenders.join("\n")).toEqual([]);
+});

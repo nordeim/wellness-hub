@@ -1227,3 +1227,37 @@ it("WH-15: the login-monochrome census — the login accent/glow/badge ride the 
     "bg-gradient-to-br from-slate-200 to-slate-300",
   );
 });
+
+it("WH-16: the hydration-suppression census — the theme store's pre-hydration write targets carry suppressHydrationWarning (the console-hygiene cure)", () => {
+  // WH-16 (F-1/F-2): the theme store's onRehydrateStorage → applyTheme
+  // runs at store-module init (app-shell imports it on every (app) route)
+  // and writes client-only attributes onto the DOM before React hydrates
+  // it: on <html> the style custom-property block (--color-primary/
+  // --color-secondary/--color-primary-hover/--font-sans), the three data
+  // attrs (data-card-style/data-animation/data-sidebar-style) and the
+  // .dark class; on <main> the bgImageUrl style write. When the module
+  // eval wins the race against hydration (observed live on the WH-16
+  // cold-compile /learning load — the full React 19 diff tree named
+  // exactly those four client-only attributes), React logs "A tree
+  // hydrated but some attributes … didn't match. This won't be patched
+  // up" — an unhandled console-error class the DOM-asserting gate could
+  // never see. The canonical cure (the next-themes pattern — every theme
+  // library that writes <html> pre-hydration ships it):
+  // suppressHydrationWarning on the written elements. Element-scoped —
+  // children keep their own hydration checks. The e2e twin (the
+  // console-hygiene net in tests/e2e/shell.spec.ts) guards the whole
+  // error class on the walked surfaces.
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/app/layout.tsx"), "utf8");
+  const htmlTag = layoutSrc.match(/<html\s[^>]*>/)?.[0] ?? "";
+  expect(
+    htmlTag.includes("suppressHydrationWarning"),
+    "src/app/layout.tsx's <html> must carry suppressHydrationWarning — the theme store writes style custom properties, three data attrs and the .dark class onto documentElement before hydration (the observed React 19 mismatch class)",
+  ).toBe(true);
+
+  const shellSrc = readFileSync(join(REPO_ROOT, "src/components/layout/app-shell.tsx"), "utf8");
+  const mainTag = shellSrc.match(/<main\s[^>]*>/)?.[0] ?? "";
+  expect(
+    mainTag.includes("suppressHydrationWarning"),
+    "app-shell.tsx's <main> must carry suppressHydrationWarning — applyTheme's bgImageUrl branch materializes a client-only style attribute on it before hydration (the same class one element down)",
+  ).toBe(true);
+});

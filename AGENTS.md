@@ -19,8 +19,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (324 checks) | `bun run test` | Vitest, node-safe seams |
-| Browser E2E (42 checks) | `bun run test:e2e` | Needs `bun run build` first |
+| Unit tests (325 checks) | `bun run test` | Vitest, node-safe seams |
+| Browser E2E (43 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
 | The full gate in one command | `bun run gate` | lint → tsc → test → build → smoke → e2e |
@@ -29,8 +29,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (324) → `bun run build` → `bun run smoke` →
-`CI=1 bun run test:e2e` (42: 5 specs + the auth setup project) — or the
+`bun run test` (325) → `bun run build` → `bun run smoke` →
+`CI=1 bun run test:e2e` (43: 5 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
 is NOT set — a type error fails `bun run build`, and the explicit
@@ -223,6 +223,14 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   drawer: open, navigate, escape-close, viewport-grow auto-close,
   scroll-lock. If you touch `src/components/layout/mobile-nav.tsx`, run it
   explicitly.
+- The console-hygiene net (WH-16, in `tests/e2e/shell.spec.ts`) walks
+  every module route asserting ZERO console errors/warnings — an error
+  class the DOM-asserting checks can never see (the hydration mismatch
+  that shipped fifteen green rounds). Its cure rides
+  `suppressHydrationWarning` on `<html>`/`<main>` (pinned by the
+  hydration-suppression census in `tests/src-census.test.ts`); a new
+  console error on the walked pages fails the gate — cure it or pin a
+  documented ignore entry, never silence the net.
 
 ## Git
 

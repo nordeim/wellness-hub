@@ -85,7 +85,18 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    // WH-16 (F-1): suppressHydrationWarning — the theme store's
+    // onRehydrateStorage → applyTheme runs at store-module init (every
+    // (app) route imports it via the shell) and writes client-only
+    // attributes onto <html> BEFORE React hydrates it: the style
+    // custom-property block, data-card-style/data-animation/
+    // data-sidebar-style and the .dark class. On the module-eval-wins
+    // timing window React 19 logs a hydration-mismatch error (observed
+    // live on the WH-16 cold-compile /learning load — the diff tree
+    // named exactly those attributes). The canonical cure (next-themes
+    // ships this exact attribute for this exact pattern);
+    // element-scoped — children keep their own hydration checks.
+    <html lang="en" suppressHydrationWarning>
       {/* Session-22 (S22-P2): the antialiased utility is RETIRED — the
           reference ships no font-smoothing (computed auto) and no
           text-rendering override; the scaffold-era shadcn double-smoothing

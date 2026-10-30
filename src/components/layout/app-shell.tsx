@@ -87,7 +87,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className={MOBILE_HEADER.title}>{APP_NAME}</span>
             <span aria-hidden="true" className="w-10" />
           </header>
-          <main className={SHELL_LAYOUT.main}>
+          {/* WH-16 (F-2): suppressHydrationWarning — applyTheme's
+              bgImageUrl branch materializes a client-only style attribute
+              on this element pre-hydration when a background image is
+              persisted (the F-1 write class one element down); the
+              element-scoped canonical cure, children unaffected. */}
+          <main suppressHydrationWarning className={SHELL_LAYOUT.main}>
             {children}
             <footer className={APP_FOOTER.footer}>
               <span>{APP_FOOTER.copyright}</span>
