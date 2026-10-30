@@ -462,7 +462,7 @@ const PROPPED_COMPONENTS: Record<string, string[]> = {
   ],
   "src/components/ui/tabs.tsx:TabsPanel": ["children", "className", "tab"],
   "src/components/shared/page-parts.tsx:PageHeader": ["actions", "subtitle", "title"],
-  "src/components/shared/page-parts.tsx:GradientButton": ["children", "className"],
+  "src/components/shared/page-parts.tsx:GradientButton": ["children"],
   "src/components/shared/page-parts.tsx:SectionCard": ["action", "children", "icon", "title"],
   "src/components/shared/page-parts.tsx:EmptyState": ["hint", "icon"],
   "src/components/shared/page-parts.tsx:OptionChip": ["icon", "label", "text", "tint"],
@@ -618,5 +618,207 @@ it("WH-11: every exported type in src has a consumer outside its own module", ()
   expect(
     dead,
     "exported types with zero consumers outside their own module — the F-1/F-2 class: a fully-unreferenced declaration retires; a same-module-only type cures by dropping the `export` keyword, keeping the declaration",
+  ).toEqual([]);
+});
+
+// ---- WH-12: the JSX pass-site prop-liveness census --------------------------
+//
+// WH-12 found the class the WH-9 prop census cannot see: the WH-9 pin is
+// a SURFACE pin (each audited component's destructure == the pinned
+// literal — drift trips in either direction of the SHAPE), not a
+// LIVENESS pin. GradientButton.className sat pinned as live surface for
+// three rounds while zero of the 17 call sites ever passed it, and
+// Checkbox carried four invented props (className/defaultChecked/label/
+// id) feeding an uncontrolled arm + a label-render arm that no call site
+// ever exercised. A surface pin is not a liveness pin — this census pins
+// the PASS SITES: what callers actually write.
+//
+// Design (four rules, each load-bearing):
+//   1. WHOLE-TREE walk — every component definition under src/ (function
+//      + const-arrow destructure forms, PascalCase). No fixed list: a new
+//      component's props are covered at birth (the WH-11 lesson).
+//   2. Same-module call sites COUNT — an internal render site (DrawerNav
+//      inside mobile-nav) is a live passer. A prop is surface RENDERED;
+//      an export is surface IMPORTED — different liveness verbs than the
+//      export corpora, which exclude the declaring module.
+//   3. The stock-API boundary (Session-71's own doctrine, explicit): the
+//      L-71d4 hideClose retirement justified itself as "not stock
+//      shadcn" — the corollary is that byte-stock shadcn SIGNATURES keep
+//      their shape. STOCK_ALLOWLIST pins the never-customized stock
+//      wrapper props per file:Component (a conscious keep; flip the
+//      literal in the same commit to add one). Invented surface — the
+//      hand-rolled GradientButton/Checkbox class — needs live passers.
+//   4. Next.js convention files are framework contract (the export-
+//      default doctrine): layout/error/global-error/not-found/page/
+//      loading/template receive their props from the framework renderer,
+//      not from JSX in the tree — skipped by filename, so a future
+//      convention file is covered without a list.
+//
+// Known boundary (documented): a `{...spread}` attribute on an element
+// marks ALL of that component's props as passed (the conservative
+// reading — the census never false-positives on a spread; it can only
+// miss dead props hiding behind one). The tree has zero app-level
+// spreads today (all six spread-attribute elements are the Radix
+// wrappers' own {...props} internals); widen if a spread ever lands on
+// an app component.
+
+/** Byte-stock shadcn wrapper signatures — never-customized props that
+ *  keep their shape (the L-71d4 doctrine boundary). */
+const STOCK_ALLOWLIST: ReadonlyMap<string, readonly string[]> = new Map([
+  ["src/components/ui/dialog.tsx:DialogOverlay", ["className"]],
+  ["src/components/ui/dialog.tsx:DialogHeader", ["className"]],
+  ["src/components/ui/dialog.tsx:DialogFooter", ["className"]],
+  ["src/components/ui/dialog.tsx:DialogTitle", ["className"]],
+  ["src/components/ui/dialog.tsx:DialogDescription", ["className"]],
+  ["src/components/ui/select.tsx:SelectContent", ["className", "position"]],
+  ["src/components/ui/select.tsx:SelectItem", ["className"]],
+  ["src/components/ui/label.tsx:Label", ["className"]],
+]);
+
+/** Next.js convention files — framework-rendered props, not JSX passers. */
+const CONVENTION_FILE =
+  /^(?:.*\/)?(?:layout|error|global-error|not-found|page|loading|template)\.tsx$/;
+
+/** Extract every JSX element's passed attribute names. Returns
+ *  comp -> { attrs, spread } aggregated over every element for that
+ *  component in the source (a spread attribute passes everything). */
+function extractJsxPasses(source: string): Map<string, { attrs: Set<string>; spread: boolean }> {
+  const passes = new Map<string, { attrs: Set<string>; spread: boolean }>();
+  const re = /<([A-Z]\w*)/g;
+  for (const open of source.matchAll(re)) {
+    const comp = open[1];
+    let i = open.index + open[0].length;
+    let depth = 1;
+    const attrs = new Set<string>();
+    let spread = false;
+    let token = "";
+    const pushToken = () => {
+      const name = token.trim().split("=")[0].trim();
+      token = "";
+      if (/^[a-zA-Z]\w*$/.test(name)) attrs.add(name);
+    };
+    while (i < source.length && depth > 0) {
+      const ch = source[i];
+      if (ch === "{") {
+        if (/^\{\s*\.\.\./.test(source.slice(i))) spread = true;
+        let braces = 1;
+        i++;
+        while (i < source.length && braces > 0) {
+          if (source[i] === "{") braces++;
+          else if (source[i] === "}") braces--;
+          i++;
+        }
+        continue;
+      }
+      if (ch === '"') {
+        i++;
+        while (i < source.length && source[i] !== '"') i++;
+        i++;
+        continue;
+      }
+      if (ch === "'") {
+        i++;
+        while (i < source.length && source[i] !== "'") i++;
+        i++;
+        continue;
+      }
+      if (ch === "<") {
+        depth++;
+        i++;
+        continue;
+      }
+      if (ch === ">") {
+        depth--;
+        i++;
+        continue;
+      }
+      if (ch === "/" && source[i + 1] === ">") {
+        depth -= 2;
+        i += 2;
+        continue;
+      }
+      if (/\s/.test(ch)) {
+        pushToken();
+        i++;
+        continue;
+      }
+      token += ch;
+      i++;
+    }
+    pushToken();
+    const agg = passes.get(comp) ?? { attrs: new Set<string>(), spread: false };
+    if (spread) agg.spread = true;
+    for (const a of attrs) agg.attrs.add(a);
+    passes.set(comp, agg);
+  }
+  return passes;
+}
+
+/** Parse a destructure list into prop names (defaults/renames/types
+ *  stripped; rest elements dropped). */
+function parseDestructure(raw: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let cur = "";
+  for (const ch of raw) {
+    if ("([{".includes(ch)) depth++;
+    if (")]}".includes(ch)) depth--;
+    if (ch === "," && depth === 0) {
+      parts.push(cur);
+      cur = "";
+      continue;
+    }
+    cur += ch;
+  }
+  if (cur.trim()) parts.push(cur);
+  return parts
+    .map((p) => p.trim())
+    .filter((p) => p && !p.startsWith("..."))
+    .map((p) => p.split(":")[0].split("=")[0].trim())
+    .filter((name) => /^\w+$/.test(name));
+}
+
+it("WH-12: every component's destructured props are passed at a JSX call site", () => {
+  // The pass corpus: every ts/tsx under src/ (production JSX — same-module
+  // sites count; tests pin behavior, they do not pass props in this tree).
+  const srcFiles: string[] = [];
+  collect(join(REPO_ROOT, "src"), srcFiles, [".ts", ".tsx"]);
+  const corpus = srcFiles.map((f) => readFileSync(f, "utf8"));
+
+  const passes = new Map<string, { attrs: Set<string>; spread: boolean }>();
+  for (const src of corpus) {
+    for (const [comp, agg] of extractJsxPasses(src)) {
+      const total = passes.get(comp) ?? { attrs: new Set<string>(), spread: false };
+      if (agg.spread) total.spread = true;
+      for (const a of agg.attrs) total.attrs.add(a);
+      passes.set(comp, total);
+    }
+  }
+
+  const dead: string[] = [];
+  for (const file of srcFiles) {
+    const mod = file.replace(REPO_ROOT + "/", "");
+    const src = readFileSync(file, "utf8");
+    if (CONVENTION_FILE.test(mod)) continue; // framework-rendered props
+    const defs: Array<{ name: string; raw: string }> = [
+      ...src.matchAll(/function ([A-Z]\w*)\s*\(\s*\{([^}]*)\}/g),
+    ].map((m) => ({ name: m[1], raw: m[2] }));
+    for (const m of src.matchAll(/const ([A-Z]\w*)\s*=\s*\(\s*\{([^}]*)\}\s*\)/g)) {
+      defs.push({ name: m[1], raw: m[2] });
+    }
+    for (const def of defs) {
+      const stock = STOCK_ALLOWLIST.get(`${mod}:${def.name}`) ?? [];
+      const passed = passes.get(def.name);
+      for (const prop of parseDestructure(def.raw)) {
+        if (prop === "children") continue; // JSX-nested, never an attribute
+        if (stock.includes(prop)) continue; // byte-stock shadcn signature
+        if (passed && (passed.spread || passed.attrs.has(prop))) continue;
+        dead.push(`${mod}: ${def.name} — ${prop}`);
+      }
+    }
+  }
+  expect(
+    dead,
+    "component props with zero JSX pass sites — the WH-12 class: retire the prop (a param no caller ever passes is dead surface), or pass it consciously, or — if it is a byte-stock shadcn wrapper signature — flip the STOCK_ALLOWLIST literal in the same commit",
   ).toEqual([]);
 });

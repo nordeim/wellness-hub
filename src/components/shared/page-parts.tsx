@@ -28,14 +28,16 @@ export function PageHeader({
 }
 
 /** The primary gradient button (the reference's own: indigo→purple,
- *  shadow-lg, rounded-md h-10 px-8). */
+ *  shadow-lg, rounded-md h-10 px-8). WH-12 (F-1): the `className` param
+ *  retired — zero pass sites across all 17 call sites in 9 files (every
+ *  site passes onClick/disabled + children; the pass-site census owns
+ *  the class — the OptionChip.className precedent, same file). */
 export function GradientButton({
   children,
-  className,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { children: React.ReactNode }) {
   return (
-    <button type="button" className={cn(GRADIENT_BUTTON, className)} {...props}>
+    <button type="button" className={GRADIENT_BUTTON} {...props}>
       {children}
     </button>
   );

@@ -36,61 +36,43 @@ function Label({ className, ...props }: React.ComponentProps<typeof LabelPrimiti
 // styling — no check glyph ever rendered, the checked fill was the app
 // blue (the reference's computes #171717, the dark stock primary), and
 // the focus ring was 2px translucent blue instead of the 1px near-black.
+//
+// WH-12 (F-2): the invented arms retired — the `label`/`id` pair (the
+// htmlFor render arm), `defaultChecked` (the entire uncontrolled
+// machinery) and `className` carried zero pass sites: both live callers
+// (the Profile page's Preferences pair) are CONTROLLED — checked +
+// onCheckedChange, aria-label riding the ...props spread, the wrapping
+// parent <label> associating without an id (the Session-71 hideClose
+// class: invented surface needs live consumers). CHECKBOX.row/label
+// retired from page-layout with the arm.
 
 interface CheckboxProps extends Omit<React.ComponentProps<"button">, "onChange" | "value"> {
-  checked?: boolean;
-  defaultChecked?: boolean;
-  onCheckedChange?: (checked: boolean) => void;
-  label?: string;
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
 }
 
-function Checkbox({
-  className,
-  checked,
-  defaultChecked,
-  onCheckedChange,
-  label,
-  id,
-  ...props
-}: CheckboxProps) {
-  const generated = React.useId();
-  const inputId = id ?? generated;
-  const [uncontrolled, setUncontrolled] = React.useState(defaultChecked ?? false);
-  const isControlled = checked !== undefined;
-  const isChecked = isControlled ? checked : uncontrolled;
-
+function Checkbox({ checked, onCheckedChange, ...props }: CheckboxProps) {
   const toggle = () => {
-    if (!isControlled) setUncontrolled((v) => !v);
-    onCheckedChange?.(!isChecked);
+    onCheckedChange(!checked);
   };
 
-  const box = (
+  return (
     <button
       type="button"
       role="checkbox"
-      id={inputId}
-      aria-checked={isChecked}
-      data-state={isChecked ? "checked" : "unchecked"}
+      aria-checked={checked}
+      data-state={checked ? "checked" : "unchecked"}
       value="on"
-      className={cn(CHECKBOX.control, className)}
+      className={CHECKBOX.control}
       onClick={toggle}
       {...props}
     >
-      {isChecked ? (
+      {checked ? (
         <span data-state="checked" className={CHECKBOX.indicator} style={{ pointerEvents: "none" }}>
           <Check className="h-4 w-4" />
         </span>
       ) : null}
     </button>
-  );
-  if (!label) return box;
-  return (
-    <div className={CHECKBOX.row}>
-      {box}
-      <label htmlFor={inputId} className={CHECKBOX.label}>
-        {label}
-      </label>
-    </div>
   );
 }
 
