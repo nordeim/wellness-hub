@@ -19,7 +19,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (317 checks) | `bun run test` | Vitest, node-safe seams |
+| Unit tests (318 checks) | `bun run test` | Vitest, node-safe seams |
 | Browser E2E (42 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
@@ -29,7 +29,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (317) → `bun run build` → `bun run smoke` →
+`bun run test` (318) → `bun run build` → `bun run smoke` →
 `CI=1 bun run test:e2e` (42: 5 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
@@ -188,8 +188,14 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   (the WH-12 whole-tree pass-site census — `children`, the byte-stock
   shadcn wrapper signatures, and the Next.js convention files are the
   pinned exemptions; a surface pin is not a liveness pin — a prop with
-  zero passers is dead surface, stock wrapper shapes keep their shape).
-  The WH-6/WH-7/WH-8/WH-9/WH-11/WH-12 pin — same doctrine as the
+  zero passers is dead surface, stock wrapper shapes keep their shape),
+  and every schema field is consumed at a READ site (the WH-13
+  column-liveness census — writes and wire declarations do not keep a
+  column alive: the completedAt quartet retired with its seam writes and
+  wire members; `@updatedAt` is the stock-schema boundary and
+  `Tutorial.views` rides the SCHEMA_PARITY_KEEPS list — the reference's
+  own entity carries it, verified live). The
+  WH-6/WH-7/WH-8/WH-9/WH-11/WH-12/WH-13 pin — same doctrine as the
   dead-dep, route/ui and docs-counts census pins.
 - E2E (Playwright): boots the PRODUCTION standalone server on an isolated
   port with its own `db/e2e.db` (schema-pushed + seeded by the global

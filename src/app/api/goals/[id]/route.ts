@@ -18,8 +18,10 @@ export async function PUT(req: Request, { params }: Params) {
   try {
     const existing = await db.goal.findFirst({ where: { id, userId: guard.user.id } });
     if (!existing) return ERR.NOT_FOUND();
-    // The completion seam: active → completed stamps completedAt and runs
-    // the Goal Getter / High Achiever / Wellness Warrior badge checks.
+    // The completion seam: active → completed runs the Goal Getter / High
+    // Achiever / Wellness Warrior badge checks (WH-13: the completedAt
+    // stamping retired with the column — written at every seam, read by
+    // nobody; the status flip drives it).
     const completing = body.status === "completed" && existing.status !== "completed";
     const row = await db.goal.update({
       where: { id },
@@ -27,9 +29,6 @@ export async function PUT(req: Request, { params }: Params) {
         ...body,
         ...(body.frequency !== undefined && body.frequency !== existing.frequency
           ? { points: goalPointsForFrequency(body.frequency) }
-          : {}),
-        ...(body.status !== undefined
-          ? { completedAt: body.status === "completed" ? new Date() : null }
           : {}),
       },
     });

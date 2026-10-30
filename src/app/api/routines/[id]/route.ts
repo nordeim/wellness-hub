@@ -20,9 +20,6 @@ export async function PUT(req: Request, { params }: Params) {
       where: { id },
       data: {
         ...body,
-        ...(body.completed !== undefined
-          ? { completedAt: body.completed ? new Date() : null }
-          : {}),
       },
     });
     return ok(row);

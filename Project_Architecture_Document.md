@@ -305,7 +305,7 @@ wellness-hub/
 │   │   ├── wellness-store.ts # ALL server state; call() envelope client
 │   │   └── theme-store.ts    # CSS-variable writer + UserPrefs sync
 │   └── types/               # shared domain types
-├── tests/                   # Vitest *.test.ts (21 suites, 317 checks)
+├── tests/                   # Vitest *.test.ts (21 suites, 318 checks)
 │   └── e2e/                 # Playwright *.spec.ts (42 checks) + setups
 ├── scripts/
 │   ├── smoke-test.sh        # 14-check ladder against the standalone artifact
@@ -444,13 +444,16 @@ erDiagram
 - `MoodEntry`: mood (amazing/good/okay/low/struggling), `energy` 0–10,
   `activities` as a JSON string array (the tag codec), gratitude/reflection.
 - `Assignment`: priority (low/medium/high/urgent), `status`
-  (pending/completed) + `completedAt`, optional due date and estimated hours.
+  (pending/completed), optional due date and estimated hours (WH-13: the
+  write-only `completedAt` column retired with its seam writes + wire
+  members — read by nobody, no reference counterpart).
 - `Event`: date + `"HH:mm"` time (display formats to 12h), category vocab,
   optional location — indexed `[userId, date]` for the calendar.
 - `StudyResource`: subject, type (8-value vocab), 1–5 `rating`, `tags` JSON
   array, optional URL/exam date.
 - `Reminder`: `remindAt`, type (custom/assignment/event/goal/routine),
-  priority, repeat (none/daily/weekly/monthly), `completed` + `completedAt`.
+  priority, repeat (none/daily/weekly/monthly), `completed` (the
+  `completedAt` twin retired at WH-13 with the rest of the quartet).
 - `Goal`: category + frequency vocab, `targetValue`/`currentValue`/`unit`,
   deadline, `points` (frequency-derived at creation), status — completion
   moves the points onto the account.
@@ -600,14 +603,14 @@ No queues, workers or cron. Utility services worth naming:
 |----------|-------|--------|----------|-----------|
 | Unit — auth seams (password, verification, reset, contract, rate limit, boot-env) | 6 | 109 | `tests/auth*.test.ts`, `password-seam`, `rate-limit`, `boot-env` | Vitest |
 | Unit — wellness domain (streaks, points, badges, codecs, schemas, stats, helpers, theme) | 5 | 89 | `tests/wellness-*.test.ts` | Vitest |
-| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member/type-export/pass-site censuses) | 10 | 119 | `tests/*.test.ts` | Vitest |
+| Unit — infra (db-path, format, login views, login-reset, chunk-recovery, dead-dep census + lockfile pin, route/ui census, signup role, docs-counts lockstep + §8.1 row arithmetic, src-surface census + store/ui-export + component-prop/theme-member/type-export/pass-site/schema-field censuses) | 10 | 120 | `tests/*.test.ts` | Vitest |
 | E2E — auth ladder (login wall, lockout, reset funnel, revocation) | 1 spec | 11 | `tests/e2e/auth.spec.ts` | Playwright |
 | E2E — mobile drawer battery | 1 spec | 6 | `tests/e2e/mobile-navigation.spec.ts` | Playwright |
 | E2E — shell (nav, dual-case routes, quick actions) | 1 spec | 6 | `tests/e2e/shell.spec.ts` | Playwright |
 | E2E — auth setup project (one-time demo login; shares the cookie via storageState) | 1 setup | 1 | `tests/e2e/auth.setup.ts` | Playwright |
 | E2E — CRUD cycles + reset-password funnel | 2 specs | 18 | `tests/e2e/wellness-crud.spec.ts`, `reset-password.spec.ts` | Playwright |
 
-Totals: **317 unit checks / 21 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
+Totals: **318 unit checks / 21 Vitest suites + 42 e2e checks / 5 specs + 1 setup project**.
 
 ### 8.2 Test Patterns
 
@@ -634,7 +637,7 @@ docs, not just the code.
 
 - `bun run lint` → 0 warnings
 - `bun run typecheck` → clean
-- `bun run test` → 317/317
+- `bun run test` → 318/318
 - `bun run build` → succeeds (the type gate)
 - `bun run smoke` → 14/14
 - `CI=1 bun run test:e2e` → 42/42

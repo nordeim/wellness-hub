@@ -822,3 +822,89 @@ it("WH-12: every component's destructured props are passed at a JSX call site", 
     "component props with zero JSX pass sites — the WH-12 class: retire the prop (a param no caller ever passes is dead surface), or pass it consciously, or — if it is a byte-stock shadcn wrapper signature — flip the STOCK_ALLOWLIST literal in the same commit",
   ).toEqual([]);
 });
+
+it("WH-13: every schema field is consumed at a READ site (writes do not keep a column alive)", () => {
+  // The DATA-LAYER census — the surface no earlier pin reads: a Prisma
+  // column can be written at a route seam (or filled by a db default),
+  // declared on the payload wire, and read by nobody — the completedAt
+  // quartet + Tutorial.views rode twelve/thirteen rounds through five
+  // census extensions. The consumption verb for a COLUMN is the READ:
+  //  (a) any non-comment occurrence in a .tsx (the component/store read
+  //      layer — the strongest signal; components never write columns),
+  //  (b) a `.field` member access in any corpus file,
+  //  (c) a prisma query-context line (select/where/orderBy/include)
+  //      carrying the field key.
+  // Write expressions (data-object keys), payload-type declarations,
+  // comments (incl. JSX `{/*` blocks) and tests do NOT count — the WH-8
+  // write-only doctrine's column form.
+  // Corpus: src/**.ts(.tsx) + prisma/seed.ts, every *.test.ts excluded —
+  // the WH-7 tests-don't-keep-alive rule, which satisfies the WH-11 SELF
+  // rule structurally (this pin cannot consume its own narration).
+  // Exempt: `@updatedAt` — the stock-schema boundary (Prisma-managed audit
+  // columns keep their shape; the WH-12 stock-API doctrine's schema form:
+  // the boundary is the DIRECTIVE, not the name or nullability — an
+  // undirected column is invented surface and needs live readers).
+  // Known boundary (the WH-9 doctrine): the test is NAME-global, not
+  // per-model — a field name shared by several models passes if any
+  // model's usage reads it; common-word fields can false-pass via
+  // className strings. Widen when a finding lands in the gap.
+  // Parity keeps (the WH-12 STOCK_ALLOWLIST's schema mechanism — a
+  // conscious keep, flipped in the same commit as any change): fields the
+  // REFERENCE's own entity carries even though neither UI displays them.
+  // WH-13: Tutorial.views — verified live this round via the reference's
+  // entity API (HAR probe: `entities/Tutorial` returns views:0 on all 12
+  // tutorials, its UI never shows it) — intentional data-model parity, the
+  // Watch-Video-placeholder doctrine's data form.
+  const SCHEMA_PARITY_KEEPS = new Set(["Tutorial: views"]);
+  const srcFiles: string[] = [];
+  collect(join(REPO_ROOT, "src"), srcFiles, [".ts", ".tsx"]);
+  const corpus: Array<{ lines: string[]; isTsx: boolean }> = [];
+  const seedPath = join(REPO_ROOT, "prisma/seed.ts");
+  for (const f of srcFiles) {
+    if (f.endsWith(".test.ts")) continue; // tests pin; they do not keep alive
+    corpus.push({ lines: readFileSync(f, "utf8").split("\n"), isTsx: f.endsWith(".tsx") });
+  }
+  corpus.push({ lines: readFileSync(seedPath, "utf8").split("\n"), isTsx: false });
+
+  const schema = readFileSync(join(REPO_ROOT, "prisma/schema.prisma"), "utf8");
+  const QUERY_CTX = /select|where|orderBy|include/;
+  const isComment = (l: string) => {
+    const t = l.trim();
+    return t.startsWith("//") || t.startsWith("*") || t.startsWith("/*") || t.startsWith("{/*");
+  };
+
+  const readSites = (field: string): number => {
+    let n = 0;
+    for (const e of corpus) {
+      for (const line of e.lines) {
+        if (isComment(line)) continue;
+        if (!new RegExp(`\\b${field}\\b`).test(line)) continue;
+        if (
+          e.isTsx ||
+          new RegExp(`\\.${field}\\b`).test(line) ||
+          (QUERY_CTX.test(line) && new RegExp(`\\b${field}\\s*:`).test(line))
+        )
+          n++;
+      }
+    }
+    return n;
+  };
+
+  const dead: string[] = [];
+  const blocks = schema.split(/^model\s+(\w+)\s*\{/m);
+  for (let i = 1; i < blocks.length; i += 2) {
+    const model = blocks[i];
+    const body = blocks[i + 1].split("\n}")[0];
+    for (const line of body.split("\n")) {
+      if (!/^\s{2}\w+\s+(String|Int|Boolean|DateTime|Json|Float)/.test(line)) continue;
+      if (/@updatedAt/.test(line)) continue; // stock Prisma audit column
+      const field = line.trim().split(/\s+/)[0];
+      if (SCHEMA_PARITY_KEEPS.has(`${model}: ${field}`)) continue; // reference-mirrored
+      if (readSites(field) === 0) dead.push(`${model}: ${field}`);
+    }
+  }
+  expect(
+    dead,
+    "schema fields with zero READ sites — the WH-13 class: a column written at a seam (or default-filled) and read by nobody is dead surface (drop it with its writes and wire members in the same commit), or read it consciously",
+  ).toEqual([]);
+});

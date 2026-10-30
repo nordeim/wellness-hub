@@ -42,7 +42,6 @@ export interface Assignment {
   priority: string;
   estimatedHours: number | null;
   status: string; // pending | completed
-  completedAt: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -83,7 +82,6 @@ export interface Reminder {
   priority: string;
   repeat: string;
   completed: boolean;
-  completedAt: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -100,7 +98,6 @@ export interface Goal {
   deadline: string | null;
   points: number;
   status: string; // active | completed
-  completedAt: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -151,7 +148,6 @@ export interface UserRoutine {
   time: string | null;
   notes: string | null;
   completed: boolean;
-  completedAt: string | null;
   createdAt: string;
   updatedAt: string;
 }

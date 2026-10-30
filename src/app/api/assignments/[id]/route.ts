@@ -17,16 +17,14 @@ export async function PUT(req: Request, { params }: Params) {
   try {
     const existing = await db.assignment.findFirst({ where: { id, userId: guard.user.id } });
     if (!existing) return ERR.NOT_FOUND();
-    // The completion seam: pending → completed stamps completedAt and runs
-    // the Assignment Ace badge check.
+    // The completion seam: pending → completed runs the Assignment Ace
+    // badge check (WH-13: the completedAt stamping retired with the column
+    // — written at every seam, read by nobody; the status flip drives it).
     const completing = body.status === "completed" && existing.status !== "completed";
     const row = await db.assignment.update({
       where: { id },
       data: {
         ...body,
-        ...(body.status !== undefined
-          ? { completedAt: body.status === "completed" ? new Date() : null }
-          : {}),
       },
     });
     if (completing) {

@@ -101,7 +101,6 @@ model Assignment {
   priority       String    @default("medium") // low | medium | high | urgent
   estimatedHours Float?
   status         String    @default("pending") // pending | completed
-  completedAt    DateTime?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
@@ -157,7 +156,6 @@ model Reminder {
   priority    String    @default("medium") // low | medium | high | urgent
   repeat      String    @default("none") // none | daily | weekly | monthly
   completed   Boolean   @default(false)
-  completedAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -179,7 +177,6 @@ model Goal {
   deadline     DateTime?
   points       Int       @default(0) // awarded on completion (frequency-derived)
   status       String    @default("active") // active | completed
-  completedAt  DateTime?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
@@ -263,7 +260,6 @@ model UserRoutine {
   time        String?
   notes       String?
   completed   Boolean   @default(false)
-  completedAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
