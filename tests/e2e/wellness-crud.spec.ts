@@ -202,6 +202,55 @@ test("routines: schedule a template into My Routines", async ({ page }) => {
   await expect(page.getByRole("dialog").getByText(/Schedule: 5-Minute Morning Energizer/)).toBeVisible();
   await expect(page.getByText("Routine Steps:")).toBeVisible();
 
+  // WH-22: the modal's CONTENT anatomy, live-verified (the never-probed
+  // modal's cure — every member probed field-by-field on the reference
+  // 2026-10-31): the 672px width (max-w-2xl), NO Cancel (the primary
+  // alone at w-full — the corner X is the dismiss), and the primary's
+  // face = the routines MODULE pair (purple→pink, verified on two
+  // different-category templates — never the brand indigo, never the
+  // category gradient).
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByRole("button", { name: "Cancel" })).toHaveCount(0);
+  // Settle ≥400 ms before the geometry read — the dialog's zoom-in-95
+  // animate-in interpolates the transform scale (0.95→1.0 over 200 ms)
+  // and the bounding rect reflects the animated frame (reads of 665–671
+  // mid-flight; the WH-20 transition-settle doctrine, dialog-animation
+  // edition — read after the animation, not after "visible").
+  await page.waitForTimeout(450);
+  const modalFace = await page.evaluate(() => {
+    const d = document.querySelector('[role="dialog"]');
+    if (!d) return { error: "no dialog" };
+    const btn = Array.from(d.querySelectorAll("button")).find((b) =>
+      b.textContent?.includes("Schedule This Routine"),
+    );
+    if (!btn) return { error: "no primary" };
+    const s = getComputedStyle(btn);
+    const num = d.querySelector("span.rounded-full");
+    const tile = Array.from(d.querySelectorAll("div")).find((el) =>
+      getComputedStyle(el).backgroundImage.includes("linear-gradient"),
+    );
+    return {
+      width: Math.round(d.getBoundingClientRect().width),
+      btnW: Math.round(btn.getBoundingClientRect().width),
+      btnBg: s.backgroundImage,
+      numBg: num ? getComputedStyle(num).backgroundColor : "(none)",
+      tileBg: tile ? getComputedStyle(tile).backgroundImage.slice(0, 130) : "(none)",
+    };
+  });
+  expect(modalFace.error, `the modal face must read (${JSON.stringify(modalFace)})`).toBeFalsy();
+  expect(
+    Math.abs(modalFace.width! - 672),
+    `the dialog is the reference's 672px max-w-2xl form (read ${modalFace.width}; ±1 the engine's sub-pixel rounding of 42rem)`,
+  ).toBeLessThanOrEqual(1);
+  expect(
+    Math.abs(modalFace.btnW! - (modalFace.width! - 50)),
+    `the primary is w-full: the dialog's CONTENT width (read btn ${modalFace.btnW} vs dialog ${modalFace.width} — 672 − 2×24px padding − 2×1px border = 622; the Cancel+pair footer retired)`,
+  ).toBeLessThanOrEqual(2);
+  expect(modalFace.btnBg, "the primary's face is the routines MODULE pair (purple→pink)").toContain("168, 85, 247");
+  expect(modalFace.btnBg).toContain("236, 72, 153");
+  expect(modalFace.numBg, "the step circle is the reference's solid purple-500 (the fixed module pair)").toBe("rgb(168, 85, 247)");
+  expect(modalFace.tileBg, "the description tile is the purple→pink gradient-50 wash").toContain("linear-gradient");
+
   await page.getByRole("button", { name: "Schedule This Routine" }).click();
   await expect(page.getByText(/scheduled — you've got this!/)).toBeVisible();
   await expect(page.getByText("My Routines").locator("..").getByText("1 scheduled")).toBeVisible();

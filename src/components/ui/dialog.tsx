@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import {
   DIALOG_CLOSE,
   DIALOG_CONTENT,
-  DIALOG_FOOTER,
   DIALOG_HEADER,
   DIALOG_OVERLAY,
   DIALOG_TITLE,
@@ -72,14 +71,13 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return <div className={cn(DIALOG_HEADER, className)} {...props} />;
 }
 
-function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
-  // Session-15 (S15-P5): the STOCK footer for the max-w-lg dialog family
-  // — `flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2`
-  // (no gap class: the buttons touch when stacked on phones, 8px margin
-  // at sm). WH-8 (F-5): the max-w-2xl DialogFooterWide twin retired with
-  // its last CRM-era consumer — the ui-export census owns the class.
-  return <div className={cn(DIALOG_FOOTER, className)} {...props} />;
-}
+// WH-22: DialogFooter + DialogDescription retired with their last
+// consumer (the Routines Schedule modal) — the seven create-forms went
+// inline at WH-21 (FORM_CARD carries their footer; their headers are
+// title-only) and the Schedule modal's content moved into the
+// SCHEDULE_MODAL record (the description rides the gradient tile; the
+// primary is w-full ALONE — no footer wrapper). The ui-export census
+// owns the live set.
 
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
   // Session-13 (S13-P9): the stock string — `text-lg font-semibold
@@ -88,27 +86,11 @@ function DialogTitle({ className, ...props }: React.ComponentProps<typeof Dialog
   return <DialogPrimitive.Title className={cn(DIALOG_TITLE, className)} {...props} />;
 }
 
-function DialogDescription({
-  className,
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Description>) {
-  // Session-15 (S15-P4): the reference's five CREATE dialogs ship NO
-  // description (h2 only — verified on the live app). WH-8 (F-2): the
-  // CRM-era "contacts scan-card" narration retired — in this domain the
-  // description IS live surface: the assignments, study-resources,
-  // mental-health and exercise dialogs render it under their titles.
-  // Session-26 (S26-P6): the color realigned to the reference's live
-  // import dialog (text-muted-foreground #737373 = our muted-ink token).
-  return <DialogPrimitive.Description className={cn("text-sm text-muted-ink", className)} {...props} />;
-}
-
 export {
   Dialog,
   DialogOverlay,
   DialogTrigger,
   DialogContent,
   DialogHeader,
-  DialogFooter,
   DialogTitle,
-  DialogDescription,
 };

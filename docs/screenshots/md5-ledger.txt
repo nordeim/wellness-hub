@@ -25,3 +25,4 @@
 25-dark-login-focus.png 4933b2d7acfa89736b4df684e583d026
 26-events-inline-form.png 5b07bf6dae0503c129bc9d0369598a06
 27-dark-mood-form.png 2a3919ecfcb78718940af285fe585cbc
+28-routines-schedule-modal.png b1fa1415d13826e17e90ebff983c9fb0

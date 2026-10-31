@@ -19,7 +19,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (340 checks) | `bun run test` | Vitest, node-safe seams |
+| Unit tests (342 checks) | `bun run test` | Vitest, node-safe seams |
 | Browser E2E (60 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
@@ -29,7 +29,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (340) → `bun run build` → `bun run smoke` →
+`bun run test` (342) → `bun run build` → `bun run smoke` →
 `CI=1 bun run test:e2e` (60: 6 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
@@ -96,7 +96,7 @@ bun run db:seed && bun run dev`. Demo login: `sepnetflix2023@outlook.com` /
   changes; loaders use `startTransition`; every list fetch goes through
   the store.
 - **The per-module page identity is a MAP, not scattered literals (WH-15)**: every module page consumes its `PAGE_THEMES` entry from `src/lib/page-layout.ts` (the page-root wash, the H1 gradient stops, the button pair, the container width, the header form) — the reference's 2026-10-30 redesign, probed live. The MODULE pairs are fixed v3 classes (NOT preset-themeable — verified on the reference's own preset engine); only the brand family (wordmark, badge, active pills, mobile/drawer titles) rides `--primary`/`--secondary`. The page-theme census pins the map's coverage, pin-completeness and consumption.
-- **The module create-forms are INLINE CARDS, not dialogs (WH-21)**: the seven action pages (Events, Exercise, MentalHealth, Assignments, Reminders, StudyResources, Goals) render their create/edit forms as inline expanding cards in the page flow (the `FORM_CARD` record from `src/lib/page-layout.ts` — `rounded-xl border bg-surface text-ink border-none shadow-xl`, the `p-6` header, the `p-6 pt-0` body, the `flex justify-end gap-3` footer inside the `space-y-4`), placed directly below the page header, conditionally rendered — the reference's own modality (probed live: its forms open with zero overlays, no scroll lock). Only the Routines "Schedule" flow is a modal (on both apps). The form-modality census + the e2e modality leg pin it — do NOT reintroduce Dialog there; `ui/dialog` keeps its consumers in routines/app-shell/mobile-nav.
+- **The module create-forms are INLINE CARDS, not dialogs (WH-21)**: the seven action pages (Events, Exercise, MentalHealth, Assignments, Reminders, StudyResources, Goals) render their create/edit forms as inline expanding cards in the page flow (the `FORM_CARD` record from `src/lib/page-layout.ts` — `rounded-xl border bg-surface text-ink border-none shadow-xl`, the `p-6` header, the `p-6 pt-0` body, the `flex justify-end gap-3` footer inside the `space-y-4`), placed directly below the page header, conditionally rendered — the reference's own modality (probed live: its forms open with zero overlays, no scroll lock). Only the Routines "Schedule" flow is a modal (on both apps). The form-modality census + the e2e modality leg pin it — do NOT reintroduce Dialog there; `ui/dialog` keeps its consumers in routines/app-shell/mobile-nav. The Routines "Schedule" flow IS a dialog on both apps — and its CONTENT rides the `SCHEDULE_MODAL` record (WH-22, probed field-by-field: the 672px width, the title-only header, the gradient-50 description tile with the nested Remember inset, the gray-50 step tiles with solid purple-500 circles, the grid-gap-4 fields, and the w-full module-pair primary — NO Cancel). `DialogFooter`/`DialogDescription`/`DIALOG_FOOTER` retired at WH-22 with their last consumer — the ui-export + value censuses own that retirement.
 - **Route aliases are intentional**: each module has a canonical lowercase
   folder (`src/app/(app)/dashboard/`) AND a capitalized alias folder
   (`src/app/(app)/Dashboard/`) mirroring the reference app's own hrefs

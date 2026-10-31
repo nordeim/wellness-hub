@@ -82,7 +82,13 @@ export const PAGE_THEMES: Record<
   routines: {
     root: "min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50/30 p-4 md:p-8 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900",
     heading: "from-purple-600 via-pink-600 to-rose-600",
-    button: "",
+    // WH-22: the routines MODULE pair — the Schedule modal's primary (the
+    // reference's own: probed on two different-category templates, both
+    // render purple→pink — the module family, never the template
+    // category's gradient, never the brand pair). The slot was empty
+    // since WH-15 (the stacked pages carry no header button); the
+    // Schedule modal is its consumer.
+    button: "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600",
     container: "max-w-7xl mx-auto space-y-8",
     stacked: true,
   },
@@ -332,6 +338,46 @@ export const FORM_CARD = {
   footer: "flex justify-end gap-3",
 } as const;
 
+/** The Routines Schedule modal's content — WH-22 (the never-probed
+ *  modal's cure): the reference's ONE modal (probed live 2026-10-31,
+ *  field-by-field on two templates of different categories — the
+ *  module-vs-category question): a 672px (max-w-2xl) panel whose header
+ *  is TITLE-ONLY (the description rides the gradient TILE, not a
+ *  DialogDescription), the tile a purple→pink gradient-50 wash
+ *  (`bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg`)
+ *  carrying the description (`text-sm text-gray-700 mb-3`) with the
+ *  Remember block NESTED as a `bg-white/80 p-3 rounded-lg` inset (the
+ *  ink inherited — rgb(10,10,10)), the steps as per-step gray-50 tiles
+ *  (`flex items-start gap-3 p-3 bg-gray-50 rounded-lg`) in a space-y-2
+ *  list with SOLID purple-500 white-ink number circles (the FIXED
+ *  module pair — the circle's 3.96:1 is reference-shared, pinned by
+ *  tests/gradient-ink.test.ts), the title/duration/description as three
+ *  separate <p>s, the fields in a `grid gap-4`, and the primary ALONE
+ *  at w-full in the module pair (NO Cancel — the corner X is the
+ *  dismiss). The dark twins on the tile/inks are OUR superset (the
+ *  reference's light-only forms are its own broken-dark class); the
+ *  circle + the button pair are mode-independent (the module family,
+ *  per the WH-15 identity). */
+export const SCHEDULE_MODAL = {
+  tile: "bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg dark:from-neutral-800/60 dark:to-neutral-900/60",
+  tileDesc: "text-sm text-gray-700 mb-3 dark:text-gray-400",
+  remember: "bg-white/80 p-3 rounded-lg dark:bg-neutral-800",
+  stepsLabel: "font-semibold mb-3",
+  stepsList: "space-y-2",
+  stepTile: "flex items-start gap-3 p-3 bg-gray-50 rounded-lg dark:bg-neutral-800/60",
+  stepNum: "flex-shrink-0 w-6 h-6 rounded-full bg-purple-500 text-white text-xs flex items-center justify-center font-semibold",
+  stepTitle: "font-medium text-sm",
+  stepDuration: "text-xs text-gray-600 dark:text-gray-400",
+  stepDesc: "text-xs text-gray-500 mt-1 dark:text-gray-400",
+  fields: "grid gap-4",
+  /** The w-full module-pair primary — the reference's stock shadcn base
+   *  + `shadow h-9 px-4 py-2 w-full` + the module pair (the one arm we
+   *  drop from the reference's string is the dead `hover:bg-primary/90`
+   *  stock-variant leftover — invisible behind the opaque gradient in
+   *  every state). */
+  button: `inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 px-4 py-2 w-full ${PAGE_THEMES.routines.button} text-white`,
+} as const;
+
 /** The Profile Theme Mode picker — WH-17 (F-2): the reference's border-2
  *  card grid (probed live): `grid grid-cols-3 gap-3` of `p-4 rounded-xl
  *  border-2 transition-all flex flex-col items-center gap-2` cards with
@@ -516,7 +562,12 @@ export const DIALOG_OVERLAY =
 
 export const DIALOG_HEADER = "flex flex-col space-y-1.5 text-center sm:text-left";
 
-export const DIALOG_FOOTER = "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2";
+// WH-22: DIALOG_FOOTER retired with its last consumer (the DialogFooter
+// wrapper) — the seven create-forms went inline at WH-21 (the reference's
+// modality: the footer `flex justify-end gap-3` rides FORM_CARD.footer
+// inside the space-y-4) and the Schedule modal's primary went w-full
+// ALONE at WH-22 (the reference's own footer — NO Cancel, the corner X
+// is the dismiss). The value census owns this module's export surface.
 
 export const DIALOG_TITLE = "text-lg font-semibold leading-none tracking-tight";
 

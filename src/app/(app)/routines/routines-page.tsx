@@ -19,10 +19,10 @@ import {
   GradientButton,
   OptionChip,
 } from "@/components/shared/page-parts";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PAGE_THEMES, ROUTINE_CATEGORY_GRADIENTS, routineCategoryStops, DIALOG_GROUP, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, ROUTINE_CATEGORY_GRADIENTS, routineCategoryStops, BUTTON_CLASSES, SCHEDULE_MODAL } from "@/lib/page-layout";
 import { difficultyMeta } from "@/lib/constants";
 import { parseJsonArray } from "@/lib/wellness";
 import { formatDateShort } from "@/lib/format";
@@ -260,82 +260,89 @@ export default function RoutinesClientPage() {
         })}
       </div>
 
-      {/* The Schedule dialog — the reference's own: steps, date, time, notes. */}
+      {/* The Schedule dialog — the reference's ONE modal (probed live
+          2026-10-31, field-by-field: the 672px panel, the title-only
+          header, the gradient description tile with the nested Remember
+          inset, the gray-50 step tiles with solid purple-500 circles, the
+          grid-gap-4 fields, and the w-full module-pair primary — NO
+          Cancel, the corner X is the dismiss). */}
       <Dialog open={scheduling !== null} onOpenChange={(o) => !o && setScheduling(null)}>
-        <DialogContent className="max-w-lg">
+        {/* max-h-[90vh] overflow-y-auto — the reference's own scroll cap
+            (probed: maxHeight 90% of the viewport, overflowY auto — the
+            tall content scrolls INSIDE the dialog; without it the primary
+            sits below the fold and is unreachable, caught live by the
+            e2e leg's click timeout). */}
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           {scheduling && (
             <>
               <DialogHeader>
                 <DialogTitle>Schedule: {scheduling.name}</DialogTitle>
-                <DialogDescription>{scheduling.description}</DialogDescription>
               </DialogHeader>
-              {scheduling.tipsForProcrastinators && (
-                <p className="rounded-lg bg-amber-50 dark:bg-amber-950/40 p-3 text-sm text-amber-800 dark:text-amber-300">
-                  💪 Remember: {scheduling.tipsForProcrastinators}
-                </p>
-              )}
-              <div>
-                <p className="mb-2 text-sm font-medium text-foreground">Routine Steps:</p>
-                <ol className="space-y-3">
-                  {scheduling.steps.map((s, i) => (
-                    <li key={s.id} className="flex items-start gap-3">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
-                        {i + 1}
-                      </span>
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium text-foreground">
-                          {s.title} <span className="font-normal text-muted">({s.duration})</span>
-                        </p>
-                        {s.description && <p className="text-xs text-muted">{s.description}</p>}
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-              <div className={cn(DIALOG_GROUP.group, "space-y-4")}>
-                <div className={DIALOG_GROUP.group}>
-                  <Label htmlFor="routine-date">When? (Date)</Label>
-                  <Input
-                    id="routine-date"
-                    type="date"
-                    className="mt-2"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                  />
+              <div className="space-y-6">
+                <div className={SCHEDULE_MODAL.tile}>
+                  <p className={SCHEDULE_MODAL.tileDesc}>{scheduling.description}</p>
+                  {scheduling.tipsForProcrastinators && (
+                    <div className={SCHEDULE_MODAL.remember}>
+                      💪 Remember: {scheduling.tipsForProcrastinators}
+                    </div>
+                  )}
                 </div>
-                <div className={DIALOG_GROUP.group}>
-                  <Label htmlFor="routine-time">What time? (Optional)</Label>
-                  <Input
-                    id="routine-time"
-                    type="time"
-                    className="mt-2"
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                  />
+                <div>
+                  <p className={SCHEDULE_MODAL.stepsLabel}>Routine Steps:</p>
+                  <ol className={SCHEDULE_MODAL.stepsList}>
+                    {scheduling.steps.map((s, i) => (
+                      <li key={s.id} className={SCHEDULE_MODAL.stepTile}>
+                        <span className={SCHEDULE_MODAL.stepNum}>{i + 1}</span>
+                        <div className="flex-1">
+                          <p className={SCHEDULE_MODAL.stepTitle}>{s.title}</p>
+                          <p className={SCHEDULE_MODAL.stepDuration}>{s.duration}</p>
+                          {s.description && <p className={SCHEDULE_MODAL.stepDesc}>{s.description}</p>}
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
                 </div>
-                <div className={DIALOG_GROUP.group}>
-                  <Label htmlFor="routine-notes">Personal Notes (Optional)</Label>
-                  <textarea
-                    id="routine-notes"
-                    className="mt-2 flex min-h-20 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                    placeholder="Any modifications or reminders for yourself?"
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                  />
+                <div className={SCHEDULE_MODAL.fields}>
+                  <div>
+                    <Label htmlFor="routine-date">When? (Date)</Label>
+                    <Input
+                      id="routine-date"
+                      type="date"
+                      className="mt-2"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="routine-time">What time? (Optional)</Label>
+                    <Input
+                      id="routine-time"
+                      type="time"
+                      className="mt-2"
+                      value={time}
+                      onChange={(e) => setTime(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="routine-notes">Personal Notes (Optional)</Label>
+                    <textarea
+                      id="routine-notes"
+                      className="mt-2 flex min-h-20 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                      placeholder="Any modifications or reminders for yourself?"
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                    />
+                  </div>
                 </div>
-              </div>
-              <DialogFooter>
                 <button
                   type="button"
-                  className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-                  onClick={() => setScheduling(null)}
+                  className={SCHEDULE_MODAL.button}
+                  onClick={() => void submitSchedule()}
+                  disabled={saving || !date}
                 >
-                  Cancel
-                </button>
-                <GradientButton onClick={() => void submitSchedule()} disabled={saving || !date}>
                   {saving ? "Scheduling…" : "Schedule This Routine"}
-                </GradientButton>
-              </DialogFooter>
+                </button>
+              </div>
             </>
           )}
         </DialogContent>

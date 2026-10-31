@@ -1616,3 +1616,89 @@ it("WH-21: the form-modality census — the seven module create-forms are INLINE
     "the seven module create-forms must be inline expanding cards (no dialog import, the FORM_CARD record consumed) — the WH-21 form-modality cure",
   ).toEqual([]);
 });
+
+it("WH-22: the schedule-modal census — the Routines Schedule modal rides the reference's probed content anatomy (the never-probed modal's cure)", () => {
+  // WH-22: the Routines "Schedule" flow is the reference's ONE modal (the
+  // WH-21 modality find — its seven create-forms are inline cards, only
+  // this flow is a dialog, and ours already mirrored the modality) — but
+  // every prior round opened it to verify the MODALITY, never its CONTENT.
+  // Probed field-by-field 2026-10-31 (two templates of different
+  // categories — the module-vs-category question): the 672px width
+  // (max-w-2xl), the title-only header (the description lives in a
+  // purple→pink gradient-50 TILE with the Remember block nested as a
+  // white/80 inset — NOT a DialogDescription), the steps as per-step
+  // gray-50 tiles with SOLID purple-500 white-ink number circles (the
+  // FIXED module pair — both templates render purple, never the category
+  // gradient; the circle's white-on-purple 3.96:1 is reference-shared,
+  // pinned by tests/gradient-ink.test.ts), the fields in a grid gap-4,
+  // and the primary ALONE at w-full in the module pair (from-purple-500
+  // to-pink-500 — NO Cancel button; the corner X is the dismiss). Ours
+  // shipped: 512px, a DialogDescription, a bare preset-themeable
+  // bg-primary/10 circle list, DIALOG_GROUP space-y-2 fields, and a
+  // Cancel + BRAND-indigo GradientButton pair — every content member
+  // deviating while the modality was parity.
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const rawPage = readFileSync(join(REPO_ROOT, "src/app/(app)/routines/routines-page.tsx"), "utf8");
+  // Strip comments first (the WH-13 lesson): the page's own narration
+  // names the retired members — a census must read CODE, not comments.
+  const pageSrc = rawPage.replace(/\/[\*][\s\S]*?[\*]\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const failures: string[] = [];
+
+  // (a) the record exists with its probed members
+  const REC = layoutSrc.match(/export const SCHEDULE_MODAL = \{([\s\S]*?)\} as const;/);
+  expect(REC, "the SCHEDULE_MODAL record must exist in page-layout.ts (the probed content anatomy)").toBeTruthy();
+  const MEMBERS: [string, string][] = [
+    ["tile", "bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg"],
+    ["tileDesc", "text-sm text-gray-700 mb-3"],
+    ["remember", "bg-white/80 p-3 rounded-lg"],
+    ["stepsLabel", "font-semibold mb-3"],
+    ["stepsList", "space-y-2"],
+    ["stepTile", "flex items-start gap-3 p-3 bg-gray-50 rounded-lg"],
+    ["stepNum", "flex-shrink-0 w-6 h-6 rounded-full bg-purple-500 text-white text-xs flex items-center justify-center font-semibold"],
+    ["stepDuration", "text-xs text-gray-600"],
+    ["stepDesc", "text-xs text-gray-500 mt-1"],
+    ["fields", "grid gap-4"],
+  ];
+  for (const [member, expectCls] of MEMBERS) {
+    const m = REC![1].match(new RegExp(`${member}:\\s*"([^"]*)"`));
+    if (!m || !m[1]!.includes(expectCls)) {
+      failures.push(`SCHEDULE_MODAL.${member} must carry the probed form "${expectCls}" (read "${m?.[1] ?? "—"}")`);
+    }
+  }
+  // the button composes the module pair at w-full (the record's template
+  // literal composes PAGE_THEMES.routines.button — the pair rides the map)
+  const btn = REC![1].match(/button:\s*(?:"([^"]*)"|`([^`]*)`)/)?.[1] ?? REC![1].match(/button:\s*(?:\"([^\"]*)\"|`([^`]*)`)/)?.[2];
+  const carriesPair = !!btn && (btn.includes("from-purple-500 to-pink-500") || btn.includes("${PAGE_THEMES.routines.button}"));
+  if (!btn || !btn.includes("w-full") || !carriesPair) {
+    failures.push(`SCHEDULE_MODAL.button must be the w-full module pair (read "${btn ?? "—"}")`);
+  }
+  // the dark superset twins on the tile/inks (the reference's light-only forms are its own broken-dark class)
+  for (const [member, twin] of [["tile", "dark:to-neutral-900"], ["remember", "dark:bg-"], ["stepTile", "dark:bg-"], ["tileDesc", "dark:text-gray-400"], ["stepDuration", "dark:text-gray-400"], ["stepDesc", "dark:text-gray-400"]] as [string, string][]) {
+    const m = REC![1].match(new RegExp(`${member}:\\s*"([^"]*)"`));
+    if (!m || !m[1]!.includes(twin)) failures.push(`SCHEDULE_MODAL.${member} must carry its dark superset twin (${twin})`);
+  }
+
+  // (b) the page consumes the record
+  if (!pageSrc.includes("SCHEDULE_MODAL")) failures.push("routines-page.tsx must consume the SCHEDULE_MODAL record");
+  // (b2) the scroll cap — the reference's own (probed: maxHeight 90vh,
+  // overflowY auto): without it the tall content pushes the primary below
+  // the fold (caught live by the e2e leg's click timeout — the gate
+  // finding the audit's gap)
+  if (!rawPage.includes('max-w-2xl max-h-[90vh] overflow-y-auto')) {
+    failures.push("the Schedule DialogContent must carry the reference's scroll cap (max-w-2xl max-h-[90vh] overflow-y-auto)");
+  }
+  // (c) NO Cancel in the schedule dialog — the reference ships the primary ALONE (the corner X is the dismiss)
+  if (/Cancel/.test(pageSrc)) failures.push("routines-page.tsx must not ship a Cancel button in the Schedule modal (the reference's footer is the w-full primary alone)");
+  // (d) the header is title-only — the description rides the gradient tile
+  if (/DialogDescription/.test(pageSrc)) failures.push("the Schedule header must be title-only (the description lives in the gradient tile, not a DialogDescription)");
+  // (e) the module pair lands in the theme map (the canonical home)
+  const routinesBtn = layoutSrc.match(/routines: \{[\s\S]*?button: "([^"]*)"/)?.[1];
+  if (!routinesBtn || !routinesBtn.includes("from-purple-500 to-pink-500")) {
+    failures.push(`PAGE_THEMES.routines.button must carry the module pair (read "${routinesBtn ?? "—"}")`);
+  }
+
+  expect(
+    failures,
+    "the Schedule modal must ride the reference's probed content anatomy — the WH-22 cure (the one modal whose content was never probed)",
+  ).toEqual([]);
+});

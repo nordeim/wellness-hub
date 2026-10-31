@@ -76,7 +76,7 @@ const FAMILY: { name: string; cls: string }[] = [
 ];
 
 it("WH-21: the fixed-gradient white-ink table — every pair measured, all AA-failing, the PAD ledger carrying the same numbers (the arithmetic pin)", () => {
-  expect(FAMILY.length, "the family must read its fifteen members (7 module buttons + the brand pair + 7 routine categories)").toBe(15);
+  expect(FAMILY.length, "the family must read its sixteen members (8 module buttons [the routines pair joined at WH-22 — the Schedule modal's primary] + the brand pair + 7 routine categories)").toBe(16);
 
   const computed = FAMILY.map(({ name, cls }) => {
     const { from, to } = stops(cls);
@@ -142,5 +142,40 @@ it("WH-21: the mood tile's active pair — the reference's own blue→cyan + whi
   expect(
     row!.includes("mood tile") && row!.includes("2.43"),
     "the PAD row must name the mood tile and carry its measured 2.43",
+  ).toBe(true);
+});
+
+it("WH-22: the Schedule modal's step circles — the reference's own solid purple-500 + white ink, pinned AT its documented 3.96:1 (the parity doctrine, NOT a ≥4.5 assertion)", () => {
+  // The reference's Schedule steps number their tiles with SOLID
+  // purple-500 circles + white ink (probed 2026-10-31 on two templates of
+  // different categories — the FIXED module pair, never the category
+  // gradient): white on purple-500 computes 3.96:1 at text-xs (12px
+  // semibold — not large text), an AA failure for the number. Byte-
+  // identical to the reference's own circle → per the parity doctrine
+  // (the family's own precedent): mirrored, documented in the PAD §11
+  // family row, pinned here — NOT cured. The pin asserts the fill stays
+  // the reference's own purple-500 AND the ratio stays pinned at the
+  // documented value.
+  const layout = readFileSync(join(import.meta.dirname, "..", "src", "lib", "page-layout.ts"), "utf8");
+  const num = layout.match(/stepNum:\s*"([^"]*)"/)?.[1];
+  expect(
+    num,
+    "SCHEDULE_MODAL.stepNum must exist and ride the reference's solid purple-500 + white ink (the FIXED module pair — verified on two different-category templates)",
+  ).toBeTruthy();
+  expect(num!.includes("bg-purple-500"), "the circle's fill is the fixed purple-500").toBe(true);
+  expect(num!.includes("text-white"), "the circle's ink is white").toBe(true);
+  const r = ratio(WHITE_LUM, lum(v3("purple-500", "the step circle's fill")));
+  expect(
+    Math.abs(r - 3.96),
+    `white on the circle's fill must stay pinned at the documented 3.96:1 (measured ${r.toFixed(2)}:1) — the reference's own AA-failing form, mirrored per the parity doctrine`,
+  ).toBeLessThan(0.005);
+
+  // The lockstep: the PAD family row must name the step circle.
+  const pad = readFileSync(join(import.meta.dirname, "..", "Project_Architecture_Document.md"), "utf8");
+  const row = pad.split("\n").find((l) => l.includes("Fixed-gradient white-ink contrast"));
+  expect(row, "the PAD §11 ledger must carry the fixed-gradient white-ink row").toBeTruthy();
+  expect(
+    row!.includes("step circle"),
+    "the PAD row must name the Schedule modal's step circle (the solid-fill member of the family)",
   ).toBe(true);
 });
