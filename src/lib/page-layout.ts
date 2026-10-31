@@ -26,17 +26,15 @@ export const SHELL_LAYOUT = {
   main: "flex-1 overflow-y-auto bg-background",
 } as const;
 
-export const APP_FOOTER = {
-  // WH-20 (F-3): the footer shipped ZERO dark pairs — a white strip on
-  // every dark module page (the loudest possible island; both dark walks
-  // passed it because its self-contrast is AA-fine — the WH-19
-  // light-island class, the 404's twin, on the most-travelled surface).
-  footer:
-    "border-t border-gray-200 bg-white px-4 sm:px-8 py-4 text-sm text-gray-500 flex flex-wrap items-center gap-x-5 gap-y-2 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-400",
-  link: "hover:text-gray-800 transition-colors dark:hover:text-neutral-200",
-  copyright: "© 2026 Wellness Hub",
-  note: "Made with 💜 for your wellbeing",
-} as const;
+// WH-30 (F-4): APP_FOOTER RETIRED — the reference carries ZERO footer
+// elements on every page (live-probed: the body ends at the content,
+// `document.querySelectorAll("footer")` === 0). The © strip was a CRM-
+// chassis inheritance with no PAD §11 row (the lesson-33 class: a
+// superset face shipped without a ledger row is a bug nobody can
+// defend); the WH-20 round cured its dark pairs instead of asking
+// whether it should exist. A returning footer needs a returning
+// reference surface + a PAD row — never a silent comeback (pinned by
+// the WH-30 footer-retirement census).
 
 /** The per-module page identity — the reference's 2026-10-30 redesign
  *  (probed live on all 11 pages after its redeployment: the stylesheet
@@ -188,35 +186,84 @@ export const routineCategoryStops = (category: string): string =>
  *  redeployed reference): the brand wordmark and badge ride the 135deg
  *  to-br brand gradient (ours shipped to-r), the badge is rounded-2xl
  *  (16px), and the ACTIVE item is the gradient pill — white text on the
- *  to-br brand gradient (the pre-redesign indigo wash is gone). */
+ *  to-br brand gradient (the pre-redesign indigo wash is gone).
+ *
+ *  WH-30 (F-2/F-3): the sidebar's three-zone structure — decoded live
+ *  on the reference's own sidebar (the SAME shadcn Sidebar component
+ *  renders its desktop panel and its mobile drawer): a brand header
+ *  zone carrying a border-b divider, the nav zone as its own p-3 scroll
+ *  container, and the footer zone at p-4 with the border-t. Ours shipped
+ *  custom paddings with no header divider — the zones converge on the
+ *  reference's forms (our dark twins ride along). */
+export const SIDEBAR_HEADER = {
+  zone: "flex flex-col gap-2 border-b border-gray-100 p-6 dark:border-neutral-800",
+  row: "flex items-center gap-3",
+} as const;
+
+export const SIDEBAR_NAV_ZONE = "flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-3";
+
+export const SIDEBAR_FOOTER_ZONE = "flex flex-col gap-2 border-t border-gray-100 p-4 dark:border-neutral-800";
+
+/** WH-30 (F-3): the Profile & Settings card — the avatar-card anatomy
+ *  the reference renders at BOTH footer sites (the desktop sidebar
+ *  footer AND the drawer's footer zone), decoded live:
+ *  `a > div.flex.items-center.gap-3.p-3.rounded-xl.hover:bg-gray-50` —
+ *  the 40px gradient circle avatar (135deg, the white lucide User at
+ *  20px) + the truncate title/subtitle pair. Ours shipped a bare lucide
+ *  icon + texts on desktop (no avatar) and a 36px-circle row in the
+ *  drawer — three faces across two apps and two sites. Our dark twins
+ *  follow the tree's gray-100/gray-500 family. */
+export const PROFILE_CARD = {
+  card: "flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors cursor-pointer",
+  avatar: "w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-secondary text-white shrink-0",
+  avatarIcon: "h-5 w-5",
+  body: "flex-1 min-w-0",
+  title: "font-medium text-sm truncate text-gray-900 dark:text-gray-100",
+  subtitle: "text-xs truncate text-gray-500 dark:text-gray-400",
+} as const;
+
 export const NAV_LAYOUT = {
-  brand: "px-6 pt-6 pb-4 flex items-center gap-3",
+  brand: "flex items-center gap-3",
   brandBadge:
     "w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-lg",
   brandWordmark:
     "font-bold text-lg bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent",
   brandSubtitle: "text-xs text-muted -mt-0.5",
-  container: "flex-1 px-3 space-y-1 flex flex-col overflow-y-auto scrollbar-thin",
-  group: "space-y-1",
-  link: "flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+  // WH-30 (F-2): the nav rows converge on the reference's 32px h-8 family
+  // (h-8 capping py-3 — ours shipped py-2.5 uncapped at 40px desktop / 44px
+  // drawer) with the 16px icons ([&>svg]:size-4 on the reference — ours
+  // h-5 w-5) and the gray-50 hover wash (#f9fafb — ours rode the zinc
+  // sidebar-hover token #f4f4f5). The active pill keeps its gradient
+  // family; its hover:opacity-95 arm retires (the reference's active
+  // carries no hover arm).
+  list: "flex w-full min-w-0 flex-col gap-1 space-y-1",
+  link: "flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm font-medium text-sidebar-foreground transition-all duration-300 hover:bg-gray-50 dark:hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
   linkActive:
-    "flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-br from-primary to-secondary shadow-lg transition-colors hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-  icon: "h-5 w-5 shrink-0",
+    "flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm font-semibold text-white bg-gradient-to-br from-primary to-secondary shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+  icon: "h-4 w-4 shrink-0",
   label: "truncate",
-  footerGroup: "space-y-1 border-t border-line px-3 pt-3 pb-4",
-  footerLink:
-    "flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-muted transition-colors hover:bg-sidebar-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
 } as const;
 
 /** The mobile glass header (the reference's own chrome). WH-15: the
  *  title rides the 135deg to-br brand gradient (probed — ours shipped
- *  to-r). */
+ *  to-r). WH-30 (F-1): the INTERIOR decoded live at 390px — the bar
+ *  computes 24px horizontal padding (px-6; ours shipped px-4), it wraps
+ *  (trigger + title) in a `flex items-center gap-4` LEFT CLUSTER (the
+ *  reference's title left edge computes x=68 = 24px pad + 28px trigger
+ *  + 16px gap; ours shipped justify-between + a w-10 spacer, the title
+ *  at x=126), and the trigger is the reference's h-7 w-7 rounded-lg
+ *  form (28×28 at radius 8px, hover:bg-gray-100) with the 16px INK
+ *  icon (rgb(10,10,10) — ours shipped h-10 w-10 rounded-md at 40×40
+ *  with a 20px gray-500 icon). OUR kept supersets: the aria-* attrs,
+ *  the focus-visible ring, the pointer-events-none toast viewport. */
 export const MOBILE_HEADER = {
-  bar: "sticky top-0 z-10 md:hidden bg-white/60 dark:bg-black/50 backdrop-blur-xl border-b border-gray-100 px-4 py-4 flex items-center justify-between",
+  bar: "sticky top-0 z-10 md:hidden bg-white/60 dark:bg-black/50 backdrop-blur-xl border-b border-gray-100 px-6 py-4",
+  interior: "flex items-center gap-4",
   title:
     "font-bold text-lg bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent",
   trigger:
-    "md:hidden inline-flex items-center justify-center rounded-md h-10 w-10 text-muted hover:bg-sidebar-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+    "md:hidden inline-flex items-center justify-center h-7 w-7 p-2 rounded-lg text-foreground hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+  triggerIcon: "h-4 w-4 shrink-0",
 } as const;
 
 export const MOBILE_NAV_LAYOUT = {
@@ -226,25 +273,26 @@ export const MOBILE_NAV_LAYOUT = {
 
 /** The mobile drawer — a left-anchored Radix Sheet (the chassis's proven
  *  construction: the reference's own mobile-nav fix), re-skinned to the
- *  light sidebar family. */
+ *  light sidebar family. WH-30 (F-1d): the sheet's own face decoded —
+ *  the reference's sheet carries a 1px right border (its --border token
+ *  = our border-line) and the authored `[&>button]:hidden` arm: its
+ *  close X is display:none (verified live — the drawer closes via
+ *  Escape/scrim/route-change only, and the Radix focus falls to the
+ *  sheet div, not the button). WH-30 (F-2): the drawer's rows ride the
+ *  same 32px h-8 nav family; the content wraps (header, nav, footer)
+ *  in the reference's `flex h-full w-full flex-col` column so the
+ *  footer zone PINS to the sheet bottom (ours floated mid-sheet). */
 export const MOBILE_NAV_SHEET = {
   content:
-    "fixed z-50 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out inset-y-0 left-0 h-full data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left w-72 border-0 bg-sidebar p-0 text-sidebar-foreground",
-  header: "flex flex-col space-y-1 p-6",
+    "fixed z-50 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out inset-y-0 left-0 h-full data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left w-72 border-r border-line bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden",
+  column: "flex h-full w-full flex-col",
+  header: "flex flex-col gap-2 border-b border-gray-100 p-6 dark:border-neutral-800",
   title: "text-left text-lg font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent mb-0",
   description: "text-xs text-muted",
-  nav: "flex flex-col gap-1 px-3",
-  navFooter: "mt-4 flex flex-col gap-1 border-t border-line px-3 pt-4 pb-6",
-  link: "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-sidebar-foreground/80 transition-colors hover:bg-sidebar-hover hover:text-sidebar-foreground",
+  link: "flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm font-medium text-sidebar-foreground/80 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-neutral-800 hover:text-sidebar-foreground",
   linkActive:
-    "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-white bg-gradient-to-br from-primary to-secondary shadow-lg transition-colors hover:opacity-95",
-  footerLink:
-    "flex items-center gap-3 rounded-xl px-4 py-3 transition-colors hover:bg-sidebar-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-  footerAvatar:
-    "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-white",
-  footerTitle: "text-sm font-semibold text-foreground leading-tight",
-  footerSubtitle: "text-xs text-muted",
-  icon: "h-5 w-5",
+    "flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm font-semibold text-white bg-gradient-to-br from-primary to-secondary shadow-lg transition-all duration-300",
+  icon: "h-4 w-4",
 } as const;
 
 /** WH-28 (F-1): the mood list "Your Journey" entry interior — probed

@@ -157,6 +157,15 @@ const pageB = await ctxB.newPage();
   await pageB.waitForTimeout(600);
   await snap(pageB, "19-dark-mobile-nav-open");
   await pageB.setViewportSize({ width: 1280, height: 900 });
+  // 27-dark-mood-form (the WH-30 addition — the file rode the ledger
+  // since WH-26's ad-hoc take without a procedural home; the committed
+  // procedure now owns it): the dark mood form's inline interior.
+  await pageB.goto(`${BASE}/MentalHealth`);
+  await pageB.getByRole("button", { name: /Log Mood|New Mood|Add Mood/ } ).first().click().catch(async () => {
+    await pageB.locator("main button").first().click();
+  });
+  await pageB.waitForTimeout(500);
+  await snap(pageB, "27-dark-mood-form");
 }
 
 // ---------- phase 6: DARK, logged OUT (context C — the persisted seed)

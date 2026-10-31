@@ -204,7 +204,10 @@ test.describe("a11y net — the dark state (the WH-18 widening)", () => {
     await page.waitForTimeout(300);
     const dres = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
     offenders.push(...describeViolations("drawer-open [dark]", dres.violations));
-    await page.locator('[role="dialog"]').getByRole("button", { name: "Close" }).click();
+    // WH-30 (F-1d): the drawer's close X is HIDDEN (the reference's
+    // authored [&>button]:hidden arm) — the walk closes via Escape, the
+    // reference's own dismissal path (scrim/escape/route-change).
+    await page.keyboard.press("Escape");
     await page.setViewportSize({ width: 1280, height: 900 });
 
     expect(
@@ -625,9 +628,10 @@ test.describe("a11y net — the auto-mode listener (the OS scheme flip)", () => 
 // CRUD spec's own rows demonstrate the pattern is safe), (b) the dark
 // login focus ring (real keyboard Tab — program focus() does not match
 // :focus-visible after mouse use; ≥400 ms settle on every read, the
-// transition-all box-shadow interpolation artifact), (c) the dark footer
-// (the F-3 class: a white strip on every dark page passed every walk
-// because its self-contrast is AA-fine), (d) the toast hover (real
+// transition-all box-shadow interpolation artifact), (c) RETIRED at
+// WH-30 with the footer itself (the reference renders no footer — the
+// strip was a chassis superset; the (n) leg in shell.spec.ts now asserts
+// the absence), (d) the toast hover (real
 // agent-browser hover — synthetic mouseenter does not set :hover; the
 // F-2 class: the glyph vanishes exactly when the user aims at it).
 const ELEMENT_PROBE = String.raw`
@@ -850,22 +854,13 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
     ).toBeGreaterThanOrEqual(3);
   });
 
-  test("(c) the dark footer — the strip must be the dark pair, not a white island", async ({ page }) => {
-    await page.goto("/Profile", { waitUntil: "networkidle" });
-    await page.getByRole("button", { name: "Light", exact: true }).click();
-    await page.getByRole("button", { name: "Dark", exact: true }).click();
-    await expect(page.locator("html")).toHaveClass(/dark/);
-
-    for (const route of ["/Dashboard", "/Exercise", "/Profile"]) {
-      await page.goto(route, { waitUntil: "networkidle" });
-      await page.waitForTimeout(250);
-      const footer = await page.evaluate(() => {
-        const f = document.querySelector("footer");
-        return f ? getComputedStyle(f).backgroundColor : "(missing)";
-      });
-      expect(footer, `${route}: the dark footer must be the dark pair (the F-3 class: a white strip on every dark page passed every walk because its self-contrast is AA-fine)`).toBe("rgb(10, 10, 10)");
-    }
-  });
+  // WH-30 (F-4): the (c) dark-footer leg RETIRED with the footer itself —
+  // the reference carries ZERO footer elements on every page (probed
+  // live: the body ends at the content), and our chassis © strip was a
+  // superset face with no PAD §11 row (the lesson-33 class). The leg
+  // had CURED the strip's dark pairs at WH-20 instead of asking whether
+  // it should exist; the retirement is the parity cure (asserted by the
+  // (n) leg in shell.spec.ts: `footer` count ZERO on every page).
 
   test("(d) the toast hover — the dismiss glyph ≥3:1 under a REAL hover", async ({ page }) => {
     await page.goto("/Profile", { waitUntil: "networkidle" });

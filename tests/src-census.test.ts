@@ -1211,27 +1211,33 @@ it("WH-15: the shell-contract census — the brand family rides the 135deg to-br
   // from-slate-50 via-white to-slate-50, the sidebar from-white
   // via-gray-50 to-white — ours were solid tokens).
   const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
-  const record = (name: string): string => {
+  // WH-30: the helper is BLOCK-SCOPED — the member-name collision class
+  // grew a new member (PROFILE_CARD.title vs MOBILE_HEADER.title vs
+  // TUTORIAL_CARD.title), so the record extraction anchors at the
+  // block's `export const` and reads the member WITHIN it.
+  const record = (block: string, name: string): string => {
+    const blockSrc = layoutSrc.slice(layoutSrc.indexOf(`export const ${block}`));
     // the leading `\n  ` anchors the key at its record indentation — a
     // bare `title:` would also match inside `subtitle:` (the collision
     // the first version of this check hit on brandSubtitle).
-    const m = layoutSrc.match(new RegExp(`\\n  ${name}:\\s*"([^"\\n]*)"`));
+    const m = blockSrc.match(new RegExp(`\\n  ${name}:\\s*"([^"\\n]*)"`));
     return m ? m[1] : "";
   };
 
   const TO_BR = "bg-gradient-to-br from-primary to-secondary";
-  expect(record("brandWordmark"), "the sidebar wordmark rides the 135deg to-br brand gradient").toContain(TO_BR);
-  expect(record("brandBadge"), "the brand badge rides the to-br gradient").toContain(TO_BR);
-  expect(record("brandBadge"), "the brand badge is rounded-2xl (the reference's 16px)").toContain("rounded-2xl");
-  expect(record("title"), "the mobile header title rides the to-br brand gradient").toContain(TO_BR);
-  expect(record("linkActive"), "the desktop active nav item is the gradient pill (white on to-br)").toContain(TO_BR);
-  expect(record("linkActive"), "the gradient active pill carries white text").toContain("text-white");
-  expect(record("footerAvatar"), "the drawer footer avatar rides the to-br brand gradient").toContain(TO_BR);
+  expect(record("NAV_LAYOUT", "brandWordmark"), "the sidebar wordmark rides the 135deg to-br brand gradient").toContain(TO_BR);
+  expect(record("NAV_LAYOUT", "brandBadge"), "the brand badge rides the to-br gradient").toContain(TO_BR);
+  expect(record("NAV_LAYOUT", "brandBadge"), "the brand badge is rounded-2xl (the reference's 16px)").toContain("rounded-2xl");
+  expect(record("MOBILE_HEADER", "title"), "the mobile header title rides the to-br brand gradient").toContain(TO_BR);
+  expect(record("NAV_LAYOUT", "linkActive"), "the desktop active nav item is the gradient pill (white on to-br)").toContain(TO_BR);
+  expect(record("NAV_LAYOUT", "linkActive"), "the gradient active pill carries white text").toContain("text-white");
+  expect(record("MOBILE_NAV_SHEET", "linkActive"), "the drawer's active pill rides the same to-br gradient").toContain(TO_BR);
+  expect(record("PROFILE_CARD", "avatar"), "the Profile card avatar rides the to-br brand gradient (the WH-30 shared card — the old footerAvatar)").toContain(TO_BR);
 
-  expect(record("root"), "the app-root wash (from-slate-50 via-white to-slate-50 at to-br)").toContain(
+  expect(record("SHELL_LAYOUT", "root"), "the app-root wash (from-slate-50 via-white to-slate-50 at to-br)").toContain(
     "bg-gradient-to-br from-slate-50 via-white to-slate-50",
   );
-  expect(record("sidebar"), "the sidebar wash (from-white via-gray-50 to-white at to-br)").toContain(
+  expect(record("SHELL_LAYOUT", "sidebar"), "the sidebar wash (from-white via-gray-50 to-white at to-br)").toContain(
     "bg-gradient-to-br from-white via-gray-50 to-white",
   );
 });
@@ -3276,5 +3282,196 @@ it("WH-29: the routines-card census — the DIV card with the UNCLIPPED strip + 
   expect(
     failures,
     "the seeded-card vocabulary must hold — the WH-29 cure (DIV cards, unclipped strip, div/p benefits, DIV titles)",
+  ).toEqual([]);
+});
+
+it("WH-30: the shell-chrome geometry census — the mobile header interior, the nav row family, the Profile card and the drawer sheet's own face", () => {
+  // WH-30 (F-1/F-2/F-3): the shell chrome's computed BOXES were never
+  // probed — the WH-15 identity round mapped the chrome's COLORS (the
+  // washes, the gradients, the badge) and the e2e battery pinned its
+  // BEHAVIOR (the drawer's open/close/lock), but the interior geometry
+  // shipped unmeasured through twenty-nine rounds. Live-decoded at
+  // 390px/1280px on BOTH apps: the mobile header's padding (px-6 vs our
+  // px-4), its LEFT-CLUSTER interior (a flex.items-center.gap-4 wrapper
+  // around trigger+title — our justify-between + w-10 spacer pushed the
+  // title to x=126 where the reference computes x=68), the 28×28
+  // rounded-lg trigger with its 16px INK icon (ours 40×40 rounded-md
+  // with a 20px gray icon), the 32px h-8 nav rows with 16px icons
+  // (ours 40px desktop / 44px drawer with 20px icons), the AVATAR-CARD
+  // Profile block at both footer sites (ours shipped a bare icon on
+  // desktop and a 36px-circle row in the drawer — three faces across
+  // two apps and two sites), and the drawer sheet's border-r + its
+  // HIDDEN close button (the reference's authored [&>button]:hidden —
+  // ours rendered the X visible).
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const plSrc = strip(readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8"));
+  const shellSrc = strip(readFileSync(join(REPO_ROOT, "src/components/layout/app-shell.tsx"), "utf8"));
+  const sbSrc = strip(readFileSync(join(REPO_ROOT, "src/components/layout/sidebar.tsx"), "utf8"));
+  const mnSrc = strip(readFileSync(join(REPO_ROOT, "src/components/layout/mobile-nav.tsx"), "utf8"));
+  const failures: string[] = [];
+
+  // (a) the mobile header: the reference's bar (px-6, no flex utilities
+  // of its own) + the LEFT-CLUSTER wrapper + no right-side spacer
+  if (!/bar:\s*"sticky top-0 z-10 md:hidden bg-white\/60 dark:bg-black\/50 backdrop-blur-xl border-b border-gray-100 px-6 py-4"/.test(plSrc)) {
+    failures.push('MOBILE_HEADER.bar must read "…border-b border-gray-100 px-6 py-4" — the reference computes 24px horizontal padding (ours shipped px-4 = 16px)');
+  }
+  if (!/interior:\s*"flex items-center gap-4"/.test(plSrc)) {
+    failures.push('MOBILE_HEADER.interior must exist at "flex items-center gap-4" — the reference wraps (trigger + title) in a LEFT-CLUSTER div (ours was justify-between + a w-10 spacer, the title at x=126 vs the reference\'s x=68)');
+  }
+  if (/<span aria-hidden="true" className="w-10" \/>/.test(shellSrc) || /className="w-10"/.test(shellSrc)) {
+    failures.push("the header's right-side w-10 spacer SPAN retires — the reference's header carries no right element");
+  }
+  if (!/<div className=\{MOBILE_HEADER\.interior\}>/.test(shellSrc)) {
+    failures.push("the app-shell must wrap (trigger + h1) in MOBILE_HEADER.interior — the reference's left-cluster structure");
+  }
+  if (/justify-between/.test(shellSrc)) {
+    failures.push("no justify-between anywhere in the app shell — the reference's header is the bare bar with the wrapper carrying the flex layout");
+  }
+  const barLine = plSrc.split("\n").find((l) => l.includes("bar:"));
+  if (barLine && /justify-between|flex/.test(barLine)) {
+    failures.push("MOBILE_HEADER.bar must carry NO flex utilities of its own — the reference's bar is the chrome (padding/glass/border); the wrapper owns the layout");
+  }
+
+  // (b) the trigger: the reference's h-7 w-7 rounded-lg form + the 16px
+  // ink icon; OUR aria/ring supersets stay
+  if (!/trigger:\s*"md:hidden inline-flex items-center justify-center h-7 w-7 p-2 rounded-lg text-foreground hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors/.test(plSrc)) {
+    failures.push('MOBILE_HEADER.trigger must read "h-7 w-7 p-2 rounded-lg text-foreground hover:bg-gray-100 …" — the reference computes 28×28 at radius 8px with the ink icon (ours shipped h-10 w-10 rounded-md = 40×40 at 6px)');
+  }
+  if (!/triggerIcon:\s*"h-4 w-4 shrink-0"/.test(plSrc)) {
+    failures.push('MOBILE_HEADER.triggerIcon must read "h-4 w-4 shrink-0" — the reference\'s hamburger icon computes 16px ink (the shrink-0 guard: the p-2 content box is 12px and flex-shrink would read 12px without it — the reference\'s own [&_svg]:shrink-0 arm)');
+  }
+  if (/Open navigation/.test(shellSrc)) {
+    failures.push('the trigger\'s redundant sr-only "Open navigation" span retires — the aria-label ("Toggle Sidebar", the reference\'s own name) is the single accessible name');
+  }
+
+  // (c) the nav row family: the 32px h-8 rows + the 16px icons + the
+  // gray-50 hover + transition-all (desktop AND drawer)
+  for (const member of ["link", "linkActive"]) {
+    const re = new RegExp(`${member}:\\s*"flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm font-[a-z]+ `);
+    if (!re.test(plSrc)) {
+      failures.push(`NAV_LAYOUT.${member} must carry "h-8 … px-4 py-3" — the reference's rows compute 32px (ours shipped py-2.5 uncapped = 40px desktop)`);
+    }
+  }
+  if (!/icon:\s*"h-4 w-4 shrink-0"/.test(plSrc)) {
+    failures.push('NAV_LAYOUT.icon must read "h-4 w-4 shrink-0" — the reference\'s nav icons compute 16px (ours shipped h-5 w-5 = 20px)');
+  }
+  if (!/hover:bg-gray-50 dark:hover:bg-neutral-800/.test(plSrc)) {
+    failures.push("the nav row hover must read hover:bg-gray-50 (+ its dark twin) — the reference's #f9fafb wash (ours shipped the zinc sidebar-hover token #f4f4f5)");
+  }
+  if (/hover:opacity-95/.test(plSrc)) {
+    failures.push("the active pill's hover:opacity-95 arm retires — the reference's active row carries no hover arm");
+  }
+  const sheetLinkRe = /link:\s*"flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm font-medium text-sidebar-foreground\/80 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-neutral-800 hover:text-sidebar-foreground"/;
+  if (!sheetLinkRe.test(plSrc)) {
+    failures.push("MOBILE_NAV_SHEET.link must carry the same h-8/icon/hover family — the drawer's rows are the same 32px family (ours shipped py-3 uncapped = 44px)");
+  }
+
+  // (d) the Profile card: the avatar-card anatomy at BOTH footer sites
+  if (!/export const PROFILE_CARD/.test(plSrc)) {
+    failures.push("the PROFILE_CARD record must exist — the reference's avatar-card anatomy (ours shipped a bare icon on desktop and a 36px circle in the drawer)");
+  }
+  const PC = [
+    ['card: "flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors cursor-pointer"', "the card row"],
+    ['avatar: "w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-secondary text-white shrink-0"', "the 40px gradient avatar"],
+    ['title: "font-medium text-sm truncate text-gray-900 dark:text-gray-100"', "the truncate title"],
+    ['subtitle: "text-xs truncate text-gray-500 dark:text-gray-400"', "the truncate subtitle"],
+  ] as const;
+  for (const [literal, label] of PC) {
+    if (!plSrc.includes(literal)) {
+      failures.push(`PROFILE_CARD must carry ${label} — the reference's decoded form`);
+    }
+  }
+  if (!/export const SIDEBAR_FOOTER_ZONE = "flex flex-col gap-2 border-t border-gray-100 p-4 dark:border-neutral-800";/.test(plSrc)) {
+    failures.push('SIDEBAR_FOOTER_ZONE must read "flex flex-col gap-2 border-t border-gray-100 p-4" — the reference\'s container (ours shipped space-y-1 px-3 pt-3 pb-4)');
+  }
+  if (!sbSrc.includes("PROFILE_CARD") || !mnSrc.includes("ProfileCard")) {
+    failures.push("PROFILE_CARD must be consumed at BOTH footer sites — the sidebar footer (the record) AND the drawer footer (the shared ProfileCard component — the reference renders the same card in both)");
+  }
+  const sheetStart = plSrc.indexOf("export const MOBILE_NAV_SHEET");
+  const sheetBlock = plSrc.slice(sheetStart, plSrc.indexOf("export const", sheetStart + 10));
+  if (/footerLink:|footerAvatar:|footerTitle:|footerSubtitle:/.test(sheetBlock)) {
+    failures.push("MOBILE_NAV_SHEET's footerLink/footerAvatar/footerTitle/footerSubtitle retire with the PROFILE_CARD conversion");
+  }
+  if (/footerGroup:|footerLink:/.test(plSrc.slice(plSrc.indexOf("export const NAV_LAYOUT"), plSrc.indexOf("export const NAV_LAYOUT") + 900))) {
+    failures.push("NAV_LAYOUT.footerGroup/footerLink retire with the PROFILE_CARD conversion");
+  }
+
+  // (e) the drawer sheet's own face: border-r + the hidden close button
+  // (the reference's authored [&>button]:hidden arm)
+  if (!/\[&>button\]:hidden/.test(plSrc)) {
+    failures.push("MOBILE_NAV_SHEET.content must carry [&>button]:hidden — the reference's authored arm; its close X is display:none (ours rendered it visible, a superset face with no ledger row)");
+  }
+  if (!/border-r border-line/.test(plSrc)) {
+    failures.push("MOBILE_NAV_SHEET.content must carry border-r border-line — the reference's sheet computes a 1px rgb(229,229,229) right border (ours shipped border-0)");
+  }
+  if (/border-0 bg-sidebar/.test(plSrc)) {
+    failures.push("the sheet's border-0 retires with the border-r conversion");
+  }
+
+  // (f) the drawer's inner column: the footer pins to the sheet bottom
+  // (the reference's flex.h-full.w-full.flex-col wrapper)
+  if (!/column:\s*"flex h-full w-full flex-col"/.test(plSrc) || !mnSrc.includes("MOBILE_NAV_SHEET.column")) {
+    failures.push("the drawer's content must wrap (header, nav, footer) in MOBILE_NAV_SHEET.column (flex h-full w-full flex-col) — the reference's footer PINS to the sheet bottom (ours floated mid-sheet after the nav)");
+  }
+  if (!mnSrc.includes("SIDEBAR_NAV_ZONE")) {
+    failures.push("the drawer's nav zone rides the shared SIDEBAR_NAV_ZONE (flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-3) — the reference's own scroll container");
+  }
+
+  // (g) the desktop sidebar's three-zone structure (the same shadcn
+  // sidebar both modes render): the header zone + the nav zone
+  if (!/zone:\s*"flex flex-col gap-2 border-b border-gray-100 p-6 dark:border-neutral-800"/.test(plSrc)) {
+    failures.push('SIDEBAR_HEADER.zone must read "flex flex-col gap-2 border-b border-gray-100 p-6" — the reference\'s brand header carries the border-b divider (ours shipped px-6 pt-6 pb-4 with no divider)');
+  }
+  if (!shellSrc.includes("SIDEBAR_HEADER.zone")) {
+    failures.push("the app-shell's aside must wrap BrandMark in SIDEBAR_HEADER.zone — the reference's border-b brand header");
+  }
+  if (!sbSrc.includes("SIDEBAR_NAV_ZONE") || !sbSrc.includes("SIDEBAR_FOOTER_ZONE")) {
+    failures.push("the sidebar must consume SIDEBAR_NAV_ZONE + SIDEBAR_FOOTER_ZONE — the reference's three-zone structure (header / nav / footer)");
+  }
+
+  expect(
+    failures,
+    "the shell-chrome geometry must hold — the WH-30 cure (the header interior, the nav row family, the Profile card, the sheet's own face)",
+  ).toEqual([]);
+});
+
+it("WH-30: the footer-retirement census — the reference carries NO footer, ours rendered the chassis strip on every module page", () => {
+  // WH-30 (F-4 — the lesson-33 class): our `© 2026 Wellness Hub · Made
+  // with 💜` strip rendered inside MAIN on every module page; the
+  // reference carries ZERO footer elements on every page probed (Goals/
+  // Dashboard/StudyResources — the body ends at the content). A CRM-
+  // chassis inheritance that NO round ever wrote a PAD §11 row for — it
+  // survived twenty-nine rounds because the WH-20 round CURED its dark
+  // pairs (treating it as a keeper surface) instead of asking whether it
+  // should exist. The retirement is the parity cure.
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const plSrc = strip(readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8"));
+  const shellSrc = strip(readFileSync(join(REPO_ROOT, "src/components/layout/app-shell.tsx"), "utf8"));
+  const failures: string[] = [];
+
+  if (/export const APP_FOOTER/.test(plSrc)) {
+    failures.push("APP_FOOTER retires from page-layout.ts — the reference renders no footer anywhere in its shell");
+  }
+  if (/<footer/.test(shellSrc)) {
+    failures.push("the app-shell's <footer> block retires — the reference's pages simply end");
+  }
+  if (/APP_FOOTER/.test(shellSrc)) {
+    failures.push("the app-shell's APP_FOOTER import retires with the block");
+  }
+  // the whole src tree stays footer-free (a returning footer needs a
+  // returning reference surface + a PAD row, never a silent comeback)
+  const appFiles = readdirSync(join(REPO_ROOT, "src"), { recursive: true })
+    .map((f) => String(f))
+    .filter((f) => f.endsWith(".tsx"));
+  for (const f of appFiles) {
+    const src = strip(readFileSync(join(REPO_ROOT, "src", f), "utf8"));
+    if (/<footer[\s>]/.test(src)) {
+      failures.push(`${f} renders a <footer> element — the reference's shell carries none (a returning footer needs a returning reference surface + a PAD §11 row)`);
+    }
+  }
+
+  expect(
+    failures,
+    "the footer retirement must hold — the WH-30 cure (the reference's pages simply end)",
   ).toEqual([]);
 });

@@ -78,7 +78,6 @@
   /* The light sidebar family (live-probed: bg rgb(250,250,250), border-r
      rgb(229,229,229), menu text rgb(63,63,70), rounded-xl 12px). */
   --color-sidebar: #fafafa;
-  --color-sidebar-hover: #f4f4f5;
   --color-sidebar-foreground: #3f3f46;
 
   /* Neutrals (the reference's body computes white; the main scroll area
@@ -231,7 +230,6 @@
   --color-gray-500: #6b7280;
   --color-gray-600: #4b5563;
   --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
   --color-gray-900: #111827;
   --color-green-50: #f0fdf4;
   --color-green-100: #dcfce7;
@@ -248,7 +246,7 @@
   --color-indigo-600: #4f46e5;
   --color-neutral-50: #fafafa;
   --color-neutral-100: #f5f5f5; /* WH-18: the Select item's dark focus text (the light neutral-900 focus pair's dark twin) */
-  --color-neutral-200: #e5e5e5; /* WH-20: the footer link's dark hover ink (the light gray-800's twin) */
+  --color-neutral-200: #e5e5e5; /* the form Add button's dark hover wash (FORM_BUTTONS.add — the WH-20 footer consumer retired with the footer at WH-30) */
   --color-neutral-400: #a3a3a3; /* WH-18: the segmented tab track's dark pair (the light neutral-600's twin) */
   --color-neutral-500: #737373; /* WH-19: the 404 display heading's dark pair (the light slate-500 superset's twin) */
   --color-neutral-600: #525252;
@@ -392,7 +390,6 @@
     --color-ink: #fafafa;
     --color-muted-ink: #a1a1aa;
     --color-sidebar: #101014;
-    --color-sidebar-hover: #1c1c1f;
     --color-sidebar-foreground: #d4d4d8;
     --color-ring: #d4d4d8;
   }
@@ -402,24 +399,6 @@
    Custom utilities (v4 native @utility — NOT @layer utilities)
 --------------------------------------------------------------------------- */
 
-@utility scrollbar-thin {
-  scrollbar-width: thin;
-  scrollbar-color: #d1d5db transparent;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #d1d5db;
-    border-radius: 9999px;
-  }
-}
 
 /* WH-3 (F-1): the chart-no-outline utility retired with recharts — it
    targeted .recharts-* focus surfaces, and the chart library never

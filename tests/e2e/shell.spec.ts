@@ -140,3 +140,51 @@ test("the module pages boot with a clean console (the console-hygiene net)", asy
 
   expect(offenders, offenders.join("\n")).toEqual([]);
 });
+
+// WH-30 (F-2/F-3/F-4 — the (n) leg): the desktop sidebar's chrome — the
+// surfaces the WH-15 color probe never measured. Live-probed on both
+// apps at 1280px: the reference's nav rows compute 32px (h-8 capping
+// py-3) with 16px icons and the gray-50 hover wash (ours shipped 40px
+// py-2.5 rows with 20px icons and the zinc token wash); the Profile
+// block is the AVATAR CARD (the 40px gradient circle + the truncate
+// title pair — ours shipped a bare lucide icon + texts on desktop);
+// and the shell carries NO footer element (the reference's pages simply
+// end — our chassis © strip retired with this round).
+test("the sidebar chrome geometry matches the reference and no footer renders (the (n) leg)", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/Dashboard", { waitUntil: "networkidle" });
+
+  const read = await page.evaluate(() => {
+    const aside = document.querySelector("aside");
+    if (!aside) return { rowH: 0, iconSize: "", avatarW: 0, avatarRadius: "", footers: -1, headerDivider: "", activeH: 0 };
+    const links = Array.from(aside.querySelectorAll("a"));
+    const row = links.find((l) => /routine templates/i.test(l.textContent || ""))!;
+    const active = links.find((l) => /dashboard/i.test(l.textContent || ""))!;
+    const icon = row.querySelector("svg");
+    const footerZone = aside.querySelector(".border-t");
+    const avatar = footerZone?.querySelector(".rounded-full");
+    const headerZone = aside.querySelector(".border-b");
+    return {
+      rowH: Math.round(row.getBoundingClientRect().height),
+      activeH: Math.round(active.getBoundingClientRect().height),
+      iconSize: icon ? getComputedStyle(icon).width : "",
+      avatarW: avatar ? Math.round(avatar.getBoundingClientRect().width) : 0,
+      avatarRadius: avatar ? getComputedStyle(avatar).borderRadius : "",
+      footers: document.querySelectorAll("footer").length,
+      headerDivider: headerZone ? getComputedStyle(headerZone).borderBottomWidth : "none",
+    };
+  });
+
+  expect(read.rowH, "the sidebar's nav rows are the reference's 32px h-8 family").toBe(32);
+  expect(read.activeH, "the active gradient pill rides the same 32px row family").toBe(32);
+  expect(read.iconSize, "the sidebar's nav icons are the reference's 16px").toBe("16px");
+  expect(read.avatarW, "the Profile card's avatar is the reference's 40px circle").toBe(40);
+  // rounded-full: the dev server serializes 9999px, the standalone build
+  // 3.35544e+07px — parse the number, the circle is the contract
+  expect(
+    Number.parseFloat(read.avatarRadius),
+    "the Profile card's avatar is round (rounded-full)",
+  ).toBeGreaterThanOrEqual(9999);
+  expect(read.footers, "NO footer element renders anywhere — the reference's pages simply end").toBe(0);
+  expect(read.headerDivider, "the sidebar's brand header carries the reference's border-b divider").toBe("1px");
+});

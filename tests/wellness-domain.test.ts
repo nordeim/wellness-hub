@@ -187,6 +187,11 @@ describe("the nav config", () => {
     const drawer = read("components/layout/mobile-nav.tsx");
     expect(sidebar).toContain("NAV_ITEMS");
     expect(drawer).toContain("NAV_ITEMS");
-    expect(drawer).toContain("NAV_FOOTER_ITEMS");
+    // WH-30 (F-3): the drawer's footer renders the SHARED ProfileCard
+    // (sidebar.tsx's export — the reference renders the same card at both
+    // footer sites); NAV_FOOTER_ITEMS lives inside it, so the one source
+    // holds through the component.
+    expect(drawer).toContain("ProfileCard");
+    expect(sidebar).toContain("NAV_FOOTER_ITEMS");
   });
 });

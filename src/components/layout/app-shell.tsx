@@ -9,9 +9,9 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useWellnessStore } from "@/stores/wellness-store";
 import { syncPrefsFromServer } from "@/stores/theme-store";
 import {
-  APP_FOOTER,
   MOBILE_HEADER,
   SHELL_LAYOUT,
+  SIDEBAR_HEADER,
 } from "@/lib/page-layout";
 import { APP_NAME } from "@/lib/constants";
 
@@ -54,43 +54,52 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     // AppShell-owned controlled open state.
     <Dialog open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
       <div className={SHELL_LAYOUT.root}>
-        {/* Desktop sidebar — in-flow flex child, visible from md. */}
+        {/* Desktop sidebar — in-flow flex child, visible from md. WH-30:
+            the reference's three-zone structure — the brand header zone
+            (border-b), the nav zone (its own flex-1 scroll container) and
+            the footer zone (border-t, the ProfileCard). */}
         <aside className={SHELL_LAYOUT.sidebar}>
-          <BrandMark />
-          <div className="min-h-0 flex-1 flex flex-col">
-            <SidebarNav />
-            <SidebarFooter />
+          <div className={SIDEBAR_HEADER.zone}>
+            <BrandMark />
           </div>
+          <SidebarNav />
+          <SidebarFooter />
         </aside>
 
         {/* Mobile sheet (< md) — the drawer. */}
         <MobileNav open={mobileNavOpen} onOpenChange={setMobileNavOpen} />
 
         {/* Main column: the phone glass header + the main scroller. The
-            pages own their padding + wash (PAGE_THEMES.<module>.root); the
-            footer follows the page children inside main (the chassis
-            placement). */}
+            pages own their padding + wash (PAGE_THEMES.<module>.root) —
+            and the page children are the LAST thing in main (WH-30: the
+            chassis © footer retired; the reference's pages simply end). */}
         <div className={SHELL_LAYOUT.mainColumn}>
+          {/* WH-30 (F-1): the header's INTERIOR decoded live at 390px — the
+              reference wraps (trigger + title) in a `flex items-center
+              gap-4` LEFT CLUSTER (the title's left edge at x=68); the bar
+              carries no flex utilities of its own and no right-side
+              element exists (our w-10 spacer + justify-between retired
+              with this round). */}
           <header className={MOBILE_HEADER.bar}>
-            <DialogTrigger asChild>
-              <button
-                type="button"
-                aria-label="Toggle Sidebar"
-                aria-expanded={mobileNavOpen}
-                aria-controls="mobile-nav-sheet"
-                className={MOBILE_HEADER.trigger}
-              >
-                <MenuIcon className="h-5 w-5" />
-                <span className="sr-only">Open navigation</span>
-              </button>
-            </DialogTrigger>
-            {/* WH-28 (F-4): the reference's own element vocabulary — its
-                mobile glass-header title is an <h1> (hidden at desktop,
-                shown at mobile — two visible h1s there, its own
-                semantics; ours was a span). The classes ride
-                MOBILE_HEADER.title unchanged. */}
-            <h1 className={MOBILE_HEADER.title}>{APP_NAME}</h1>
-            <span aria-hidden="true" className="w-10" />
+            <div className={MOBILE_HEADER.interior}>
+              <DialogTrigger asChild>
+                <button
+                  type="button"
+                  aria-label="Toggle Sidebar"
+                  aria-expanded={mobileNavOpen}
+                  aria-controls="mobile-nav-sheet"
+                  className={MOBILE_HEADER.trigger}
+                >
+                  <MenuIcon className={MOBILE_HEADER.triggerIcon} />
+                </button>
+              </DialogTrigger>
+              {/* WH-28 (F-4): the reference's own element vocabulary — its
+                  mobile glass-header title is an <h1> (hidden at desktop,
+                  shown at mobile — two visible h1s there, its own
+                  semantics; ours was a span). The classes ride
+                  MOBILE_HEADER.title unchanged. */}
+              <h1 className={MOBILE_HEADER.title}>{APP_NAME}</h1>
+            </div>
           </header>
           {/* WH-16 (F-2): suppressHydrationWarning — applyTheme's
               bgImageUrl branch materializes a client-only style attribute
@@ -99,10 +108,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               element-scoped canonical cure, children unaffected. */}
           <main suppressHydrationWarning className={SHELL_LAYOUT.main}>
             {children}
-            <footer className={APP_FOOTER.footer}>
-              <span>{APP_FOOTER.copyright}</span>
-              <span className={APP_FOOTER.link}>{APP_FOOTER.note}</span>
-            </footer>
           </main>
         </div>
       </div>

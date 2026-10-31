@@ -110,8 +110,8 @@ it("WH-20 F-1: the login family's dark focus arms compute ≥3:1 — the ring ag
   expect(offenders, "F-1: every dark focus ring must compute ≥3:1 against BOTH its backgrounds (card + input blend) and every focus border ≥3:1 against the blend — the ring is the keyboard user's only indicator in dark").toEqual([]);
 });
 
-// ---- F-2 + F-3: the toast hover arm + the footer's dark text ------------
-it("WH-20 F-2/F-3: the toast's hovered dismiss glyph and the footer's dark ink compute ≥3:1 (text ≥4.5:1)", () => {
+// ---- F-2 (the toast hover arm) — F-3 RETIRED at WH-30 with the footer --
+it("WH-20 F-2: the toast's hovered dismiss glyph computes ≥3:1 (the footer's F-3 retired at WH-30)", () => {
   const offenders: string[] = [];
 
   // F-2 — the toast close button (toast.tsx): the HOVER arm must carry a
@@ -127,28 +127,18 @@ it("WH-20 F-2/F-3: the toast's hovered dismiss glyph and the footer's dark ink c
     if (r < 3) offenders.push(`toast.tsx: dark:hover:text-${hover} vs the dark hover wash ${TOAST_WASH_DARK} = ${r.toFixed(2)}:1 (<3:1; neutral-100 clears at 15.59:1)`);
   }
 
-  // F-3 — APP_FOOTER (page-layout.ts): the resting text must clear 4.5:1
-  // against the footer's own dark bg, the link's hover arm 3:1. RED ships
-  // a WHITE strip on every dark page (border-gray-200 bg-white text-gray-500).
-  const footer = armsIn("src/lib/page-layout.ts", /border-gray-200 bg-white px-4/, "page-layout.ts (APP_FOOTER)");
-  if (footer.length !== 1) offenders.push(`APP_FOOTER: expected one footer string, read ${footer.length}`);
-  for (const { cls } of footer) {
-    const bg = cls.match(/dark:bg-([a-z]+-\d+)/)?.[1];
-    const text = cls.match(/(?:^|\s)dark:text-([a-z]+-\d+)/)?.[1];
-    if (!bg || !text) { offenders.push(`APP_FOOTER: no dark:bg-/dark:text- pair in "${cls}" (a white strip on every dark page — the loudest possible island)`); continue; }
-    const bgHex = v3(bg, "the footer's dark bg");
-    const rText = ratioHex(v3(text, "the footer's dark ink"), bgHex);
-    if (rText < 4.5) offenders.push(`APP_FOOTER: dark:text-${text} vs dark:bg-${bg} = ${rText.toFixed(2)}:1 (<4.5:1 text; neutral-400 on neutral-950 clears at 7.85:1)`);
-  }
-  const link = armsIn("src/lib/page-layout.ts", /hover:text-gray-800/, "page-layout.ts (the footer link)");
-  if (link.length !== 1) offenders.push(`the footer link: expected one link string, read ${link.length}`);
-  for (const { cls } of link) {
-    const hover = cls.match(/dark:hover:text-([a-z]+-\d+)/)?.[1];
-    if (!hover) { offenders.push(`the footer link: no dark:hover:text- arm in "${cls}"`); continue; }
-    const r = ratioHex(v3(hover, "the footer link's hover ink"), v3("neutral-950", "the footer's dark bg"));
-    if (r < 3) offenders.push(`the footer link: dark:hover:text-${hover} vs neutral-950 = ${r.toFixed(2)}:1 (<3:1; neutral-200 clears at 15.72:1)`);
-  }
-  expect(offenders, "F-2/F-3: the interaction ink must clear contrast IN THE STATE THE USER SEES IT — the hovered glyph and the dark footer").toEqual([]);
+  // F-3 — APP_FOOTER RETIRED at WH-30 (F-4): the reference carries ZERO
+  // footer elements on every page (probed live — the body ends at the
+  // content); our chassis © strip was a superset face with no PAD §11
+  // row (the lesson-33 class). The WH-20 dark-pair cure had treated it
+  // as a keeper surface; the retirement is the parity cure — the
+  // footer-retirement census (src-census) + the (n) e2e leg own the
+  // absence now.
+  expect(
+    readFileSync(join(import.meta.dirname, "..", "src", "lib", "page-layout.ts"), "utf8"),
+    "F-3's retirement: APP_FOOTER must stay gone (the reference renders no footer)",
+  ).not.toContain("export const APP_FOOTER");
+  expect(offenders, "F-2: the interaction ink must clear contrast IN THE STATE THE USER SEES IT — the hovered glyph").toEqual([]);
 });
 
 // ---- F-4: the nine module action arms -----------------------------------

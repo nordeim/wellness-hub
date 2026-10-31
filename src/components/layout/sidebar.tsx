@@ -2,9 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sparkles } from "lucide-react";
+import { Sparkles, User } from "lucide-react";
 import { NAV_ITEMS, NAV_FOOTER_ITEMS, isNavActive } from "./nav-config";
-import { NAV_LAYOUT } from "@/lib/page-layout";
+import {
+  NAV_LAYOUT,
+  PROFILE_CARD,
+  SIDEBAR_FOOTER_ZONE,
+  SIDEBAR_NAV_ZONE,
+} from "@/lib/page-layout";
 import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +21,12 @@ import { cn } from "@/lib/utils";
  * the desktop sidebar only, and the `onNavigate` prop that served the
  * phantom sharing went with it (zero call sites — app-shell renders
  * both exports bare). The component-prop census owns this surface.
+ *
+ * WH-30 (F-2): the reference's three-zone structure — this component
+ * renders the NAV ZONE (`flex min-h-0 flex-1 flex-col gap-2
+ * overflow-auto p-3`, the reference's own scroll container) wrapping
+ * the link list at its UL form (`flex w-full min-w-0 flex-col gap-1
+ * space-y-1`).
  */
 export function SidebarNav() {
   const pathname = usePathname();
@@ -38,49 +49,65 @@ export function SidebarNav() {
   );
 
   return (
-    <nav aria-label="Main navigation" className={NAV_LAYOUT.container}>
-      <div className={NAV_LAYOUT.group}>
+    <div className={SIDEBAR_NAV_ZONE}>
+      <nav aria-label="Main navigation" className={NAV_LAYOUT.list}>
         {NAV_ITEMS.map((item) => renderLink(item, isActive(item.href)))}
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }
 
-/** The footer link — the reference's "Profile & Settings / Customize your
- *  experience" card, pinned to the sidebar bottom behind a divider. WH-9
- *  (F-2c): the `onNavigate` prop retired with SidebarNav's (zero call
- *  sites — app-shell renders this bare). */
+/** WH-30 (F-3): the sidebar's footer ZONE — the reference's
+ * `flex flex-col gap-2 border-t border-gray-100 p-4` container carrying
+ * the shared ProfileCard (the avatar-card anatomy it renders at BOTH
+ * footer sites). WH-9 (F-2c): the `onNavigate` prop retired with
+ * SidebarNav's (zero call sites — app-shell renders this bare). */
 export function SidebarFooter() {
-  const pathname = usePathname();
   return (
-    <div className={NAV_LAYOUT.footerGroup}>
-      {NAV_FOOTER_ITEMS.map((item) => {
-        const active = isNavActive(pathname, item.href);
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            aria-current={active ? "page" : undefined}
-            className={cn(
-              active ? NAV_LAYOUT.linkActive : NAV_LAYOUT.footerLink,
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-            )}
-          >
-            <item.icon className={cn(NAV_LAYOUT.icon, "shrink-0")} strokeWidth={2} />
-            <span className="flex flex-col">
-              <span className="text-sm font-medium leading-tight">{item.label}</span>
-              <span className="text-xs text-muted">Customize your experience</span>
-            </span>
-          </Link>
-        );
-      })}
+    <div className={SIDEBAR_FOOTER_ZONE}>
+      <ProfileCard />
     </div>
+  );
+}
+
+/** WH-30 (F-3): the Profile & Settings card — the reference's
+ * avatar-card anatomy, decoded live at BOTH of its footer sites (the
+ * desktop sidebar footer AND the drawer's footer zone — the same
+ * shadcn Sidebar component renders both): the bare `a` wrapper, the
+ * `flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50` card row,
+ * the 40px gradient-circle avatar with the white lucide User at 20px,
+ * and the truncate title/subtitle pair. Ours shipped a bare lucide
+ * icon + texts on desktop and a 36px-circle row in the drawer — three
+ * faces across two apps and two sites. The aria-current + the focus
+ * ring stay our a11y superset. */
+export function ProfileCard({ onNavigate }: { onNavigate?: () => void }) {
+  const pathname = usePathname();
+  const active = NAV_FOOTER_ITEMS.some((item) => isNavActive(pathname, item.href));
+  return (
+    <Link
+      href="/Profile"
+      onClick={onNavigate}
+      aria-current={active ? "page" : undefined}
+      className="rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      <div className={PROFILE_CARD.card}>
+        <div className={PROFILE_CARD.avatar} aria-hidden="true">
+          <User className={PROFILE_CARD.avatarIcon} />
+        </div>
+        <div className={PROFILE_CARD.body}>
+          <p className={PROFILE_CARD.title}>Profile &amp; Settings</p>
+          <p className={PROFILE_CARD.subtitle}>Customize your experience</p>
+        </div>
+      </div>
+    </Link>
   );
 }
 
 /** Brand mark — the gradient badge + the clipped-gradient wordmark
  *  (live-probed: `font-bold text-lg bg-clip-text text-transparent` over
- *  linear-gradient(135deg, #6366f1, #a855f7)) and the tagline. */
+ *  linear-gradient(135deg, #6366f1, #a855f7)) and the tagline. WH-30:
+ *  the row is consumed inside SIDEBAR_HEADER.zone (the reference's
+ *  border-b header container — app-shell owns the zone wrapper). */
 export function BrandMark() {
   return (
     <div className={NAV_LAYOUT.brand}>

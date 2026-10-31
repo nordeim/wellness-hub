@@ -30,14 +30,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Sparkles, X } from "lucide-react";
-import {
-  NAV_ITEMS,
-  NAV_FOOTER_ITEMS,
-  isNavActive,
-  type NavItem,
-} from "./nav-config";
+import { NAV_ITEMS, isNavActive, type NavItem } from "./nav-config";
+import { ProfileCard } from "./sidebar";
 import { DialogOverlay } from "@/components/ui/dialog";
-import { MOBILE_NAV_LAYOUT, MOBILE_NAV_SHEET, NAV_LAYOUT } from "@/lib/page-layout";
+import {
+  MOBILE_NAV_LAYOUT,
+  MOBILE_NAV_SHEET,
+  NAV_LAYOUT,
+  SIDEBAR_FOOTER_ZONE,
+  SIDEBAR_NAV_ZONE,
+} from "@/lib/page-layout";
 import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -80,18 +82,25 @@ export function MobileNav({ open, onOpenChange }: MobileNavProps) {
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
-        <div className={MOBILE_NAV_SHEET.header}>
-          <DialogPrimitive.Title className="flex items-center gap-2">
-            <span className={NAV_LAYOUT.brandBadge} aria-hidden="true">
-              <Sparkles className="h-5 w-5" />
-            </span>
-            <span className={MOBILE_NAV_SHEET.title}>{APP_NAME}</span>
-          </DialogPrimitive.Title>
-          <DialogPrimitive.Description className={MOBILE_NAV_SHEET.description}>
-            {APP_TAGLINE}
-          </DialogPrimitive.Description>
+        {/* WH-30 (F-1d/F-2): the reference's inner column — the sheet's
+            content is the flex column `flex h-full w-full flex-col` so the
+            footer zone PINS to the sheet bottom (ours floated mid-sheet
+            after the nav); the header zone carries the border-b divider
+            (ours shipped a bare p-6 block). */}
+        <div className={MOBILE_NAV_SHEET.column}>
+          <div className={MOBILE_NAV_SHEET.header}>
+            <DialogPrimitive.Title className="flex items-center gap-3">
+              <span className={NAV_LAYOUT.brandBadge} aria-hidden="true">
+                <Sparkles className="h-5 w-5" />
+              </span>
+              <span className={MOBILE_NAV_SHEET.title}>{APP_NAME}</span>
+            </DialogPrimitive.Title>
+            <DialogPrimitive.Description className={MOBILE_NAV_SHEET.description}>
+              {APP_TAGLINE}
+            </DialogPrimitive.Description>
+          </div>
+          <DrawerNav onNavigate={() => onOpenChange(false)} />
         </div>
-        <DrawerNav onNavigate={() => onOpenChange(false)} />
       </DialogPrimitive.Content>
     </DialogPrimitive.Portal>
   );
@@ -124,36 +133,18 @@ function DrawerNav({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <>
-      <nav aria-label="Main navigation" className={MOBILE_NAV_SHEET.nav}>
-        {NAV_ITEMS.map((item) => renderLink(item, isNavActive(pathname, item.href)))}
-      </nav>
-      <nav aria-label="Profile and settings" className={MOBILE_NAV_SHEET.navFooter}>
-        {NAV_FOOTER_ITEMS.map((item) => {
-          const active = isNavActive(pathname, item.href);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onNavigate}
-              aria-current={active ? "page" : undefined}
-              className={cn(
-                MOBILE_NAV_SHEET.footerLink,
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              )}
-            >
-              <span className={MOBILE_NAV_SHEET.footerAvatar} aria-hidden="true">
-                <item.icon className="h-4 w-4" />
-              </span>
-              <span className="flex flex-col">
-                <span className={MOBILE_NAV_SHEET.footerTitle}>{item.label}</span>
-                <span className={MOBILE_NAV_SHEET.footerSubtitle}>
-                  Customize your experience
-                </span>
-              </span>
-            </Link>
-          );
-        })}
-      </nav>
+      {/* WH-30 (F-2): the nav zone — the reference's own scroll container
+          (`flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-3`) wrapping
+          the link list; the footer zone pins to the sheet bottom through
+          the inner column. */}
+      <div className={SIDEBAR_NAV_ZONE}>
+        <nav aria-label="Main navigation" className={NAV_LAYOUT.list}>
+          {NAV_ITEMS.map((item) => renderLink(item, isNavActive(pathname, item.href)))}
+        </nav>
+      </div>
+      <div className={SIDEBAR_FOOTER_ZONE}>
+        <ProfileCard onNavigate={onNavigate} />
+      </div>
     </>
   );
 }
