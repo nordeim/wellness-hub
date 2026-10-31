@@ -2510,3 +2510,211 @@ it("WH-25: the checkbox-retirement census — the native w-5 h-5 form + the cust
     "the native checkbox form + the retirement must hold — the WH-25 cure",
   ).toEqual([]);
 });
+
+it("WH-26: the form-grid family census — the six sibling forms' trailing fields ride the reference's grid md:grid-cols-2 gap-4 (the field interiors the modality/card rounds never walked)", () => {
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const failures: string[] = [];
+
+  const FG = layoutSrc.match(/export const FORM_GRID = \{([\s\S]*?)\n\} as const;/);
+  expect(FG, "the FORM_GRID record must exist in page-layout.ts").toBeTruthy();
+  const fgGrid = FG![1].match(/grid:\s*"([^"]*)"/)?.[1] ?? "";
+  if (fgGrid !== "grid md:grid-cols-2 gap-4") {
+    failures.push(`FORM_GRID.grid must be the reference's probed "grid md:grid-cols-2 gap-4" (read "${fgGrid}")`);
+  }
+
+  const pages: Array<[string, string, string[]]> = [
+    ["events", "events/events-page.tsx", ["Date", "Time (optional)", "Category", "Location (optional)"]],
+    ["exercise", "exercise/exercise-page.tsx", ["Exercise Type", "Duration (minutes)", "Intensity", "Calories Burned (optional)", "Date"]],
+    ["assignments", "assignments/assignments-page.tsx", ["Subject/Category", "Due Date", "Priority", "Estimated Hours"]],
+    ["reminders", "reminders/reminders-page.tsx", ["Remind Me On", "Type", "Priority", "Repeat"]],
+    ["goals", "goals/goals-page.tsx", ["Category", "Frequency", "Target Value", "Unit", "Deadline (optional)"]],
+  ];
+  for (const [name, path, members] of pages) {
+    const src = strip(readFileSync(join(REPO_ROOT, `src/app/(app)/${path}`), "utf8"));
+    if (!/FORM_GRID\.grid/.test(src)) {
+      failures.push(`${name}: the trailing fields must ride the FORM_GRID record (probed live — the reference pairs them two-wide at md)`);
+    }
+    for (const label of members) {
+      if (!src.includes(label)) {
+        failures.push(`${name}: the pinned grid member "${label}" is missing from the form`);
+      }
+    }
+  }
+  // studyresources: TWO grids ([Title, Subject] + [Type, ExamDate]) — the
+  // URL Link moves to a bare group below
+  const srSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/studyresources/studyresources-page.tsx"), "utf8"));
+  const srGridUses = srSrc.match(/FORM_GRID\.grid/g)?.length ?? 0;
+  if (srGridUses < 2) {
+    failures.push(`studyresources: the form rides TWO FORM_GRID grids — [Resource Title, Subject/Course] + [Resource Type, Exam/Test Date] (read ${srGridUses} uses)`);
+  }
+
+  // the retirements: the stacked single-column trailing fields + the wrong
+  // breakpoint/arity grids (probed: the reference is md:grid-cols-2)
+  if (/sm:grid-cols-3/.test(strip(readFileSync(join(REPO_ROOT, "src/app/(app)/reminders/reminders-page.tsx"), "utf8")))) {
+    failures.push("reminders: the sm:grid-cols-3 grid retires — the reference's trailing fields ride ONE grid md:grid-cols-2 gap-4");
+  }
+  if (/sm:grid-cols-2/.test(strip(readFileSync(join(REPO_ROOT, "src/app/(app)/goals/goals-page.tsx"), "utf8")))) {
+    failures.push("goals: the sm:grid-cols-2 grids retire — the reference's five trailing fields ride ONE grid md:grid-cols-2 gap-4");
+  }
+  if (/sm:grid-cols-2/.test(srSrc)) {
+    failures.push("studyresources: the [Exam, URL] sm:grid-cols-2 grid retires — the reference's grids are [Title, Subject] + [Type, ExamDate] at md");
+  }
+
+  expect(
+    failures,
+    "the form-grid family must hold — the WH-26 cure (the trailing-field geometry, probed live on the redeployed reference)",
+  ).toEqual([]);
+});
+
+it("WH-26: the form-interior census — the mood form's own family + the shared button/chip/rating/upload forms (the F-1 active-label cure + the redeployment round's cures)", () => {
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const failures: string[] = [];
+  const mhSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/mentalhealth/mentalhealth-page.tsx"), "utf8"));
+  const srSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/studyresources/studyresources-page.tsx"), "utf8"));
+
+  // (a) the mood form's wrapper: space-y-6 — the ONE form that deviates
+  // from its space-y-4 siblings (probed)
+  if (!/space-y-6/.test(mhSrc)) {
+    failures.push("the mood form's body wrapper must be space-y-6 (probed: the reference's mood form rides 24px group gaps where its siblings ride 16px)");
+  }
+  // (b) the mood label mb-4 block + the bare grid — the label's class
+  // lives in the MOOD_FORM record (the record + the page's consumption
+  // site — the WH-25 census doctrine)
+  const MF = layoutSrc.match(/export const MOOD_FORM = \{([\s\S]*?)\n\} as const;/);
+  expect(MF, "the MOOD_FORM record must exist in page-layout.ts").toBeTruthy();
+  const mfLabel = MF![1].match(/label:\s*"([^"]*)"/)?.[1] ?? "";
+  if (mfLabel !== "mb-4 block") {
+    failures.push(`the "Choose your mood" label must ride mb-4 block (probed: a 16px label→grid gap) — read "${mfLabel}"`);
+  }
+  if (!/MOOD_FORM\.label/.test(mhSrc)) {
+    failures.push("the page must consume MOOD_FORM.label on the Choose your mood label (the record + the consumption site)");
+  }
+  if (/mt-2 grid grid-cols-2 md:grid-cols-5/.test(mhSrc)) {
+    failures.push("the mood tile grid rides BARE (the label's mb-4 owns the gap) — the mt-2 arm retires");
+  }
+  // (c) THE F-1 CURE: the active tile's label flips to white
+  const mfLabelActive = MF![1].match(/labelActive:\s*"([^"]*)"/)?.[1] ?? "";
+  const mfLabelInactive = MF![1].match(/labelInactive:\s*"([^"]*)"/)?.[1] ?? "";
+  if (!mfLabelActive.includes("text-white")) {
+    failures.push(`MOOD_FORM.labelActive must carry text-white (probed: the reference's active label div flips with the tile state) — read "${mfLabelActive}"`);
+  }
+  if (!mfLabelInactive.includes("text-gray-700")) {
+    failures.push(`MOOD_FORM.labelInactive must carry text-gray-700 (the inactive face) — read "${mfLabelInactive}"`);
+  }
+  if (!/mood === m\.value \? MOOD_FORM\.labelActive : MOOD_FORM\.labelInactive|labelActive : .*labelInactive/.test(mhSrc)) {
+    failures.push("the mood tile's label class must be STATE-CONDITIONAL — the constant text-gray-700 label rendered GRAY on the blue gradient (the F-1 bug: the WH-21 pin asserted the button's arm, never the rendered label span)");
+  }
+  // (d) the energy slider: the probed track + min=1 + the accent retirement
+  const mfRange = MF![1].match(/range:\s*"([^"]*)"/)?.[1] ?? "";
+  if (!mfRange.includes("h-2") || !mfRange.includes("bg-gray-200") || !mfRange.includes("appearance-none")) {
+    failures.push(`MOOD_FORM.range must be the reference's probed track "w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" — read "${mfRange}"`);
+  }
+  if (/accent-\[var\(--color-primary\)\]/.test(mhSrc)) {
+    failures.push("the native accent-color slider retires — the reference ships the 8px gray-200 track (Chrome keeps the native thumb under appearance:none)");
+  }
+  if (!/min=\{1\}/.test(mhSrc)) {
+    failures.push("the energy range must ride min={1} (probed: the reference's slider runs 1-10; the schema's min(0) stays the API superset)");
+  }
+  // (e) the Low/High row + the text-subtle retirement on this row
+  const mfLowHigh = MF![1].match(/lowHigh:\s*"([^"]*)"/)?.[1] ?? "";
+  if (!mfLowHigh.includes("text-gray-500") || !mfLowHigh.includes("mt-1")) {
+    failures.push(`MOOD_FORM.lowHigh must be the reference's "flex justify-between text-xs text-gray-500 mt-1" — read "${mfLowHigh}"`);
+  }
+  // (f) the reflection h-24
+  if (!/TEXTAREA_FIELD,\s*"h-24"|h-24/.test(mhSrc)) {
+    failures.push("the Daily Reflection textarea must ride h-24 (probed: 96px where the gratitude field rides the 60px stock form)");
+  }
+  // (g) the shared buttons: the FORM_BUTTONS record + the retirements
+  const FB = layoutSrc.match(/export const FORM_BUTTONS = \{([\s\S]*?)\n\} as const;/);
+  expect(FB, "the FORM_BUTTONS record must exist in page-layout.ts").toBeTruthy();
+  const fbCancel = FB![1].match(/cancel:\s*"([^"]*)"/)?.[1] ?? "";
+  const fbAdd = FB![1].match(/add:\s*"([^"]*)"/)?.[1] ?? "";
+  if (!fbCancel.includes("h-9 px-4") || !fbCancel.includes("shadow-sm") || !fbCancel.includes("bg-surface")) {
+    failures.push(`FORM_BUTTONS.cancel must be the reference's stock outline at h-9 px-4 (the token-computed-equal form) — read "${fbCancel.slice(0, 80)}…"`);
+  }
+  if (!fbAdd.includes("bg-neutral-900") || !fbAdd.includes("shadow")) {
+    failures.push(`FORM_BUTTONS.add must be the reference's solid primary at its own --primary value rgb(23,23,23) — read "${fbAdd.slice(0, 80)}…"`);
+  }
+  for (const [name, path] of [
+    ["events", "events/events-page.tsx"],
+    ["exercise", "exercise/exercise-page.tsx"],
+    ["assignments", "assignments/assignments-page.tsx"],
+    ["reminders", "reminders/reminders-page.tsx"],
+    ["goals", "goals/goals-page.tsx"],
+    ["mentalhealth", "mentalhealth/mentalhealth-page.tsx"],
+    ["studyresources", "studyresources/studyresources-page.tsx"],
+  ] as const) {
+    const src = strip(readFileSync(join(REPO_ROOT, `src/app/(app)/${path}`), "utf8"));
+    if (!/FORM_BUTTONS\.cancel/.test(src)) {
+      failures.push(`${name}: the form Cancel must ride FORM_BUTTONS.cancel (probed: the stock outline h-9)`);
+    }
+    if (/h-10 rounded-md border border-line px-8/.test(src)) {
+      failures.push(`${name}: the h-10 px-8 outline Cancel retires — the reference's Cancel is the stock h-9 px-4`);
+    }
+  }
+  // (h) the Add buttons: both consumers ride FORM_BUTTONS.add
+  for (const [name, src] of [["mentalhealth", mhSrc], ["studyresources", srSrc]] as const) {
+    if (!/FORM_BUTTONS\.add/.test(src)) {
+      failures.push(`${name}: the Add button must ride FORM_BUTTONS.add (probed: the solid stock primary, bg rgb(23,23,23))`);
+    }
+  }
+  // (i) the TAG_CHIP family + the retirements
+  const TC = layoutSrc.match(/export const TAG_CHIP = \{([\s\S]*?)\n\} as const;/);
+  expect(TC, "the TAG_CHIP record must exist in page-layout.ts").toBeTruthy();
+  const tcChip = TC![1].match(/chip:\s*"([^"]*)"/)?.[1] ?? "";
+  const tcRow = TC![1].match(/row:\s*"([^"]*)"/)?.[1] ?? "";
+  if (!tcChip.includes("bg-emerald-100") || !tcChip.includes("text-emerald-700") || !tcChip.includes("px-3 py-1") || !tcChip.includes("text-sm")) {
+    failures.push(`TAG_CHIP.chip must be the reference's emerald family "px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm flex items-center gap-2" — read "${tcChip}"`);
+  }
+  if (tcRow !== "flex flex-wrap gap-2 mt-3") {
+    failures.push(`TAG_CHIP.row must be "flex flex-wrap gap-2 mt-3" (probed) — read "${tcRow}"`);
+  }
+  if (/bg-primary\/10 px-2\.5 py-0\.5/.test(mhSrc) || /bg-primary\/10 px-2\.5 py-0\.5/.test(srSrc)) {
+    failures.push("the primary/10 text-xs chip family retires — the reference's chips are the emerald px-3 py-1 text-sm family");
+  }
+  // the sr tags row: the reference's flex gap-2 mb-2 (the 4px artifact gap)
+  if (!/flex gap-2 mb-2/.test(srSrc)) {
+    failures.push("the sr tags input row must be the reference's `flex gap-2 mb-2` (probed: the label gap is the 4px line-box artifact, the mb-2 owns the row→chips gap)");
+  }
+  // (j) the Upload File field (the WH-4 absence claim is FALSE on the
+  // redeployed reference)
+  const UP = layoutSrc.match(/export const UPLOAD_FIELD = \{([\s\S]*?)\n\} as const;/);
+  expect(UP, "the UPLOAD_FIELD record must exist in page-layout.ts").toBeTruthy();
+  if (!/Upload File \(optional\)/.test(srSrc)) {
+    failures.push('the sr form must carry the "Upload File (optional)" field (probed on the redeployed reference — the WH-4 absence claim is FALSE)');
+  }
+  if (!/type="file"/.test(srSrc) || !/flex-1/.test(srSrc)) {
+    failures.push("the upload field is the bare stock file input at flex-1 inside the flex items-center gap-2 wrap (render-only — no persistence, no upload route)");
+  }
+  // (k) the Rating picker: the text-2xl stars + the Star-icon retirement
+  const RP = layoutSrc.match(/export const RATING_PICKER = \{([\s\S]*?)\n\} as const;/);
+  expect(RP, "the RATING_PICKER record must exist in page-layout.ts").toBeTruthy();
+  const rpRow = RP![1].match(/row:\s*"([^"]*)"/)?.[1] ?? "";
+  const rpStar = RP![1].match(/star:\s*"([^"]*)"/)?.[1] ?? "";
+  if (rpRow !== "flex gap-2") {
+    failures.push(`RATING_PICKER.row must be the reference's "flex gap-2" — read "${rpRow}"`);
+  }
+  if (rpStar !== "text-2xl") {
+    failures.push(`RATING_PICKER.star must be the reference's "text-2xl" — read "${rpStar}"`);
+  }
+  // The Star-icon retirement is scoped to the FORM region — the sr LIST
+  // card's read-only Star display (h-4 w-4, the amber fill) is a
+  // separate surface never re-probed this round (the F-10 walk decoded
+  // the form's picker; the list's own face rides the WH-27 ledger).
+  const srFormStart = srSrc.indexOf("open &&");
+  const srFormEnd = srSrc.indexOf("</section>", srFormStart);
+  const srForm = srFormStart >= 0 && srFormEnd > srFormStart ? srSrc.slice(srFormStart, srFormEnd) : "";
+  if (/fill-amber-400|hover:scale-110/.test(srForm)) {
+    failures.push("the lucide Star icon picker retires — the reference's rating is five bare text-2xl ☆ buttons (our radiogroup semantics stay the superset)");
+  }
+  if (!/[☆★]/.test(srForm)) {
+    failures.push("the rating buttons render the ☆/★ text glyphs (the reference's own form)");
+  }
+
+  expect(
+    failures,
+    "the form-interior family must hold — the WH-26 cure (the F-1 active-label bug + the redeployment round's field-interior cures)",
+  ).toEqual([]);
+});

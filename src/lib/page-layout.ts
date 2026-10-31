@@ -527,6 +527,100 @@ export const FORM_CARD = {
   footer: "flex justify-end gap-3",
 } as const;
 
+/** WH-26 (F-4): the create-forms' trailing-field grid — the reference
+ *  pairs the dense fields two-wide at md (probed live on the redeployed
+ *  reference, field-by-field on all six sibling forms): events
+ *  [Date/Time/Category/Location] · exercise [Type/Duration/Intensity/
+ *  Calories/Date] · assignments [Subject/Due/Priority/Hours] ·
+ *  reminders [RemindMeOn/Type/Priority/Repeat] · goals ONE grid
+ *  [Category/Frequency/Target/Unit/Deadline] · studyresources
+ *  [Title/Subject] + [Type/ExamDate] (the URL Link rides a bare group
+ *  below). The cell interiors keep the computed-equal 12px label→control
+ *  mechanism (the inline-label line box + the control's own mt-2 — the
+ *  same face as the space-y-2 groups). */
+export const FORM_GRID = {
+  grid: "grid md:grid-cols-2 gap-4",
+} as const;
+
+/** WH-26 (F-5/F-7): the create-forms' footer/Add buttons — the
+ *  reference's STOCK shadcn forms (probed live on the redeployed
+ *  reference): the Cancel the OUTLINE variant (`border border-input
+ *  bg-background shadow-sm hover:bg-accent hover:text-accent-foreground
+ *  h-9 px-4 py-2` — expressed in our computed-equal tokens: --line
+ *  #e5e5e5 = its --input, --line-soft #f5f5f5 = its --accent, --surface
+ *  = its --background) and the Add the SOLID default variant at the
+ *  reference's own --primary value — its --primary is the shadcn stock
+ *  zinc rgb(23,23,23), NOT its brand pair (the reference's brand
+ *  gradient rides explicit classes; OUR --primary is the indigo brand
+ *  pair) — so the fixed neutral-900 classes express its computed face.
+ *  The dark twins on the Add are OUR documented superset (the
+ *  reference's forms are light-only — its own broken-dark class). */
+export const FORM_BUTTONS = {
+  cancel:
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-line bg-surface shadow-sm hover:bg-line-soft hover:text-ink h-9 px-4 py-2",
+  add: "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-neutral-900 text-neutral-50 shadow hover:bg-neutral-900/90 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 h-9 px-4 py-2",
+} as const;
+
+/** WH-26 (F-6): the tag-chip family — the reference's EMERALD chips
+ *  (probed live, client-state on both the mood activities and the sr
+ *  tags): `px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full
+ *  text-sm flex items-center gap-2` (rgb(209,250,229)/rgb(4,120,87) —
+ *  AA at ≈5.9:1) with the × button BARE (zero classes — the reference's
+ *  own form; our aria-label stays the association superset) in the
+ *  `flex flex-wrap gap-2 mt-3` row. The dark twins are our superset. */
+export const TAG_CHIP = {
+  chip: "px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm flex items-center gap-2 dark:bg-emerald-900/50 dark:text-emerald-300",
+  row: "flex flex-wrap gap-2 mt-3",
+} as const;
+
+/** WH-26 (F-1/F-2/F-3/F-8/F-11): the mood form's own interior — the ONE
+ *  create-form that deviates from its space-y-4 siblings (probed live on
+ *  the redeployed reference, the full DOM + computed walk): the wrapper
+ *  `<form class="space-y-6">` (24px group gaps), the mood label the
+ *  stock Label + `mb-4 block` (a 16px label→grid gap — the grid rides
+ *  BARE), the active tile's label `text-white` (the F-1 bug: the label
+ *  must flip with the tile state, never ride a constant gray — the
+ *  constant text-gray-700 rendered GRAY on the blue gradient), the
+ *  energy slider the 8px gray-200 track (`w-full h-2 bg-gray-200
+ *  rounded-lg appearance-none cursor-pointer` — Chrome keeps a NATIVE
+ *  blue thumb under `appearance:none`, pixel-verified; min=1, the value
+ *  5) with the Low/High row `flex justify-between text-xs text-gray-500
+ *  mt-1`, and the Daily Reflection textarea at h-24 (96px — the
+ *  gratitude field keeps the 60px stock form). */
+export const MOOD_FORM = {
+  label: "mb-4 block",
+  grid: "grid grid-cols-2 md:grid-cols-5 gap-3",
+  tile: "p-4 rounded-2xl border-2 transition-all text-center",
+  active: "bg-gradient-to-br from-blue-500 to-cyan-500 text-white border-transparent shadow-lg scale-105",
+  inactive: "border-gray-200 hover:border-gray-300 dark:border-neutral-700 dark:hover:border-neutral-600",
+  icon: "text-4xl mb-2",
+  labelActive: "text-sm font-medium text-white",
+  labelInactive: "text-sm font-medium text-gray-700 dark:text-gray-400",
+  range: "w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-neutral-700",
+  lowHigh: "flex justify-between text-xs text-gray-500 mt-1 dark:text-gray-400",
+} as const;
+
+/** WH-26 (F-9): the studyresources Upload File field — the WH-4 absence
+ *  claim ("the reference carries no upload surface anywhere,
+ *  live-probed") is FALSE on the redeployed reference: its form carries
+ *  a bare stock `<input type="file" class="…stock… flex-1">` inside a
+ *  `flex items-center gap-2` row. RENDER-ONLY mirror: the native picker
+ *  opens, nothing persists, no /api/upload route (the WH-4 route
+ *  retirement pin stays — the PAD §11 row documents the mirror). */
+export const UPLOAD_FIELD = {
+  wrap: "flex items-center gap-2",
+} as const;
+
+/** WH-26 (F-10): the sr Rating picker — the reference's five BARE
+ *  `text-2xl` ☆ buttons in a `flex gap-2` row (probed live; the ink
+ *  near-black rgb(10,10,10), the click state inert on the reference's
+ *  own demo). Our radiogroup semantics + the ★ fill stay the functional
+ *  superset. */
+export const RATING_PICKER = {
+  row: "flex gap-2",
+  star: "text-2xl",
+} as const;
+
 /** The Routines Schedule modal's content — WH-22 (the never-probed
  *  modal's cure): the reference's ONE modal (probed live 2026-10-31,
  *  field-by-field on two templates of different categories — the

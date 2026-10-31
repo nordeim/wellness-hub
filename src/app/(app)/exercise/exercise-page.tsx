@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD , TEXTAREA_FIELD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD, TEXTAREA_FIELD, FORM_GRID, FORM_BUTTONS } from "@/lib/page-layout";
 import { WORKOUT_TYPES, WORKOUT_INTENSITIES, workoutTypeMeta, intensityMeta } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -116,70 +116,76 @@ export default function ExerciseClientPage() {
           </div>
           <div className={FORM_CARD.body}>
             <div className="space-y-4">
-              <div className={DIALOG_GROUP.group}>
-                <Label htmlFor="workout-type">Exercise Type</Label>
-                <Select value={type} onValueChange={setType}>
-                  <SelectTrigger id="workout-type" className="mt-2 w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {WORKOUT_TYPES.map((t) => (
-                      <SelectItem key={t.value} value={t.value}>
-                        {t.icon} {t.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className={DIALOG_GROUP.group}>
-                <Label htmlFor="workout-duration">Duration (minutes)</Label>
-                <Input
-                  id="workout-duration"
-                  type="number"
-                  min={1}
-                  required
-                  className="mt-2"
-                  value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
-                  placeholder="30"
-                />
-              </div>
-              <div className={DIALOG_GROUP.group}>
-                <Label htmlFor="workout-intensity">Intensity</Label>
-                <Select value={intensity} onValueChange={setIntensity}>
-                  <SelectTrigger id="workout-intensity" className="mt-2 w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {WORKOUT_INTENSITIES.map((t) => (
-                      <SelectItem key={t.value} value={t.value}>
-                        {t.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className={DIALOG_GROUP.group}>
-                <Label htmlFor="workout-calories">Calories Burned (optional)</Label>
-                <Input
-                  id="workout-calories"
-                  type="number"
-                  min={0}
-                  className="mt-2"
-                  value={calories}
-                  onChange={(e) => setCalories(e.target.value)}
-                  placeholder="250"
-                />
-              </div>
-              <div className={DIALOG_GROUP.group}>
-                <Label htmlFor="workout-date">Date</Label>
-                <Input
-                  id="workout-date"
-                  type="date"
-                  className="mt-2"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                />
+              {/* WH-26 (F-4): the five dense fields ride the reference's
+                  grid md:grid-cols-2 gap-4 (probed live — the reference
+                  pairs them two-wide at md; the Notes group stays
+                  full-width below). */}
+              <div className={FORM_GRID.grid}>
+                <div className={DIALOG_GROUP.group}>
+                  <Label htmlFor="workout-type">Exercise Type</Label>
+                  <Select value={type} onValueChange={setType}>
+                    <SelectTrigger id="workout-type" className="mt-2 w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {WORKOUT_TYPES.map((t) => (
+                        <SelectItem key={t.value} value={t.value}>
+                          {t.icon} {t.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className={DIALOG_GROUP.group}>
+                  <Label htmlFor="workout-duration">Duration (minutes)</Label>
+                  <Input
+                    id="workout-duration"
+                    type="number"
+                    min={1}
+                    required
+                    className="mt-2"
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                    placeholder="30"
+                  />
+                </div>
+                <div className={DIALOG_GROUP.group}>
+                  <Label htmlFor="workout-intensity">Intensity</Label>
+                  <Select value={intensity} onValueChange={setIntensity}>
+                    <SelectTrigger id="workout-intensity" className="mt-2 w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {WORKOUT_INTENSITIES.map((t) => (
+                        <SelectItem key={t.value} value={t.value}>
+                          {t.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className={DIALOG_GROUP.group}>
+                  <Label htmlFor="workout-calories">Calories Burned (optional)</Label>
+                  <Input
+                    id="workout-calories"
+                    type="number"
+                    min={0}
+                    className="mt-2"
+                    value={calories}
+                    onChange={(e) => setCalories(e.target.value)}
+                    placeholder="250"
+                  />
+                </div>
+                <div className={DIALOG_GROUP.group}>
+                  <Label htmlFor="workout-date">Date</Label>
+                  <Input
+                    id="workout-date"
+                    type="date"
+                    className="mt-2"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                  />
+                </div>
               </div>
               <div className={DIALOG_GROUP.group}>
                 <Label htmlFor="workout-notes">Notes (optional)</Label>
@@ -192,11 +198,7 @@ export default function ExerciseClientPage() {
                 />
               </div>
               <div className={FORM_CARD.footer}>
-                <button
-                  type="button"
-                  className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-                  onClick={() => setOpen(false)}
-                >
+                <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                   Cancel
                 </button>
                 <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.exercise.button}>

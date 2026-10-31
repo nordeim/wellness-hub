@@ -14,7 +14,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, SECTION_CARD, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD, CALENDAR , TEXTAREA_FIELD } from "@/lib/page-layout";
+import { PAGE_THEMES, SECTION_CARD, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD, CALENDAR, TEXTAREA_FIELD, FORM_GRID, FORM_BUTTONS } from "@/lib/page-layout";
 import { EVENT_CATEGORIES, eventCategoryMeta } from "@/lib/constants";
 import { monthGrid, isSameCalendarDay, formatTimeString } from "@/lib/wellness";
 import { formatMonthYear, formatDateShort } from "@/lib/format";
@@ -180,58 +180,59 @@ export default function EventsClientPage() {
                   onChange={(e) => set("description", e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="ev-date">Date</Label>
-                <Input
-                  id="ev-date"
-                  type="date"
-                  required
-                  className="mt-2"
-                  value={form.date}
-                  onChange={(e) => set("date", e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="ev-time">Time (optional)</Label>
-                <Input
-                  id="ev-time"
-                  type="time"
-                  className="mt-2"
-                  value={form.time}
-                  onChange={(e) => set("time", e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="ev-category">Category</Label>
-                <Select value={form.category} onValueChange={(v) => set("category", v)}>
-                  <SelectTrigger id="ev-category" className="mt-2 w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {EVENT_CATEGORIES.map((c) => (
-                      <SelectItem key={c.value} value={c.value}>
-                        {c.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="ev-location">Location (optional)</Label>
-                <Input
-                  id="ev-location"
-                  className="mt-2"
-                  placeholder="Where?"
-                  value={form.location}
-                  onChange={(e) => set("location", e.target.value)}
-                />
+              {/* WH-26 (F-4): the trailing fields ride the reference's
+                  grid md:grid-cols-2 gap-4 (probed live — the four dense
+                  fields pair two-wide at md, never stacked). */}
+              <div className={FORM_GRID.grid}>
+                <div className="space-y-2">
+                  <Label htmlFor="ev-date">Date</Label>
+                  <Input
+                    id="ev-date"
+                    type="date"
+                    required
+                    className="mt-2"
+                    value={form.date}
+                    onChange={(e) => set("date", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="ev-time">Time (optional)</Label>
+                  <Input
+                    id="ev-time"
+                    type="time"
+                    className="mt-2"
+                    value={form.time}
+                    onChange={(e) => set("time", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="ev-category">Category</Label>
+                  <Select value={form.category} onValueChange={(v) => set("category", v)}>
+                    <SelectTrigger id="ev-category" className="mt-2 w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {EVENT_CATEGORIES.map((c) => (
+                        <SelectItem key={c.value} value={c.value}>
+                          {c.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="ev-location">Location (optional)</Label>
+                  <Input
+                    id="ev-location"
+                    className="mt-2"
+                    placeholder="Where?"
+                    value={form.location}
+                    onChange={(e) => set("location", e.target.value)}
+                  />
+                </div>
               </div>
               <div className={FORM_CARD.footer}>
-                <button
-                  type="button"
-                  className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-                  onClick={() => setOpen(false)}
-                >
+                <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                   Cancel
                 </button>
                 <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.events.button}>

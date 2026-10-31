@@ -242,23 +242,38 @@ it("WH-21 F-3: the mood selector rides the reference's block-stacked tile anatom
   // inactive arms are OUR superset (the reference's light-only form is
   // its own broken-dark class); the label's dark:text-gray-400 is the
   // PAGE_HEADER.subtitle precedent pair. aria-pressed stays (our
-  // semantics superset — the reference's tiles carry none).
-  const src = readFileSync(join(import.meta.dirname, "..", "src", "app", "(app)", "mentalhealth", "mentalhealth-page.tsx"), "utf8");
+  // semantics superset — the reference's tiles carry none). WH-26: the
+  // tile family moved into the MOOD_FORM record
+  // (page-layout.ts) — the anatomy reads the RECORD + the page's
+  // consumption site (the WH-23 body-slice doctrine), and the label
+  // member became the STATE-CONDITIONAL pair (the F-1 cure: the
+  // reference's active label div flips to text-white; our constant
+  // gray-700 label rendered GRAY on the blue gradient — the WH-21 pin
+  // asserted the button's arm, never the rendered label span).
+  const pageSrc = readFileSync(join(import.meta.dirname, "..", "src", "app", "(app)", "mentalhealth", "mentalhealth-page.tsx"), "utf8");
+  const layoutSrc = readFileSync(join(import.meta.dirname, "..", "src", "lib", "page-layout.ts"), "utf8");
   const ANATOMY: [string, string][] = [
-    ["p-4 rounded-2xl border-2 transition-all", "the tile's own geometry (the reference's block-stacked tile, not a pill)"],
+    ["p-4 rounded-2xl border-2 transition-all text-center", "the tile's own geometry (the reference's block-stacked tile, not a pill)"],
     ["bg-gradient-to-br from-blue-500 to-cyan-500 text-white border-transparent shadow-lg scale-105", "the active tile (the reference's FIXED module pair + white ink — never the preset-themeable primary)"],
     ["border-gray-200 hover:border-gray-300 dark:border-neutral-700 dark:hover:border-neutral-600", "the inactive tile (the reference's faint gray arms + our dark twins)"],
     ["grid grid-cols-2 md:grid-cols-5 gap-3", "the tile grid (the reference's 2-col mobile / 5-col desktop form)"],
     ["text-4xl mb-2", "the emoji glyph (36px, block-stacked)"],
-    ["text-sm font-medium text-gray-700", "the label (14px, the reference's gray-700 ink)"],
-    ["dark:text-gray-400", "the label's dark pair (the PAGE_HEADER.subtitle precedent — the superset over the reference's light-only form)"],
+    ["text-sm font-medium text-white", "the ACTIVE label (the reference's active label div flips to white ink — the F-1 cure)"],
+    ["text-sm font-medium text-gray-700 dark:text-gray-400", "the INACTIVE label (14px, the reference's gray-700 ink + the PAGE_HEADER.subtitle precedent dark twin)"],
   ];
-  const missing = ANATOMY.filter(([cls]) => !src.includes(cls)).map(([, why]) => why);
+  const missing = ANATOMY.filter(([cls]) => !layoutSrc.includes(cls)).map(([, why]) => why);
   expect(
     missing,
-    "the mood selector must ride the reference's tile anatomy — every decoded member present (the WH-21 F-3 cure; the 40px pill form was both an AA failure and the wrong theming model)",
+    "the mood selector must ride the reference's tile anatomy — every decoded member present in the MOOD_FORM record (the WH-21 F-3 cure; the 40px pill form was both an AA failure and the wrong theming model)",
   ).toEqual([]);
+  // The page must consume the record's members (the record + the
+  // consumption site — the WH-25 census doctrine: a class that lives in
+  // the record but is never consumed is a dead arm).
+  expect(
+    pageSrc.includes("MOOD_FORM.tile") && pageSrc.includes("MOOD_FORM.active : MOOD_FORM.inactive") && pageSrc.includes("MOOD_FORM.labelActive : MOOD_FORM.labelInactive"),
+    "the page must consume the MOOD_FORM record's tile/active/inactive/label members (the record + the consumption site)",
+  ).toBe(true);
   // The old pill form must be gone.
-  expect(src.includes("rounded-full border px-4"), "the old 40px rounded-full pill form must be retired (the reference ships tiles)").toBe(false);
-  expect(src.includes('aria-pressed={mood === m.value}'), "the tiles keep aria-pressed (our semantics superset over the reference's unlabelled state)").toBe(true);
+  expect(pageSrc.includes("rounded-full border px-4"), "the old 40px rounded-full pill form must be retired (the reference ships tiles)").toBe(false);
+  expect(pageSrc.includes('aria-pressed={mood === m.value}'), "the tiles keep aria-pressed (our semantics superset over the reference's unlabelled state)").toBe(true);
 });

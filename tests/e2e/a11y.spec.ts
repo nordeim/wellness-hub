@@ -1225,3 +1225,94 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
     expect(cells!.today!.num, "the today number carries the mb-1 rhythm + the violet-700 ink").toContain("mb-1");
   });
 });
+
+  // WH-26 (k): the mood form's computed interior — the round's core cure
+  // pinned live. The WH-21 modality round pinned the CARD + the footer +
+  // the modality; the field interiors shipped unwalked through five green
+  // rounds — and the F-1 bug rode the gap: the WH-21 pin asserted the
+  // active BUTTON's text-white arm while the label span's constant
+  // text-gray-700 overrode it (gray-on-gradient). This leg reads the
+  // RENDERED leaves: the wrapper's 24px group ladder (the reference's mood
+  // form rides space-y-6 where its siblings ride space-y-4), the mood
+  // label's 16px mb-4, the 8px gray-200 track + min 1, the Low/High row,
+  // the 96px reflection, the 36px stock-outline Cancel, the solid
+  // rgb(23,23,23) Add, the emerald chip (added client-state, never
+  // saved), and the active tile's LABEL color.
+  test("(k) the mood form's computed interior — the space-y-6 ladder, the mb-4 mood label, the 8px track slider at min 1, the h-24 reflection, the stock footer buttons, the emerald chip, the active label white", async ({ page }) => {
+    await page.goto("/MentalHealth", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "New Entry" }).click();
+    await expect(page.getByText("How are you feeling today?")).toBeVisible();
+    await page.mouse.move(8, 300);
+    await page.waitForTimeout(450);
+
+    const read = await page.evaluate(() => {
+      const range = document.querySelector("input[type='range']");
+      if (!range) return { error: "no range" };
+      let card = range as HTMLElement;
+      while (card && card !== document.body) {
+        if ((card.getAttribute("class") || "").includes("shadow-xl")) break;
+        card = card.parentElement!;
+      }
+      const wrapper = card.querySelector(".p-6\\.pt-0 > div, .p-6.pt-0 > div") as HTMLElement | null;
+      const groups = wrapper ? (Array.from(wrapper.children) as HTMLElement[]) : [];
+      const label0 = card.querySelector("label")!;
+      const grid = label0.parentElement!.querySelector("div[class*='grid-cols-2']")!;
+      const labels = Array.from(card.querySelectorAll("label"));
+      const reflect = Array.from(card.querySelectorAll("textarea"))[1];
+      const cancel = Array.from(card.querySelectorAll("button")).find((b) => b.textContent.trim() === "Cancel")!;
+      const add = Array.from(card.querySelectorAll("button")).find((b) => b.textContent.trim() === "Add")!;
+      const lowHigh = Array.from(card.querySelectorAll("div")).find((d) => d.textContent.trim() === "LowHigh" && d.querySelector("span"));
+      const activeTile = Array.from(card.querySelectorAll("button[aria-pressed]")).find((t) => t.getAttribute("aria-pressed") === "true");
+      const activeLabel = activeTile?.querySelectorAll("span")[1] as HTMLElement | undefined;
+      return {
+        wrapperCls: wrapper?.getAttribute("class"),
+        groupGap: groups.length >= 2 ? Math.round(groups[1].getBoundingClientRect().y - groups[0].getBoundingClientRect().y - groups[0].getBoundingClientRect().height) : null,
+        moodLabelMb: Math.round(grid.getBoundingClientRect().y - label0.getBoundingClientRect().bottom),
+        rangeH: Math.round(range.getBoundingClientRect().height),
+        rangeMin: (range as HTMLInputElement).min,
+        rangeBg: getComputedStyle(range).backgroundColor,
+        lowHighMt: lowHigh ? getComputedStyle(lowHigh).marginTop : null,
+        lowHighColor: lowHigh ? getComputedStyle(lowHigh.querySelector("span")!).color : null,
+        reflectH: reflect ? Math.round(reflect.getBoundingClientRect().height) : null,
+        cancelH: Math.round(cancel.getBoundingClientRect().height),
+        cancelBg: getComputedStyle(cancel).backgroundColor,
+        addBg: getComputedStyle(add).backgroundColor,
+        activeLabelColor: activeLabel ? getComputedStyle(activeLabel).color : null,
+        labelCount: labels.length,
+      };
+    });
+    expect(read.error, `the mood form must render (read ${JSON.stringify(read)})`).toBeFalsy();
+    expect(read.wrapperCls, "the mood form's body wrapper rides space-y-6 (the ONE form that deviates from its space-y-4 siblings — probed)").toContain("space-y-6");
+    expect(read.groupGap, "the group ladder computes 24px (space-y-6)").toBe(24);
+    expect(read.moodLabelMb, "the mood label's mb-4 computes a 16px label→grid gap (probed)").toBe(16);
+    expect(read.rangeH, "the energy slider is the reference's 8px track (h-2)").toBe(8);
+    expect(read.rangeMin, "the energy range runs 1-10 (probed; the schema's min(0) stays the API superset)").toBe("1");
+    expect(read.rangeBg, "the track washes gray-200").toBe("rgb(229, 231, 235)");
+    expect(read.lowHighMt, "the Low/High row rides mt-1 (4px)").toBe("4px");
+    expect(read.lowHighColor, "the Low/High ink is gray-500").toBe("rgb(107, 114, 128)");
+    expect(read.reflectH, "the Daily Reflection textarea rides h-24 (96px — probed)").toBe(96);
+    expect(read.cancelH, "the Cancel is the stock outline at h-9 (36px — probed)").toBe(36);
+    expect(read.cancelBg, "the Cancel carries the surface wash (bg-background ≈ our bg-surface)").toBe("rgb(255, 255, 255)");
+    expect(read.addBg, "the Add is the reference's solid --primary at its own zinc value rgb(23,23,23)").toBe("rgb(23, 23, 23)");
+    expect(read.activeLabelColor, "THE F-1 CURE: the active tile's LABEL flips to white (the WH-21 pin asserted the button's arm while the constant-gray span overrode it)").toBe("rgb(255, 255, 255)");
+
+    // the chip: added client-state only (never saved — zero writes)
+    await page.locator("input[placeholder*='Exercise']").fill("(k)probe");
+    await page.getByRole("button", { name: "Add", exact: true }).click();
+    await page.waitForTimeout(300);
+    const chip = await page.evaluate(() => {
+      const el = Array.from(document.querySelectorAll("span")).find((s) => s.textContent.includes("(k)probe"));
+      if (!el) return null;
+      const cs = getComputedStyle(el);
+      return { bg: cs.backgroundColor, color: cs.color, fs: cs.fontSize, h: Math.round(el.getBoundingClientRect().height), rowCls: el.parentElement!.getAttribute("class") };
+    });
+    expect(chip, "the client-state chip renders").toBeTruthy();
+    expect(chip!.bg, "the chip washes emerald-100 (the reference's family — not our old primary/10)").toBe("rgb(209, 250, 229)");
+    expect(chip!.color, "the chip ink is emerald-700").toBe("rgb(4, 120, 87)");
+    expect(chip!.fs, "the chip text is text-sm (14px — not our old text-xs)").toBe("14px");
+    expect(chip!.h, "the chip computes 28px (px-3 py-1)").toBe(28);
+    expect(chip!.rowCls, "the chip row is the reference's flex flex-wrap gap-2 mt-3").toContain("flex-wrap gap-2 mt-3");
+    // cancel the form — the client state dies with it (zero writes)
+    await page.getByRole("button", { name: "Cancel", exact: true }).click();
+    await expect(page.getByText("How are you feeling today?")).toBeHidden();
+  });

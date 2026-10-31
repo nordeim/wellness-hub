@@ -150,12 +150,32 @@ it("WH-21: the mood tile's active pair — the reference's own blue→cyan + whi
   // the pair STAYS the reference's own stops AND the ratio stays pinned
   // at the documented value — a change to either forces the PAD §11 row
   // and this pin to move together.
+  // WH-26: the pair moved into the MOOD_FORM record (page-layout.ts) —
+  // the pin reads the RECORD + the page's consumption site (the WH-23
+  // body-slice doctrine). And per the F-1 lesson (a pin asserts the
+  // RENDERED LEAF, never the parent's arm): the active label's own
+  // text-white arm is pinned here too — the WH-21 form asserted the
+  // BUTTON's text-white while the label span's constant gray-700 rode
+  // over it for five rounds (the label is state-conditional since the
+  // WH-26 cure).
+  const layout = readFileSync(join(import.meta.dirname, "..", "src", "lib", "page-layout.ts"), "utf8");
   const page = readFileSync(join(import.meta.dirname, "..", "src", "app", "(app)", "mentalhealth", "mentalhealth-page.tsx"), "utf8");
-  const active = page.match(/bg-gradient-to-br from-([a-z]+-\d+) to-([a-z]+-\d+) text-white/);
+  const mfBlock = layout.match(/export const MOOD_FORM = \{([\s\S]*?)\n\} as const;/);
+  const mfActive = mfBlock?.[1]?.match(/active:\s*"([^"]*)"/)?.[1] ?? "";
+  const mfLabelActive = mfBlock?.[1]?.match(/labelActive:\s*"([^"]*)"/)?.[1] ?? "";
+  const active = mfActive.match(/bg-gradient-to-br from-([a-z]+-\d+) to-([a-z]+-\d+) text-white/);
   expect(
     active,
     "the mood tile's active state must ride the reference's fixed gradient pair + white ink (from-blue-500 to-cyan-500 text-white — the module-pair family, never the preset-themeable primary)",
   ).toBeTruthy();
+  expect(
+    mfLabelActive.includes("text-white"),
+    "the active tile's RENDERED label must carry its own text-white arm (the F-1 lesson: the button's arm never reaches the label span — the constant gray-700 label rendered GRAY on the gradient through five green rounds)",
+  ).toBe(true);
+  expect(
+    page.includes("MOOD_FORM.labelActive : MOOD_FORM.labelInactive"),
+    "the page must consume the label's STATE-CONDITIONAL pair (the record + the consumption site — the body-slice doctrine)",
+  ).toBe(true);
   const r = worstStopRatio(v3(active![1]!, "the mood tile's from-stop"), v3(active![2]!, "the mood tile's to-stop"));
   expect(
     Math.abs(r - 2.43),

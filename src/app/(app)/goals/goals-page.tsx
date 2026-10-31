@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD, EMPTY_STATE , TEXTAREA_FIELD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD, EMPTY_STATE, TEXTAREA_FIELD, FORM_GRID, FORM_BUTTONS } from "@/lib/page-layout";
 import { GOAL_CATEGORIES, GOAL_FREQUENCIES, goalCategoryMeta, goalFrequencyMeta } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -207,7 +207,12 @@ export default function GoalsClientPage() {
                 onChange={(e) => set("description", e.target.value)}
               />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* WH-26 (F-4): the trailing fields ride the reference's ONE
+                grid md:grid-cols-2 gap-4 (probed live — all five fields
+                [Category, Frequency, Target, Unit, Deadline] pair in ONE
+                grid; our old form split them across two sm:grid-cols-2
+                grids with different membership). */}
+            <div className={FORM_GRID.grid}>
               <div className="space-y-2">
                 <Label htmlFor="gl-category">Category</Label>
                 <Select value={form.category} onValueChange={(v) => set("category", v)}>
@@ -238,8 +243,6 @@ export default function GoalsClientPage() {
                   </SelectContent>
                 </Select>
               </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="gl-target">Target Value</Label>
                 <Input
@@ -264,24 +267,20 @@ export default function GoalsClientPage() {
                   onChange={(e) => set("unit", e.target.value)}
                 />
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="gl-deadline">Deadline (optional)</Label>
-              <Input
-                id="gl-deadline"
-                type="date"
-                className="mt-2"
-                value={form.deadline}
-                onChange={(e) => set("deadline", e.target.value)}
-              />
+              <div className="space-y-2">
+                <Label htmlFor="gl-deadline">Deadline (optional)</Label>
+                <Input
+                  id="gl-deadline"
+                  type="date"
+                  className="mt-2"
+                  value={form.deadline}
+                  onChange={(e) => set("deadline", e.target.value)}
+                />
+              </div>
             </div>
           
               <div className={FORM_CARD.footer}>
-              <button
-                type="button"
-                className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-                onClick={() => setOpen(false)}
-              >
+              <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                 Cancel
               </button>
               <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.goals.button}>

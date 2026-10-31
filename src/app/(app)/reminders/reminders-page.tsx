@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD , TEXTAREA_FIELD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD, TEXTAREA_FIELD, FORM_GRID, FORM_BUTTONS } from "@/lib/page-layout";
 import {
   REMINDER_TYPES,
   REMINDER_REPEATS,
@@ -189,18 +189,22 @@ export default function RemindersClientPage() {
                 onChange={(e) => set("details", e.target.value)}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="rm-when">Remind Me On</Label>
-              <Input
-                id="rm-when"
-                type="datetime-local"
-                required
-                className="mt-2"
-                value={form.remindAt}
-                onChange={(e) => set("remindAt", e.target.value)}
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* WH-26 (F-4): the trailing fields ride the reference's
+                grid md:grid-cols-2 gap-4 (probed live — the four fields
+                [Remind Me On, Type, Priority, Repeat] pair two-wide at md;
+                our old form stacked Remind Me On + a sm:grid-cols-3). */}
+            <div className={FORM_GRID.grid}>
+              <div className="space-y-2">
+                <Label htmlFor="rm-when">Remind Me On</Label>
+                <Input
+                  id="rm-when"
+                  type="datetime-local"
+                  required
+                  className="mt-2"
+                  value={form.remindAt}
+                  onChange={(e) => set("remindAt", e.target.value)}
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="rm-type">Type</Label>
                 <Select value={form.type} onValueChange={(v) => set("type", v)}>
@@ -247,13 +251,9 @@ export default function RemindersClientPage() {
                 </Select>
               </div>
             </div>
-          
+
               <div className={FORM_CARD.footer}>
-              <button
-                type="button"
-                className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-                onClick={() => setOpen(false)}
-              >
+              <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                 Cancel
               </button>
               <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.reminders.button}>

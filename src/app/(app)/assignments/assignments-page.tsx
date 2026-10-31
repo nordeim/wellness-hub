@@ -14,7 +14,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD , TEXTAREA_FIELD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD, TEXTAREA_FIELD, FORM_GRID, FORM_BUTTONS } from "@/lib/page-layout";
 import { ASSIGNMENT_PRIORITIES, priorityMeta } from "@/lib/constants";
 import { isAssignmentUrgent } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -186,61 +186,62 @@ export default function AssignmentsClientPage() {
                 onChange={(e) => set("description", e.target.value)}
               />
             </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="as-subject">Subject/Category</Label>
-              <Input
-                id="as-subject"
-                className="mt-2"
-                placeholder="Math, Science, etc."
-                value={form.subject}
-                onChange={(e) => set("subject", e.target.value)}
-              />
+            {/* WH-26 (F-4): the trailing fields ride the reference's
+                grid md:grid-cols-2 gap-4 (probed live — the four dense
+                fields pair two-wide at md, never stacked). */}
+            <div className={FORM_GRID.grid}>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="as-subject">Subject/Category</Label>
+                <Input
+                  id="as-subject"
+                  className="mt-2"
+                  placeholder="Math, Science, etc."
+                  value={form.subject}
+                  onChange={(e) => set("subject", e.target.value)}
+                />
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="as-due">Due Date</Label>
+                <Input
+                  id="as-due"
+                  type="date"
+                  className="mt-2"
+                  value={form.dueDate}
+                  onChange={(e) => set("dueDate", e.target.value)}
+                />
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="as-priority">Priority</Label>
+                <Select value={form.priority} onValueChange={(v) => set("priority", v)}>
+                  <SelectTrigger id="as-priority" className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ASSIGNMENT_PRIORITIES.map((p) => (
+                      <SelectItem key={p.value} value={p.value}>
+                        {p.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="as-hours">Estimated Hours</Label>
+                <Input
+                  id="as-hours"
+                  type="number"
+                  min={0}
+                  step={0.5}
+                  className="mt-2"
+                  placeholder="Optional"
+                  value={form.estimatedHours}
+                  onChange={(e) => set("estimatedHours", e.target.value)}
+                />
+              </div>
             </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="as-due">Due Date</Label>
-              <Input
-                id="as-due"
-                type="date"
-                className="mt-2"
-                value={form.dueDate}
-                onChange={(e) => set("dueDate", e.target.value)}
-              />
-            </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="as-priority">Priority</Label>
-              <Select value={form.priority} onValueChange={(v) => set("priority", v)}>
-                <SelectTrigger id="as-priority" className="mt-2 w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {ASSIGNMENT_PRIORITIES.map((p) => (
-                    <SelectItem key={p.value} value={p.value}>
-                      {p.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="as-hours">Estimated Hours</Label>
-              <Input
-                id="as-hours"
-                type="number"
-                min={0}
-                step="0.5"
-                className="mt-2"
-                placeholder="Optional"
-                value={form.estimatedHours}
-                onChange={(e) => set("estimatedHours", e.target.value)}
-              />
-            </div>
-          
+
               <div className={FORM_CARD.footer}>
-              <button
-                type="button"
-                className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-                onClick={() => setOpen(false)}
-              >
+              <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                 Cancel
               </button>
               <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.assignments.button}>

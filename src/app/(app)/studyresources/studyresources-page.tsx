@@ -23,7 +23,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, BUTTON_CLASSES, FORM_CARD, SECTION_CARD, EMPTY_STATE, TOOLBAR , TEXTAREA_FIELD } from "@/lib/page-layout";
+import { PAGE_THEMES, BUTTON_CLASSES, FORM_CARD, SECTION_CARD, EMPTY_STATE, TOOLBAR, TEXTAREA_FIELD, FORM_GRID, FORM_BUTTONS, TAG_CHIP, UPLOAD_FIELD, RATING_PICKER } from "@/lib/page-layout";
 import { RESOURCE_TYPES, resourceTypeMeta } from "@/lib/constants";
 import { matchesQuery, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -194,27 +194,34 @@ export default function StudyResourcesClientPage() {
           <div className={FORM_CARD.body}>
             <div className="space-y-4">
 
-            <div className="space-y-2">
-              <Label htmlFor="sr-title">Resource Title</Label>
-              <Input
-                id="sr-title"
-                required
-                className="mt-2"
-                placeholder="e.g., Chapter 5 Notes"
-                value={form.title}
-                onChange={(e) => set("title", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="sr-subject">Subject/Course</Label>
-              <Input
-                id="sr-subject"
-                required
-                className="mt-2"
-                placeholder="e.g., Biology 101"
-                value={form.subject}
-                onChange={(e) => set("subject", e.target.value)}
-              />
+            {/* WH-26 (F-4): the reference's TWO grids (probed live) —
+                [Resource Title, Subject/Course] pair two-wide at md,
+                then the Description rides full-width, then
+                [Resource Type, Exam/Test Date] pair again (the URL Link
+                rides a bare group below). */}
+            <div className={FORM_GRID.grid}>
+              <div className="space-y-2">
+                <Label htmlFor="sr-title">Resource Title</Label>
+                <Input
+                  id="sr-title"
+                  required
+                  className="mt-2"
+                  placeholder="e.g., Chapter 5 Notes"
+                  value={form.title}
+                  onChange={(e) => set("title", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="sr-subject">Subject/Course</Label>
+                <Input
+                  id="sr-subject"
+                  required
+                  className="mt-2"
+                  placeholder="e.g., Biology 101"
+                  value={form.subject}
+                  onChange={(e) => set("subject", e.target.value)}
+                />
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="sr-desc">Description</Label>
@@ -226,22 +233,22 @@ export default function StudyResourcesClientPage() {
                 onChange={(e) => set("description", e.target.value)}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="sr-type">Resource Type</Label>
-              <Select value={form.type} onValueChange={(v) => set("type", v)}>
-                <SelectTrigger id="sr-type" className="mt-2 w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {RESOURCE_TYPES.map((t) => (
-                    <SelectItem key={t.value} value={t.value}>
-                      {t.icon} {t.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className={FORM_GRID.grid}>
+              <div className="space-y-2">
+                <Label htmlFor="sr-type">Resource Type</Label>
+                <Select value={form.type} onValueChange={(v) => set("type", v)}>
+                  <SelectTrigger id="sr-type" className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {RESOURCE_TYPES.map((t) => (
+                      <SelectItem key={t.value} value={t.value}>
+                        {t.icon} {t.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="sr-exam">Exam/Test Date (optional)</Label>
                 <Input
@@ -252,21 +259,36 @@ export default function StudyResourcesClientPage() {
                   onChange={(e) => set("examDate", e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="sr-url">URL Link (optional)</Label>
-                <Input
-                  id="sr-url"
-                  type="url"
-                  className="mt-2"
-                  placeholder="https://..."
-                  value={form.url}
-                  onChange={(e) => set("url", e.target.value)}
-                />
-              </div>
             </div>
             <div className="space-y-2">
+              <Label htmlFor="sr-url">URL Link (optional)</Label>
+              <Input
+                id="sr-url"
+                type="url"
+                className="mt-2"
+                placeholder="https://..."
+                value={form.url}
+                onChange={(e) => set("url", e.target.value)}
+              />
+            </div>
+            {/* WH-26 (F-9): the Upload File field — the reference's own
+                surface (the WH-4 absence claim is FALSE on the redeployed
+                reference). RENDER-ONLY mirror: the native picker opens,
+                nothing persists, no /api/upload route. */}
+            <div>
+              <Label htmlFor="sr-file">Upload File (optional)</Label>
+              <div className={UPLOAD_FIELD.wrap}>
+                <Input id="sr-file" type="file" className="flex-1" />
+              </div>
+            </div>
+            {/* WH-26 (F-6): the tags row — the reference's flex gap-2 mb-2
+                (the label gap is the 4px line-box artifact) + the solid
+                stock Add + the emerald chip family. Our Enter-to-add
+                stays the functional superset (the reference's Enter does
+                nothing — probed). */}
+            <div>
               <Label htmlFor="sr-tags">Tags</Label>
-              <div className="mt-2 flex gap-2">
+              <div className="flex gap-2 mb-2">
                 <Input
                   id="sr-tags"
                   placeholder="e.g., midterm, chapter3"
@@ -279,26 +301,18 @@ export default function StudyResourcesClientPage() {
                     }
                   }}
                 />
-                <button
-                  type="button"
-                  className={cn(BUTTON_CLASSES, "h-9 rounded-md border border-line px-4 hover:bg-line-soft")}
-                  onClick={addTag}
-                >
+                <button type="button" className={FORM_BUTTONS.add} onClick={addTag}>
                   Add
                 </button>
               </div>
               {form.tags.length > 0 && (
-                <div className="mt-2 flex flex-wrap gap-1.5">
+                <div className={TAG_CHIP.row}>
                   {form.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
-                    >
-                      #{tag}
+                    <span key={tag} className={TAG_CHIP.chip}>
+                      {tag}
                       <button
                         type="button"
                         aria-label={`Remove tag ${tag}`}
-                        className="text-primary/70 hover:text-primary"
                         onClick={() => set("tags", form.tags.filter((x) => x !== tag))}
                       >
                         ×
@@ -318,9 +332,13 @@ export default function StudyResourcesClientPage() {
                 onChange={(e) => set("personalNotes", e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            {/* WH-26 (F-10): the Rating picker — the reference's five
+                BARE text-2xl ☆ buttons in a flex gap-2 row (probed live;
+                the reference's own click state is inert — our ★ fill +
+                the radiogroup semantics stay the functional superset). */}
+            <div>
               <Label>Rating (optional)</Label>
-              <div className="mt-2 flex items-center gap-1" role="radiogroup" aria-label="Rating">
+              <div className={RATING_PICKER.row} role="radiogroup" aria-label="Rating">
                 {[1, 2, 3, 4, 5].map((n) => (
                   <button
                     key={n}
@@ -329,25 +347,16 @@ export default function StudyResourcesClientPage() {
                     aria-checked={form.rating === n}
                     aria-label={`${n} star${n > 1 ? "s" : ""}`}
                     onClick={() => set("rating", form.rating === n ? 0 : n)}
-                    className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+                    className={cn(RATING_PICKER.star, "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm")}
                   >
-                    <Star
-                      className={cn(
-                        "h-6 w-6 transition-transform hover:scale-110",
-                        n <= form.rating ? "fill-amber-400 text-amber-400" : "text-gray-300",
-                      )}
-                    />
+                    {n <= form.rating ? "★" : "☆"}
                   </button>
                 ))}
               </div>
             </div>
           
               <div className={FORM_CARD.footer}>
-              <button
-                type="button"
-                className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-                onClick={() => setOpen(false)}
-              >
+              <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                 Cancel
               </button>
               <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.studyresources.button}>

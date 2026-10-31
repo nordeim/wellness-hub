@@ -13,7 +13,7 @@ import {
 } from "@/components/shared/page-parts";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD , TEXTAREA_FIELD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD, TEXTAREA_FIELD, MOOD_FORM, FORM_BUTTONS, TAG_CHIP } from "@/lib/page-layout";
 import { MOODS, moodMeta } from "@/lib/constants";
 import { averageEnergy, currentStreak, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -120,10 +120,13 @@ export default function MentalHealthClientPage() {
             <h2 className={FORM_CARD.title}>How are you feeling today?</h2>
           </div>
           <div className={FORM_CARD.body}>
-            <div className="space-y-4">
+            {/* WH-26: the mood form's own wrapper — the reference's ONE
+                space-y-6 form (24px group gaps; its siblings ride
+                space-y-4 — probed on the redeployed reference). */}
+            <div className="space-y-6">
               <div className={DIALOG_GROUP.group}>
-                <Label>Choose your mood</Label>
-                <div className="mt-2 grid grid-cols-2 md:grid-cols-5 gap-3">
+                <Label className={MOOD_FORM.label}>Choose your mood</Label>
+                <div className={MOOD_FORM.grid}>
                   {MOODS.map((m) => (
                     <button
                       key={m.value}
@@ -131,41 +134,53 @@ export default function MentalHealthClientPage() {
                       onClick={() => setMood(m.value)}
                       aria-pressed={mood === m.value}
                       className={cn(
-                        "p-4 rounded-2xl border-2 transition-all text-center",
-                        mood === m.value
-                          ? "bg-gradient-to-br from-blue-500 to-cyan-500 text-white border-transparent shadow-lg scale-105"
-                          : "border-gray-200 hover:border-gray-300 dark:border-neutral-700 dark:hover:border-neutral-600",
+                        MOOD_FORM.tile,
+                        mood === m.value ? MOOD_FORM.active : MOOD_FORM.inactive,
                       )}
                     >
-                      <span aria-hidden="true" className="block text-4xl mb-2">
+                      <span aria-hidden="true" className={cn("block", MOOD_FORM.icon)}>
                         {m.icon}
                       </span>
-                      <span className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                      {/* WH-26 (F-1): the label flips with the tile state —
+                          the reference's active label div is text-white;
+                          our old CONSTANT text-gray-700 rendered gray on
+                          the blue gradient (the WH-21 pin asserted the
+                          button's arm, never the rendered label span). */}
+                      <span
+                        className={cn(
+                          "block",
+                          mood === m.value ? MOOD_FORM.labelActive : MOOD_FORM.labelInactive,
+                        )}
+                      >
                         {m.label}
                       </span>
                     </button>
                   ))}
                 </div>
               </div>
-              <div className={DIALOG_GROUP.group}>
+              {/* WH-26 (F-3): the energy slider — the reference's 8px
+                  gray-200 track at min=1 (Chrome keeps the native blue
+                  thumb under appearance:none — pixel-verified); the
+                  label→range gap is the line-box artifact (13px probed). */}
+              <div>
                 <Label htmlFor="mood-energy">Energy Level: {energy}/10</Label>
                 <input
                   id="mood-energy"
                   type="range"
-                  min={0}
+                  min={1}
                   max={10}
                   value={energy}
                   onChange={(e) => setEnergy(Number(e.target.value))}
-                  className="mt-3 w-full accent-[var(--color-primary)]"
+                  className={MOOD_FORM.range}
                 />
-                <div className="flex justify-between text-xs text-subtle">
+                <div className={MOOD_FORM.lowHigh}>
                   <span>Low</span>
                   <span>High</span>
                 </div>
               </div>
               <div className={DIALOG_GROUP.group}>
                 <Label htmlFor="mood-activities">Activities that affected your mood</Label>
-                <div className="mt-2 flex gap-2">
+                <div className="flex gap-2 mt-2">
                   <Input
                     id="mood-activities"
                     placeholder="e.g., Exercise, Work, Friends"
@@ -178,26 +193,18 @@ export default function MentalHealthClientPage() {
                       }
                     }}
                   />
-                  <button
-                    type="button"
-                    className={cn(BUTTON_CLASSES, "h-9 rounded-md border border-line px-4 hover:bg-line-soft")}
-                    onClick={addActivity}
-                  >
+                  <button type="button" className={FORM_BUTTONS.add} onClick={addActivity}>
                     Add
                   </button>
                 </div>
                 {activities.length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-1.5">
+                  <div className={TAG_CHIP.row}>
                     {activities.map((a) => (
-                      <span
-                        key={a}
-                        className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
-                      >
+                      <span key={a} className={TAG_CHIP.chip}>
                         {a}
                         <button
                           type="button"
                           aria-label={`Remove ${a}`}
-                          className="text-primary/70 hover:text-primary"
                           onClick={() => setActivities(activities.filter((x) => x !== a))}
                         >
                           ×
@@ -219,9 +226,12 @@ export default function MentalHealthClientPage() {
               </div>
               <div className={DIALOG_GROUP.group}>
                 <Label htmlFor="mood-reflection">Daily Reflection</Label>
+                {/* WH-26 (F-8): the reference's reflection textarea rides
+                    h-24 (96px) where the gratitude field keeps the 60px
+                    stock form — probed. */}
                 <textarea
                   id="mood-reflection"
-                  className={TEXTAREA_FIELD}
+                  className={cn(TEXTAREA_FIELD, "h-24")}
                   placeholder="How was your day? Any thoughts or feelings to note?"
                   value={reflection}
                   onChange={(e) => setReflection(e.target.value)}
@@ -238,11 +248,7 @@ export default function MentalHealthClientPage() {
                 />
               </div>
               <div className={FORM_CARD.footer}>
-                <button
-                  type="button"
-                  className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-                  onClick={() => setOpen(false)}
-                >
+                <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                   Cancel
                 </button>
                 <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.mentalhealth.button}>
