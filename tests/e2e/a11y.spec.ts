@@ -896,109 +896,78 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
       `the HOVERED dismiss glyph must compute ≥3:1 (got ${x.ratio}:1, ink ${x.ink} on ${x.bg}) — the F-2 class: the glyph vanished at 1.05:1 exactly when the user aims at it`,
     ).toBeGreaterThanOrEqual(3);
   });
-
-  test("(e) the dark checkboxes — the checked fill, the unchecked border and the glyph all ≥3:1 on the Preferences wash", async ({ page }) => {
-    // F-1's live leg (the WH-21 cure): the Profile Preferences pair (our
-    // functional superset — the reference ships ZERO checkboxes, probed
-    // live) shipped invisible in dark (neutral-900 fill/border on the
-    // #1a1a1d wash ≈1.12:1). The Appearance tab is the strip's default —
-    // no tab click needed before the Dark flip; the Preferences tab
-    // carries the checkboxes.
+  // WH-25: the (e) dark-checkbox leg RETIRED with its false premise — the
+  // WH-21 claim "the reference ships ZERO checkboxes" was written without
+  // opening the Preferences tab; the live read shows NATIVE bare
+  // input[type=checkbox] w-5 h-5 controls there. The custom Checkbox, its
+  // dark-state cure and this leg all shipped on the untested premise; the
+  // native form has no custom fill/border/glyph to measure (the dark a11y
+  // walk passes it natively). Its replacement — the (j) leg — pins the
+  // Profile tab region's computed geometry (the round's cure).
+  // WH-25 (j): the Profile tab region's computed geometry — the round's
+  // cure pinned live: the tablist full-width (the wrapper w-full — ours
+  // shipped max-w-xl), the panel shell mt-2 (ours mt-6), the Preferences
+  // rows' p-4 rounded-lg border form, the NATIVE checkboxes at the
+  // probed 20×20, and the save bar's STICKY right-aligned form.
+  test("(j) the Profile tab region's computed geometry — the full-width tablist, the mt-2 panels, the native 20px checkboxes, the sticky save bar", async ({ page }) => {
     await page.goto("/Profile", { waitUntil: "networkidle" });
-    await page.getByRole("button", { name: "Dark", exact: true }).click();
-    await expect(page.locator("html")).toHaveClass(/dark/);
+    await page.waitForTimeout(600);
+
+    // the tablist: full container width (the wrapper w-full)
+    const tablist = await page.evaluate(() => {
+      const list = document.querySelector('[role="tablist"]');
+      if (!list) return null;
+      const r = list.getBoundingClientRect();
+      const container = list.closest(".max-w-7xl") ?? list.parentElement?.parentElement;
+      return { w: Math.round(r.width), containerW: container ? Math.round(container.getBoundingClientRect().width) : null };
+    });
+    expect(tablist, "the tablist must render").toBeTruthy();
+    expect(tablist!.w, "the tablist spans the FULL container width (the wrapper w-full — probed 960 of 960)").toBe(tablist!.containerW);
+
+    // the panel shell: mt-2 (8px)
+    const panelMargin = await page.evaluate(() => {
+      const panel = document.querySelector('[role="tabpanel"]');
+      return panel ? getComputedStyle(panel).marginTop : null;
+    });
+    expect(panelMargin, "the panel shell rides mt-2 (8px — the probed form; ours shipped mt-6)").toBe("8px");
+
+    // the Preferences tab: the native checkboxes + the row form
     await page.getByRole("tab", { name: "Preferences" }).click();
+    await page.waitForTimeout(500);
+    const prefs = await page.evaluate(() => {
+      const boxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+      const first = boxes[0] ?? null;
+      const box = first ? { w: Math.round(first.getBoundingClientRect().width), h: Math.round(first.getBoundingClientRect().height), cls: first.getAttribute("class") } : null;
+      // the row: the checkbox's ancestor row (a <label> — our association superset)
+      const row = first?.closest("label");
+      const rcs = row ? getComputedStyle(row) : null;
+      return {
+        boxCount: boxes.length,
+        box,
+        row: row ? { cls: row.getAttribute("class"), padding: rcs!.padding, bg: rcs!.backgroundColor, alignItems: rcs!.alignItems } : null,
+      };
+    });
+    expect(prefs!.boxCount, "the Preferences tab renders the TWO native checkboxes").toBe(2);
+    expect(prefs!.box!.w, "the native checkbox is the probed 20px (w-5)").toBe(20);
+    expect(prefs!.box!.h).toBe(20);
+    expect(prefs!.box!.cls, "the native checkbox carries the probed w-5 h-5 class (no custom control classes)").toBe("w-5 h-5");
+    expect(prefs!.row!.padding, "the Preferences rows ride p-4 (16px — the probed form)").toBe("16px");
+    expect(prefs!.row!.bg, "the Preferences rows carry NO bg wash (the probed bare border form)").toBe("rgba(0, 0, 0, 0)");
+    expect(prefs!.row!.alignItems, "the rows align items-center (the probed form)").toBe("center");
 
-    // The wash is the label row's bg-line-soft/40 composited over the
-    // panel card (the dark surface) — read live (Tailwind v4 computes
-    // alpha-modified tokens in OKLAB, so the page-side reader converts),
-    // blended in Node with the same arithmetic the unit pin uses.
-    const readBox = () =>
-      page.evaluate(() => {
-        const oklabToRgb = (L: number, a: number, b: number) => {
-          const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
-          const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
-          const s_ = L - 0.0894841775 * a - 1.291485548 * b;
-          const l = l_ * l_ * l_, m = m_ * m_ * m_, s = s_ * s_ * s_;
-          const enc = (x: number) => {
-            x = Math.min(1, Math.max(0, x));
-            return Math.round(255 * (x <= 0.0031308 ? 12.92 * x : 1.055 * Math.pow(x, 1 / 2.4) - 0.055));
-          };
-          return [enc(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
-                  enc(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
-                  enc(-0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s)];
-        };
-        const parse = (c: string): { rgb: number[]; alpha: number } | null => {
-          if (!c) return null;
-          let m = c.match(/rgba?\((\d+), (\d+), (\d+)(?:, ([\d.]+))?\)/);
-          if (m) return { rgb: [+m[1]!, +m[2]!, +m[3]!], alpha: m[4] === undefined ? 1 : +m[4] };
-          m = c.match(/oklab\(([\d.-]+) ([\d.e-]+) ([\d.e-]+)(?: \/ ([\d.]+))?\)/);
-          if (m) return { rgb: oklabToRgb(+m[1]!, +m[2]!, +m[3]!), alpha: m[4] === undefined ? 1 : +m[4] };
-          return null;
-        };
-        const box = document.querySelector('button[role="checkbox"][aria-label="Enable notifications"]');
-        if (!box) return null;
-        const s = getComputedStyle(box);
-        const row = box.closest("label");
-        const panel = row ? row.closest("section") : null;
-        return {
-          fill: s.backgroundColor,
-          border: s.borderTopColor,
-          ink: s.color,
-          rowBg: row ? parse(getComputedStyle(row).backgroundColor) : null,
-          panelBg: panel ? parse(getComputedStyle(panel).backgroundColor) : null,
-        };
-      });
-    const parse = (c: string): [number, number, number, number] | null => {
-      const m = c.match(/rgba?\((\d+), (\d+), (\d+)(?:, ([\d.]+))?\)/);
-      return m ? [+m[1]!, +m[2]!, +m[3]!, m[4] === undefined ? 1 : +m[4]] : null;
-    };
-
-    // The CHECKED box: the fill and its glyph.
-    const checked = await readBox();
-    expect(checked, "the checked checkbox must render (the Preferences pair)").toBeTruthy();
-    expect(
-      checked!.rowBg && checked!.panelBg,
-      `the wash chain must read (row ${JSON.stringify(checked!.rowBg)}, panel ${JSON.stringify(checked!.panelBg)})`,
-    ).toBeTruthy();
-    const a = checked!.rowBg!.alpha;
-    const wash: [number, number, number] = [
-      Math.round(a * checked!.rowBg!.rgb[0]! + (1 - a) * checked!.panelBg!.rgb[0]!),
-      Math.round(a * checked!.rowBg!.rgb[1]! + (1 - a) * checked!.panelBg!.rgb[1]!),
-      Math.round(a * checked!.rowBg!.rgb[2]! + (1 - a) * checked!.panelBg!.rgb[2]!),
-    ];
-    const fill = parse(checked!.fill)!, glyph = parse(checked!.ink)!;
-    expect(
-      nodeContrast(fill[0]!, fill[1]!, fill[2]!, wash),
-      `the checked fill (${checked!.fill}) must compute ≥3:1 on the Preferences wash rgb(${wash.join(", ")}) — the F-1 class: neutral-900 shipped ≈1.12:1, a fully invisible box`,
-    ).toBeGreaterThanOrEqual(3);
-    expect(
-      nodeContrast(glyph[0]!, glyph[1]!, glyph[2]!, [fill[0]!, fill[1]!, fill[2]!]),
-      `the glyph (${checked!.ink}) must compute ≥3:1 on its own fill (${checked!.fill})`,
-    ).toBeGreaterThanOrEqual(3);
-
-    // The UNCHECKED box (the only visual = its border): flip, read, restore
-    // (probe hygiene — the flip PUTs to the server prefs; the restore
-    // verifies it landed).
-    await page.getByRole("checkbox", { name: "Enable notifications" }).click();
-    await page.waitForTimeout(450); // transition-colors settles
-    const unchecked = await readBox();
-    const border = parse(unchecked!.border)!;
-    expect(
-      nodeContrast(border[0]!, border[1]!, border[2]!, wash),
-      `the unchecked border (${unchecked!.border}) must compute ≥3:1 on the wash — the UNCHECKED box has no glyph; the border is its only visual (it shipped invisible at ≈1.12:1)`,
-    ).toBeGreaterThanOrEqual(3);
-    await page.getByRole("checkbox", { name: "Enable notifications" }).click();
-    await expect
-      .poll(
-        async () =>
-          page.evaluate(async () => {
-            const res = await fetch("/api/prefs");
-            return res.json();
-          }),
-        { timeout: 5000 },
-      )
-      .toMatchObject({ data: { notificationsEnabled: true } });
+    // the save bar: sticky + right-aligned + bottom-4
+    const saveBar = await page.evaluate(() => {
+      const btns = Array.from(document.querySelectorAll("button"));
+      const b = btns.find((x) => /save/i.test(x.textContent ?? ""));
+      const bar = b?.parentElement;
+      if (!bar) return null;
+      const cs = getComputedStyle(bar);
+      return { position: cs.position, justifyContent: cs.justifyContent, bottom: cs.bottom };
+    });
+    expect(saveBar, "the save bar renders").toBeTruthy();
+    expect(saveBar!.position, "the save bar is STICKY (the probed floating form)").toBe("sticky");
+    expect(saveBar!.justifyContent, "the save bar is right-aligned (justify-end)").toBe("flex-end");
+    expect(saveBar!.bottom, "the save bar sticks at bottom-4 (16px)").toBe("16px");
   });
 
   test("(f) the dark mood tiles — the active tile's scale property + gradient, the inactive border the pinned neutral-700", async ({ page }) => {

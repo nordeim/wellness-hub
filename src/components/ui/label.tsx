@@ -2,9 +2,7 @@
 
 import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
-import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { CHECKBOX } from "@/lib/page-layout";
 
 function Label({ className, ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) {
   return (
@@ -25,55 +23,14 @@ function Label({ className, ...props }: React.ComponentProps<typeof LabelPrimiti
   );
 }
 
-// Session-17 (S17-P3): the STOCK Radix-style checkbox — the reference
-// ships button-role checkboxes (`<button type="button" role="checkbox"
-// aria-checked data-state value="on">`) on EVERY filter rail (accounts
-// tiers / calendar types+dates / activities Activity-Type + the by-type
-// footer), with a Check h-4 w-4 indicator that mounts ONLY when checked.
-// The button element keeps keyboard semantics native (Space/Enter fire
-// click on buttons) and the label's htmlFor still forwards clicks to a
-// labelable button. Ours shipped native inputs with appearance-none
-// styling — no check glyph ever rendered, the checked fill was the app
-// blue (the reference's computes #171717, the dark stock primary), and
-// the focus ring was 2px translucent blue instead of the 1px near-black.
-//
-// WH-12 (F-2): the invented arms retired — the `label`/`id` pair (the
-// htmlFor render arm), `defaultChecked` (the entire uncontrolled
-// machinery) and `className` carried zero pass sites: both live callers
-// (the Profile page's Preferences pair) are CONTROLLED — checked +
-// onCheckedChange, aria-label riding the ...props spread, the wrapping
-// parent <label> associating without an id (the Session-71 hideClose
-// class: invented surface needs live consumers). CHECKBOX.row/label
-// retired from page-layout with the arm.
+// WH-25: the Checkbox component RETIRED with its false premise — the
+// WH-21 claim "the reference ships ZERO checkboxes" was written without
+// opening the Preferences tab; the live read shows NATIVE bare
+// input[type=checkbox] w-5 h-5 controls there. The CRM-chassis custom
+// form (the Session-17 button-role model), its WH-21 dark-state cure,
+// its interaction-contrast pin and its a11y (e) leg all shipped on the
+// untested premise. The Preferences pair now renders the native form
+// (the PROFILE_PREFS.checkbox member) — the ui-export census owns this
+// module's surface.
 
-interface CheckboxProps extends Omit<React.ComponentProps<"button">, "onChange" | "value"> {
-  checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-}
-
-function Checkbox({ checked, onCheckedChange, ...props }: CheckboxProps) {
-  const toggle = () => {
-    onCheckedChange(!checked);
-  };
-
-  return (
-    <button
-      type="button"
-      role="checkbox"
-      aria-checked={checked}
-      data-state={checked ? "checked" : "unchecked"}
-      value="on"
-      className={CHECKBOX.control}
-      onClick={toggle}
-      {...props}
-    >
-      {checked ? (
-        <span data-state="checked" className={CHECKBOX.indicator} style={{ pointerEvents: "none" }}>
-          <Check className="h-4 w-4" />
-        </span>
-      ) : null}
-    </button>
-  );
-}
-
-export { Label, Checkbox };
+export { Label };

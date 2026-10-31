@@ -36,7 +36,7 @@ import { TABS_SEGMENTED } from "@/lib/page-layout";
 // (selection follows focus). This component now wires the same contract:
 // `useId()` generates the trigger/panel id pair, the component renders
 // the reference's wrapper anatomy (`<div class=…>[tablist, panels…]` —
-// the wrapper className is page-specific: `mb-6 max-w-xl` on the Profile
+// the wrapper className is page-specific: `w-full` on the Profile (WH-25:
 // page, the only live call site), and `TabsPanel` renders the wired
 // shells as the wrapper's children. Our roving tabindex (selected tab =
 // 0) remains the documented superset over the reference's all-=-1
@@ -47,7 +47,8 @@ interface TabsProps {
   value: string;
   onValueChange: (value: string) => void;
   /** The wrapper div's classes — the reference's per-page Tabs region
-   * (the Profile page ships `mb-6 max-w-xl`; pages own their spacing). */
+   * (the Profile page ships `w-full` — WH-25, probed; pages own their
+   * spacing). */
   className?: string;
   /** Equal-width grid columns for the segmented track (reference: one per tab). */
   cols: number;
@@ -78,9 +79,9 @@ const GRID_COLS: Record<number, string> = {
 // The reference's stock Radix TabsContent classes (byte-extracted from the
 // live reference on 2026-10-01): the focus-visible ring family rides every
 // panel shell; the per-page mt-*/space-y-* classes are appended by the
-// pages (the Profile page's panels ship `mt-6` — the WH-8 truth; the
-// CRM-era activities/settings/reports mt-narration retired with the
-// pages it named).
+// pages (the Profile page's panels ship `mt-2` — the WH-25 probed
+// truth; the CRM-era activities/settings/reports mt-narration retired
+// with the pages it named).
 // Session-129 (F-129c1): the extracted string's ring-offset-background is
 // the COMPUTED-CONTRACT EXCEPTION, retired per the s11 DIALOG_CLOSE
 // precedent — the reference's ride computes hsl(0 0% 100%) = #ffffff; OUR

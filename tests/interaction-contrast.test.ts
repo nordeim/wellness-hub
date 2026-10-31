@@ -212,61 +212,15 @@ it("WH-20 F-5: the light login ring is pinned AT its documented parity values (2
   expect(row!.includes("2.56") && row!.includes("2.45"), "the ledger row must carry both documented ratios (2.56 / 2.45)").toBe(true);
 });
 
-// ---- F-1 (WH-21): the Profile checkboxes' dark pairs ----------------------
-it("WH-21 F-1: the checkboxes' dark pairs compute ≥3:1 on the Preferences wash — the light fill pinned at its documented 17.93", () => {
-  // The WH-20 census pins hover:/focus: arms; the checkbox's
-  // data-[state=checked]: arms are STATE arms the census never covered —
-  // and the Profile Preferences pair (our functional superset: the
-  // reference ships ZERO checkboxes, probed live) shipped light-only:
-  // border-neutral-900 + data-[state=checked]:bg-neutral-900 computed
-  // ≈1.12:1 on the dark Preferences wash (surface #18181b + the label
-  // row's bg-line-soft/40 = #1a1a1d) — the checked box INVISIBLE, the
-  // unchecked box (no glyph) a completely invisible control. Live-confirmed
-  // in dark on /Profile. The cure: neutral-400 fill/border (6.88:1 on the
-  // wash) + neutral-950 glyph (7.85:1 on its own fill); the light values
-  // stay pinned at their measured ratios (the fill vs the white card
-  // 17.93:1 — the stock shadcn light form, byte-identical to the
-  // reference's own genus).
-  const control = readFileSync(join(import.meta.dirname, "..", "src", "lib", "page-layout.ts"), "utf8")
-    .match(/control:\s*\n?\s*"([^"]*data-\[state=checked\][^"]*)"/)?.[1];
-  expect(control, "CHECKBOX.control must exist and carry its data-[state=checked] arms (the record the Preferences pair renders)").toBeTruthy();
-
-  // The dark arms — existence first (the WH-19 pairing doctrine), then value.
-  const darkBorder = control!.match(/dark:border-([a-z]+-\d+)/)?.[1];
-  const darkFill = control!.match(/dark:data-\[state=checked\]:bg-([a-z]+-\d+)/)?.[1];
-  const darkGlyph = control!.match(/dark:data-\[state=checked\]:text-([a-z]+-\d+)/)?.[1];
-  const offenders: string[] = [];
-  if (!darkBorder || !darkFill || !darkGlyph) {
-    offenders.push(`CHECKBOX.control carries no dark pairs (read border=${darkBorder ?? "—"} fill=${darkFill ?? "—"} glyph=${darkGlyph ?? "—"}) — in dark the checked box renders ≈1.12:1 on the Preferences wash and the unchecked box is a completely invisible control`);
-  } else {
-    // The effective dark backdrop: the Preferences label row =
-    // bg-line-soft/40 over the PROFILE_PANEL card (the dark surface).
-    const darkSurface = css.match(/\.dark\s*\{[^}]*--color-surface: (#[0-9a-f]{6})/)?.[1] ?? "#18181b";
-    const lineSoftDark = css.match(/\.dark\s*\{[^}]*--color-line-soft: (#[0-9a-f]{6})/)?.[1] ?? "#1c1c1f";
-    const wash = blend(lineSoftDark, 0.4, darkSurface);
-    const rFill = ratioHex(v3(darkFill, "the checkbox's dark fill"), wash);
-    if (rFill < 3) offenders.push(`dark:data-[state=checked]:bg-${darkFill} vs the Preferences wash ${wash} = ${rFill.toFixed(2)}:1 (<3:1 — the cure is neutral-400 at 6.88:1)`);
-    const rBorder = ratioHex(v3(darkBorder, "the checkbox's dark border"), wash);
-    if (rBorder < 3) offenders.push(`dark:border-${darkBorder} vs the Preferences wash ${wash} = ${rBorder.toFixed(2)}:1 (<3:1 — the UNCHECKED box's only visual)`);
-    const rGlyph = ratioHex(v3(darkGlyph, "the checkbox's dark glyph"), v3(darkFill, "the checkbox's dark fill"));
-    if (rGlyph < 3) offenders.push(`dark:data-[state=checked]:text-${darkGlyph} on the ${darkFill} fill = ${rGlyph.toFixed(2)}:1 (<3:1 — the cure is neutral-950 at 7.85:1)`);
-  }
-
-  // The light values — pinned AT their documented ratios (a re-step of the
-  // light arms forces this pin to move, never silently).
-  const lightFill = control!.match(/(?<!dark:)data-\[state=checked\]:bg-([a-z]+-\d+)/)?.[1];
-  const lightGlyph = control!.match(/(?<!dark:)data-\[state=checked\]:text-([a-z]+-\d+)/)?.[1];
-  expect(lightFill, "the light checked fill arm must read (the stock shadcn light form)").toBeTruthy();
-  expect(lightGlyph, "the light checked glyph arm must read").toBeTruthy();
-  const rLightFill = ratioHex(v3(lightFill!, "the light fill"), "#ffffff");
-  expect(
-    Math.abs(rLightFill - 17.93),
-    `the light fill vs the white card must stay pinned at the documented 17.93:1 (measured ${rLightFill.toFixed(2)}:1) — the stock shadcn light form`,
-  ).toBeLessThan(0.005);
-  expect(ratioHex(v3(lightGlyph!, "the light glyph"), v3(lightFill!, "the light fill")), "the light glyph on its fill must clear 3:1").toBeGreaterThanOrEqual(3);
-
-  expect(offenders, "F-1: the checkbox must be VISIBLE in dark — the checked fill, the unchecked border and the glyph all ≥3:1 on the Preferences wash (the state arms the hover/focus census never covered)").toEqual([]);
-});
+// ---- F-1 (WH-21): RETIRED at WH-25 ----------------------------------------
+// The custom Checkbox this block pinned retired with its false premise:
+// the WH-21 claim "the reference ships ZERO checkboxes, probed live"
+// was written without opening the Preferences tab — the live read shows
+// NATIVE bare input[type=checkbox] w-5 h-5 controls there. The
+// CRM-chassis component, its dark-state cure, this arithmetic pin and
+// the a11y (e) leg all shipped on the untested premise; the native form
+// carries no custom fill/border/glyph to measure (the UA renders it,
+// and the dark a11y walk passes it natively).
 
 // ---- F-3 (WH-21): the mood tile's anatomy — the reference's own form ------
 it("WH-21 F-3: the mood selector rides the reference's block-stacked tile anatomy (the fixed blue→cyan active pair, the faint gray inactive arms + our dark twins)", () => {

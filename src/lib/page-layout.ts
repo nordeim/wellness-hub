@@ -483,6 +483,24 @@ export const PROFILE_PANEL = {
   title: "font-semibold leading-none tracking-tight flex items-center gap-2",
   body: "p-6 pt-0",
   bodySpaced: "p-6 pt-0 space-y-6",
+  /** WH-25 (probed live): the space-y-4 body form — the Account, the
+   *  Background Image and the Preferences cards ride it (ours shipped
+   *  the space-y on an inner wrapper div). */
+  bodySpaced4: "p-6 pt-0 space-y-4",
+} as const;
+
+/** The Profile Preferences rows — WH-25 (probed live): the rows are
+ *  `flex items-center justify-between p-4 rounded-lg border` (items-
+ *  center, NO gap arm, NO bg wash — ours shipped items-start gap-4
+ *  px-4 py-3 bg-line-soft/40), the title `font-medium` (unsized, 16px)
+ *  + the subtitle `text-sm text-gray-500`, and the control the NATIVE
+ *  bare checkbox `w-5 h-5` (20px — the reference's own form; our <label>
+ *  wrapper association stays the a11y superset). */
+export const PROFILE_PREFS = {
+  row: "flex items-center justify-between p-4 rounded-lg border",
+  title: "font-medium",
+  subtitle: "text-sm text-gray-500 dark:text-gray-400",
+  checkbox: "w-5 h-5",
 } as const;
 
 /** The module create-form card — WH-21 (F-2, the modality cure): the
@@ -583,8 +601,14 @@ export const THEME_MODE_PICKER = {
 export const PRESET_CARD = {
   card: "p-3 rounded-xl border hover:shadow-md transition-all text-left",
   active: "border-primary ring-1 ring-primary",
-  swatch: "mb-2 block h-8 w-full rounded-md bg-gradient-to-r",
-  label: "text-xs font-medium text-foreground",
+  /** WH-25: the reference's swatch row — TWO SOLID CIRCLES (the flex
+   *  gap-2 mb-2 row holding two w-6 h-6 rounded-full divs with inline
+   *  solid backgrounds — probed live; ours shipped ONE gradient bar
+   *  h-8 w-full). The inline colors come from the preset's pair at the
+   *  call site. */
+  swatches: "flex gap-2 mb-2",
+  swatch: "w-6 h-6 rounded-full",
+  label: "text-xs font-medium",
   activeLabel: "mt-1 flex items-center gap-1 text-xs text-foreground",
 } as const;
 
@@ -713,25 +737,15 @@ export const SELECT_TRIGGER = {
   focusRing: "focus:outline-none focus:ring-1 focus:ring-ring",
 } as const;
 
-export const CHECKBOX = {
-  // WH-21 (F-1): the dark pairs. The record shipped light-only — on the
-  // dark Preferences wash (surface #18181b + the label row's
-  // bg-line-soft/40 = #1a1a1d) the checked fill/border (neutral-900
-  // #171717) computed ≈1.12:1 and the UNCHECKED box (no glyph) was a
-  // completely invisible control. The cure: neutral-400 (#a3a3a3) at
-  // 6.88:1 on the wash + the neutral-950 (#0a0a0a) glyph at 7.85:1 on
-  // its own fill. The light form stays the stock shadcn values (the
-  // fill vs the white card 17.93:1 — pinned by the interaction-contrast
-  // pin). Our superset: the reference ships ZERO checkboxes (probed
-  // live on its Profile → Preferences tab).
-  control:
-    "peer h-4 w-4 shrink-0 rounded-sm border border-neutral-900 shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-neutral-900 data-[state=checked]:text-neutral-50 dark:border-neutral-400 dark:data-[state=checked]:bg-neutral-400 dark:data-[state=checked]:border-neutral-400 dark:data-[state=checked]:text-neutral-950",
-  indicator: "flex items-center justify-center text-current",
-} as const;
-// WH-12 (F-2): the `row`/`label` pair retired with its only consumer —
-// Checkbox's label-render arm (zero pass sites; both live callers are
-// controlled and wrap their own <label>). The value census owns this
-// module's export surface — the TABS_PILL/EMPTY_STATE.title precedent.
+// WH-25: the CHECKBOX record RETIRED with its last consumer and its
+// false premise — the WH-21 claim "the reference ships ZERO checkboxes
+// (probed live on its Profile → Preferences tab)" was written without
+// opening the tab: the live read shows NATIVE bare
+// input[type=checkbox] w-5 h-5 controls there. The CRM-chassis custom
+// Checkbox (the Session-17 button-role form), its WH-21 dark-state cure,
+// its interaction-contrast pin and its a11y (e) leg all shipped on the
+// untested premise; the Preferences pair renders the native form (the
+// PROFILE_PREFS.checkbox member).
 
 /** The segmented tab control — the Profile page's tablist track. WH-9
  *  (F-2a): the TABS_PILL twin retired with its only consumer (the tabs

@@ -2322,3 +2322,191 @@ it("WH-24: the routines template-card census — the thumbnail-free face + the m
     "the routines template card must mirror the reference's face — the WH-24 cure",
   ).toEqual([]);
 });
+
+// WH-25: the profile-tab geometry census — the Profile tab panels'
+// INTERIOR geometry (the WH-17/18 rounds walked the panels' colors +
+// dark pairs; the field-by-field geometry of the tab region + every
+// interior block was never walked). Probed live 2026-10-31: the Tabs
+// wrapper is w-full (the tablist computes 960px — ours shipped
+// max-w-xl), the panel shells mt-2 (ours mt-6), the Colors card rides
+// the stock Label + mb-3 block form with the md:grid-cols-4 preset
+// grid of TWO-circular-swatch cards and the md:grid-cols-2 gap-6 picker
+// rows (the color input the stock form + w-20 h-12), the preview tile
+// the 135deg inline gradient (to-br — ours shipped to-right), the
+// Typography select w-full with the mt-4 p-4 border preview block (the
+// preview at text-lg font-sans), the Visual Style selects STACKED
+// full-width in a space-y-6 body (ours shipped a 3-col grid), the
+// Account inputs carry the bg-gray-50 disabled wash + the circle-user
+// glyph, the Preferences rows are p-4 rounded-lg border with the
+// NATIVE w-5 h-5 checkboxes, and the save bar is flex justify-end
+// gap-3 sticky bottom-4.
+it("WH-25: the profile-tab geometry census — the tab region + the five cards + the rows + the native checkboxes + the sticky save bar", () => {
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const failures: string[] = [];
+  const pSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/profile/profile-page.tsx"), "utf8"));
+
+  // (a) the Tabs region: the w-full wrapper + the mt-2 panels
+  if (/max-w-xl/.test(pSrc)) {
+    failures.push("the Profile Tabs wrapper must be w-full (probed: the tablist computes 960px) — the max-w-xl form retires");
+  }
+  if (/mt-6/.test(pSrc)) {
+    failures.push("the Profile tab panel shells must ride mt-2 (probed) — the mt-6 form retires");
+  }
+
+  // (b) the Colors card: the stock Label + mb-3 block, the md grid, the
+  // circular swatches, the picker rows, the color input, the 135deg tile
+  if (!/mb-3 block/.test(pSrc)) {
+    failures.push('the "Quick Presets" label must ride the stock Label + mb-3 block form (probed)');
+  }
+  if (/sm:grid-cols-4/.test(pSrc)) {
+    failures.push("the preset grid must be grid-cols-2 md:grid-cols-4 gap-3 (probed) — the sm:grid-cols-4 arm retires");
+  }
+  if (!/md:grid-cols-4/.test(pSrc)) {
+    failures.push("the preset grid must carry the md:grid-cols-4 arm (probed)");
+  }
+  const PC = layoutSrc.match(/export const PRESET_CARD = \{([\s\S]*?)\n\} as const;/);
+  expect(PC, "the PRESET_CARD record must exist in page-layout.ts").toBeTruthy();
+  const pcSwatches = PC![1].match(/swatches:\s*"([^"]*)"/)?.[1] ?? "";
+  if (!pcSwatches.includes("flex gap-2 mb-2")) {
+    failures.push(`PRESET_CARD.swatches must be the reference's two-circle row "flex gap-2 mb-2" (read "${pcSwatches}")`);
+  }
+  const pcSwatch = PC![1].match(/swatch:\s*"([^"]*)"/)?.[1] ?? "";
+  if (!pcSwatch.includes("w-6 h-6 rounded-full")) {
+    failures.push(`PRESET_CARD.swatch must be the reference's solid circle "w-6 h-6 rounded-full" (read "${pcSwatch}")`);
+  }
+  if (/h-8 w-full rounded-md/.test(layoutSrc)) {
+    failures.push("the ONE-gradient-bar swatch form retires — the reference's preset cards carry TWO solid circles");
+  }
+  if (/sm:grid-cols-2 gap-4/.test(pSrc)) {
+    failures.push("the custom picker rows must be grid md:grid-cols-2 gap-6 (probed) — the sm:grid-cols-2 gap-4 form retires");
+  }
+  if (!/md:grid-cols-2 gap-6/.test(pSrc)) {
+    failures.push("the custom picker rows must carry the md:grid-cols-2 gap-6 form (probed)");
+  }
+  if (/h-9 w-14/.test(pSrc)) {
+    failures.push("the color input must be the stock form + w-20 h-12 cursor-pointer (probed: 80×48) — the h-9 w-14 form retires");
+  }
+  if (!/w-20 h-12/.test(pSrc)) {
+    failures.push("the color input must carry the probed w-20 h-12 arms");
+  }
+  if (/bg-gradient-to-r/.test(pSrc) || /to right, \$\{/.test(pSrc) || /linear-gradient\(to right/.test(pSrc)) {
+    failures.push("the preview tile must ride the reference's 135deg inline gradient (to-br) — the to-right form retires");
+  }
+  if (!/135deg/.test(pSrc)) {
+    failures.push("the preview tile must carry the probed 135deg gradient angle");
+  }
+
+  // (c) the Typography card: the w-full select + the border preview block
+  if (/sm:w-64/.test(pSrc)) {
+    failures.push("the font select must be w-full (probed) — the sm:w-64 arm retires");
+  }
+  if (!/mt-4 p-4 border rounded-lg/.test(pSrc)) {
+    failures.push("the typography preview must be the reference's mt-4 p-4 border rounded-lg BLOCK (probed) — the bg-line-soft p-3 form retires");
+  }
+  if (!/text-lg font-sans/.test(pSrc)) {
+    failures.push("the typography preview text must ride text-lg font-sans (probed) — the text-sm form retires");
+  }
+
+  // (d) the Background Image card: the hint form
+  if (!/text-xs text-gray-500 mt-1/.test(pSrc)) {
+    failures.push("the BG hint must be the reference's text-xs text-gray-500 mt-1 (ours: mt-2 text-xs text-muted)");
+  }
+
+  // (e) the Visual Style card: the STACKED selects
+  if (/sm:grid-cols-3/.test(pSrc)) {
+    failures.push("the Visual Style selects must be STACKED full-width in the space-y-6 body (probed) — the 3-col grid retires");
+  }
+
+  // (f) the Account card: the glyph + the disabled wash
+  if (/UserRound/.test(pSrc)) {
+    failures.push("the Account title icon must be the reference's circle-user (UserCircle) — the UserRound glyph retires");
+  }
+  if (!/bg-gray-50/.test(pSrc)) {
+    failures.push("the Account disabled inputs must carry the reference's bg-gray-50 wash (probed)");
+  }
+
+  // (g) the Preferences card: the Settings icon + the row form + the text forms
+  if (!/Settings className="h-5 w-5"/.test(pSrc)) {
+    failures.push("the Preferences title must carry the reference's Settings icon (probed) — ours shipped the bare title");
+  }
+  if (/items-start justify-between gap-4/.test(pSrc)) {
+    failures.push("the Preferences rows must be the reference's flex items-center justify-between p-4 rounded-lg border (probed) — the items-start gap-4 px-4 py-3 bg-line-soft/40 form retires");
+  }
+  const PP = layoutSrc.match(/export const PROFILE_PREFS = \{([\s\S]*?)\n\} as const;/);
+  expect(PP, "the PROFILE_PREFS record must exist in page-layout.ts").toBeTruthy();
+  const ppRow = PP![1].match(/row:\s*"([^"]*)"/)?.[1] ?? "";
+  if (!ppRow.includes("flex items-center justify-between p-4 rounded-lg border")) {
+    failures.push(`PROFILE_PREFS.row must be the probed "flex items-center justify-between p-4 rounded-lg border" (read "${ppRow}")`);
+  }
+  if (!/PROFILE_PREFS\.row/.test(pSrc)) {
+    failures.push("the Preferences rows must consume the PROFILE_PREFS.row record");
+  }
+
+  // (h) the save bar: the sticky right-aligned form
+  if (!/sticky bottom-4/.test(pSrc)) {
+    failures.push("the save bar must be the reference's flex justify-end gap-3 sticky bottom-4 (probed) — ours shipped a bare div");
+  }
+  if (!/flex justify-end gap-3/.test(pSrc)) {
+    failures.push("the save bar must carry the flex justify-end gap-3 arms (probed)");
+  }
+
+  expect(
+    failures,
+    "the Profile tab panels' geometry must mirror the reference — the WH-25 cure",
+  ).toEqual([]);
+});
+
+// WH-25: the checkbox-retirement census — the round's second core
+// finding: the WH-21 claim "the reference ships ZERO checkboxes, probed
+// live" was FALSE (that probe never opened the Preferences tab; the
+// live read shows NATIVE bare input[type=checkbox] w-5 h-5 controls).
+// The CRM-chassis custom Checkbox (the Session-17 button-role form),
+// its WH-21 dark-state cure, its interaction-contrast arithmetic pins
+// and its a11y (e) leg all shipped on the untested premise — the
+// component, the record, the pins and the leg retire with the premise,
+// and the Preferences pair renders the native form.
+it("WH-25: the checkbox-retirement census — the native w-5 h-5 form + the custom Checkbox's retirement", () => {
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const failures: string[] = [];
+  const pSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/profile/profile-page.tsx"), "utf8"));
+  const labelSrc = readFileSync(join(REPO_ROOT, "src/components/ui/label.tsx"), "utf8");
+  const PP = layoutSrc.match(/export const PROFILE_PREFS = \{([\s\S]*?)\n\} as const;/);
+
+  // (a) the profile page imports NO Checkbox and renders the native form
+  if (/Checkbox/.test(pSrc)) {
+    failures.push("the profile page must NOT consume the custom Checkbox — the reference's Preferences controls are NATIVE input[type=checkbox]");
+  }
+  const nativeCount = (pSrc.match(/type="checkbox"/g) ?? []).length;
+  if (nativeCount !== 2) {
+    failures.push(`the profile page must render exactly TWO native input[type=checkbox] controls (read ${nativeCount})`);
+  }
+  expect(PP, "the PROFILE_PREFS record must exist in page-layout.ts").toBeTruthy();
+  const ppCheckbox = PP![1].match(/checkbox:\s*"([^"]*)"/)?.[1] ?? "";
+  if (ppCheckbox !== "w-5 h-5") {
+    failures.push(`PROFILE_PREFS.checkbox must be the probed "w-5 h-5" (read "${ppCheckbox}")`);
+  }
+  if (!/PROFILE_PREFS\.checkbox/.test(pSrc)) {
+    failures.push("the native checkboxes must consume the PROFILE_PREFS.checkbox record");
+  }
+
+  // (b) the CHECKBOX record retires from page-layout
+  if (/export const CHECKBOX/.test(layoutSrc)) {
+    failures.push("the CHECKBOX record retires with its last consumer — the native form carries no custom control classes");
+  }
+
+  // (c) label.tsx exports Label only (the Checkbox export retires)
+  const exportBlock = labelSrc.match(/export \{([^}]*)\}/)?.[1] ?? "";
+  if (/Checkbox/.test(exportBlock)) {
+    failures.push(`label.tsx's export block must carry Label only (read: ${exportBlock.trim()}) — the Checkbox export retires with its last consumer`);
+  }
+  if (/function Checkbox/.test(labelSrc)) {
+    failures.push("the Checkbox component body retires with the export (dead surface — the ui-export census owns it)");
+  }
+
+  expect(
+    failures,
+    "the native checkbox form + the retirement must hold — the WH-25 cure",
+  ).toEqual([]);
+});
