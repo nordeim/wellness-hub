@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import {
+  BookOpen,
   ExternalLink,
-  FolderOpen,
   Pencil,
   Plus,
   Search,
@@ -22,7 +22,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
+import { PAGE_THEMES, BUTTON_CLASSES, FORM_CARD, SECTION_CARD, EMPTY_STATE } from "@/lib/page-layout";
 import { RESOURCE_TYPES, resourceTypeMeta } from "@/lib/constants";
 import { matchesQuery, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -400,12 +400,15 @@ export default function StudyResourcesClientPage() {
         </Select>
       </div>
 
+      {/* WH-23: the reference's OWN special empty card (probed): the
+          p-6 py-20 body + the big w-16 h-16 gray-300 book-open + the
+          text-lg hint — not the module pages' bare-paragraph form. */}
       {filtered.length === 0 ? (
-        <div className="rounded-xl border border-line bg-surface shadow-lg">
-          <EmptyState
-            icon={FolderOpen}
-            hint="No resources found. Add your study materials to get started!"
-          />
+        <div className={SECTION_CARD.card}>
+          <div className={EMPTY_STATE.study.body}>
+            <BookOpen className={EMPTY_STATE.study.icon} aria-hidden="true" />
+            <p className={EMPTY_STATE.study.text}>No resources found. Add your study materials to get started!</p>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">

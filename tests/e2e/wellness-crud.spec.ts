@@ -68,7 +68,10 @@ test("assignments: create, complete, delete", async ({ page }) => {
 
   // Delete it.
   await page.getByRole("button", { name: /Delete Chapter 5 exercises/ }).click();
-  await expect(page.getByText("No assignments yet")).toBeVisible();
+  // WH-23: the reference OMITS the list section at zero rows (probed —
+  // /Assignments ends after the KPI row), so the empty state is the
+  // section's ABSENCE, never an empty-state card.
+  await expect(page.getByRole("heading", { name: "Your Assignments" })).toHaveCount(0);
 });
 
 test("events: create an event, see the calendar dot + upcoming, delete", async ({ page }) => {
@@ -83,7 +86,10 @@ test("events: create an event, see the calendar dot + upcoming, delete", async (
   await expect(page.getByText("Study group").first()).toBeVisible();
 
   await page.getByRole("button", { name: /Delete Study group/ }).click();
-  await expect(page.getByText("No upcoming events. Add one to plan ahead!")).toBeVisible();
+  // WH-23: the reference's events-page empty form is the BARE empty list
+  // (probed: no empty-state message there) — the deletion's evidence is
+  // the row's disappearance, never an empty-state text.
+  await expect(page.getByText("Study group")).toHaveCount(0);
 });
 
 test("study resources: create with tags + rating, filter by search", async ({ page }) => {

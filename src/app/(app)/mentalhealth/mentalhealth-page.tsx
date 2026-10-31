@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { HeartPulse, Trash2 } from "lucide-react";
+import { Heart, HeartPulse, Smile, Trash2, TrendingUp } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
 import { toast } from "@/components/ui/toast";
 import {
@@ -13,7 +13,7 @@ import {
 } from "@/components/shared/page-parts";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
 import { MOODS, moodMeta } from "@/lib/constants";
 import { averageEnergy, currentStreak, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -254,28 +254,49 @@ export default function MentalHealthClientPage() {
         </section>
       )}
 
+      {/* The KPI row — the reference's probed anatomy (WH-23): the
+          emerald→teal hero + two plain tiles with the big module-tinted
+          right icons (heart / trending-up / smile). */}
       <div className={PAGE_KPI_GRIDS.three}>
-        <div className={cn(STAT_CARD.hero, "from-emerald-500 to-teal-500 p-5")}>
-          <p className={cn(STAT_CARD.heroLabel, "text-emerald-100")}>Total Entries</p>
-          <h3 className={cn(STAT_CARD.heroValue, "mt-1")}>{moodEntries.length}</h3>
+        <div className={cn(MODULE_KPI.hero, "from-emerald-500 to-teal-500")}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={cn(MODULE_KPI.heroLabel, "text-emerald-100")}>Total Entries</p>
+                <h3 className={MODULE_KPI.heroValue}>{moodEntries.length}</h3>
+              </div>
+              <Heart className={cn(MODULE_KPI.bigIcon, "text-emerald-100")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
-        <div className={cn(STAT_CARD.card, "p-5")}>
-          <p className={STAT_CARD.label}>Avg Energy</p>
-          <h3 className={cn(STAT_CARD.value, "mt-1")}>{avgEnergy}/10</h3>
+        <div className={STAT_CARD.card}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={MODULE_KPI.label}>Avg Energy</p>
+                <h3 className={MODULE_KPI.value}>{avgEnergy}/10</h3>
+              </div>
+              <TrendingUp className={cn(MODULE_KPI.bigIcon, "text-emerald-500")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
-        <div className={cn(STAT_CARD.card, "p-5")}>
-          <p className={STAT_CARD.label}>Current Streak</p>
-          <h3 className={cn(STAT_CARD.value, "mt-1")}>{streak}</h3>
-          <p className={STAT_CARD.sub}>days</p>
+        <div className={STAT_CARD.card}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={MODULE_KPI.label}>Current Streak</p>
+                <h3 className={MODULE_KPI.value}>{streak}</h3>
+                <p className={STAT_CARD.sub}>days</p>
+              </div>
+              <Smile className={cn(MODULE_KPI.bigIcon, "text-yellow-500")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
       </div>
 
-      <SectionCard icon={HeartPulse} title="Your Journey">
+      <SectionCard title="Your Journey">
         {moodEntries.length === 0 ? (
-          <EmptyState
-            icon={HeartPulse}
-            hint="Start your mental health journey by logging your first mood entry!"
-          />
+          <EmptyState hint="Start your mental health journey by logging your first mood entry!" />
         ) : (
           <ul className="space-y-3">
             {moodEntries.map((m) => {

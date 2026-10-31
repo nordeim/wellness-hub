@@ -19,8 +19,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (342 checks) | `bun run test` | Vitest, node-safe seams |
-| Browser E2E (60 checks) | `bun run test:e2e` | Needs `bun run build` first |
+| Unit tests (344 checks) | `bun run test` | Vitest, node-safe seams |
+| Browser E2E (61 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
 | The full gate in one command | `bun run gate` | lint → tsc → test → build → smoke → e2e |
@@ -29,8 +29,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (342) → `bun run build` → `bun run smoke` →
-`CI=1 bun run test:e2e` (60: 6 specs + the auth setup project) — or the
+`bun run test` (344) → `bun run build` → `bun run smoke` →
+`CI=1 bun run test:e2e` (61: 6 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
 is NOT set — a type error fails `bun run build`, and the explicit
@@ -96,6 +96,7 @@ bun run db:seed && bun run dev`. Demo login: `sepnetflix2023@outlook.com` /
   changes; loaders use `startTransition`; every list fetch goes through
   the store.
 - **The per-module page identity is a MAP, not scattered literals (WH-15)**: every module page consumes its `PAGE_THEMES` entry from `src/lib/page-layout.ts` (the page-root wash, the H1 gradient stops, the button pair, the container width, the header form) — the reference's 2026-10-30 redesign, probed live. The MODULE pairs are fixed v3 classes (NOT preset-themeable — verified on the reference's own preset engine); only the brand family (wordmark, badge, active pills, mobile/drawer titles) rides `--primary`/`--secondary`. The page-theme census pins the map's coverage, pin-completeness and consumption.
+- **The card family rides the reference's CardHeader/CardContent GEOMETRY (WH-23)**: every list card (the shared `SectionCard` + the dashboard's hand-built Quick Actions card) uses `flex flex-col space-y-1.5 p-6` headers (NO bottom border, the title `font-semibold leading-none tracking-tight`, the optional icon INSIDE the title row at `h-5 w-5` inherited ink — per-card: Exercise/MentalHealth/Events ship the bare title) + `p-6 pt-0` bodies — pinned by the card-geometry census. The Quick Actions grid is `grid grid-cols-2 gap-3` (a 12px gap, never dividers) of fixed `h-24` cells (the `QUICK_ACTIONS` record) whose hover family is the ICON SCALE (`group-hover:scale-110`) + the label lighten — NEVER a background wash or an icon color flip; the reference's `[&_svg]:size-4` WINS over the icon's own `w-6 h-6` (the icon computes 16px). The module KPI rows ride the `MODULE_KPI` record (the `p-6 pt-6` wrapper + the justify-between row + the BIG `w-12 h-12` module-tinted right icons). The empty states are BARE centered paragraphs (`EMPTY_STATE.p`/`.dash` — the icon chip retired at WH-23; StudyResources ships its own special card); the reference OMITS the Assignments + Routines list sections at zero rows (conditional rendering) and the events page's empty body is the bare empty list. The Recent Activity items are 2xl-emoji rows with the mood VALUE as its own detail line + the `formatDateShort` date (the reference's 💚 is a fixed per-kind glyph — its mood vocabulary is byte-identical to ours).
 - **The module create-forms are INLINE CARDS, not dialogs (WH-21)**: the seven action pages (Events, Exercise, MentalHealth, Assignments, Reminders, StudyResources, Goals) render their create/edit forms as inline expanding cards in the page flow (the `FORM_CARD` record from `src/lib/page-layout.ts` — `rounded-xl border bg-surface text-ink border-none shadow-xl`, the `p-6` header, the `p-6 pt-0` body, the `flex justify-end gap-3` footer inside the `space-y-4`), placed directly below the page header, conditionally rendered — the reference's own modality (probed live: its forms open with zero overlays, no scroll lock). Only the Routines "Schedule" flow is a modal (on both apps). The form-modality census + the e2e modality leg pin it — do NOT reintroduce Dialog there; `ui/dialog` keeps its consumers in routines/app-shell/mobile-nav. The Routines "Schedule" flow IS a dialog on both apps — and its CONTENT rides the `SCHEDULE_MODAL` record (WH-22, probed field-by-field: the 672px width, the title-only header, the gradient-50 description tile with the nested Remember inset, the gray-50 step tiles with solid purple-500 circles, the grid-gap-4 fields, and the w-full module-pair primary — NO Cancel). `DialogFooter`/`DialogDescription`/`DIALOG_FOOTER` retired at WH-22 with their last consumer — the ui-export + value censuses own that retirement.
 - **Route aliases are intentional**: each module has a canonical lowercase
   folder (`src/app/(app)/dashboard/`) AND a capitalized alias folder
@@ -289,8 +290,16 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   dark mood-tile walk (Tailwind v4's `scale-105` compiles to the `scale`
   PROPERTY, not `transform` — read the property, not the old pipeline) +
   the gradient-ink arithmetic pin (the whole fixed-gradient white-ink
-  family measured: all 16 pairs AA-fail at the worst stop, all
-  reference-shared — documented in PAD §11, pinned, not cured).
+  family measured: all 16 pairs AA-fail at the worst stop + the four KPI
+  hero-label -100 tints (WH-23: 2.45/2.19/2.07/1.79), all
+  reference-shared — documented in PAD §11, pinned, not cured). The
+  WH-23 widening: the card-geometry + empty-form/omission censuses (the
+  identity probe read color, never geometry — the CardHeader/
+  CardContent anatomy, the gap-3 Quick Actions grid, the scale-110
+  hover family, the MODULE_KPI big icons, the bare-paragraph empty
+  states, the zero-row section omissions) + the scroll-capped keyboard
+  walk (the (g) leg: the initial focus, the trap, the below-fold
+  primary's scroll-into-view — the net never walked a scrolled dialog).
 
 ## Git
 

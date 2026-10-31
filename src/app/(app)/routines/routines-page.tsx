@@ -14,7 +14,6 @@ import { toast } from "@/components/ui/toast";
 import {
   PageHeader,
   SectionCard,
-  EmptyState,
   LoadingBlock,
   GradientButton,
   OptionChip,
@@ -114,19 +113,17 @@ export default function RoutinesClientPage() {
         theme={PAGE_THEMES.routines}
       />
 
-      {/* My routines (the scheduled list — the reference stores these; the
-          page surfaces them so scheduling has a visible home). */}
+      {/* My routines (the scheduled list). WH-23: the reference OMITS this
+          section at zero scheduled (probed — its /Routines shows only the
+          templates); the populated form is unobservable on the reference
+          account (zero-write doctrine), so our card stays for the
+          rows-exist state. */}
+      {upcoming.length > 0 && (
       <SectionCard
         icon={CalendarCheck}
         title="My Routines"
         action={<span className="text-xs text-muted">{upcoming.length} scheduled</span>}
       >
-        {upcoming.length === 0 ? (
-          <EmptyState
-            icon={CalendarCheck}
-            hint="Schedule a template below to see it here!"
-          />
-        ) : (
           <ul className="space-y-3">
             {upcoming.map((r) => (
               <li
@@ -162,8 +159,8 @@ export default function RoutinesClientPage() {
               </li>
             ))}
           </ul>
-        )}
       </SectionCard>
+      )}
 
       <div>
         <h2 className="text-xl font-semibold text-foreground">Browse Templates</h2>

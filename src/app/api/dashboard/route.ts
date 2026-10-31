@@ -63,8 +63,12 @@ export async function GET() {
       ...moods.map((m) => ({
         kind: "mood" as const,
         id: m.id,
-        title: `Mood check-in: ${m.mood}`,
-        detail: m.gratitude,
+        // WH-23: the reference's own feed item (probed live): the title
+        // "Mood check-in" with the mood VALUE as its own detail line —
+        // never the value folded into the title. The 2xl emoji glyph
+        // rides the feed row (ours: the 💚 the reference renders).
+        title: "Mood check-in",
+        detail: m.mood,
         at: m.createdAt,
       })),
       ...assignments.slice(0, 5).map((a) => ({

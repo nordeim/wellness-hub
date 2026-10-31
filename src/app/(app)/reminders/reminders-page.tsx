@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Bell, BellRing, CheckCircle2, Pencil, Plus, Trash2 } from "lucide-react";
+import { Check, CheckCircle2, CircleAlert, Clock, Pencil, Plus, Trash2 } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
 import { toast } from "@/components/ui/toast";
 import {
@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
 import {
   REMINDER_TYPES,
   REMINDER_REPEATS,
@@ -266,27 +266,48 @@ export default function RemindersClientPage() {
         </section>
       )}
 
+      {/* The KPI row — the reference's probed anatomy (WH-23): three
+          PLAIN tiles (no hero on this page) with the big tinted right
+          icons (clock / circle-alert / check). */}
       <div className={PAGE_KPI_GRIDS.three}>
-        <div className={cn(STAT_CARD.card, "p-5")}>
-          <p className={STAT_CARD.label}>Upcoming</p>
-          <h3 className={cn(STAT_CARD.value, "mt-1")}>{upcoming}</h3>
+        <div className={STAT_CARD.card}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={MODULE_KPI.label}>Upcoming</p>
+                <h3 className={MODULE_KPI.value}>{upcoming}</h3>
+              </div>
+              <Clock className={cn(MODULE_KPI.bigIcon, "text-purple-500")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
-        <div className={cn(STAT_CARD.card, "p-5")}>
-          <p className={STAT_CARD.label}>Overdue</p>
-          <h3 className={cn(STAT_CARD.value, "mt-1")}>{overdue}</h3>
+        <div className={STAT_CARD.card}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={MODULE_KPI.label}>Overdue</p>
+                <h3 className={MODULE_KPI.value}>{overdue}</h3>
+              </div>
+              <CircleAlert className={cn(MODULE_KPI.bigIcon, "text-red-500")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
-        <div className={cn(STAT_CARD.card, "p-5")}>
-          <p className={STAT_CARD.label}>Completed</p>
-          <h3 className={cn(STAT_CARD.value, "mt-1")}>{completed}</h3>
+        <div className={STAT_CARD.card}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={MODULE_KPI.label}>Completed</p>
+                <h3 className={MODULE_KPI.value}>{completed}</h3>
+              </div>
+              <Check className={cn(MODULE_KPI.bigIcon, "text-green-500")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
       </div>
 
-      <SectionCard icon={BellRing} title="Upcoming Reminders">
+      <SectionCard icon={Clock} title="Upcoming Reminders">
         {reminders.length === 0 ? (
-          <EmptyState
-            icon={Bell}
-            hint="No upcoming reminders. Create one to stay organized!"
-          />
+          <EmptyState hint="No upcoming reminders. Create one to stay organized!" />
         ) : (
           <ul className="space-y-3">
             {sorted.map((r) => {

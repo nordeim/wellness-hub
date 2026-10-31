@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Award, CheckCircle2, Pencil, Plus, Target, Trash2 } from "lucide-react";
+import { Award, CheckCircle2, Pencil, Plus, Sparkles, Target, Trash2, Trophy } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
 import { toast } from "@/components/ui/toast";
 import {
@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD, EMPTY_STATE } from "@/lib/page-layout";
 import { GOAL_CATEGORIES, GOAL_FREQUENCIES, goalCategoryMeta, goalFrequencyMeta } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -294,29 +294,50 @@ export default function GoalsClientPage() {
         </section>
       )}
 
+      {/* The KPI row — the reference's probed anatomy (WH-23): the
+          yellow→amber hero + two plain tiles with the big tinted right
+          icons (sparkles / target / award). */}
       <div className={PAGE_KPI_GRIDS.three}>
-        <div className={cn(STAT_CARD.hero, "from-yellow-500 to-amber-600 p-5")}>
-          <p className={cn(STAT_CARD.heroLabel, "text-yellow-100")}>Total Points</p>
-          <h3 className={cn(STAT_CARD.heroValue, "mt-1")}>{totalPoints}</h3>
+        <div className={cn(MODULE_KPI.hero, "from-yellow-500 to-amber-600")}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={cn(MODULE_KPI.heroLabel, "text-yellow-100")}>Total Points</p>
+                <h3 className={MODULE_KPI.heroValue}>{totalPoints}</h3>
+              </div>
+              <Sparkles className={cn(MODULE_KPI.bigIcon, "text-yellow-100")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
-        <div className={cn(STAT_CARD.card, "p-5")}>
-          <p className={STAT_CARD.label}>Goals Completed</p>
-          <h3 className={cn(STAT_CARD.value, "mt-1")}>{completedCount}</h3>
-          <p className={STAT_CARD.sub}>of {goalsTotal} total</p>
+        <div className={STAT_CARD.card}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={MODULE_KPI.label}>Goals Completed</p>
+                <h3 className={MODULE_KPI.value}>{completedCount}</h3>
+                <p className={STAT_CARD.sub}>of {goalsTotal} total</p>
+              </div>
+              <Target className={cn(MODULE_KPI.bigIcon, "text-amber-500")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
-        <div className={cn(STAT_CARD.card, "p-5")}>
-          <p className={STAT_CARD.label}>Badges Earned</p>
-          <h3 className={cn(STAT_CARD.value, "mt-1")}>{badgesEarned}</h3>
-          <p className={STAT_CARD.sub}>of {badgesTotal} total</p>
+        <div className={STAT_CARD.card}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={MODULE_KPI.label}>Badges Earned</p>
+                <h3 className={MODULE_KPI.value}>{badgesEarned}</h3>
+                <p className={STAT_CARD.sub}>of {badgesTotal} total</p>
+              </div>
+              <Award className={cn(MODULE_KPI.bigIcon, "text-purple-500")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
       </div>
 
       <SectionCard icon={Target} title="Active Goals">
         {active.length === 0 ? (
-          <EmptyState
-            icon={Target}
-            hint="No goals yet. Create your first goal to start tracking!"
-          />
+          <EmptyState hint="No goals yet. Create your first goal to start tracking!" />
         ) : (
           <ul className="space-y-4">
             {active.map((g) => {
@@ -382,7 +403,7 @@ export default function GoalsClientPage() {
       </SectionCard>
 
       <SectionCard
-        icon={Award}
+        icon={Trophy}
         title="Achievements"
         action={
           <span className="text-xs text-muted">
@@ -391,7 +412,7 @@ export default function GoalsClientPage() {
         }
       >
         {(achievements?.badges.length ?? 0) === 0 ? (
-          <EmptyState icon={Award} hint="Achievements will appear here as you progress!" />
+          <p className={cn(EMPTY_STATE.p, "text-sm")}>Achievements will appear here as you progress!</p>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {achievements?.badges.map((b) => {

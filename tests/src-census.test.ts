@@ -485,7 +485,10 @@ const PROPPED_COMPONENTS: Record<string, string[]> = {
   "src/components/shared/page-parts.tsx:PageHeader": ["actions", "subtitle", "theme", "title"],
   "src/components/shared/page-parts.tsx:GradientButton": ["children", "gradient"],
   "src/components/shared/page-parts.tsx:SectionCard": ["action", "children", "icon", "title"],
-  "src/components/shared/page-parts.tsx:EmptyState": ["hint", "icon"],
+  // WH-23: EmptyState's `icon` prop retired with the icon chip — the
+  // reference's empty states are a bare centered paragraph (probed:
+  // `<p class="text-center text-gray-500 py-12">`, no chip).
+  "src/components/shared/page-parts.tsx:EmptyState": ["hint"],
   "src/components/shared/page-parts.tsx:OptionChip": ["icon", "label", "text", "tint"],
   "src/components/shared/page-parts.tsx:LoadingBlock": ["label"],
   "src/components/layout/sidebar.tsx:SidebarNav": [],
@@ -1700,5 +1703,305 @@ it("WH-22: the schedule-modal census — the Routines Schedule modal rides the r
   expect(
     failures,
     "the Schedule modal must ride the reference's probed content anatomy — the WH-22 cure (the one modal whose content was never probed)",
+  ).toEqual([]);
+});
+
+it("WH-23: the card-geometry census — the dashboard + card family rides the reference's probed anatomy (the identity probe read COLOR, never GEOMETRY)", () => {
+  // WH-23: the WH-15 redesign probes mapped every card family by its
+  // COLORS (the washes, the gradient pairs) — and every later round
+  // trusted the map. The geometry was never walked: the Quick Actions
+  // grid ships 12px GAPS on the reference (not our border dividers),
+  // the cells are fixed h-24 buttons whose hover family is an ICON
+  // SCALE + a label lighten (never our bg wash + indigo icon), every
+  // list card rides the CardHeader/CardContent anatomy (p-6, no
+  // border-b, the icon INSIDE the title at inherited ink — not muted),
+  // the dashboard stat tiles carry a relative p-6 content wrapper +
+  // the justify-between icon row + the mb-1 rhythm, and the module KPI
+  // tiles carry BIG w-12 h-12 module-tinted right icons ours never
+  // shipped at all. Probed live 2026-10-31 (computed styles + DOM,
+  // real pointer for the hover families, settled ≥400 ms).
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const partsSrc = readFileSync(join(REPO_ROOT, "src/components/shared/page-parts.tsx"), "utf8");
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const failures: string[] = [];
+
+  // (a) the QUICK_ACTIONS record — the probed anatomy + our dark twins
+  const QA = layoutSrc.match(/export const QUICK_ACTIONS = \{([\s\S]*?)\} as const;/);
+  expect(QA, "the QUICK_ACTIONS record must exist in page-layout.ts").toBeTruthy();
+  const QA_MEMBERS: [string, string][] = [
+    ["header", "flex flex-col space-y-1.5 p-6"],
+    ["title", "font-semibold leading-none tracking-tight flex items-center gap-2"],
+    ["body", "p-6 pt-0"],
+    ["grid", "grid grid-cols-2 gap-3"],
+    ["cell", "px-4 py-2 w-full h-24 flex flex-col items-center justify-center gap-2 border-none"],
+    ["cell", "bg-opacity-5 hover:bg-opacity-10 transition-all group"],
+    ["cell", "hover:text-neutral-900"],
+    ["cell", "dark:hover:text-neutral-100"],
+    ["icon", "h-6 w-6 text-gray-700 group-hover:scale-110 transition-transform"],
+    ["icon", "dark:text-gray-400"],
+    ["label", "text-sm font-medium"],
+  ];
+  for (const [member, expectCls] of QA_MEMBERS) {
+    const m = QA![1].match(new RegExp(`${member}:\\s*"([^"]*)"`));
+    if (!m || !m[1]!.includes(expectCls)) {
+      failures.push(`QUICK_ACTIONS.${member} must carry the probed form "${expectCls}" (read "${m?.[1] ?? "—"}")`);
+    }
+  }
+  for (const [k, pair] of [
+    ["exercise", "from-orange-500 to-red-500"],
+    ["mentalhealth", "from-emerald-500 to-teal-500"],
+    ["assignments", "from-blue-500 to-cyan-500"],
+    ["events", "from-violet-500 to-purple-500"],
+  ] as [string, string][]) {
+    const m = QA![1].match(new RegExp(`${k}:\\s*"([^"]*)"`));
+    if (!m || !m[1]!.includes(pair)) failures.push(`QUICK_ACTIONS.pairs.${k} must carry the module pair "${pair}" (read "${m?.[1] ?? "—"}")`);
+  }
+
+  // (b) the dashboard consumes the record; the divider + wash hover
+  // families RETIRE (the reference ships gap-3 with NO dividers, NO bg
+  // wash, NO indigo icon — its hover is the icon scale + label lighten)
+  const dashRaw = readFileSync(join(REPO_ROOT, "src/app/(app)/dashboard/dashboard-page.tsx"), "utf8");
+  const dashSrc = strip(dashRaw);
+  if (!dashSrc.includes("QUICK_ACTIONS")) failures.push("dashboard-page.tsx must consume the QUICK_ACTIONS record");
+  if (/border-r border-line|border-t border-line/.test(dashSrc)) {
+    failures.push("the Quick Actions grid must ride the reference's gap-3 form — the border dividers retire (probed: grid grid-cols-2 gap-3, cells border-none)");
+  }
+  if (/group-hover:text-primary/.test(dashSrc)) {
+    failures.push("the quick-action icon's hover must be the reference's SCALE family (group-hover:scale-110), never the indigo color flip (group-hover:text-primary)");
+  }
+  if (/hover:bg-line-soft/.test(dashSrc) && /QUICK_ACTIONS/.test(dashSrc) && new RegExp(`cell[^}]*hover:bg-line-soft`).test(dashSrc)) {
+    failures.push("the quick-action cell must NOT carry a background wash on hover (probed: the reference's cell bg stays transparent)");
+  }
+
+  // (c) the MODULE_KPI record + the five pages' conversions
+  const KPI = layoutSrc.match(/export const MODULE_KPI = \{([\s\S]*?)\} as const;/);
+  expect(KPI, "the MODULE_KPI record must exist in page-layout.ts").toBeTruthy();
+  const KPI_MEMBERS: [string, string][] = [
+    ["hero", "rounded-xl border-none shadow-lg bg-gradient-to-br text-white"],
+    ["wrap", "p-6 pt-6"],
+    ["row", "flex items-center justify-between"],
+    ["heroLabel", "text-sm mb-1"],
+    ["label", "text-gray-600 text-sm mb-1"],
+    ["label", "dark:text-gray-400"],
+    ["heroValue", "text-4xl font-bold"],
+    ["value", "text-4xl font-bold text-gray-900"],
+    ["value", "dark:text-gray-100"],
+    ["bigIcon", "h-12 w-12"],
+  ];
+  for (const [member, expectCls] of KPI_MEMBERS) {
+    const m = KPI![1].match(new RegExp(`${member}:\\s*"([^"]*)"`));
+    if (!m || !m[1]!.includes(expectCls)) {
+      failures.push(`MODULE_KPI.${member} must carry the probed form "${expectCls}" (read "${m?.[1] ?? "—"}")`);
+    }
+  }
+  const KPI_PAGES: [string, string[], string[]][] = [
+    ["exercise", ["Dumbbell", "Clock", "Flame"], ["text-orange-100", "text-orange-500", "text-red-500"]],
+    ["mentalhealth", ["Heart", "TrendingUp", "Smile"], ["text-emerald-100", "text-emerald-500", "text-yellow-500"]],
+    ["assignments", ["Clock", "CircleCheck", "CircleAlert"], ["text-blue-500", "text-green-100", "text-red-500"]],
+    ["reminders", ["Clock", "CircleAlert", "Check"], ["text-purple-500", "text-red-500", "text-green-500"]],
+    ["goals", ["Sparkles", "Target", "Award"], ["text-yellow-100", "text-amber-500", "text-purple-500"]],
+  ];
+  for (const [page, icons, tints] of KPI_PAGES) {
+    const src = strip(readFileSync(join(REPO_ROOT, `src/app/(app)/${page}/${page}-page.tsx`), "utf8"));
+    if (!src.includes("MODULE_KPI")) failures.push(`${page}-page.tsx must consume the MODULE_KPI record`);
+    for (const icon of icons) {
+      if (!src.includes(icon)) failures.push(`${page}-page.tsx must carry the probed big KPI icon ${icon}`);
+    }
+    for (const tint of tints) {
+      if (!src.includes(tint)) failures.push(`${page}-page.tsx must carry the probed KPI tint ${tint}`);
+    }
+    if (/cn\(STAT_CARD\.(hero|card),\s*"[^"]*p-5"\)/.test(src)) {
+      failures.push(`${page}-page.tsx: the KPI tiles must ride MODULE_KPI.wrap (p-6 pt-6) — the p-5 composition retires`);
+    }
+  }
+  // the assignments page gains its missing hero tile (probed: the
+  // green→emerald Completed hero is the SECOND tile — ours shipped 3 plain)
+  const assignSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/assignments/assignments-page.tsx"), "utf8"));
+  if (!/from-green-500 to-emerald-500/.test(assignSrc)) {
+    failures.push("assignments-page.tsx must ship the probed green→emerald Completed hero tile");
+  }
+
+  // (d) the SECTION_CARD anatomy — the CardHeader/CardContent forms
+  const SC = layoutSrc.match(/export const SECTION_CARD = \{([\s\S]*?)\} as const;/);
+  expect(SC, "SECTION_CARD must exist").toBeTruthy();
+  const SC_MEMBERS: [string, string][] = [
+    ["card", "rounded-xl border-none shadow-lg"],
+    ["card", "text-ink"],
+    ["header", "flex flex-col space-y-1.5 p-6"],
+    ["title", "font-semibold leading-none tracking-tight"],
+    ["titleRow", "flex items-center gap-2"],
+    ["body", "p-6 pt-0"],
+  ];
+  for (const [member, expectCls] of SC_MEMBERS) {
+    const m = SC![1].match(new RegExp(`${member}:\\s*"([^"]*)"`));
+    if (!m || !m[1]!.includes(expectCls)) {
+      failures.push(`SECTION_CARD.${member} must carry the probed form "${expectCls}" (read "${m?.[1] ?? "—"}")`);
+    }
+  }
+  if (/border-b/.test(SC![1])) failures.push("SECTION_CARD.header must NOT carry a bottom border (probed: the reference's CardHeader has none)");
+  if (/"p-5"/.test(SC![1])) failures.push("SECTION_CARD.body must be p-6 pt-0 (the reference's CardContent), never p-5");
+
+  // (e) the STAT_CARD extension — the dashboard stat tiles' geometry
+  const ST = layoutSrc.match(/export const STAT_CARD = \{([\s\S]*?)\} as const;/);
+  expect(ST, "STAT_CARD must exist").toBeTruthy();
+  const ST_MEMBERS: [string, string][] = [
+    ["content", "relative p-6"],
+    ["iconRow", "flex items-start justify-between mb-4"],
+    ["iconTile", "p-3 rounded-2xl bg-gradient-to-br shadow-lg"],
+    ["label", "mb-1"],
+    ["value", "mb-1"],
+  ];
+  for (const [member, expectCls] of ST_MEMBERS) {
+    const m = ST![1].match(new RegExp(`${member}:\\s*"([^"]*)"`));
+    if (!m || !m[1]!.includes(expectCls)) {
+      failures.push(`STAT_CARD.${member} must carry the probed form "${expectCls}" (read "${m?.[1] ?? "—"}")`);
+    }
+  }
+  if (/iconTile:\s*"([^"]*)"/.test(ST![1]) && /flex items-center justify-center/.test(ST![1].match(/iconTile:\s*"([^"]*)"/)![1])) {
+    failures.push("STAT_CARD.iconTile must NOT carry the flex/center arms (probed: the reference's tile is the bare p-3 rounded-2xl form)");
+  }
+  // the hero members retire with their last consumer (the module pages
+  // move to MODULE_KPI; the value census owns the retirement)
+  if (/\bhero(Label|Value)?:/.test(ST![1])) {
+    failures.push("STAT_CARD's hero/heroLabel/heroValue members retire at WH-23 (the module KPI tiles ride MODULE_KPI — their last consumer)");
+  }
+
+  // (f) the SectionCard component — the icon INSIDE the title row at
+  // inherited ink (probed: w-5 h-5, color rgb(10,10,10) — NOT muted)
+  const scStart = partsSrc.indexOf("export function SectionCard");
+  const scEnd = partsSrc.indexOf("export function EmptyState");
+  const scBody = scStart >= 0 && scEnd > scStart ? partsSrc.slice(scStart, scEnd) : "";
+  if (!scBody) {
+    failures.push("the SectionCard component body must be readable in page-parts.tsx");
+  } else {
+    if (!/SECTION_CARD\.titleRow/.test(scBody)) {
+      failures.push("SectionCard must place the icon inside the title row (SECTION_CARD.titleRow — the reference's CardHeader form)");
+    }
+    if (/text-muted/.test(scBody)) {
+      failures.push("SectionCard's header icon must inherit the card ink (probed: the reference's w-5 h-5 icons carry NO color class) — text-muted retires");
+    }
+  }
+
+  expect(
+    failures,
+    "the card family must ride the reference's probed geometry — the WH-23 cure (the identity probe read color, never geometry)",
+  ).toEqual([]);
+});
+
+it("WH-23: the empty-form + omission census — the reference's empty states are TEXT-ONLY and two sections OMIT at zero rows", () => {
+  // WH-23: the reference's module empty states are a bare centered
+  // paragraph (probed: `<p class="text-center text-gray-500 py-12">` —
+  // the full body innerHTML carries NO icon chip), the dashboard's
+  // upcoming empties are the py-8 form, StudyResources ships its own
+  // big-icon card — and the Assignments + Routines pages OMIT their
+  // list sections entirely at zero rows (probed: /Assignments ends
+  // after the KPI row; /Routines shows only the templates). Our
+  // icon-chip EmptyState and always-rendered sections retire.
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const partsSrc = readFileSync(join(REPO_ROOT, "src/components/shared/page-parts.tsx"), "utf8");
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const failures: string[] = [];
+
+  // (a) the EMPTY_STATE record — the text-only forms
+  const ES = layoutSrc.match(/export const EMPTY_STATE = \{([\s\S]*?)\n\} as const;/);
+  expect(ES, "the EMPTY_STATE record must exist").toBeTruthy();
+  const ES_MEMBERS: [string, string][] = [
+    ["p", "text-center text-gray-500 py-12"],
+    ["p", "dark:text-gray-400"],
+    ["dash", "text-gray-500 text-center py-8"],
+    ["dash", "dark:text-gray-400"],
+  ];
+  for (const [member, expectCls] of ES_MEMBERS) {
+    const m = ES![1].match(new RegExp(`${member}:\\s*"([^"]*)"`));
+    if (!m || !m[1]!.includes(expectCls)) {
+      failures.push(`EMPTY_STATE.${member} must carry the probed form "${expectCls}" (read "${m?.[1] ?? "—"}")`);
+    }
+  }
+  // the StudyResources special card (probed: p-6 py-20 + the w-16
+  // h-16 gray-300 book-open + the text-lg hint)
+  if (!/study:\s*\{/.test(ES![1])) {
+    failures.push("EMPTY_STATE must carry the study member (the StudyResources special empty card)");
+  } else {
+    const study = ES![1].match(/study:\s*\{([\s\S]*?)\}/)![1];
+    for (const [member, expectCls] of [
+      ["body", "p-6 py-20 text-center"],
+      ["icon", "h-16 w-16 text-gray-300 mx-auto mb-4"],
+      ["text", "text-gray-500 text-lg"],
+    ] as [string, string][]) {
+      if (!study.includes(`${member}:`) || !study.includes(expectCls)) {
+        failures.push(`EMPTY_STATE.study.${member} must carry the probed form "${expectCls}"`);
+      }
+    }
+  }
+  // the icon-chip members RETIRE (the value census owns it; the census
+  // documents the retirement)
+  if (/h-12 w-12/.test(ES![1]) || /iconGlyph/.test(ES![1])) {
+    failures.push("EMPTY_STATE's icon-chip members (icon/iconGlyph) retire at WH-23 — the reference's empty states are text-only");
+  }
+
+  // (b) the EmptyState component renders the bare paragraph (no chip)
+  const esStart = partsSrc.indexOf("export function EmptyState");
+  const esEnd = partsSrc.indexOf("export function LoadingBlock");
+  const esBody = esStart >= 0 && esEnd > esStart ? partsSrc.slice(esStart, esEnd) : "";
+  if (!esBody) {
+    failures.push("the EmptyState component body must be readable in page-parts.tsx");
+  } else if (/EMPTY_STATE\.icon\b/.test(esBody)) {
+    failures.push("EmptyState must not render the icon chip (the icon prop retires with the chip)");
+  }
+
+  // (c) the per-page icon parity — Exercise/MentalHealth/Events carry NO
+  // header icon (probed); Reminders = Clock; Goals = Target + the
+  // reference's Trophy (ours shipped Award); the dashboard's two wrong
+  // icons cure to Bell + Calendar (probed: bell + calendar)
+  const ICON_PAGES: [string, string, string][] = [
+    ["exercise", "Recent Workouts", ""],
+    ["mentalhealth", "Your Journey", ""],
+    ["events", "Upcoming Events", ""],
+    ["reminders", "Upcoming Reminders", "Clock"],
+    ["goals", "Active Goals", "Target"],
+  ];
+  for (const [page, title, icon] of ICON_PAGES) {
+    const src = strip(readFileSync(join(REPO_ROOT, `src/app/(app)/${page}/${page}-page.tsx`), "utf8"));
+    const call = src.match(new RegExp(`<SectionCard[^>]*title="${title}"`));
+    if (!call) { failures.push(`${page}-page.tsx: the "${title}" SectionCard must exist`); continue; }
+    const hasIcon = /icon=\{/.test(call[0]);
+    if (icon === "" && hasIcon) failures.push(`${page}-page.tsx: "${title}" must carry NO header icon (probed — the reference's card ships the bare title)`);
+    if (icon !== "" && !call[0].includes(icon)) failures.push(`${page}-page.tsx: "${title}" must carry the probed ${icon} icon (read "${call[0]}")`);
+  }
+  const goalsSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/goals/goals-page.tsx"), "utf8"));
+  if (!/icon=\{Trophy\}/.test(goalsSrc)) failures.push("goals-page.tsx: the Achievements card must carry the probed Trophy icon (ours shipped Award)");
+  const dashSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/dashboard/dashboard-page.tsx"), "utf8"));
+  if (!/icon=\{Bell\}/.test(dashSrc)) failures.push("dashboard-page.tsx: Upcoming Reminders must carry the probed Bell icon (ours shipped BarChart3)");
+  if (!/icon=\{Calendar\}/.test(dashSrc)) failures.push("dashboard-page.tsx: Upcoming Events must carry the probed Calendar icon (ours shipped CalendarPlus)");
+
+  // (d) the empty-data omission — Assignments + Routines render their
+  // list sections ONLY when rows exist (probed: both pages end without
+  // the section at zero rows)
+  for (const [page, title] of [["assignments", "Your Assignments"], ["routines", "My Routines"]] as [string, string][]) {
+    const src = strip(readFileSync(join(REPO_ROOT, `src/app/(app)/${page}/${page}-page.tsx`), "utf8"));
+    const cond = src.match(new RegExp(`\\S+\\.length[^\\n]{0,40}&&[\\s\\S]{0,220}?title="${title}"`));
+    if (!cond) {
+      failures.push(`${page}-page.tsx: the "${title}" section must render ONLY when rows exist (probed — the reference omits the section at zero rows)`);
+    }
+  }
+
+  // (e) the dashboard's upcoming empties ride the py-8 dash form (no text-sm — probed)
+  if (/py-8 text-center text-sm text-muted/.test(dashSrc)) {
+    failures.push('the dashboard upcoming empties must ride EMPTY_STATE.dash (text-gray-500 text-center py-8) — the text-sm text-muted form retires');
+  }
+
+  // (f) the events PAGE's empty form is the BARE empty list (probed: the
+  // reference's Upcoming Events body innerHTML is just the empty
+  // space-y-3 container — NO empty-state message on the events page,
+  // unlike Exercise/Goals/Reminders; the dashboard's card keeps its
+  // "No upcoming events" py-8 text)
+  const eventsSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/events/events-page.tsx"), "utf8"));
+  if (/No upcoming events/.test(eventsSrc)) {
+    failures.push("events-page.tsx: the reference's events-page empty form is the BARE empty list — the empty-state message retires there (the dashboard's py-8 text stays)");
+  }
+
+  expect(
+    failures,
+    "the empty forms + the zero-row omissions must mirror the reference — the WH-23 cure",
   ).toEqual([]);
 });

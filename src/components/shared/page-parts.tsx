@@ -72,17 +72,25 @@ export function GradientButton({
 // the authored per-tile tints the reference carries). The export-census pin
 // owns this module's export surface.
 
-/** A white section card with an icon + title header (the Recent Workouts /
- *  Your Journey / Upcoming Events panels). WH-9 (F-2b): the `bodyClassName`
- *  prop retired — zero call sites (every live SectionCard passes the bare
- *  body constant); the component-prop census owns this surface. */
+/** A white section card with an optional icon + title header (the Recent
+ *  Workouts / Your Journey / Upcoming Events panels). WH-9 (F-2b): the
+ *  `bodyClassName` prop retired — zero call sites. WH-23: the header
+ *  rides the reference's CardHeader/CardContent anatomy (probed on
+ *  every list card — `flex flex-col space-y-1.5 p-6`, NO bottom border,
+ *  the title `font-semibold leading-none tracking-tight`, the icon
+ *  INSIDE the title row at `h-5 w-5` inheriting the card ink — the
+ *  icon becomes OPTIONAL for the reference's per-card parity:
+ *  Exercise/MentalHealth/Events ship the bare title, the Dashboard /
+ *  Reminders / Goals cards carry theirs). The `<h2>` stays our a11y
+ *  superset (the reference's titles are bare divs — our heading
+ *  semantics is the documented deviation class). */
 export function SectionCard({
   icon: Icon,
   title,
   action,
   children,
 }: {
-  icon: LucideIcon;
+  icon?: LucideIcon;
   title: string;
   action?: React.ReactNode;
   children: React.ReactNode;
@@ -90,33 +98,25 @@ export function SectionCard({
   return (
     <section className={SECTION_CARD.card}>
       <div className={SECTION_CARD.header}>
-        <Icon className="h-5 w-5 text-muted shrink-0" aria-hidden="true" />
-        <h2 className={cn(SECTION_CARD.title, "flex-1")}>{title}</h2>
-        {action}
+        <div className={cn(SECTION_CARD.title, Icon && SECTION_CARD.titleRow)}>
+          {Icon && <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />}
+          <h2 className="flex-1">{title}</h2>
+          {action}
+        </div>
       </div>
       <div className={SECTION_CARD.body}>{children}</div>
     </section>
   );
 }
 
-/** The empty-state block (the reference's "No workouts logged yet…" family).
- *  WH-9 (F-2b): the `title` prop retired — every live call site passes
- *  icon + hint only; the constant's title face went with it. */
-export function EmptyState({
-  icon: Icon,
-  hint,
-}: {
-  icon: LucideIcon;
-  hint?: string;
-}) {
-  return (
-    <div className={EMPTY_STATE.wrap}>
-      <div className={EMPTY_STATE.icon} aria-hidden="true">
-        <Icon className={EMPTY_STATE.iconGlyph} />
-      </div>
-      {hint && <p className={EMPTY_STATE.hint}>{hint}</p>}
-    </div>
-  );
+/** The empty-state block — the reference's bare centered paragraph
+ *  (probed WH-23: the module empty states carry NO icon chip; the full
+ *  body innerHTML is the single `<p>`). WH-9 (F-2b) retired the
+ *  `title` prop; WH-23 retired the `icon` prop with the chip. The
+ *  dashboard's py-8 form + the StudyResources special card ride the
+ *  EMPTY_STATE record's other members at their call sites. */
+export function EmptyState({ hint }: { hint?: string }) {
+  return <p className={EMPTY_STATE.p}>{hint}</p>;
 }
 
 /** The loading face — a centered pulse (pages render it until their first

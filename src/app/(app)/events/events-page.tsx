@@ -7,7 +7,6 @@ import { toast } from "@/components/ui/toast";
 import {
   PageHeader,
   SectionCard,
-  EmptyState,
   LoadingBlock,
   GradientButton,
   OptionChip,
@@ -327,11 +326,12 @@ export default function EventsClientPage() {
           </div>
         </section>
 
-        {/* The upcoming panel. */}
-        <SectionCard icon={CalendarDays} title="Upcoming Events">
-          {upcoming.length === 0 ? (
-            <EmptyState icon={CalendarDays} hint="No upcoming events. Add one to plan ahead!" />
-          ) : (
+        {/* The upcoming panel — WH-23: the reference's empty form is the
+            BARE empty list (probed: its body innerHTML is just
+            `<div class="space-y-3"></div>` — no empty-state message on
+            the events page, unlike Exercise/Goals/Reminders). */}
+        <SectionCard title="Upcoming Events">
+          {upcoming.length > 0 && (
             <ul className="space-y-3">
               {upcoming.map((e) => {
                 const c = eventCategoryMeta(e.category);

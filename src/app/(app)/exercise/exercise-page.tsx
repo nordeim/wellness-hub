@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Dumbbell, Trash2 } from "lucide-react";
+import { Clock, Dumbbell, Flame, Trash2 } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
 import { toast } from "@/components/ui/toast";
 import {
@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
 import { WORKOUT_TYPES, WORKOUT_INTENSITIES, workoutTypeMeta, intensityMeta } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -208,27 +208,49 @@ export default function ExerciseClientPage() {
         </section>
       )}
 
+      {/* The KPI row — the reference's probed anatomy (WH-23): the hero
+          tile + two plain tiles, each a p-6 pt-6 wrapper + a
+          justify-between row with the label+value left and a BIG w-12
+          h-12 module-tinted icon right. */}
       <div className={PAGE_KPI_GRIDS.three}>
-        <div className={cn(STAT_CARD.hero, "from-orange-500 to-red-500 p-5")}>
-          <p className={cn(STAT_CARD.heroLabel, "text-orange-100")}>Total Workouts</p>
-          <h3 className={cn(STAT_CARD.heroValue, "mt-1")}>{workouts.length}</h3>
+        <div className={cn(MODULE_KPI.hero, "from-orange-500 to-red-500")}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={cn(MODULE_KPI.heroLabel, "text-orange-100")}>Total Workouts</p>
+                <h3 className={MODULE_KPI.heroValue}>{workouts.length}</h3>
+              </div>
+              <Dumbbell className={cn(MODULE_KPI.bigIcon, "text-orange-100")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
-        <div className={cn(STAT_CARD.card, "p-5")}>
-          <p className={STAT_CARD.label}>Total Minutes</p>
-          <h3 className={cn(STAT_CARD.value, "mt-1")}>{totalMinutes}</h3>
+        <div className={STAT_CARD.card}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={MODULE_KPI.label}>Total Minutes</p>
+                <h3 className={MODULE_KPI.value}>{totalMinutes}</h3>
+              </div>
+              <Clock className={cn(MODULE_KPI.bigIcon, "text-orange-500")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
-        <div className={cn(STAT_CARD.card, "p-5")}>
-          <p className={STAT_CARD.label}>Calories Burned</p>
-          <h3 className={cn(STAT_CARD.value, "mt-1")}>{totalCalories}</h3>
+        <div className={STAT_CARD.card}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={MODULE_KPI.label}>Calories Burned</p>
+                <h3 className={MODULE_KPI.value}>{totalCalories}</h3>
+              </div>
+              <Flame className={cn(MODULE_KPI.bigIcon, "text-red-500")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
       </div>
 
-      <SectionCard icon={Dumbbell} title="Recent Workouts">
+      <SectionCard title="Recent Workouts">
         {workouts.length === 0 ? (
-          <EmptyState
-            icon={Dumbbell}
-            hint="No workouts logged yet. Start tracking your fitness journey!"
-          />
+          <EmptyState hint="No workouts logged yet. Start tracking your fitness journey!" />
         ) : (
           <ul className="space-y-3">
             {workouts.map((w) => {

@@ -1,13 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { AlertTriangle, BookOpen, CheckCircle2, ClipboardList, Pencil, Trash2 } from "lucide-react";
+import { AlertTriangle, BookOpen, CheckCircle2, CircleAlert, CircleCheck, ClipboardList, Clock, Pencil, Trash2 } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
 import { toast } from "@/components/ui/toast";
 import {
   PageHeader,
   SectionCard,
-  EmptyState,
   LoadingBlock,
   GradientButton,
   OptionChip,
@@ -15,7 +14,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
 import { ASSIGNMENT_PRIORITIES, priorityMeta } from "@/lib/constants";
 import { isAssignmentUrgent } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -254,28 +253,51 @@ export default function AssignmentsClientPage() {
         </section>
       )}
 
+      {/* The KPI row — the reference's probed anatomy (WH-23): Pending
+          (plain) + the green→emerald Completed HERO as the second tile +
+          Urgent (plain), each with its big tinted right icon. */}
       <div className={PAGE_KPI_GRIDS.three}>
-        <div className={cn(STAT_CARD.card, "p-5")}>
-          <p className={STAT_CARD.label}>Pending</p>
-          <h3 className={cn(STAT_CARD.value, "mt-1")}>{pending.length}</h3>
+        <div className={STAT_CARD.card}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={MODULE_KPI.label}>Pending</p>
+                <h3 className={MODULE_KPI.value}>{pending.length}</h3>
+              </div>
+              <Clock className={cn(MODULE_KPI.bigIcon, "text-blue-500")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
-        <div className={cn(STAT_CARD.hero, "from-green-500 to-emerald-500 p-5")}>
-          <p className={cn(STAT_CARD.heroLabel, "text-green-100")}>Completed</p>
-          <h3 className={cn(STAT_CARD.heroValue, "mt-1")}>{completed.length}</h3>
+        <div className={cn(MODULE_KPI.hero, "from-green-500 to-emerald-500")}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={cn(MODULE_KPI.heroLabel, "text-green-100")}>Completed</p>
+                <h3 className={MODULE_KPI.heroValue}>{completed.length}</h3>
+              </div>
+              <CircleCheck className={cn(MODULE_KPI.bigIcon, "text-green-100")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
-        <div className={cn(STAT_CARD.card, "p-5")}>
-          <p className={STAT_CARD.label}>Urgent</p>
-          <h3 className={cn(STAT_CARD.value, "mt-1")}>{urgent}</h3>
+        <div className={STAT_CARD.card}>
+          <div className={MODULE_KPI.wrap}>
+            <div className={MODULE_KPI.row}>
+              <div>
+                <p className={MODULE_KPI.label}>Urgent</p>
+                <h3 className={MODULE_KPI.value}>{urgent}</h3>
+              </div>
+              <CircleAlert className={cn(MODULE_KPI.bigIcon, "text-red-500")} aria-hidden="true" />
+            </div>
+          </div>
         </div>
       </div>
 
+      {/* WH-23: the reference OMITS the list section at zero rows (probed
+          — its /Assignments ends after the KPI row); the populated form is
+          unobservable on the reference account (zero-write doctrine), so
+          our card structure stays for the rows-exist state. */}
+      {assignments.length > 0 && (
       <SectionCard icon={BookOpen} title="Your Assignments">
-        {assignments.length === 0 ? (
-          <EmptyState
-            icon={BookOpen}
-            hint="No assignments yet. Add one to stay on top of your deadlines!"
-          />
-        ) : (
           <ul className="space-y-3">
             {sorted.map((a) => {
               const p = priorityMeta(a.priority);
@@ -335,8 +357,8 @@ export default function AssignmentsClientPage() {
               );
             })}
           </ul>
-        )}
       </SectionCard>
+      )}
 
       </div>
     </div>

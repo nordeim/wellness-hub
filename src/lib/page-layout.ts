@@ -267,33 +267,108 @@ export const PAGE_KPI_GRIDS = {
   four: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6",
 } as const;
 
-/** The stat-card family — the redesign's two forms (probed live):
- *  the WHITE tile (a borderless bg-surface card with a 5%-opacity gradient
- *  WASH that intensifies to 10% on hover, a `rounded-2xl` gradient icon
- *  tile, a gray-600 label, a gray-900 value and a gray-500 sub) and the
- *  module HERO tile (the solid gradient card with white text, the label
- *  in the module's -100 tint — the per-module label tints are authored
- *  at the call sites exactly as the reference's per-tile tints are). */
+/** The stat-card family — the dashboard's WHITE tiles (probed live
+ *  field-by-field WH-23: the card + the 5%-opacity gradient WASH that
+ *  intensifies to 10% on hover + a `relative p-6` content wrapper that
+ *  sits above the wash + a `flex items-start justify-between mb-4` icon
+ *  row + the bare `p-3 rounded-2xl` gradient iconTile carrying a
+ *  `w-6 h-6 text-white` default-stroke icon + the mb-1 label/value
+ *  rhythm + the gray-500 sub). The module pages' HERO tiles moved to
+ *  MODULE_KPI at WH-23 (with their big right icons ours never shipped). */
 export const STAT_CARD = {
   card: "relative overflow-hidden rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all duration-300 group",
   wash: "absolute inset-0 bg-gradient-to-br opacity-5 group-hover:opacity-10 transition-opacity",
-  iconTile: "p-3 rounded-2xl bg-gradient-to-br shadow-lg flex items-center justify-center text-white mb-4",
-  value: "text-3xl font-bold text-gray-900 dark:text-gray-100",
-  label: "text-sm font-medium text-gray-600 dark:text-gray-400",
+  /** WH-23: the content wrapper — the reference's `relative p-6` div
+   *  between the wash and the tile's rows (the positioned wrapper is
+   *  what paints the content above the absolute wash). */
+  content: "relative p-6",
+  iconRow: "flex items-start justify-between mb-4",
+  iconTile: "p-3 rounded-2xl bg-gradient-to-br shadow-lg",
+  value: "text-3xl font-bold text-gray-900 dark:text-gray-100 mb-1",
+  label: "text-sm font-medium text-gray-600 dark:text-gray-400 mb-1",
   sub: "text-sm text-gray-500 dark:text-gray-400",
-  hero: "rounded-xl border-none shadow-lg bg-gradient-to-br text-white",
-  heroLabel: "text-sm font-medium",
-  heroValue: "text-4xl font-bold text-white",
 } as const;
 
-/** Section card — the white list/panel cards. WH-15: the redesign's
- *  borderless form (probed: `border-none shadow-lg` on every list
- *  card). */
+/** The module KPI tiles — WH-23 (probed field-by-field on all five
+ *  pages): the reference's form is a `p-6 pt-6` wrapper + a `flex
+ *  items-center justify-between` row carrying the label+value LEFT and
+ *  a BIG `w-12 h-12` module-tinted icon RIGHT (ours shipped no icons at
+ *  all), the hero labels in the module's -100 tint (`text-<m>-100
+ *  text-sm mb-1`), the plain labels `text-gray-600 text-sm mb-1` (no
+ *  font-medium), the values `text-4xl font-bold`. The per-tile tints
+ *  and icons are authored at the call sites exactly as the reference's
+ *  are. The hero label inks on the gradient cards are the
+ *  gradient-ink family's -100-tint members (reference-shared, low
+ *  contrast — the PAD §11 family row documents them). */
+export const MODULE_KPI = {
+  hero: "rounded-xl border-none shadow-lg bg-gradient-to-br text-white",
+  wrap: "p-6 pt-6",
+  row: "flex items-center justify-between",
+  heroLabel: "text-sm mb-1",
+  label: "text-gray-600 text-sm mb-1 dark:text-gray-400",
+  heroValue: "text-4xl font-bold",
+  value: "text-4xl font-bold text-gray-900 dark:text-gray-100",
+  bigIcon: "h-12 w-12",
+} as const;
+
+/** Section card — the white list/panel cards. WH-15 probed the card
+ *  face (border-none shadow-lg); WH-23 walked the GEOMETRY: the
+ *  reference's list cards everywhere ride the shadcn CardHeader/
+ *  CardContent anatomy — `flex flex-col space-y-1.5 p-6` (NO bottom
+ *  border), the title `font-semibold leading-none tracking-tight` with
+ *  the header icon INSIDE the title row (`w-5 h-5`, inherited ink —
+ *  never muted), the body `p-6 pt-0`. Ours shipped a px-5 py-4 header
+ *  with a border-b and a p-5 body for twenty-three rounds. */
 export const SECTION_CARD = {
-  card: "bg-surface rounded-xl border-none shadow-lg",
-  header: "flex items-center gap-2 px-5 py-4 border-b border-line",
-  title: "font-semibold text-foreground",
-  body: "p-5",
+  card: "bg-surface text-ink rounded-xl border-none shadow-lg",
+  header: "flex flex-col space-y-1.5 p-6",
+  title: "font-semibold leading-none tracking-tight",
+  titleRow: "flex items-center gap-2",
+  body: "p-6 pt-0",
+} as const;
+
+/** The Quick Actions — WH-23 (the round's declared target, probed live
+ *  with a real pointer): the reference's card rides the CardHeader/
+ *  CardContent forms, the grid is `grid grid-cols-2 gap-3` (a 12px gap —
+ *  NO dividers), and each cell is a fixed `h-24` full-width column of
+ *  icon+label whose hover family is an ICON SCALE (group-hover:scale-110
+ *  transition-transform) + a label lighten (hover:text-accent-foreground
+ *  ≈ neutral-900) — NO background wash, NO icon color change (probed:
+ *  the cell bg stays transparent through the hover; the icon stays
+ *  text-gray-700). The per-module gradient arms in the reference's cell
+ *  string are DEAD v3-era forms (`from-* to-*` without a gradient
+ *  utility, `bg-opacity-*` with no bg color — computed transparent at
+ *  rest and hover on the reference, verified) — mirrored byte-for-byte
+ *  per the parity doctrine. Our cells stay `<Link>` anchors (the
+ *  reference's `<a><button>` nesting is invalid HTML — the documented
+ *  superset class). Dark twins: the icon gray-400 + the hover arm's
+ *  neutral-100 (the interaction-arm census). */
+export const QUICK_ACTIONS = {
+  header: "flex flex-col space-y-1.5 p-6",
+  title: "font-semibold leading-none tracking-tight flex items-center gap-2",
+  body: "p-6 pt-0",
+  grid: "grid grid-cols-2 gap-3",
+  /** The cell base — the reference's stock shadcn button base + the
+   *  outline arms + the cell geometry, self-contained (the lesson-25
+   *  form: never composing BUTTON_CLASSES, whose inline-flex/
+   *  transition-colors arms fight this column-stacked transition-all
+   *  anatomy). Our additions: the explicit text-ink (the reference
+   *  inherits its card foreground through the button) + the hover arm
+   *  as the literal neutral-900 (the reference's accent-foreground
+   *  token computes rgb(23,23,23)) + the dark twin. NOTE the
+   *  `[&_svg]:size-4`: the reference's own cell carries it and it
+   *  WINS the cascade over the svg's own w-6 h-6 (higher specificity)
+   *  — the reference's icon computes 16px (probed), so ours must carry
+   *  the arm too. */
+  cell: "whitespace-nowrap rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input shadow-sm px-4 py-2 w-full h-24 flex flex-col items-center justify-center gap-2 border-none bg-opacity-5 hover:bg-opacity-10 transition-all group text-ink hover:text-neutral-900 dark:hover:text-neutral-100",
+  pairs: {
+    exercise: "from-orange-500 to-red-500",
+    mentalhealth: "from-emerald-500 to-teal-500",
+    assignments: "from-blue-500 to-cyan-500",
+    events: "from-violet-500 to-purple-500",
+  },
+  icon: "h-6 w-6 text-gray-700 group-hover:scale-110 transition-transform dark:text-gray-400",
+  label: "text-sm font-medium",
 } as const;
 
 /** The Profile appearance panels — WH-17 (F-2): the reference's shadcn
@@ -452,13 +527,23 @@ export const INPUT_BASE = {
   file: "file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground",
 } as const;
 
+/** The empty states — WH-23 (probed: the reference's module empty states
+ *  are a BARE centered paragraph, the full body innerHTML carrying no
+ *  icon chip — `<p class="text-center text-gray-500 py-12">`); the
+ *  dashboard's upcoming empties are the py-8 form; StudyResources ships
+ *  its own special card (a `p-6 py-20` body + a big `w-16 h-16`
+ *  gray-300 book-open + the text-lg hint). The icon-chip members and
+ *  the `icon` prop retired at WH-23. Dark twins are our superset (the
+ *  reference's gray-500/gray-300 forms are its own broken-dark class).
+ *  Achievements adds `text-sm` per the reference's own card. */
 export const EMPTY_STATE = {
-  wrap: "flex flex-col items-center justify-center py-12 text-center",
-  icon: "mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-line-soft",
-  iconGlyph: "h-6 w-6 text-muted",
-  // WH-9 (F-2b): the `title` face retired with EmptyState's dead title
-  // prop — every live call site passes icon + hint only.
-  hint: "mt-1 text-sm text-muted",
+  p: "text-center text-gray-500 py-12 dark:text-gray-400",
+  dash: "text-gray-500 text-center py-8 dark:text-gray-400",
+  study: {
+    body: "p-6 py-20 text-center",
+    icon: "h-16 w-16 text-gray-300 mx-auto mb-4 dark:text-gray-600",
+    text: "text-gray-500 text-lg dark:text-gray-400",
+  },
 } as const;
 
 /** Login card — the EvolveWell wall (the full ladder's chrome: the

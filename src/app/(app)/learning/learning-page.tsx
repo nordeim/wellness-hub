@@ -85,7 +85,7 @@ export default function LearningClientPage() {
 
       {filtered.length === 0 ? (
         <div className={SECTION_CARD.card}>
-          <EmptyState icon={Video} hint="No tutorials found. Try a different search!" />
+          <EmptyState hint="No tutorials found. Try a different search!" />
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">

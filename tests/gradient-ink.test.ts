@@ -110,6 +110,33 @@ it("WH-21: the fixed-gradient white-ink table — every pair measured, all AA-fa
     ).toBe(true);
   }
   expect(row!.includes("1.92"), "the row must name goals 1.92 — the family's worst pair").toBe(true);
+
+  // ---- WH-23: the KPI hero labels — the family's -100-TINT members ----
+  // The module hero tiles carry their -100 tint inks on the SAME fixed
+  // pairs (probed live: text-orange-100 on the orange→red hero, etc.) —
+  // a reference-shared low-contrast class the family row now names.
+  // Measured from the live tints + the v3 pins: all four fail AA.
+  const HERO_LABELS: { name: string; ink: string; from: string; to: string }[] = [
+    { name: "exercise hero label", ink: "orange-100", from: "orange-500", to: "red-500" },
+    { name: "mentalhealth hero label", ink: "emerald-100", from: "emerald-500", to: "teal-500" },
+    { name: "assignments hero label", ink: "green-100", from: "green-500", to: "emerald-500" },
+    { name: "goals hero label", ink: "yellow-100", from: "yellow-500", to: "amber-600" },
+  ];
+  for (const { name, ink, from, to } of HERO_LABELS) {
+    const inkLum = lum(v3(ink, `${name}'s ink`));
+    const r = Math.min(
+      ratio(inkLum, lum(v3(from, `${name}'s from-stop`))),
+      ratio(inkLum, lum(v3(to, `${name}'s to-stop`))),
+    );
+    expect(
+      r,
+      `${name}: the -100 tint on the worst stop = ${r.toFixed(2)}:1 — the family's tinted-ink class is ALL-FAIL (<4.5:1, reference-shared); if a pair now passes, the PAD §11 row and this claim move in the SAME commit`,
+    ).toBeLessThan(4.5);
+    expect(
+      row!.includes(r.toFixed(2)),
+      `the PAD fixed-gradient row must carry the measured ${r.toFixed(2)} ratio (the ${name}) — the ledger carries the full table`,
+    ).toBe(true);
+  }
 });
 
 it("WH-21: the mood tile's active pair — the reference's own blue→cyan + white ink, pinned AT its documented 2.43:1 (the parity doctrine, NOT a ≥4.5 assertion)", () => {

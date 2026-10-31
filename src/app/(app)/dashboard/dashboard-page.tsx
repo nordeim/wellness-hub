@@ -4,9 +4,9 @@ import * as React from "react";
 import Link from "next/link";
 import {
   Activity,
-  BarChart3,
+  Bell,
   BookOpen,
-  CalendarPlus,
+  Calendar,
   Plus,
   Dumbbell,
   HeartPulse,
@@ -14,19 +14,33 @@ import {
 } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
 import { PageHeader, SectionCard, LoadingBlock } from "@/components/shared/page-parts";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, SECTION_CARD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, SECTION_CARD, QUICK_ACTIONS, EMPTY_STATE } from "@/lib/page-layout";
 import { formatMonthDayYearTime, formatDateShort } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { DashboardData } from "@/types";
 
-/** The Quick Actions — the reference's four link-cards (each deep-links to
- *  the module's page). */
-const QUICK_ACTIONS = [
-  { href: "/Exercise", label: "Log Exercise", icon: Dumbbell },
-  { href: "/MentalHealth", label: "Mood Check", icon: HeartPulse },
-  { href: "/Assignments", label: "Add Assignment", icon: BookOpen },
-  { href: "/Events", label: "New Event", icon: CalendarPlus },
+/** The Quick Actions — the reference's four link-cards (each deep-links
+ *  the module's page). The key addresses the QUICK_ACTIONS.pairs map —
+ *  the per-module dead gradient arms the reference carries in its own
+ *  cell strings (probed: they compute nothing — mirrored byte-for-byte). */
+const QUICK_ACTION_LINKS = [
+  { key: "exercise", href: "/Exercise", label: "Log Exercise", icon: Dumbbell },
+  { key: "mentalhealth", href: "/MentalHealth", label: "Mood Check", icon: HeartPulse },
+  { key: "assignments", href: "/Assignments", label: "Add Assignment", icon: BookOpen },
+  { key: "events", href: "/Events", label: "New Event", icon: Calendar },
 ] as const;
+
+/** The Recent Activity glyph per kind — the reference's own feed carries a
+ *  2xl emoji per item (probed: its mood row renders 💚). The mood glyph
+ *  is the observed byte; the other kinds are unobservable on the reference
+ *  account (zero rows) so ours are the documented superset choices. */
+const ACTIVITY_EMOJI: Record<string, string> = {
+  mood: "💚",
+  workout: "💪",
+  assignment: "📚",
+  event: "📅",
+  goal: "🎯",
+};
 
 export default function DashboardClientPage() {
   const { dashboard, hydrated } = useWellnessStore();
@@ -57,99 +71,126 @@ export default function DashboardClientPage() {
         theme={PAGE_THEMES.dashboard}
       />
 
-      {/* The stat tiles — the redesign's white cards with the 5%-opacity
-          module washes + the rounded-2xl gradient icon tiles (probed:
-          orange→red, emerald→teal, blue→cyan, yellow→amber-600). */}
+      {/* The stat tiles — the reference's probed anatomy (WH-23): the card
+          + the 5%-opacity gradient WASH + a `relative p-6` content wrapper
+          above it + the `flex items-start justify-between mb-4` icon row +
+          the bare p-3 rounded-2xl gradient tile carrying a default-stroke
+          w-6 h-6 white icon + the mb-1 label/value rhythm. The per-tile
+          gradient pairs (orange→red, emerald→teal, blue→cyan,
+          yellow→amber-600) are the WH-15 identity, unchanged. */}
       <div className={PAGE_KPI_GRIDS.four}>
-        <div className={cn(STAT_CARD.card, "p-5")}>
+        <div className={STAT_CARD.card}>
           <div className={cn(STAT_CARD.wash, "from-orange-500 to-red-500")} aria-hidden="true" />
-          <div className={cn(STAT_CARD.iconTile, "from-orange-500 to-red-500")} aria-hidden="true">
-            <Dumbbell className="h-5 w-5" fill="currentColor" strokeWidth={1} />
+          <div className={STAT_CARD.content}>
+            <div className={STAT_CARD.iconRow}>
+              <div className={cn(STAT_CARD.iconTile, "from-orange-500 to-red-500")} aria-hidden="true">
+                <Dumbbell className="h-6 w-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <p className={STAT_CARD.label}>Workouts This Week</p>
+              <h3 className={STAT_CARD.value}>{d.workoutsThisWeek}</h3>
+              <p className={STAT_CARD.sub}>{d.workoutMinutesThisWeek} total minutes</p>
+            </div>
           </div>
-          <p className={STAT_CARD.label}>Workouts This Week</p>
-          <h3 className={STAT_CARD.value}>{d.workoutsThisWeek}</h3>
-          <p className={STAT_CARD.sub}>{d.workoutMinutesThisWeek} total minutes</p>
         </div>
-        <div className={cn(STAT_CARD.card, "p-5")}>
+        <div className={STAT_CARD.card}>
           <div className={cn(STAT_CARD.wash, "from-emerald-500 to-teal-500")} aria-hidden="true" />
-          <div className={cn(STAT_CARD.iconTile, "from-emerald-500 to-teal-500")} aria-hidden="true">
-            <HeartPulse className="h-5 w-5" fill="currentColor" strokeWidth={1} />
+          <div className={STAT_CARD.content}>
+            <div className={STAT_CARD.iconRow}>
+              <div className={cn(STAT_CARD.iconTile, "from-emerald-500 to-teal-500")} aria-hidden="true">
+                <HeartPulse className="h-6 w-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <p className={STAT_CARD.label}>Mood Entries</p>
+              <h3 className={STAT_CARD.value}>{d.moodEntries}</h3>
+              <p className={STAT_CARD.sub}>Total check-ins</p>
+            </div>
           </div>
-          <p className={STAT_CARD.label}>Mood Entries</p>
-          <h3 className={STAT_CARD.value}>{d.moodEntries}</h3>
-          <p className={STAT_CARD.sub}>Total check-ins</p>
         </div>
-        <div className={cn(STAT_CARD.card, "p-5")}>
+        <div className={STAT_CARD.card}>
           <div className={cn(STAT_CARD.wash, "from-blue-500 to-cyan-500")} aria-hidden="true" />
-          <div className={cn(STAT_CARD.iconTile, "from-blue-500 to-cyan-500")} aria-hidden="true">
-            <BookOpen className="h-5 w-5" fill="currentColor" strokeWidth={1} />
+          <div className={STAT_CARD.content}>
+            <div className={STAT_CARD.iconRow}>
+              <div className={cn(STAT_CARD.iconTile, "from-blue-500 to-cyan-500")} aria-hidden="true">
+                <BookOpen className="h-6 w-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <p className={STAT_CARD.label}>Active Assignments</p>
+              <h3 className={STAT_CARD.value}>{d.activeAssignments}</h3>
+              <p className={STAT_CARD.sub}>Need attention</p>
+            </div>
           </div>
-          <p className={STAT_CARD.label}>Active Assignments</p>
-          <h3 className={STAT_CARD.value}>{d.activeAssignments}</h3>
-          <p className={STAT_CARD.sub}>Need attention</p>
         </div>
-        <div className={cn(STAT_CARD.card, "p-5")}>
+        <div className={STAT_CARD.card}>
           <div className={cn(STAT_CARD.wash, "from-yellow-500 to-amber-600")} aria-hidden="true" />
-          <div className={cn(STAT_CARD.iconTile, "from-yellow-500 to-amber-600")} aria-hidden="true">
-            <Target className="h-5 w-5" fill="currentColor" strokeWidth={1} />
+          <div className={STAT_CARD.content}>
+            <div className={STAT_CARD.iconRow}>
+              <div className={cn(STAT_CARD.iconTile, "from-yellow-500 to-amber-600")} aria-hidden="true">
+                <Target className="h-6 w-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <p className={STAT_CARD.label}>Goals Completed</p>
+              <h3 className={STAT_CARD.value}>{d.goalsCompleted}</h3>
+              <p className={STAT_CARD.sub}>of {d.goalsTotal} total</p>
+            </div>
           </div>
-          <p className={STAT_CARD.label}>Goals Completed</p>
-          <h3 className={STAT_CARD.value}>{d.goalsCompleted}</h3>
-          <p className={STAT_CARD.sub}>of {d.goalsTotal} total</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left column: quick actions + recent activity. */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Quick Actions — the reference's own construction: ONE white
-              card, the "+" header, a 2x2 grid of centered icon+label
-              cells with thin dividers. */}
+          {/* Quick Actions — the reference's own construction (probed live
+              WH-23): ONE white card in the CardHeader/CardContent anatomy,
+              the "+" title row, a 2×2 gap-3 grid of fixed h-24 centered
+              icon+label cells whose hover is the icon SCALE + the label
+              lighten (never a background wash — the dead gradient arms in
+              the cell strings compute nothing on the reference either). */}
           <section className={SECTION_CARD.card}>
-            <div className="flex items-center gap-2 px-5 py-4 border-b border-line">
-              <Plus className="h-5 w-5 text-foreground" aria-hidden="true" />
-              <h2 className="font-semibold text-foreground">Quick Actions</h2>
+            <div className={QUICK_ACTIONS.header}>
+              <div className={QUICK_ACTIONS.title}>
+                <Plus className="h-5 w-5" aria-hidden="true" />
+                <h2>Quick Actions</h2>
+              </div>
             </div>
-            <div className="grid grid-cols-2">
-              {QUICK_ACTIONS.map((a, i) => (
-                <Link
-                  key={a.href}
-                  href={a.href}
-                  className={cn(
-                    "group flex flex-col items-center justify-center gap-2 px-4 py-6 text-center transition-colors hover:bg-line-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                    // The thin dividers: right arm on the left column,
-                    // top arm on the second row.
-                    i % 2 === 0 && "border-r border-line",
-                    i >= 2 && "border-t border-line",
-                  )}
-                >
-                  <a.icon className="h-6 w-6 text-muted group-hover:text-primary" strokeWidth={1.75} aria-hidden="true" />
-                  <span className="text-sm font-medium text-foreground">{a.label}</span>
-                </Link>
-              ))}
+            <div className={QUICK_ACTIONS.body}>
+              <div className={QUICK_ACTIONS.grid}>
+                {QUICK_ACTION_LINKS.map((a) => (
+                  <Link
+                    key={a.href}
+                    href={a.href}
+                    className={cn(QUICK_ACTIONS.cell, QUICK_ACTIONS.pairs[a.key])}
+                  >
+                    <a.icon className={QUICK_ACTIONS.icon} aria-hidden="true" />
+                    <span className={QUICK_ACTIONS.label}>{a.label}</span>
+                  </Link>
+                ))}
+              </div>
             </div>
           </section>
 
           <SectionCard icon={Activity} title="Recent Activity">
             {d.recentActivity.length === 0 ? (
-              <p className="py-8 text-center text-sm text-muted">No recent activity</p>
+              <p className={EMPTY_STATE.dash}>No recent activity</p>
             ) : (
               <ul className="space-y-3">
                 {d.recentActivity.map((item) => (
-                  <li key={item.id} className="flex items-start gap-3">
-                    <span
-                      className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary"
-                      aria-hidden="true"
-                    >
-                      <Activity className="h-4 w-4" />
+                  <li
+                    key={item.id}
+                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors dark:hover:bg-neutral-800/60"
+                  >
+                    <span className="text-2xl" aria-hidden="true">
+                      {ACTIVITY_EMOJI[item.kind] ?? "✨"}
                     </span>
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-foreground">{item.title}</p>
-                      <p className="text-xs text-muted">
-                        {formatMonthDayYearTime(item.at)}
-                        {item.detail ? ` · ${item.detail}` : ""}
-                      </p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 truncate dark:text-gray-100">{item.title}</p>
+                      {item.detail && <p className="text-sm text-gray-500 dark:text-gray-400">{item.detail}</p>}
                     </div>
+                    <span className="text-xs text-gray-400 dark:text-gray-500">{formatDateShort(item.at)}</span>
                   </li>
                 ))}
               </ul>
@@ -159,9 +200,9 @@ export default function DashboardClientPage() {
 
         {/* Right column: upcoming reminders + events. */}
         <div className="space-y-6">
-          <SectionCard icon={BarChart3} title="Upcoming Reminders">
+          <SectionCard icon={Bell} title="Upcoming Reminders">
             {d.upcomingReminders.length === 0 ? (
-              <p className="py-8 text-center text-sm text-muted">No upcoming reminders</p>
+              <p className={EMPTY_STATE.dash}>No upcoming reminders</p>
             ) : (
               <ul className="space-y-3">
                 {d.upcomingReminders.map((r) => (
@@ -174,9 +215,9 @@ export default function DashboardClientPage() {
             )}
           </SectionCard>
 
-          <SectionCard icon={CalendarPlus} title="Upcoming Events">
+          <SectionCard icon={Calendar} title="Upcoming Events">
             {d.upcomingEvents.length === 0 ? (
-              <p className="py-8 text-center text-sm text-muted">No upcoming events</p>
+              <p className={EMPTY_STATE.dash}>No upcoming events</p>
             ) : (
               <ul className="space-y-3">
                 {d.upcomingEvents.map((e) => (

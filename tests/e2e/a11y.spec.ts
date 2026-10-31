@@ -1052,4 +1052,92 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
       "the inactive tile's dark border = the pinned neutral-700 (#404040 — the @theme v3 pin, rgb(64, 64, 64); the reference's light-only gray-200 form is its own broken-dark class, our superset cures it)",
     ).toBe("rgb(64, 64, 64)");
   });
+
+  test("(g) the scroll-capped Schedule modal's keyboard walk — the trap, the below-fold primary's scroll-into-view, the unlock", async ({ page }) => {
+    // WH-23's second declared target (F-8): the net never walked a
+    // SCROLLED dialog. The WH-22 scroll cap (max-h-[90vh]
+    // overflow-y-auto) means the primary sits below the in-dialog fold,
+    // and the keyboard path through it was unpinned. The reference
+    // decoded live this round: the initial focus = the FIRST FIELD (the
+    // date input), the Tab order walks fields → primary → corner X (the
+    // trap holds), and the below-fold primary SCROLLS INTO VIEW when
+    // focused (the dialog's scrollTop follows the native focus scroll —
+    // probed: scrollTop 0→82 on the reference); Escape closes and the
+    // body unlocks. Our Radix dialog should match — this leg pins it.
+    await page.goto("/Routines", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Use This Template" }).first().click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByText(/Schedule: /)).toBeVisible();
+    await page.waitForTimeout(450); // the zoom-in-95 settle (the WH-22 calibration)
+
+    const readFocus = () =>
+      page.evaluate(() => {
+        const dlg = document.querySelector('[role="dialog"]');
+        if (!dlg) return { gone: true as const, inDialog: false, focus: "", visible: false, dlgScroll: null, overflows: null };
+        let scrollEl: HTMLElement | null = dlg as HTMLElement;
+        while (scrollEl && getComputedStyle(scrollEl).overflowY !== "auto") {
+          scrollEl = scrollEl.firstElementChild as HTMLElement | null;
+        }
+        const ae = document.activeElement as HTMLElement | null;
+        const r = ae?.getBoundingClientRect();
+        return {
+          gone: false as const,
+          inDialog: dlg.contains(ae),
+          focus: (ae?.getAttribute("aria-label") || ae?.textContent?.trim().slice(0, 26) || ae?.tagName + ":" + (ae as HTMLInputElement)?.type || "").slice(0, 30),
+          visible: !!r && r.top >= 0 && r.bottom <= window.innerHeight,
+          dlgScroll: scrollEl ? Math.round(scrollEl.scrollTop) : null,
+          overflows: scrollEl ? scrollEl.scrollHeight > scrollEl.clientHeight : null,
+        };
+      });
+
+    // The initial focus: Radix focuses the first focusable — the date
+    // input (the reference's own walk).
+    const initial = await readFocus();
+    expect(initial.gone).toBe(false);
+    expect(initial.inDialog, "the dialog takes the focus on open (the trap)").toBe(true);
+    expect(initial.focus, "the initial focus is the first field (the date input)").toBe("INPUT:date");
+    expect(initial.overflows, "the dialog content overflows its scroll cap (the tall form scrolls INSIDE — the WH-22 anatomy)").toBe(true);
+
+    // Tab through to the below-fold primary. NOTE: the date + time
+    // inputs are SEGMENTED in Chromium — Tab walks the internal
+    // month/day/year (and hh/mm) segments before leaving the field
+    // (the reference's own walk shows the same native behavior: three
+    // date reads, four time reads) — so the leg walks UP TO 12 presses
+    // and asserts the primary and the X are REACHED, not a fixed count.
+    const walk: string[] = [];
+    let primaryStep: Awaited<ReturnType<typeof readFocus>> | null = null;
+    let sawPrimary = false;
+    let sawClose = false;
+    for (let i = 0; i < 12 && !sawClose; i++) {
+      const step = await readFocus();
+      expect(step.gone).toBe(false);
+      expect(step.inDialog, "the walk stays inside the dialog (the Radix trap)").toBe(true);
+      walk.push(step.focus);
+      if (step.focus.includes("Schedule This Routine")) {
+        sawPrimary = true;
+        primaryStep = step;
+      }
+      if (sawPrimary && step.focus.includes("Close")) sawClose = true;
+      await page.keyboard.press("Tab");
+      await page.waitForTimeout(150);
+    }
+    expect(
+      walk.join(" | "),
+      "the Tab order must walk the fields to the primary and the corner X (the reference's own order — the date/time segments ride Chromium's native field walking)",
+    ).toContain("Schedule This Routine");
+    expect(sawClose, "the walk must reach the corner X (the sr-only Close — the last focusable before the trap wraps)").toBe(true);
+    expect(
+      primaryStep?.visible,
+      "the below-fold primary SCROLLS INTO VIEW when focused (the dialog's scroll follows the native focus scroll — the reference's own behavior)",
+    ).toBe(true);
+    expect((primaryStep as { dlgScroll: number | null }).dlgScroll ?? 0).toBeGreaterThan(0);
+
+    // Escape closes + the body unlocks (the WH-22 modal's teardown).
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect
+      .poll(async () => page.evaluate(() => getComputedStyle(document.body).overflow), { timeout: 4000 })
+      .toBe("visible");
+  });
 });
