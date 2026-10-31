@@ -84,7 +84,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <span className="sr-only">Open navigation</span>
               </button>
             </DialogTrigger>
-            <span className={MOBILE_HEADER.title}>{APP_NAME}</span>
+            {/* WH-28 (F-4): the reference's own element vocabulary — its
+                mobile glass-header title is an <h1> (hidden at desktop,
+                shown at mobile — two visible h1s there, its own
+                semantics; ours was a span). The classes ride
+                MOBILE_HEADER.title unchanged. */}
+            <h1 className={MOBILE_HEADER.title}>{APP_NAME}</h1>
             <span aria-hidden="true" className="w-10" />
           </header>
           {/* WH-16 (F-2): suppressHydrationWarning — applyTheme's

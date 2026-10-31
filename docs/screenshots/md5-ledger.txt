@@ -1,8 +1,35 @@
+# docs/screenshots md5 ledger — re-based at WH-28 (2026-10-31), 34 files
+#
+# The WH-28 round: 28 byte-stable + 5 movers (all root-caused) + 1 NEW:
+#   05-mentalhealth   — the round's EXPECTED cure: the Avg Energy tile
+#                       "0/10" -> "0.0/10" (the reference's (sum/length).toFixed(1)).
+#   19-dark-mobile-nav-open — the raster-noise class (160px, maxDelta 1/255,
+#                       100% within ±2 RGB — the session-40 / WH-27 precedent).
+#   29-quick-actions-hover  — the round's EXPECTED cure, the feed's face: the
+#                       Recent Activity row renders the NEW 3-kind builder
+#                       ("cardio workout" + "30 minutes" + 🏃 + the entity date)
+#                       where the WH-27-era capture showed the retired five-kind
+#                       row ("Logged a 30-minute workout" + 💪 + createdAt date);
+#                       visible because the prior procedure left the capture-24
+#                       write in the account through 29 — replicated this round.
+#   32/33-form-interiors    — the procedure-state class: the prior script's
+#                       undocumented form micro-state + scroll (the best-
+#                       alignment decode ~136/128px; the residual ~14% — the
+#                       old interior states [likely the (k) leg's client-state
+#                       chips] are not reconstructible without the original
+#                       script). The form interiors themselves are LIVE-VERIFIED
+#                       this round at the reference's computed values; the
+#                       resting open form + the decoded scroll is the new base.
+#   34-mood-list-interior (NEW) — the round's surface: the Your Journey list
+#                       with the reference's demo row mirrored (good/5/Oct-29),
+#                       the tiles at "1" / "5.0/10" / "1", and the H4 label row.
+# The capture-state doctrine held (badgesEarned=0 asserted before the light
+# set); the post-round re-seed + census MATCH the house step.
 01-login.png 0eb839b6997d2d0fb14ea1834f39bff8
 02-dashboard.png fa1749aa18472ecdc7e1f6dc16b9aa2c
 03-routines.png ed58ecab06c44eb657150110128a471e
 04-exercise.png 9bb0d1150bbc6b95238b43a6b85def7c
-05-mentalhealth.png b61ce36610630d6eaf80fe403d2c5cdc
+05-mentalhealth.png aa2176ba42a1ec2a40c4c015eb1df081
 06-assignments.png d6b9e0ec6b8867d7c9bdbdcec3a44206
 07-events.png fa4cf7175ae782cdd864caf042eecc15
 08-studyresources.png aaaebec2781f0553daf5b9b27daf5960
@@ -16,7 +43,7 @@
 16-mobile-drawer-nav-exercise.png 0169a14cbe8288ae8df1db92f1dbb745
 17-dark-dashboard.png 5339aaa34fd70d856463422862b5f1b3
 18-dark-routines.png a1ca94945f17463f18a5bf94bd3626b6
-19-dark-mobile-nav-open.png 16bcfc992547c92ebf954fbe17bbf353
+19-dark-mobile-nav-open.png 677a78b56a90dc6c42aacdcffda259f7
 20-dark-login.png 9ad84a98f04c63d08f37ab668388484f
 21-dark-signup.png 1105dcb0a18f044a6d72fe0f68e2e88c
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
@@ -26,8 +53,9 @@
 26-events-inline-form.png 9b1c399ad3e7084215bf03a3f6e6a181
 27-dark-mood-form.png 8782f2dc6d3a4702592a0f12724fe61f
 28-routines-schedule-modal.png 7326740453d3fa754960c238026d2ee9
-29-quick-actions-hover.png 495838cdd7a5d4649959597e36896f63
+29-quick-actions-hover.png 698d60fa61693615823bbd21bc97b2b2
 30-tutorial-card-hover.png ab6b68a4e8bf4acc60bba4fb994b4ed4
 31-profile-preferences.png 6c994caadc8f44e8306a23f8769c21f6
-32-mentalhealth-form-interior.png 15d775f4b5513c181d24c0e1580920bd
-33-sr-form-interior.png 76b0a559208e315ba97a05f415c40c3c
+32-mentalhealth-form-interior.png 640fcc1bbb1663ae8e28df18bafee437
+33-sr-form-interior.png f92eda92ef8fa673764ca0aae3d09d29
+34-mood-list-interior.png 673a381cb156c4a4687c325f5c6755fb

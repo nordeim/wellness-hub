@@ -36,7 +36,18 @@ test("the sidebar carries the full wellness nav", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: /Profile & Settings/ }),
   ).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Wellness Hub", level: 2 })).toBeHidden();
+  // WH-28 (F-4): the reference's own shell element vocabulary, pinned
+  // live: the sidebar wordmark is an <h2> (VISIBLE at desktop) and the
+  // mobile glass-header title an <h1> (hidden at desktop, shown at
+  // mobile — two visible h1s there, its own semantics). The build-era
+  // assertion (level 2 toBeHidden) passed vacuously through the span
+  // era; the tag census + this leg now pin it standing.
+  await expect(
+    page.getByRole("heading", { name: "Wellness Hub", level: 2 }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Wellness Hub", level: 1 }),
+  ).toBeHidden();
 });
 
 test("the capitalized alias routes render their pages", async ({ page }) => {

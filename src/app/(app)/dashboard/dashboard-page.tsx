@@ -30,16 +30,15 @@ const QUICK_ACTION_LINKS = [
   { key: "events", href: "/Events", label: "New Event", icon: Calendar },
 ] as const;
 
-/** The Recent Activity glyph per kind — the reference's own feed carries a
- *  2xl emoji per item (probed: its mood row renders 💚). The mood glyph
- *  is the observed byte; the other kinds are unobservable on the reference
- *  account (zero rows) so ours are the documented superset choices. */
+/** The Recent Activity glyph per kind — the reference's own feed glyphs,
+ *  decoded from its compiled bundle (WH-28 — the feed was unobservable
+ *  through WH-27 at zero rows): exercise 🏃, mood 💚, completed
+ *  assignments ✅. The 💪/📚/📅/🎯 inventions retired with the
+ *  five-kind builder. */
 const ACTIVITY_EMOJI: Record<string, string> = {
+  workout: "🏃",
   mood: "💚",
-  workout: "💪",
-  assignment: "📚",
-  event: "📅",
-  goal: "🎯",
+  assignment: "✅",
 };
 
 export default function DashboardClientPage() {
@@ -177,9 +176,9 @@ export default function DashboardClientPage() {
             {d.recentActivity.length === 0 ? (
               <p className={EMPTY_STATE.dash}>No recent activity</p>
             ) : (
-              <ul className="space-y-3">
+              <div className="space-y-3">
                 {d.recentActivity.map((item) => (
-                  <li
+                  <div
                     key={item.id}
                     className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors dark:hover:bg-neutral-800/60"
                   >
@@ -191,9 +190,9 @@ export default function DashboardClientPage() {
                       {item.detail && <p className="text-sm text-gray-500 dark:text-gray-400">{item.detail}</p>}
                     </div>
                     <span className="text-xs text-gray-400 dark:text-gray-500">{formatDateShort(item.at)}</span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
           </SectionCard>
         </div>
@@ -204,14 +203,14 @@ export default function DashboardClientPage() {
             {d.upcomingReminders.length === 0 ? (
               <p className={EMPTY_STATE.dash}>No upcoming reminders</p>
             ) : (
-              <ul className="space-y-3">
+              <div className="space-y-3">
                 {d.upcomingReminders.map((r) => (
-                  <li key={r.id} className="text-sm">
+                  <div key={r.id} className="text-sm">
                     <p className="font-medium text-foreground">{r.title}</p>
                     <p className="text-xs text-muted">{formatMonthDayYearTime(r.remindAt)}</p>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
           </SectionCard>
 
@@ -219,17 +218,17 @@ export default function DashboardClientPage() {
             {d.upcomingEvents.length === 0 ? (
               <p className={EMPTY_STATE.dash}>No upcoming events</p>
             ) : (
-              <ul className="space-y-3">
+              <div className="space-y-3">
                 {d.upcomingEvents.map((e) => (
-                  <li key={e.id} className="text-sm">
+                  <div key={e.id} className="text-sm">
                     <p className="font-medium text-foreground">{e.title}</p>
                     <p className="text-xs text-muted">
                       {formatDateShort(e.date)}
                       {e.time ? ` · ${e.time}` : ""}
                     </p>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
           </SectionCard>
         </div>

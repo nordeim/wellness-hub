@@ -52,6 +52,20 @@ export function currentStreak(dates: (Date | string)[], now: Date = new Date()):
   return streak;
 }
 
+// WH-28 (F-3): the TWO-CONSUMER SPLIT — `currentStreak` above is the
+// BADGE ENGINE's math (the "7-Day Streak" badge is "Journal your mood
+// 7 days in a row" — the real consecutive-day semantics, unchanged);
+// the mood page's "Current Streak" TILE mirrors the reference's own
+// formula instead, decoded from its compiled bundle:
+//   `e.length>0?Math.min(7,e.length):0`
+// — the ENTRY COUNT capped at 7, not a streak at all (an entry 2 days
+// ago reads 1 there; ours read 0 on identical data — the drift this
+// round cured). The tile is the parity surface; the engine is our
+// documented superset.
+export function displayStreak(entryCount: number): number {
+  return Math.min(7, entryCount);
+}
+
 // ---------------------------------------------------------------------------
 // Points — goal completion awards the frequency-derived value; badges add
 // their own. Total Points = sum(goal.points where completed) + sum(earned

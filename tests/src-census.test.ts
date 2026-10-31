@@ -2818,3 +2818,189 @@ it("WH-27: the rating-glyph census — the ⭐ fill (U+2B50, the reference's own
     "the rating glyph family must hold — the WH-27 cure (the ⭐ fill + the semantics superset)",
   ).toEqual([]);
 });
+
+it("WH-28: the mood-entry-list census — the reference's data-bearing list interior (the label row's h4 + the separate date span + the div container)", () => {
+  // The WH-28 probe (live, with the reference's demo data — the surface
+  // was "data-blocked" through WH-27; the demo account's existing row
+  // opened it read-only): the reference's entry renders
+  //   <div class="p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition-all">
+  //     <div class="flex items-start gap-4">
+  //       <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500
+  //            flex items-center justify-center text-3xl shadow-lg">😊</div>
+  //       <div class="flex-1">
+  //         <div class="flex items-center justify-between mb-2">
+  //           <h4 class="font-semibold text-lg text-gray-900">Good</h4>
+  //           <span class="text-sm text-gray-500">Oct 29, 2026</span>
+  //         </div>
+  //         <p class="text-sm text-gray-600 mb-3">Energy Level: 5/10</p>
+  //       </div>
+  //     </div>
+  //   </div>
+  // inside <div class="space-y-4"> — the label computes 18px/600 (text-lg)
+  // with the date as its OWN right-side span (justify-between spreads
+  // them); ours rendered a 14px p with the date INLINE (ml-2) — a real
+  // rendered-face drift invisible to every zero-data walk. The container
+  // is a DIV at space-y-4 (16px) — ours was ul/space-y-3 (12px).
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const mhSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/mentalhealth/mentalhealth-page.tsx"), "utf8"));
+  const plSrc = strip(readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8"));
+  const failures: string[] = [];
+
+  // (a) the record exists with the reference's classes (+ our dark twins)
+  const recordNeedles: Array<[string, RegExp]> = [
+    ["container", /container:\s*"space-y-4"/],
+    ["tile", /tile:\s*"p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition-all dark:border-neutral-800"/],
+    ["chip", /chip:\s*"w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-3xl shadow-lg"/],
+    ["labelRow", /labelRow:\s*"flex items-center justify-between mb-2"/],
+    ["label", /label:\s*"font-semibold text-lg text-gray-900 dark:text-gray-100"/],
+    ["date", /date:\s*"text-sm text-gray-500 dark:text-gray-400"/],
+  ];
+  for (const [name, re] of recordNeedles) {
+    if (!re.test(plSrc)) {
+      failures.push(`MOOD_ENTRY_LIST.${name} must exist in page-layout.ts at the reference's probed classes (the WH-28 live decode)`);
+    }
+  }
+  if (!/export const MOOD_ENTRY_LIST/.test(plSrc)) {
+    failures.push("the MOOD_ENTRY_LIST record must be exported (the record-per-family doctrine)");
+  }
+
+  // (b) the page consumes the record: the div container (space-y-4), the
+  // div tile, the h4 label, the date as its OWN span — and the old forms
+  // retire (the ul container, the p label, the inline ml-2 date)
+  if (!/<div className=\{MOOD_ENTRY_LIST\.container\}>/.test(mhSrc)) {
+    failures.push("the list container must be the reference's DIV at MOOD_ENTRY_LIST.container (space-y-4) — the ul retires");
+  }
+  if (/<ul className="space-y-3">/.test(mhSrc)) {
+    failures.push('the mood list\'s old <ul className="space-y-3"> retires — the reference renders a div at space-y-4');
+  }
+  if (!/<h4 className=\{MOOD_ENTRY_LIST\.label\}>/.test(mhSrc)) {
+    failures.push("the entry's mood label must be the reference's H4 at MOOD_ENTRY_LIST.label (text-lg = 18px — the 14px p drift)");
+  }
+  if (!/<span className=\{MOOD_ENTRY_LIST\.date\}>\{formatDate\(m\.date\)\}<\/span>/.test(mhSrc)) {
+    failures.push("the entry's date must be its OWN right-side span at MOOD_ENTRY_LIST.date — the reference's justify-between spread (the inline ml-2 form retires)");
+  }
+  if (/ml-2 font-normal text-muted/.test(mhSrc)) {
+    failures.push('the inline date form (the <span class="ml-2 font-normal text-muted"> inside the label paragraph) retires — the date is a separate element on the reference');
+  }
+  if (!/\{meta\.label\}/.test(mhSrc)) {
+    failures.push("the label text still rides the mood vocabulary's meta label (the byte-parity vocabulary)");
+  }
+
+  expect(
+    failures,
+    "the mood list interior must hold — the WH-28 cure (the record + the page conversion)",
+  ).toEqual([]);
+});
+
+it("WH-28: the activity-feed census — the reference's three-kind builder with entity dates (the 🏃/💚/✅ glyphs, never the five-kind createdAt feed)", () => {
+  // The WH-28 decode (the reference's own bundle — the feed was
+  // unobservable through WH-27 at zero rows):
+  //   exercise → `${type} workout` + `${duration} minutes` (🏃, date = the entity date)
+  //   mood → "Mood check-in" + the raw mood value (💚, date = the entity date)
+  //   COMPLETED assignments only → `${title}` + "Completed" (✅, updated_date)
+  //   merged → sorted by date DESC → capped at 8 — the row date is the
+  //   ENTITY's date field ("MMM d"), never createdAt (ours rendered
+  //   "Oct 31" where the reference renders "Oct 29" on identical data).
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const feedSrc = strip(readFileSync(join(REPO_ROOT, "src/lib/activity-feed.ts"), "utf8"));
+  const routeSrc = strip(readFileSync(join(REPO_ROOT, "src/app/api/dashboard/route.ts"), "utf8"));
+  const dashSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/dashboard/dashboard-page.tsx"), "utf8"));
+  const typesSrc = strip(readFileSync(join(REPO_ROOT, "src/types/index.ts"), "utf8"));
+  const failures: string[] = [];
+
+  // (a) the seam's shape — the reference's three kinds
+  if (!/export function recentActivityFeed/.test(feedSrc)) {
+    failures.push("the pure seam src/lib/activity-feed.ts must export recentActivityFeed (the feed builder left the route handler)");
+  }
+  for (const needle of [
+    /\$\{w\.type\} workout/,
+    /\$\{w\.durationMinutes\} minutes/,
+    /"Mood check-in"/,
+    /"Completed"/,
+  ] as RegExp[]) {
+    if (!needle.test(feedSrc)) {
+      failures.push(`the seam must carry the reference's titles/subtitles (${needle}) — decoded from its bundle`);
+    }
+  }
+  if (!/status === "completed"/.test(feedSrc) || !/w: a\.updatedAt|at: a\.updatedAt/.test(feedSrc)) {
+    failures.push("completed assignments only, keyed off updatedAt (the reference's updated_date) — pending assignments never feed");
+  }
+  if (/\.createdAt/.test(feedSrc)) {
+    failures.push("the feed never keys off createdAt — the entity date fields are the reference's row dates (the F-2 drift)");
+  }
+  if (!/slice\(0, 8\)/.test(feedSrc)) {
+    failures.push("the cap is 8 (the reference's slice(0,8)) — ours capped at 5");
+  }
+
+  // (b) the route consumes the seam; the five-kind builder retires
+  if (!/recentActivityFeed\(\s*workouts,\s*moods,\s*assignments\s*\)/.test(routeSrc)) {
+    failures.push("the dashboard route must build its feed through the seam (recentActivityFeed(workouts, moods, assignments))");
+  }
+  for (const retired of [
+    /Logged a a? ?\$\{|`Logged a \$\{/,
+    /Assignment "\$\{a\.title\}"|Assignment "\$\{/,
+    /Event "\$\{e\.title\}" scheduled/,
+    /Goal "\$\{g\.title\}"|Goal "\$\{/,
+  ] as RegExp[]) {
+    if (retired.test(routeSrc)) {
+      failures.push(`the five-kind builder's invented titles retire (${retired}) — the reference carries three kinds only`);
+    }
+  }
+  if (!/take: 50/.test(routeSrc)) {
+    failures.push("the moods read widens to take: 50 (the reference's own mood-list bound — the feed needs the rows the tile counts)");
+  }
+
+  // (c) the page: the reference's glyph map + the div container
+  if (!/workout: "🏃"/.test(dashSrc) || !/mood: "💚"/.test(dashSrc) || !/assignment: "✅"/.test(dashSrc)) {
+    failures.push('the ACTIVITY_EMOJI map must be the reference\'s own glyphs — {workout: "🏃", mood: "💚", assignment: "✅"} (the 💪/📚 inventions retire)');
+  }
+  if (/workout: "💪"|assignment: "📚"|event: "📅"|goal: "🎯"/.test(dashSrc)) {
+    failures.push("the invented glyphs (💪/📚/📅/🎯) retire — the reference's feed glyphs are 🏃/💚/✅");
+  }
+  if (!/<div className="space-y-3">/.test(dashSrc)) {
+    failures.push("the feed container must be the reference's DIV (space-y-3) — the ul retires");
+  }
+  if (/<ul className="space-y-3">/.test(dashSrc)) {
+    failures.push('the feed\'s old <ul className="space-y-3"> retires — the reference renders a div');
+  }
+  if (!/formatDateShort\(item\.at\)/.test(dashSrc)) {
+    failures.push("the row date still renders formatDateShort (the \"MMM d\" shape) — of item.at, now the entity date");
+  }
+
+  // (d) the wire type narrows to the three live kinds
+  if (!/kind: "workout" \| "mood" \| "assignment";/.test(typesSrc)) {
+    failures.push('the recentActivity wire type\'s kind union narrows to "workout" | "mood" | "assignment" — the five-kind union retires with the builder');
+  }
+
+  expect(
+    failures,
+    "the activity-feed family must hold — the WH-28 cure (the seam + the route + the page + the type)",
+  ).toEqual([]);
+});
+
+it("WH-28: the shell-tag census — the wordmark h2 + the mobile-title h1 (the reference's own element vocabulary)", () => {
+  // The WH-28 probe (live, the lesson-31 class applied to the shell):
+  // the reference's sidebar wordmark is an <h2> ("Wellness Hub") and its
+  // mobile glass-header title is an <h1> (hidden at desktop, shown at
+  // mobile — two visible h1s there, the reference's own semantics);
+  // ours rendered both as <span>s — visually identical, tag-drifted.
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const sbSrc = strip(readFileSync(join(REPO_ROOT, "src/components/layout/sidebar.tsx"), "utf8"));
+  const shellSrc = strip(readFileSync(join(REPO_ROOT, "src/components/layout/app-shell.tsx"), "utf8"));
+  const failures: string[] = [];
+
+  if (!/<h2 className=\{NAV_LAYOUT\.brandWordmark\}>\{APP_NAME\}<\/h2>/.test(sbSrc)) {
+    failures.push("the sidebar wordmark must render as the reference's <h2> at NAV_LAYOUT.brandWordmark — the span retires");
+  }
+  if (!/<h1 className=\{MOBILE_HEADER\.title\}>\{APP_NAME\}<\/h1>/.test(shellSrc)) {
+    failures.push("the mobile glass-header title must render as the reference's <h1> at MOBILE_HEADER.title — the span retires");
+  }
+  if (/<span className=\{NAV_LAYOUT\.brandWordmark\}>/.test(sbSrc) || /<span className=\{MOBILE_HEADER\.title\}>/.test(shellSrc)) {
+    failures.push("the <span> forms retire on both shell surfaces — the tag vocabulary is the parity target (the sr-chip lesson on the shell)");
+  }
+
+  expect(
+    failures,
+    "the shell tag family must hold — the WH-28 cure (h2 wordmark + h1 mobile title, classes untouched)",
+  ).toEqual([]);
+});

@@ -178,7 +178,10 @@ export interface DashboardData {
   goalsCompleted: number;
   goalsTotal: number;
   recentActivity: {
-    kind: "workout" | "mood" | "assignment" | "event" | "reminder" | "goal" | "routine";
+    // WH-28 (F-2): the kind union narrows to the reference's three live
+    // kinds (decoded from its bundle) — the five-kind builder retired
+    // with the createdAt-keyed feed.
+    kind: "workout" | "mood" | "assignment";
     id: string;
     title: string;
     detail: string | null;

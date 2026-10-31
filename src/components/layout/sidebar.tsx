@@ -88,7 +88,11 @@ export function BrandMark() {
         <Sparkles className="h-5 w-5" />
       </div>
       <div className="flex flex-col">
-        <span className={NAV_LAYOUT.brandWordmark}>{APP_NAME}</span>
+        {/* WH-28 (F-4): the reference's own element vocabulary — its
+            sidebar wordmark is an <h2> (probed live; ours was a span —
+            the tag layer is the sr-chip lesson applied to the shell).
+            The classes ride NAV_LAYOUT.brandWordmark unchanged. */}
+        <h2 className={NAV_LAYOUT.brandWordmark}>{APP_NAME}</h2>
         <span className={NAV_LAYOUT.brandSubtitle}>{APP_TAGLINE}</span>
       </div>
     </div>

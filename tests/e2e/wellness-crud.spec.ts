@@ -293,3 +293,43 @@ test("profile: the appearance tab presets re-skin the app live", async ({ page }
   await page.getByRole("button", { name: "Light", exact: true }).click();
   await expect(root).not.toHaveClass(/dark/);
 });
+
+// WH-28 (F-2): the Recent Activity feed — the reference's three-kind
+// builder, decoded from its own bundle. The pin that matters most: the
+// row date keys off the ENTITY's date field ("MMM d"), never createdAt
+// — before the cure, a workout dated 10 days ago rendered TODAY's
+// short date on the feed row. The leg creates a PAST-dated workout
+// through the real form and asserts the feed row: the 🏃 glyph, the
+// reference's title/subtitle pair ("cardio workout" / "30 minutes"),
+// and the PAST date — the createdAt-drift pin.
+test("dashboard: the Recent Activity feed — the reference's 3-kind builder with entity dates", async ({ page }) => {
+  const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const past = new Date(Date.now() - 10 * 86_400_000);
+  const pastIso = `${past.getFullYear()}-${String(past.getMonth() + 1).padStart(2, "0")}-${String(past.getDate()).padStart(2, "0")}`;
+  const pastShort = `${MONTHS_SHORT[past.getMonth()]} ${past.getDate()}`;
+
+  await page.goto("/Exercise");
+  await page.getByRole("button", { name: "Log Workout" }).click();
+  await expect(page.getByText("Log New Workout")).toBeVisible();
+
+  await page.getByLabel("Duration (minutes)").fill("30");
+  await page.locator("#workout-date").fill(pastIso);
+  await page.getByRole("button", { name: "Save Workout" }).click();
+  await expect(page.getByText("Workout logged")).toBeVisible();
+
+  // The feed row on the dashboard: the reference's own shape.
+  await page.goto("/dashboard");
+  const row = page.locator("div.space-y-3 > div", { hasText: "cardio workout" });
+  await expect(row).toBeVisible();
+  await expect(row).toContainText("cardio workout");
+  await expect(row).toContainText("30 minutes");
+  await expect(row).toContainText("🏃");
+  // The entity-date pin: the row renders the PAST short date, never
+  // today's (the createdAt drift this round cured).
+  await expect(row.locator("span.text-xs")).toHaveText(pastShort);
+
+  // Cleanup: the residue row leaves the feed for the later specs.
+  await page.goto("/Exercise");
+  await page.getByRole("button", { name: /Delete .* workout/ }).click();
+  await expect(page.getByText("No workouts logged yet")).toBeVisible();
+});

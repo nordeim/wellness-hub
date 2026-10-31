@@ -54,11 +54,11 @@ const CANONICAL = {
   models: 15, // prisma/schema.prisma `^model` declarations
   apiRouteFamilies: 15, // directories under src/app/api/
   uiModules: 6, // .tsx modules under src/components/ui/
-  unitSuites: 24, // tests/*.test.ts (INCLUDING this suite — WH-21: +tests/gradient-ink.test.ts)
+  unitSuites: 25, // tests/*.test.ts (INCLUDING this suite — WH-28: +tests/activity-feed.test.ts)
   e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 352, // `bun run test` total (WH-27: 350 + the sr chip-family census + the rating-glyph census — the two-site chip split + the ⭐ fill)
-  e2eChecks: 65, // `CI=1 bun run test:e2e` total (WH-27: 64 + the (l) login-family computed-interior leg — the standing drift pin)
+  unitChecks: 358, // `bun run test` total (WH-28: 352 + displayStreak + the activity-feed spec's 2 + the mood-entry-list/activity-feed/shell-tag censuses)
+  e2eChecks: 66, // `CI=1 bun run test:e2e` total (WH-28: 65 + the Recent Activity feed leg — the entity-date pin)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
   // WH-18: ThemeBoot joined src/components/layout/ — the counts move with it.
   layoutComponents: 8, // modules under src/components/layout/

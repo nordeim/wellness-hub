@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { ok, ERR, isGuarded, requireSession } from "@/lib/api";
+import { recentActivityFeed } from "@/lib/activity-feed";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,10 @@ export async function GET() {
         db.moodEntry.findMany({
           where: { userId: guard.user.id },
           orderBy: { date: "desc" },
-          take: 5,
+          // WH-28 (F-2): 5 → 50 — the reference's own mood-list bound; the
+          // feed merges ALL moods before its cap, and a take of 5 starved
+          // it (the top-8-by-entity-date face).
+          take: 50,
         }),
         db.moodEntry.count({ where: { userId: guard.user.id } }),
         db.assignment.findMany({
@@ -49,52 +53,13 @@ export async function GET() {
     const dayStart = new Date(now);
     dayStart.setHours(0, 0, 0, 0);
 
-    // Recent Activity — the five latest writes across the modules, merged
-    // and time-ordered (the reference's "No recent activity" tile fills
-    // with the same kinds: workouts, moods, assignments, events, goals).
-    const activity = [
-      ...workouts.slice(0, 5).map((w) => ({
-        kind: "workout" as const,
-        id: w.id,
-        title: `Logged a ${w.durationMinutes}-minute workout`,
-        detail: w.notes,
-        at: w.createdAt,
-      })),
-      ...moods.map((m) => ({
-        kind: "mood" as const,
-        id: m.id,
-        // WH-23: the reference's own feed item (probed live): the title
-        // "Mood check-in" with the mood VALUE as its own detail line —
-        // never the value folded into the title. The 2xl emoji glyph
-        // rides the feed row (ours: the 💚 the reference renders).
-        title: "Mood check-in",
-        detail: m.mood,
-        at: m.createdAt,
-      })),
-      ...assignments.slice(0, 5).map((a) => ({
-        kind: "assignment" as const,
-        id: a.id,
-        title: `Assignment "${a.title}" ${a.status === "completed" ? "completed" : "added"}`,
-        detail: a.subject,
-        at: a.createdAt,
-      })),
-      ...events.slice(0, 5).map((e) => ({
-        kind: "event" as const,
-        id: e.id,
-        title: `Event "${e.title}" scheduled`,
-        detail: e.location,
-        at: e.createdAt,
-      })),
-      ...goals.slice(0, 5).map((g) => ({
-        kind: "goal" as const,
-        id: g.id,
-        title: `Goal "${g.title}" ${g.status === "completed" ? "completed" : "created"}`,
-        detail: null,
-        at: g.createdAt,
-      })),
-    ]
-      .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime())
-      .slice(0, 5);
+    // WH-28 (F-2): the feed rides the pure seam — the reference's own
+    // three-kind builder (exercise/mood/completed-assignments), the
+    // row dates keyed off the ENTITY date fields, merged + sorted by
+    // date DESC + capped at 8. The five-kind createdAt-keyed builder
+    // retired with this conversion (src/lib/activity-feed.ts carries
+    // the decode provenance).
+    const activity = recentActivityFeed(workouts, moods, assignments);
 
     const upcomingReminders = reminders
       .filter((r) => new Date(r.remindAt) >= dayStart)

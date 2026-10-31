@@ -247,6 +247,30 @@ export const MOBILE_NAV_SHEET = {
   icon: "h-5 w-5",
 } as const;
 
+/** WH-28 (F-1): the mood list "Your Journey" entry interior — probed
+ *  LIVE on the reference's demo data (the surface was "data-blocked"
+ *  through WH-27; the demo account's existing row opened it read-only).
+ *  The reference's entry (the full DOM decode):
+ *  `p-6 rounded-2xl border border-gray-100 hover:shadow-lg
+ *  transition-all` tiles in a `space-y-4` DIV (16px gap — ours shipped
+ *  ul/space-y-3), the `flex items-start gap-4` row with the 64px
+ *  blue→cyan emoji chip, and the label row `flex items-center
+ *  justify-between mb-2` carrying the label as an H4 at `text-lg`
+ *  (18px — ours shipped a 14px p) with the date as its OWN right-side
+ *  span at `text-sm text-gray-500` (justify-between spreads them —
+ *  ours folded the date inline after the label). The dark twins are
+ *  our documented superset (the reference's list is light-only). */
+export const MOOD_ENTRY_LIST = {
+  container: "space-y-4",
+  tile: "p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition-all dark:border-neutral-800",
+  row: "flex items-start gap-4",
+  chip: "w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-3xl shadow-lg",
+  labelRow: "flex items-center justify-between mb-2",
+  label: "font-semibold text-lg text-gray-900 dark:text-gray-100",
+  date: "text-sm text-gray-500 dark:text-gray-400",
+  energy: "text-sm text-gray-600 mb-3 dark:text-gray-400",
+} as const;
+
 /** Page header — the redesign's anatomy: a `text-4xl` gradient H1 (the
  *  module's stops land via the theme, `mb-2` against the subtitle), a
  *  `text-gray-600` subtitle, right-aligned actions. The ROW form is the

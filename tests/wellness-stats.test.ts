@@ -3,6 +3,7 @@ import {
   averageEnergy,
   currentStreak,
   dayDiff,
+  displayStreak,
   earnedBadgeKeys,
   goalPointsForFrequency,
   isAssignmentUrgent,
@@ -201,5 +202,22 @@ describe("averageEnergy", () => {
     expect(averageEnergy([5, 6])).toBe(5.5);
     expect(averageEnergy([5, 6, 7])).toBe(6);
     expect(averageEnergy([5, 5, 5, 6])).toBe(5.3);
+  });
+});
+
+// WH-28 (F-3): the mood page's "Current Streak" TILE mirrors the
+// reference's own formula — decoded from its compiled bundle
+// (`e.length>0?Math.min(7,e.length):0`): the ENTRY COUNT capped at 7,
+// not a consecutive-day streak. The BADGE ENGINE keeps the real math
+// (`currentStreak` above) — the two-consumer split: the tile is the
+// parity surface, "7-Day Streak" ("Journal your mood 7 days in a
+// row") is our superset.
+describe("displayStreak (the tile's reference-mirroring stat)", () => {
+  it("is the entry count capped at 7 — the reference's own bundle formula", () => {
+    expect(displayStreak(0)).toBe(0);
+    expect(displayStreak(1)).toBe(1);
+    expect(displayStreak(3)).toBe(3);
+    expect(displayStreak(7)).toBe(7);
+    expect(displayStreak(20)).toBe(7);
   });
 });

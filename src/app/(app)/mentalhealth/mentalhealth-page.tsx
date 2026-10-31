@@ -13,9 +13,9 @@ import {
 } from "@/components/shared/page-parts";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD, TEXTAREA_FIELD, MOOD_FORM, FORM_BUTTONS, TAG_CHIP } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD, TEXTAREA_FIELD, MOOD_FORM, FORM_BUTTONS, TAG_CHIP, MOOD_ENTRY_LIST } from "@/lib/page-layout";
 import { MOODS, moodMeta } from "@/lib/constants";
-import { averageEnergy, currentStreak, normalizeTags, parseJsonArray } from "@/lib/wellness";
+import { averageEnergy, displayStreak, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { MoodEntry } from "@/types";
@@ -83,8 +83,17 @@ export default function MentalHealthClientPage() {
     }
   };
 
+  // WH-28 (F-3): the tile formulas mirror the reference's own bundle —
+  //   Avg Energy: `(sum/length).toFixed(1)` → always one decimal place
+  //     ("5.0/10"; at zero entries ours deliberately renders "0.0/10"
+  //     where the reference renders "NaN/10" — its (0/0) bug, fixed
+  //     here, the deviation documented in PAD §11)
+  //   Current Streak: `min(7, entry count)` — NEVER a consecutive-day
+  //     streak (an entry 2 days ago reads 1). The BADGE ENGINE keeps the
+  //     real math (`currentStreak` — "7-Day Streak" is "7 days in a
+  //     row"): the tile is the parity surface, the engine our superset.
   const avgEnergy = averageEnergy(moodEntries.map((m) => m.energy));
-  const streak = currentStreak(moodEntries.map((m) => m.date));
+  const streak = displayStreak(moodEntries.length);
 
   if (!hydrated) {
     return (
@@ -280,7 +289,7 @@ export default function MentalHealthClientPage() {
             <div className={MODULE_KPI.row}>
               <div>
                 <p className={MODULE_KPI.label}>Avg Energy</p>
-                <h3 className={MODULE_KPI.value}>{avgEnergy}/10</h3>
+                <h3 className={MODULE_KPI.value}>{avgEnergy.toFixed(1)}/10</h3>
               </div>
               <TrendingUp className={cn(MODULE_KPI.bigIcon, "text-emerald-500")} aria-hidden="true" />
             </div>
@@ -304,41 +313,41 @@ export default function MentalHealthClientPage() {
         {moodEntries.length === 0 ? (
           <EmptyState hint="Start your mental health journey by logging your first mood entry!" />
         ) : (
-          <ul className="space-y-3">
+          <div className={MOOD_ENTRY_LIST.container}>
             {moodEntries.map((m) => {
               const meta = moodMeta(m.mood);
               const acts = parseJsonArray(m.activities);
               return (
-                <li
-                  key={m.id}
-                  className="p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition dark:border-neutral-800"
-                >
-                  <div className="flex items-start gap-4">
-                    <div
-                      className="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-3xl shadow-lg"
-                      aria-hidden="true"
-                    >
+                <div key={m.id} className={MOOD_ENTRY_LIST.tile}>
+                  <div className={MOOD_ENTRY_LIST.row}>
+                    <div className={MOOD_ENTRY_LIST.chip} aria-hidden="true">
                       {meta.icon}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="mb-2 flex items-center justify-between gap-2">
-                        <p className="text-sm font-semibold text-foreground">
-                          {meta.label}
-                          <span className="ml-2 font-normal text-muted">{formatDate(m.date)}</span>
-                        </p>
-                        <button
-                          type="button"
-                          className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40")}
-                          onClick={async () => {
-                            const res = await deleteMoodEntry(m.id);
-                            if (!res.ok) toast.error(res.error);
-                          }}
-                          aria-label={`Delete ${meta.label} entry`}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                      {/* WH-28 (F-1): the reference's label row — the H4 at
+                          text-lg (18px) LEFT, the date its OWN right-side
+                          span (justify-between spreads them); our delete
+                          rides in the right-side group beside the date —
+                          the reference's spread preserved, the superset
+                          kept (it carries no delete anywhere). */}
+                      <div className={MOOD_ENTRY_LIST.labelRow}>
+                        <h4 className={MOOD_ENTRY_LIST.label}>{meta.label}</h4>
+                        <div className="flex items-center gap-2">
+                          <span className={MOOD_ENTRY_LIST.date}>{formatDate(m.date)}</span>
+                          <button
+                            type="button"
+                            className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40")}
+                            onClick={async () => {
+                              const res = await deleteMoodEntry(m.id);
+                              if (!res.ok) toast.error(res.error);
+                            }}
+                            aria-label={`Delete ${meta.label} entry`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
                       </div>
-                      <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">Energy Level: {m.energy}/10</p>
+                      <p className={MOOD_ENTRY_LIST.energy}>Energy Level: {m.energy}/10</p>
                       {acts.length > 0 && (
                         <p className="text-xs text-muted">Activities: {acts.join(", ")}</p>
                       )}
@@ -348,10 +357,10 @@ export default function MentalHealthClientPage() {
                       {m.reflection && <p className="mt-1 text-xs text-muted">{m.reflection}</p>}
                     </div>
                   </div>
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
         )}
         </SectionCard>
       </div>
