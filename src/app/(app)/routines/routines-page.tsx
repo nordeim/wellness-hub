@@ -7,6 +7,7 @@ import {
   CalendarCheck,
   CheckCircle2,
   Clock,
+  Play,
   Trash2,
 } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
@@ -21,7 +22,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PAGE_THEMES, ROUTINE_CATEGORY_GRADIENTS, routineCategoryStops, BUTTON_CLASSES, SCHEDULE_MODAL , TEXTAREA_FIELD } from "@/lib/page-layout";
+import { PAGE_THEMES, ROUTINE_CATEGORY_GRADIENTS, ROUTINE_VIDEO_CARD, routineCategoryStops, BUTTON_CLASSES, SCHEDULE_MODAL , TEXTAREA_FIELD } from "@/lib/page-layout";
 import { difficultyMeta } from "@/lib/constants";
 import { parseJsonArray } from "@/lib/wellness";
 import { formatDateShort } from "@/lib/format";
@@ -179,23 +180,46 @@ export default function RoutinesClientPage() {
           return (
             <div
               key={t.id}
-              className="rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all h-full flex flex-col"
+              className="rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all h-full flex flex-col group"
             >
               {/* WH-24: the reference's template card face — the category
-                  strip runs DIRECTLY into the header (probed live: its
-                  cards render NO thumbnail and NO Watch Video anywhere,
-                  imgCount 0 — its own template data carries the fields
-                  its UI never renders; parity is a property of the
-                  RENDERED FACE, so both video branches retire here while
-                  the seed data keeps the columns).
-                  WH-29 (F-E): NO overflow-hidden — the reference's card
-                  computes overflow VISIBLE and its h-2 strip paints
-                  SQUARE corners past the 12px radius (pixel-verified:
-                  amber at the corner where a clipped card reads the
-                  page background). Our overflow-hidden was an
-                  undocumented deviation; the reference's own face is
-                  the target. */}
+                  strip runs DIRECTLY into the header (probed live).
+                  WH-32 (F-1): the round-20 redeployment RENDERED the video
+                  family the old build omitted — the six templates carrying
+                  thumbnail/videoUrl now draw the h-40 thumbnail zone
+                  between the strip and the header (probed on the new build,
+                  CSS content hash index-BHjkUcdg.css; the WH-24 retirement
+                  "its UI omits the fields" was true for nine rounds and
+                  false the moment its renderer learned to draw them). The
+                  five field-less templates render the bare face — the
+                  reference's own conditional, probed on all 11. The card
+                  class carries `group` unconditionally (the reference's own
+                  class on all 11 — the reveal family's scope).
+                  WH-29 (F-E): NO overflow-hidden on the CARD — the
+                  reference's card computes overflow VISIBLE and its h-2
+                  strip paints SQUARE corners past the 12px radius
+                  (pixel-verified: amber at the corner where a clipped card
+                  reads the page background). The thumbnail zone carries its
+                  OWN overflow-hidden (the reference's own form — the img
+                  clips inside the zone without re-clipping the strip). */}
               <div className={cn("h-2 bg-gradient-to-r", routineCategoryStops(t.category))} aria-hidden="true" />
+              {t.thumbnail && (
+                <div className={ROUTINE_VIDEO_CARD.wrap}>
+                  <img src={t.thumbnail} alt={t.name} className={ROUTINE_VIDEO_CARD.img} loading="lazy" />
+                  <div className={ROUTINE_VIDEO_CARD.overlay}>
+                    <button
+                      type="button"
+                      className={ROUTINE_VIDEO_CARD.watchBtn}
+                      onClick={() => {
+                        if (t.videoUrl) window.open(t.videoUrl, "_blank", "noopener,noreferrer");
+                      }}
+                      aria-label={`Watch Video: ${t.name}`}
+                    >
+                      <Play className={ROUTINE_VIDEO_CARD.icon} aria-hidden="true" /> Watch Video
+                    </button>
+                  </div>
+                </div>
+              )}
               <div className="flex flex-col space-y-1.5 p-6">
                 <div className="flex items-start justify-between gap-2 mb-2">
                   {/* WH-29 (F-D): the reference's title is a bare DIV —

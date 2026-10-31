@@ -1,45 +1,42 @@
-# docs/screenshots md5 ledger — re-based at WH-31 (2026-10-31), 34 files
+# docs/screenshots md5 ledger — re-based at WH-32 (2026-11-01), 34 files
 #
-# The WH-31 round (the redeployment-watch round): the SECOND cross-round
-# byte comparison under the committed procedure — and the round's own
-# verification: the reference's round-19 redeployment (the CSS path shape
-# moved back, a new JS bundle, cdn.tailwindcss.com added) moved NOTHING
-# in any rendered face, and our tree changed zero rendered faces — the
-# capture set proves it: 32/34 byte-stable.
+# The WH-32 round (the routines video-card round): the THIRD cross-round
+# byte comparison under the committed procedure. The reference's round-20
+# redeployment changed ONE rendered face (the routines video-card family)
+# and the WH-32 cure changed the same face on OUR side — the comparison's
+# expected movers, root-caused below. 29/34 byte-stable.
 #
-# The two movers (both root-caused, both the 25-dark-login-focus
-# PRECEDENT class — sub-visible rendering instants, not face changes):
-#   10-learning.png — 16/1,152,000 px (0.0014%), max channel delta 7, a
-#     26×23 region inside the first tutorial card's thumbnail (the img
-#     decode edge); the Learning page carries the app's only photo
-#     thumbnails — where a headless-Chromium build's rasterization
-#     variance shows first.
-#   29-quick-actions-hover.png — 5/1,152,000 px (0.0004%), max channel
-#     delta 1, a 4×4 region on the hovered tile's icon edge.
-# The root cause: CROSS-SESSION headless-Chromium rasterization variance
-# (the sandbox's fresh chromium_headless_shell-1248 install this session
-# vs WH-30's build) — both movers reproduced IDENTICALLY across this
-# session's two takes (the values below are stable), and both sit orders
-# of magnitude under the WH-30 timing-class precedent (0.007%). No face
-# changed; the ledger re-bases at the two movers.
+# The WH-32 movers (all root-caused before the re-base):
+#   03-routines + 18-dark-routines (15.0%/15.0% of sampled px, delta
+#     255/250) — THE F-1 CURE BY DESIGN: the six video templates now
+#     render the h-40 thumbnail zone on both modes.
+#   28-routines-schedule-modal (4.5%, delta 51) — THE CURE'S KNOCK-ON:
+#     95% of the differing samples sit OUTSIDE the 672px modal column
+#     (2932 outside vs 147 inside) — the backdrop behind the scrim now
+#     renders the video thumbnails; the modal's own face is unchanged
+#     (the WH-22 map verified live on the reference this round).
+#   10-learning (0.0014%, delta 5) — the cross-session headless-Chromium
+#     rasterization class (the WH-31 mover, same file, same magnitude:
+#     the Learning page's photo thumbnails show a fresh Chromium build's
+#     rasterization variance first).
+#   25-dark-login-focus (0.0069%, delta 4) — the sub-visible rendering
+#     instant (the file's own precedent class: the transition-all
+#     box-shadow interpolation sampled mid-fade).
 #
-# The WH-30 round: 6 byte-stable + 28 movers (all root-caused) — the
-# LARGEST capture re-base since WH-15 (the shell-chrome geometry round:
-# every page capture carries the chrome). The committed procedure's
-# FIRST cross-round run (the WH-29 suggested-next (d)): 27-dark-mood-form
-# JOINED the procedure this round (the file had ridden the ledger since
-# WH-26's ad-hoc take without a procedural home — the reconstruction
-# class ends for it too).
+# The prior ledger head (WH-31): 32/34 byte-stable; two movers
+# root-caused as the cross-session Chromium rasterization class
+# (0.0014%/0.0004%, sub-visible).
+#
 01-login.png 0eb839b6997d2d0fb14ea1834f39bff8
 02-dashboard.png b396f588554c48d4ceb2cf4ea5df4311
-03-routines.png f328b5dd7f0ba04a17a1cfb66b682394
+03-routines.png 431e0010b2f5d7798ac777d560b6c5c4
 04-exercise.png 8774683d2108e9c3be6d6f4ff17ba7f1
 05-mentalhealth.png 3cc6a5e0356c41b1b0794e7b75d7e69e
 06-assignments.png 4ed037698b278a6a69e5f60eccbdb6c8
 07-events.png 7df71d4fc4d11993025457efb180bbc5
 08-studyresources.png d55df9d487b4c758815c6df05f611482
 09-reminders.png b9a6e1fb97d2426143b3518109ceebd7
-10-learning.png 0c088cbb788d7825506973744ab016d3
+10-learning.png 421150b6886c1abd4d82edc7fefd19fb
 11-goals.png 01596f05cae8a18b75a35b30f9f40506
 12-profile.png 53218b174c58a304d904725237759615
 13-mobile-login.png 479e3bc95a4ca2465691d6b0c5669b90
@@ -47,17 +44,17 @@
 15-mobile-nav-open.png 889d3e0632af845055da8a1a030aa79b
 16-mobile-drawer-nav-exercise.png a73a87cfcf49d4069ac94a30817ce513
 17-dark-dashboard.png 95b9646f49fd606b14acfdc9e30adb76
-18-dark-routines.png a2ba1759be3861d7aeb527ae33b4992a
+18-dark-routines.png e855e9a2397dc2785e28919cb4090a12
 19-dark-mobile-nav-open.png daac2f7cf710667926056b61db708a53
 20-dark-login.png 9ad84a98f04c63d08f37ab668388484f
 21-dark-signup.png 1105dcb0a18f044a6d72fe0f68e2e88c
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png 554a5ac802b890e129a5c9309db81725
-25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
+25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
 26-events-inline-form.png 4e8cc505a9a051d963bc50e2d7d59ac2
 27-dark-mood-form.png 3e088c5ef27bd5ee831da75329090488
-28-routines-schedule-modal.png 53818da6ae8da44f26d448ad350df9b4
+28-routines-schedule-modal.png 4843f599aa74f2589926c73519b8304c
 29-quick-actions-hover.png 7cadbcde9c4691236ce5dd59524d9114
 30-tutorial-card-hover.png bd6004ad8bbb6b0f0b3dbe56753b469b
 31-profile-preferences.png 3eeab6faa67b22b9fb29ac1dac4b7a36

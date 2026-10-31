@@ -2286,20 +2286,21 @@ it("WH-24: the module-toolbar + chip-form census — the stock search family + t
 // text-gray-600 mb-6 subtitle, and the Use This Template button is
 // w-full mt-auto in the category pair with hover:opacity-90 + the
 // ArrowRight icon (ours: an auto-width pair in a justify-between row).
-it("WH-24: the routines template-card census — the thumbnail-free face + the meta/benefits glyphs + the w-full category-pair button", () => {
+it("WH-24: the routines template-card census — the meta/benefits glyphs + the w-full category-pair button (the face members that SURVIVED the round-20 redeployment)", () => {
   const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
   const failures: string[] = [];
   const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
   const rSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/routines/routines-page.tsx"), "utf8"));
 
-  // (a) the thumbnail + Watch Video face RETIRES (the reference renders
-  // neither — the seed DATA keeps the fields)
-  if (/t\.thumbnail/.test(rSrc)) {
-    failures.push("the template card must NOT render the thumbnail branch — the reference's face carries none (imgCount 0, probed)");
-  }
-  if (/Watch Video/.test(rSrc)) {
-    failures.push("the template card must NOT render any Watch Video affordance — the reference's face carries none (probed)");
-  }
+  // (a) WH-32: the thumbnail/Watch-Video retirement REVERSED — the
+  // reference's round-20 build RENDERS the video family on the six
+  // templates carrying the fields (the WH-24 "its UI omits the fields"
+  // was true for nine rounds and false the moment its renderer learned
+  // to draw them). The video-family contract now lives in the WH-32
+  // census above (the ROUTINE_VIDEO_CARD member walk); this block keeps
+  // only the OLD guard's still-true half: the family stays CONDITIONAL
+  // (the five field-less templates render the bare face — the
+  // reference's own split, probed on all 11).
 
   // (b) the meta rows: clock + calendar at w-4 h-4
   if (!/Calendar/.test(rSrc)) failures.push("the timeOfDay row must carry the reference's Calendar glyph (ours shipped Sun)");
@@ -2347,6 +2348,83 @@ it("WH-24: the routines template-card census — the thumbnail-free face + the m
   expect(
     failures,
     "the routines template card must mirror the reference's face — the WH-24 cure",
+  ).toEqual([]);
+});
+
+// WH-32: the routines video-card census — the round-20 redeployment
+// RENDERED the fields the old build omitted (the WH-24 retirement
+// reversed). The reference's NEW build (CSS content hash
+// /static/index-BHjkUcdg.css, JS index-BFu7mt5f.js — the first
+// stylesheet CONTENT change since round 16) draws, on the SIX templates
+// carrying thumbnail/videoUrl (Creative Flow Session, Quick Productivity
+// Reset, Energizing Morning Kickstart, Self-Care Sunday, Focused Study
+// Session, Peaceful Evening Wind-Down — the last six of the eleven in
+// grid order), a `relative h-40 overflow-hidden` thumbnail zone between
+// the h-2 category strip and the card header: the img (alt = the
+// template name, unsplash URLs byte-identical to the seed fields) at
+// `w-full h-full object-cover group-hover:scale-105
+// transition-transform duration-300`, the group-hover reveal overlay
+// `absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100
+// transition-opacity flex items-center justify-center`, and inside it
+// the Watch Video button (the stock shadcn base + `shadow h-8
+// rounded-md px-3 text-xs bg-white text-gray-900 hover:bg-gray-100`,
+// the lucide Play at `w-4 h-4 mr-2`) — a BUTTON on the reference,
+// navigating to the template's videoUrl. The card class now carries
+// `group` (ALL 11 — the reference's own unconditional class, probed).
+// OUR kept supersets (the Learning watch() precedent): the aria-label
+// carrying the template name + the `_blank` `noopener,noreferrer`
+// navigation (the reference's same-tab external navigation is a UX
+// hazard — the superset documented here + in the PAD §11 row).
+it("WH-32: the routines video-card census — the round-20 redeployment renders the thumbnail + Watch Video family on the six templates that carry the fields", () => {
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const failures: string[] = [];
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const rSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/routines/routines-page.tsx"), "utf8"));
+
+  // (a) the record exists with its probed members
+  const REC = layoutSrc.match(/export const ROUTINE_VIDEO_CARD = \{([\s\S]*?)\} as const;/);
+  expect(REC, "the ROUTINE_VIDEO_CARD record must exist in page-layout.ts (the round-20 probed anatomy)").toBeTruthy();
+  const MEMBERS: [string, string][] = [
+    ["wrap", "relative h-40 overflow-hidden"],
+    ["img", "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"],
+    ["overlay", "absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"],
+    ["watchBtn", "shadow h-8 rounded-md px-3 text-xs bg-white text-gray-900 hover:bg-gray-100"],
+    ["icon", "h-4 w-4 mr-2"],
+  ];
+  for (const [member, expectCls] of MEMBERS) {
+    const m = REC?.[1].match(new RegExp(`${member}:\\s*"([^"]*)"`));
+    if (!m || !m[1]!.includes(expectCls)) {
+      failures.push(`ROUTINE_VIDEO_CARD.${member} must carry the probed form "${expectCls}" (read "${m?.[1] ?? "—"}")`);
+    }
+  }
+  // (b) the page consumes the record — the zone rendered conditionally
+  // on t.thumbnail, between the strip and the header
+  if (!rSrc.includes("ROUTINE_VIDEO_CARD")) failures.push("routines-page.tsx must consume the ROUTINE_VIDEO_CARD record");
+  if (!/t\.thumbnail\s*&&/.test(rSrc)) failures.push("the thumbnail zone must be conditional on t.thumbnail (the five field-less templates render the bare face — the reference's own split)");
+  const zonePos = rSrc.indexOf("ROUTINE_VIDEO_CARD.wrap");
+  const stripPos = rSrc.indexOf("routineCategoryStops(t.category)");
+  const headerPos = rSrc.indexOf("space-y-1.5 p-6");
+  if (zonePos === -1 || stripPos === -1 || headerPos === -1 || !(stripPos < zonePos && zonePos < headerPos)) {
+    failures.push("the thumbnail zone must render BETWEEN the h-2 strip and the card header (the reference's card order: strip → thumbnail → header)");
+  }
+  // (c) the card class carries group (the reveal family's scope — the
+  // reference's own unconditional class on all 11)
+  const cardCls = rSrc.match(/className=\{cn\(\s*"rounded-xl border-none[^"]*/)?.[0] ?? rSrc.match(/"rounded-xl border-none bg-surface[^"]*"/)?.[0] ?? "";
+  if (!cardCls.includes("group")) {
+    failures.push(`the template card class must carry group (the reveal family's scope — read "${cardCls.slice(0, 60)}…")`);
+  }
+  // (d) the Watch Video button — the label + our kept supersets
+  if (!/Watch Video/.test(rSrc)) failures.push("the Watch Video affordance must render (the reference's round-20 face)");
+  if (!/aria-label=\{`Watch Video: \$\{t\.name\}`\}/.test(rSrc)) {
+    failures.push("the Watch Video button must carry the aria-label superset (the Learning watch() precedent — the reference's button is unlabeled)");
+  }
+  if (!/_blank/.test(rSrc) || !/noopener/.test(rSrc)) {
+    failures.push("the Watch Video navigation must ride the _blank noopener superset (the reference's same-tab external navigation is a UX hazard — the Learning precedent)");
+  }
+
+  expect(
+    failures,
+    "the routines video-card family must mirror the reference's round-20 face — the WH-32 cure",
   ).toEqual([]);
 });
 
@@ -3235,9 +3313,12 @@ it("WH-29: the routines-card census — the DIV card with the UNCLIPPED strip + 
   const failures: string[] = [];
 
   // (a) the routines card: a DIV, no overflow-hidden (the strip's square
-  // corners are the reference's own face)
-  if (!/<div\s*key=\{t\.id\}\s*className="rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all h-full flex flex-col"/.test(roSrc)) {
-    failures.push('the routines card must be a DIV at "rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all h-full flex flex-col" — NO overflow-hidden (the reference\'s strip bleeds past the radius, pixel-verified)');
+  // corners are the reference's own face), carrying `group` (WH-32: the
+  // reference's own unconditional class on all 11 — the round-20 video
+  // family's reveal scope; the WH-29 probe had already recorded it on
+  // the reference's card string)
+  if (!/<div\s*key=\{t\.id\}\s*className="rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all h-full flex flex-col group"/.test(roSrc)) {
+    failures.push('the routines card must be a DIV at "rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all h-full flex flex-col group" — NO overflow-hidden (the reference\'s strip bleeds past the radius, pixel-verified)');
   }
   if (/overflow-hidden rounded-xl border-none bg-surface/.test(roSrc)) {
     failures.push("the overflow-hidden clipping retires from the routines card — the reference's overflow is VISIBLE and its strip corners are SQUARE");

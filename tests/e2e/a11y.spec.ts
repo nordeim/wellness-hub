@@ -1521,3 +1521,89 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
       await page.waitForTimeout(400);
     });
   });
+
+  // WH-32 (p): the routines video-card reveal family — the round-20
+  // redeployment's ONE rendered-face change (the CSS content hash moved:
+  // /static/index-s8d1FO8M.css → /static/index-BHjkUcdg.css). The six
+  // templates carrying thumbnail/videoUrl now render the h-40 thumbnail
+  // zone between the strip and the header — the (h) tutorial-card
+  // precedent's SIBLING family on the routines surface: the img scales
+  // 1.05 on card hover, the black/40 overlay fades in (opacity-0 at
+  // rest — the oklab alpha form), the Watch Video button rides inside.
+  // The leg also pins the FAMILY SPLIT: exactly six of the eleven
+  // templates render the zone (the five field-less templates render the
+  // bare face — the reference's own conditional, probed on all 11).
+  test.describe("a11y net — the routines video-card family (WH-32 (p))", () => {
+    test("(p) the six video templates render the h-40 thumbnail + the opacity-0 Watch Video reveal; the five field-less templates render the bare face", async ({ page }) => {
+      await page.goto("/Routines", { waitUntil: "networkidle" });
+      await page.waitForTimeout(600);
+
+      const readCards = () =>
+        page.evaluate(() => {
+          const titles = Array.from(document.querySelectorAll("div.font-semibold.tracking-tight"))
+            .filter((d) => (d.textContent || "").trim().length > 3 && !/Pro Tip/.test(d.textContent || ""));
+          return titles.map((t) => {
+            let card = t as HTMLElement;
+            for (let i = 0; i < 6; i++) {
+              card = card.parentElement!;
+              if (card.className.includes("rounded-xl")) break;
+            }
+            const img = card.querySelector("img");
+            const overlay = img?.parentElement?.querySelector("div.absolute") ?? null;
+            const btn = overlay?.querySelector("button") ?? null;
+            const cs = (el: Element | null) => (el ? getComputedStyle(el) : null);
+            return {
+              title: (t.textContent || "").trim().slice(0, 30),
+              hasImg: !!img,
+              imgAlt: img ? img.getAttribute("alt") : null,
+              wrapH: img?.parentElement ? Math.round((img.parentElement as HTMLElement).getBoundingClientRect().height) : null,
+              // the ROUTINES family's fade lives on the OVERLAY (bg-black/40
+              // + opacity-0→100) — the Learning family puts the opacity arms
+              // on the BUTTON instead (its scrim is a bg-alpha fade); read
+              // the overlay's opacity here, the (h) leg's button form is the
+              // sibling, not this one
+              overlayOpacity: cs(overlay)?.opacity ?? null,
+              overlayBg: cs(overlay)?.backgroundColor ?? null,
+              btnH: btn ? Math.round(btn.getBoundingClientRect().height) : null,
+              cardGroup: card.className.includes("group"),
+            };
+          });
+        });
+
+      const cards = await readCards();
+      expect(cards.length, "the eleven seeded templates render").toBe(11);
+      const videoCards = cards.filter((c) => c.hasImg);
+      const bareCards = cards.filter((c) => !c.hasImg);
+      expect(videoCards.length, "exactly SIX templates carry the thumbnail zone (the reference's own split — the fields its seed carries)").toBe(6);
+      expect(bareCards.length, "the five field-less templates render the bare face").toBe(5);
+      expect(videoCards[0]!.title, "the first video card is Creative Flow Session (grid order)").toBe("Creative Flow Session");
+      for (const c of videoCards) {
+        expect(c.cardGroup, `the video card must carry group (${c.title})`).toBe(true);
+        expect(c.imgAlt, `the img alt carries the template name (${c.title})`).toBe(c.title);
+        expect(c.wrapH, `the thumbnail zone is h-40 = 160px (${c.title})`).toBe(160);
+        expect(c.btnH, `the Watch Video button is the h-8 = 32px form (${c.title})`).toBe(32);
+        expect(c.overlayOpacity, `the reveal overlay rests INVISIBLE — the routines family's fade lives on the overlay, not the button (${c.title})`).toBe("0");
+        expect(c.overlayBg, `the overlay is the CONSTANT black/40 scrim (its OPACITY fades, not its bg — the Learning family's inverse) (${c.title})`).toBe("oklab(0 0 0 / 0.4)");
+      }
+
+      // the REVEAL — a REAL pointer on the first video card (the (h)
+      // doctrine: synthetic mouseenter never sets :hover)
+      const cardLoc = page
+        .getByText("Creative Flow Session", { exact: true })
+        .locator("xpath=ancestor::*[contains(@class,'rounded')][1]")
+        .first();
+      await cardLoc.scrollIntoViewIfNeeded();
+      await cardLoc.hover();
+      await page.waitForTimeout(600); // the settle doctrine
+      const after = (await readCards()).find((c) => c.title === "Creative Flow Session")!;
+      expect(after.overlayOpacity, "the reveal overlay fades IN on card hover (the whole scrim + button family)").toBe("1");
+      // the button's accessible name (our aria-label superset — the
+      // reference's own button is unlabeled; the axe net needs a name)
+      const label = await page.evaluate(() => {
+        const btns = Array.from(document.querySelectorAll("button"));
+        const b = btns.find((x) => (x.getAttribute("aria-label") || "").startsWith("Watch Video:"));
+        return b ? b.getAttribute("aria-label") : null;
+      });
+      expect(label, "the Watch Video button carries the aria-label superset").toBe("Watch Video: Creative Flow Session");
+    });
+  });

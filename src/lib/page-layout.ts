@@ -799,6 +799,50 @@ export const SCHEDULE_MODAL = {
   button: `inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 px-4 py-2 w-full ${PAGE_THEMES.routines.button} text-white`,
 } as const;
 
+/** The routines video-card family — WH-32 (the round-20 redeployment's
+ *  ONE rendered-face change, probed live on the new build: the CSS
+ *  content hash moved /static/index-s8d1FO8M.css → /static/index-
+ *  BHjkUcdg.css — the first stylesheet CONTENT change since round 16).
+ *  The six templates carrying thumbnail/videoUrl (the last six of the
+ *  eleven in grid order) now render, between the h-2 category strip and
+ *  the card header, a `relative h-40 overflow-hidden` thumbnail zone:
+ *  the img (alt = the template name; the unsplash URLs are
+ *  byte-identical to the seed fields OUR data has carried since WH-24)
+ *  scaling 1.05 on card hover, the black/40 overlay fading in, and the
+ *  Watch Video button riding inside — the TUTORIAL_CARD reveal family's
+ *  SIBLING on the routines surface, with its own probed geometry: the
+ *  cover is a FIXED h-40 (160px at every viewport — NOT the Learning
+ *  aspect-video), the scrim is bg-black/40 behind an OPACITY fade
+ *  (the Learning family's bg-black/0→20 is a different arm set), and
+ *  the button is the SMALLER h-8 text-xs form (the Learning Watch Now
+ *  is h-9 text-sm). The five field-less templates render the bare
+ *  face — the reference's own conditional, probed on all 11. The card
+ *  class carries `group` unconditionally (the reference's own class on
+ *  all 11 — the reveal family's scope). OUR kept supersets at the call
+ *  site: the aria-label carrying the template name + the `_blank`
+ *  noopener navigation (the Learning watch() precedent — the
+ *  reference's same-tab external navigation is a UX hazard; the
+ *  reference's own button is unlabeled). The button/overlay faces are
+ *  mode-independent whites — no dark twins needed (the TUTORIAL_CARD
+ *  watchBtn precedent). */
+export const ROUTINE_VIDEO_CARD = {
+  wrap: "relative h-40 overflow-hidden",
+  img: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300",
+  overlay:
+    "absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center",
+  /** The reference's own base (its string DROPS the stock rounded-md/
+   *  text-sm — the arms carry rounded-md + text-xs; composing the full
+   *  stock base would put text-sm and text-xs in one attribute, a
+   *  cascade race) + the SMALLER watch form (h-8 text-xs — probed; the
+   *  Learning family's h-9 text-sm is a sibling, not this one). The
+   *  white face + gray-100 hover are mode-independent (the dark-pair
+   *  census's structural exemption — the TUTORIAL_CARD watchBtn
+   *  precedent declares the hover VALUE explicitly). */
+  watchBtn:
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-8 rounded-md px-3 text-xs bg-white text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-100",
+  icon: "h-4 w-4 mr-2",
+} as const;
+
 /** The Profile Theme Mode picker — WH-17 (F-2): the reference's border-2
  *  card grid (probed live): `grid grid-cols-3 gap-3` of `p-4 rounded-xl
  *  border-2 transition-all flex flex-col items-center gap-2` cards with
