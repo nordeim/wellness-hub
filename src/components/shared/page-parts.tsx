@@ -137,35 +137,48 @@ export function LoadingBlock({ label }: { label: string }) {
  *  The verified maps live in constants.ts; the WH-17 chip-vocabulary
  *  census in tests/src-census.test.ts pins the system. WH-9 (F-2b):
  *  the `className` prop retired — zero call sites (studyresources's icon
- *  chip is the only live `icon` consumer; none styles the span). */
+ *  chip is the only live `icon` consumer; none styles the span).
+ *
+ *  WH-29 (F-B/F-C): the reference's chips are the stock shadcn Badge —
+ *  a DIV, not a span (the sr-chip lesson: an element-tag vocabulary
+ *  hides behind identical visual faces) — and it carries TWO variants
+ *  per chip ROLE, decoded live on its Learning card: the category chip
+ *  the SECONDARY family (below) and the difficulty chip the OUTLINE
+ *  family (a plain VISIBLE border, no border-transparent, no shadow,
+ *  no hover arm, no bg — 12 instances). The variant prop owns the
+ *  split; the tint/text classes compose after either base exactly as
+ *  the reference's variants do. */
+const SOLID_BASE =
+  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent shadow hover:bg-primary/80";
+const OUTLINE_BASE =
+  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground";
+
 export function OptionChip({
   label,
   icon,
   tint,
   text,
+  variant = "solid",
 }: {
   label: string;
   icon?: string;
   tint: string;
   text: string;
+  /** "solid" (default — the secondary Badge family: the category chips,
+   *  the routines easy/moderate difficulty chips) | "outline" (the
+   *  outline Badge family — the Learning difficulty chips). */
+  variant?: "solid" | "outline";
 }) {
   return (
-    <span
+    <div
       className={cn(
-        // WH-24: the stock shadcn Badge form (probed on the reference's
-        // rendered chips — the Learning category badges + the routines
-        // difficulty badges): transition-colors + the plain-focus ring-2
-        // family + the shadow + hover:bg-primary/80, NO gap arm (the
-        // reference's Badge carries none; the one icon consumer renders
-        // an unobservable zero-row face). The tint classes compose after
-        // the base exactly as the reference's variants do.
-        "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent shadow hover:bg-primary/80",
+        variant === "outline" ? OUTLINE_BASE : SOLID_BASE,
         tint,
         text,
       )}
     >
       {icon && <span aria-hidden="true">{icon}</span>}
       {label}
-    </span>
+    </div>
   );
 }

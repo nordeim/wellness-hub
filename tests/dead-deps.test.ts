@@ -138,6 +138,17 @@ const PINNED_RESOLUTIONS = {
   "deepmerge-ts": "8.0.2",
   "source-map-js": "1.2.2",
   zod: "4.6.7",
+  // WH-29 (F-H): minimatch GHSA-g3hv-75wg-m249 (ReDoS via globparts
+  // amplification, < 11.0.1) — reached through the eslint chains: the
+  // root 3.1.5 (eslint/@eslint/eslintrc/@eslint/config-array/
+  // eslint-plugin-import/jsx-a11y/react, all ^3.x ranges) + a NESTED
+  // @typescript-eslint/typescript-estree/minimatch@10.2.6. The override
+  // to registry-latest 11.0.3 is RANGE-BREAKING but API-compatible at
+  // every call site the lint gate exercises (eslint 9.39.5 runs clean
+  // on 11.0.3 — the gate is the proof). The WH-8 "zero vulnerabilities"
+  // posture had aged out: a new advisory landed under the locked
+  // versions between the periodic re-triages.
+  minimatch: "11.0.3",
 } as const;
 
 it("WH-8 (F-3): the lockfile resolves the advisory-zero versions", () => {
@@ -148,7 +159,7 @@ it("WH-8 (F-3): the lockfile resolves the advisory-zero versions", () => {
     const re = new RegExp(`"${name}": \\["${name}@${version}"`);
     expect(
       re.test(lock),
-      `bun.lock must resolve ${name} at ${version} (the WH-8 advisory-zero override) — found no \\"${name}@${version}\\" resolution`,
+      `bun.lock must resolve ${name} at ${version} (the advisory-zero override) — found no \\"${name}@${version}\\" resolution`,
     ).toBe(true);
   }
 
@@ -159,4 +170,25 @@ it("WH-8 (F-3): the lockfile resolves the advisory-zero versions", () => {
   const zodResolutions = [...lock.matchAll(/"zod@([\d.]+)"/g)].map((m) => m[1]);
   expect(zodResolutions.length, "exactly one zod resolution (the direct 4.6.7 — the eslint-plugin peer joins it via the override)").toBe(1);
   expect(zodResolutions[0]).toBe("4.6.7");
+});
+
+it("WH-29 (F-H): every minimatch resolution is the advisory-cleared 11.0.3 (the nested-copy scan)", () => {
+  // The s198 nested-copy doctrine, applied to the WH-29 override: the
+  // override forces ALL resolutions, but a lockfile regen (or a future
+  // dependency bump reintroducing a nested requirement) could leave a
+  // vulnerable copy surviving beside the pinned root. Every
+  // minimatch@X.Y.Z resolution in the lockfile must read 11.0.3 — the
+  // pre-override tree carried BOTH a root 3.1.5 and a nested 10.2.6,
+  // both inside the advisory range.
+  const lock = readFileSync(join(REPO_ROOT, "bun.lock"), "utf8");
+  const resolutions = [...lock.matchAll(/minimatch@([\d.]+)/g)].map((m) => m[1]);
+  expect(
+    resolutions.length,
+    "at least one minimatch resolution must exist (the eslint chains depend on it — a disappearing resolution means the override or the tree broke)",
+  ).toBeGreaterThan(0);
+  const offenders = resolutions.filter((v) => v !== "11.0.3");
+  expect(
+    offenders,
+    `every minimatch resolution must be 11.0.3 (GHSA-g3hv-75wg-m249 cleared) — found off-version resolutions: ${offenders.join(", ")}`,
+  ).toEqual([]);
 });

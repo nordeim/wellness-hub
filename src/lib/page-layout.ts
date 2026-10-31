@@ -271,6 +271,47 @@ export const MOOD_ENTRY_LIST = {
   energy: "text-sm text-gray-600 mb-3 dark:text-gray-400",
 } as const;
 
+/** The Goals page's Achievements rows — WH-29 (F-G), decoded from the
+ *  reference's own compiled bundle (`/assets/index-Bn9GF0-W.js`, the
+ *  GU() goals component): its Achievement entity is a PER-USER row
+ *  table (the demo account carries ZERO rows — the empty state is the
+ *  FACE, not a data gap), rendered as a vertical space-y-3 list of
+ *  earned/unearned tiles. The decoded template:
+ *
+ *    <div class="p-4 rounded-xl border transition-all
+ *         bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200">
+ *      <div class="flex items-start gap-3">
+ *        <div class="text-3xl">{badge_icon || "🏆"}</div>
+ *        <div class="flex-1">
+ *          <h5 class="font-semibold text-gray-900 mb-1">{name}</h5>
+ *          <p class="text-xs text-gray-600 mb-2">{description}</p>
+ *          <div class="flex items-center justify-between">
+ *            <Badge variant="outline" class="text-xs">{category…}</Badge>
+ *            {earned && <span class="text-xs text-amber-600 font-semibold">
+ *              +{points} pts</span>}
+ *          </div>
+ *        </div>
+ *      </div>
+ *    </div>
+ *
+ *  TWO documented deviations (PAD §11): the category chip OMITS — the
+ *  reference's platform rows carry a category whose values are
+ *  unobservable at zero rows and our Badge model has no category
+ *  column (inventing one is not decode) — and the points span rides
+ *  justify-end (the reference's justify-between carries its category
+ *  chip on the left; with the chip omitted, the right-side placement
+ *  is the face). Our dark twins follow the amber tip-box convention. */
+export const ACHIEVEMENT_TILE = {
+  container: "space-y-3",
+  tile: "p-4 rounded-xl border transition-all bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200 dark:from-yellow-950/40 dark:to-amber-950/40 dark:border-yellow-900",
+  inner: "flex items-start gap-3",
+  icon: "text-3xl",
+  name: "font-semibold text-gray-900 mb-1 dark:text-gray-100",
+  description: "text-xs text-gray-600 mb-2 dark:text-gray-400",
+  row: "flex items-center justify-end",
+  points: "text-xs text-amber-600 font-semibold dark:text-amber-400",
+} as const;
+
 /** Page header — the redesign's anatomy: a `text-4xl` gradient H1 (the
  *  module's stops land via the theme, `mb-2` against the subtitle), a
  *  `text-gray-600` subtitle, right-aligned actions. The ROW form is the
@@ -434,7 +475,7 @@ export const TUTORIAL_CARD = {
   duration: "absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded",
   header: "flex flex-col space-y-1.5 p-6",
   titleRow: "flex items-start justify-between gap-2 mb-2",
-  title: "font-semibold tracking-tight text-lg line-clamp-2 text-foreground",
+  title: "font-semibold tracking-tight text-lg line-clamp-2",
   chipsRow: "flex flex-wrap gap-2",
   body: "p-6 pt-0",
   desc: "text-sm text-gray-600 line-clamp-3 dark:text-gray-400",

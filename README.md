@@ -5,7 +5,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.19-2D3748?logo=prisma)](https://www.prisma.io/)
-[![Tests](https://img.shields.io/badge/tests-358%20unit%20+%2066%20e2e-brightgreen)](#testing)
+[![Tests](https://img.shields.io/badge/tests-362%20unit%20+%2067%20e2e-brightgreen)](#testing)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
 A complete, self-hostable **student wellbeing application** — a production-grade
@@ -40,7 +40,7 @@ Vitest + Playwright test battery pinning all of it in place.
 | 📖 Study Resources | 8 resource types, 5-star ratings, tag chips, search filter |
 | ⏰ Reminders | Type/priority/repeat model with completion and status derivation |
 | 🎓 Learning Center | 12 seeded tutorials with category/difficulty filters and search |
-| 🏆 Goals & Achievements | Points engine, goal progress logging, 8-badge auto-award catalog |
+| 🏆 Goals & Achievements | Points engine, goal progress logging, 8-badge auto-award engine (earned badges render as the reference's vertical tiles) |
 | 🎨 Profile & Customization | Light/Dark/Auto mode, 8 color presets, font/radius/animation preferences — applied live, synced server-side |
 | 🔐 Auth ladder | Signup with hashed OTP verification, forgot/reset password, login rate limiting, session revocation |
 
@@ -57,8 +57,8 @@ Vitest + Playwright test battery pinning all of it in place.
 | ORM | Prisma | 6.19 | Schema + SQLite driver |
 | Database | SQLite | — | `db/custom.db` at the repo root, git-ignored |
 | Validation | Zod | 4 | Every API body boundary (`parseBody()`) |
-| Unit tests | Vitest | 5 | 358 checks / 25 suites |
-| E2E tests | Playwright | 1.64 | 66 checks (6 specs + the auth setup project) against the production standalone server |
+| Unit tests | Vitest | 5 | 362 checks / 25 suites |
+| E2E tests | Playwright | 1.64 | 67 checks (6 specs + the auth setup project) against the production standalone server |
 
 ```mermaid
 flowchart TB
@@ -146,8 +146,8 @@ Requires **Node.js ≥ 20** and **bun ≥ 1.1**.
 ## Testing
 
 ```bash
-bun run test         # Vitest — 358 checks, 25 suites (node-safe seams)
-bun run test:e2e     # Playwright — 66 checks (run `bun run build` first:
+bun run test         # Vitest — 362 checks, 25 suites (node-safe seams)
+bun run test:e2e     # Playwright — 67 checks (run `bun run build` first:
                      # boots the PRODUCTION standalone server on an isolated
                      # port with its own scratch db/e2e.db)
 bun run lint         # eslint, --max-warnings 0
@@ -207,7 +207,7 @@ reference's own preset engine behaves), and mounts at the ROOT layout
 - PWA manifest + per-route OpenGraph/Twitter metadata + `sitemap.xml`
 - Accessibility superset: focus rings, aria states, 44px touch targets — pinned by the axe a11y net + the computed-contrast leg (WCAG 2.1+2.2 A+AA, zero violations, light AND dark states, every login-family route)
 - Zod validation at every API boundary; bounded readers; per-IP rate limits
-- 358 unit + 66 e2e checks pinning the behavior
+- 362 unit + 67 e2e checks pinning the behavior
 
 ## Deployment
 

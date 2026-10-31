@@ -170,7 +170,7 @@ it("WH-6: src/lib/api.ts exports exactly the live contract surface (9)", () => {
   );
 });
 
-it("WH-6: no duplicated adjacent return statements in src", () => {
+it("WH-6/WH-29: no unreachable return-followed-by-return statements in src", () => {
   const files: string[] = [];
   collect(join(REPO_ROOT, "src"), files, [".ts", ".tsx"]);
   const dups: string[] = [];
@@ -179,11 +179,20 @@ it("WH-6: no duplicated adjacent return statements in src", () => {
     for (let i = 1; i < lines.length; i++) {
       const prev = lines[i - 1].trim();
       const curr = lines[i].trim();
+      // WH-6 form: the EXACT duplicated pair (the copy-paste class).
+      // WH-29 widening: ANY `return …;` line directly followed by a
+      // `return`-starting line is unreachable — the first return exits
+      // unconditionally. The WH-29 live catch: the awardBadges
+      // insertion landed its new return BEFORE the old `return ok(row);`
+      // in the workouts + mood-entries POST routes and the old line
+      // survived as dead code for seventeen rounds — the exact-duplicate
+      // constraint (`prev === curr`) could never see it because the two
+      // returns DIFFER in content.
       if (
         prev &&
-        prev === curr &&
         /^return\b/.test(prev) &&
-        prev.endsWith(";")
+        prev.endsWith(";") &&
+        /^return\b/.test(curr)
       ) {
         dups.push(`${file.replace(REPO_ROOT + "/", "")}:${i + 1}: ${curr}`);
       }
@@ -191,7 +200,7 @@ it("WH-6: no duplicated adjacent return statements in src", () => {
   }
   expect(
     dups,
-    "duplicated adjacent return statements — the second is unreachable dead code (F-2 class, the reminders/assignments/events/study-resources copy-paste)",
+    "unreachable return-followed-by-return statements — the second can never execute (the WH-6 copy-paste class + the WH-29 awardBadges-insertion class the exact-duplicate rule could not see)",
   ).toEqual([]);
 });
 
@@ -489,7 +498,7 @@ const PROPPED_COMPONENTS: Record<string, string[]> = {
   // reference's empty states are a bare centered paragraph (probed:
   // `<p class="text-center text-gray-500 py-12">`, no chip).
   "src/components/shared/page-parts.tsx:EmptyState": ["hint"],
-  "src/components/shared/page-parts.tsx:OptionChip": ["icon", "label", "text", "tint"],
+  "src/components/shared/page-parts.tsx:OptionChip": ["icon", "label", "text", "tint", "variant"],
   "src/components/shared/page-parts.tsx:LoadingBlock": ["label"],
   "src/components/layout/sidebar.tsx:SidebarNav": [],
   "src/components/layout/sidebar.tsx:SidebarFooter": [],
@@ -1367,12 +1376,19 @@ it("WH-17: the chip-vocabulary census — every OptionMeta chip rides the refere
   ).toEqual([]);
 
   // The anatomy: the OptionChip primitive renders the reference's Badge form.
+  // WH-29 restructure: the base strings moved from the function body into
+  // the SOLID_BASE/OUTLINE_BASE module constants (the two-variant split) —
+  // the census reads BOTH bases.
   const chipSrc = readFileSync(join(REPO_ROOT, "src/components/shared/page-parts.tsx"), "utf8");
-  const chipClass = chipSrc.match(/function OptionChip[\s\S]{0,900}?"([^"]*rounded[^"]*)"/)?.[1] ?? "";
+  const chipClass = [
+    chipSrc.match(/const SOLID_BASE =\s*"([^"]*)"/)?.[1] ?? "",
+    chipSrc.match(/const OUTLINE_BASE =\s*"([^"]*)"/)?.[1] ?? "",
+  ].join(" ");
   expect(chipClass.includes("rounded-md"), "the OptionChip shape is the reference's rounded-md (6px) — the stale rounded-full is the pre-redesign form").toBe(true);
   expect(chipClass.includes("font-semibold"), "the OptionChip weight is the reference's font-semibold (600) — the stale font-medium is the pre-redesign form").toBe(true);
   expect(chipClass.includes("border"), "the OptionChip carries the Badge's 1px (transparent) border — computed-verified on the reference").toBe(true);
   expect(chipClass.includes("rounded-full"), "the stale rounded-full form must not return").toBe(false);
+  expect(chipSrc.includes('variant === "outline" ? OUTLINE_BASE : SOLID_BASE'), "the variant arm selects between the two bases (the WH-29 split)").toBe(true);
 });
 
 it("WH-18: the dark-variant pin — globals.css declares the class-based dark variant (the dark-mode strategy cure)", () => {
@@ -2193,7 +2209,12 @@ it("WH-24: the module-toolbar + chip-form census — the stock search family + t
   // focus:ring-ring focus:ring-offset-2 border-transparent shadow
   // hover:bg-primary/80 + the tint)
   const chipSrc = partsSrc;
-  const chipClass = chipSrc.match(/function OptionChip[\s\S]{0,900}?"([^"]*rounded[^"]*)"/)?.[1] ?? "";
+  // WH-29 restructure: the base strings moved into the SOLID_BASE/
+  // OUTLINE_BASE module constants (the two-variant split) — the arms
+  // census reads the SOLID base (the secondary family the WH-24 round
+  // probed; the outline base deliberately drops the shadow + hover arms,
+  // pinned by the WH-29 chip-family census).
+  const chipClass = chipSrc.match(/const SOLID_BASE =\s*"([^"]*)"/)?.[1] ?? "";
   for (const arm of [
     "transition-colors",
     "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
@@ -3002,5 +3023,258 @@ it("WH-28: the shell-tag census — the wordmark h2 + the mobile-title h1 (the r
   expect(
     failures,
     "the shell tag family must hold — the WH-28 cure (h2 wordmark + h1 mobile title, classes untouched)",
+  ).toEqual([]);
+});
+
+it("WH-29: the chip-family census — the stock Badge DIV + the two-variant split (the difficulty chips ride the OUTLINE base, the category chips the solid)", () => {
+  // The WH-29 probe (live on the reference's Learning + Routines pages,
+  // both seeded data-bearing): the reference's chips are DIVs (its Badge
+  // is the stock shadcn <div> form — the sr-chip lesson again: an
+  // element-tag vocabulary hides behind identical visual faces), and it
+  // carries TWO Badge variants on the same tutorial card:
+  //   the category chip (the SECONDARY family):
+  //     inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs
+  //     font-semibold transition-colors focus:outline-none focus:ring-2
+  //     focus:ring-ring focus:ring-offset-2 border-transparent shadow
+  //     hover:bg-primary/80 bg-blue-100 text-blue-700
+  //   the difficulty chip (the OUTLINE family — 12 instances live):
+  //     inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs
+  //     font-semibold transition-colors focus:outline-none focus:ring-2
+  //     focus:ring-ring focus:ring-offset-2 text-foreground
+  // — a plain VISIBLE border, NO border-transparent, NO shadow, NO hover
+  // arm, NO bg. Ours rendered every chip through the secondary base:
+  // the difficulty chip carried `border-transparent shadow
+  // hover:bg-primary/80 bg-transparent` — an INVISIBLE border + a shadow
+  // + a hover arm the reference does not carry. The routines difficulty
+  // chips (easy/moderate at bg-green-100/bg-yellow-100) ride the
+  // SECONDARY family on the reference — the split is per CHIP ROLE, not
+  // per page.
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const ppSrc = strip(readFileSync(join(REPO_ROOT, "src/components/shared/page-parts.tsx"), "utf8"));
+  const learnSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/learning/learning-page.tsx"), "utf8"));
+  const failures: string[] = [];
+
+  // (a) the component renders the reference's DIV (the stock Badge tag)
+  if (!/<div\s*\n?\s*className=\{cn\(/.test(ppSrc) || /<span\s*\n?\s*className=\{cn\(/.test(ppSrc.replace(/<span aria-hidden="true">\{icon\}<\/span>/g, ""))) {
+    failures.push("OptionChip must render a <div> (the reference's Badge is the stock shadcn div) — the outer <span> retires (the icon's inner aria-hidden span stays)");
+  }
+  if (!/\{icon && <span aria-hidden="true">\{icon\}<\/span>\}/.test(ppSrc)) {
+    failures.push("the icon's inner aria-hidden span stays exactly as-is (only the outer element tag converts)");
+  }
+
+  // (b) the two-variant split: the solid base (today's WH-24 string) +
+  // the outline base (the reference's difficulty form)
+  if (!/const SOLID_BASE =\s*"inline-flex items-center rounded-md border px-2\.5 py-0\.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent shadow hover:bg-primary\/80"/.test(ppSrc)) {
+    failures.push("the solid base must stay byte-identical (the WH-24 secondary family — the category/routines/events/goals/reminders/assignments/exercise chips)");
+  }
+  if (!/const OUTLINE_BASE =\s*"inline-flex items-center rounded-md border px-2\.5 py-0\.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"/.test(ppSrc)) {
+    failures.push("the outline base must exist — the reference's difficulty form: a plain VISIBLE border, no border-transparent, no shadow, no hover arm, no bg");
+  }
+  if (!/variant = "solid"/.test(ppSrc) || !/variant === "outline" \? OUTLINE_BASE : SOLID_BASE/.test(ppSrc)) {
+    failures.push("the variant prop must default to solid and select the outline base only when asked (the two-variant split)");
+  }
+
+  // (c) the Learning page's split: the difficulty chip rides the outline
+  // variant; the category chip rides the solid base
+  if (!/<OptionChip label=\{d\.label\} tint=\{d\.tint\} text=\{d\.text\} variant="outline" \/>/.test(learnSrc)) {
+    failures.push('the Learning difficulty chip must pass variant="outline" — the reference renders the outline Badge family there (12 instances)');
+  }
+  if (!/<OptionChip label=\{c\.label\} tint=\{c\.tint\} text=\{c\.text\} \/>/.test(learnSrc)) {
+    failures.push("the Learning category chip stays on the solid base (the reference's bg-blue-100 text-blue-700 secondary family)");
+  }
+
+  expect(
+    failures,
+    "the chip family must hold — the WH-29 cure (the DIV tag + the two-variant split)",
+  ).toEqual([]);
+});
+
+it("WH-29: the achievements-section census — the reference's earned-only vertical tiles (the bundle-decoded entity model; the catalog grid retires)", () => {
+  // The WH-29 decode (the reference's own bundle, /assets/index-Bn9GF0-W.js
+  // — the GU() goals component; the surface was unobservable through
+  // WH-28 because the demo account carries zero Achievement rows):
+  //   const [goals, setGoals] = useState([]);
+  //   const [n, setN] = useState([]);            // Achievement.list("-earned_date")
+  //   …
+  //   <CardHeader><CardTitle className="flex items-center gap-2">
+  //     <Trophy className="w-5 h-5"/>"Achievements"</CardTitle></CardHeader>
+  //   <CardContent>
+  //     {n.length === 0 ? (
+  //       <p className="text-center text-gray-500 py-12 text-sm">
+  //         "Achievements will appear here as you progress!"
+  //       </p>
+  //     ) : (
+  //       <div className="space-y-3">
+  //         {n.map(j => (
+  //           <div className={`p-4 rounded-xl border transition-all ${j.earned
+  //               ? "bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200"
+  //               : "bg-gray-50 border-gray-200 opacity-60"}`}>
+  //             <div className="flex items-start gap-3">
+  //               <div className={`text-3xl ${j.earned ? "" : "grayscale"}`}>
+  //                 {j.badge_icon || "🏆"}</div>
+  //               <div className="flex-1">
+  //                 <h5 className="font-semibold text-gray-900 mb-1">{j.name}</h5>
+  //                 <p className="text-xs text-gray-600 mb-2">{j.description}</p>
+  //                 <div className="flex items-center justify-between">
+  //                   <Badge variant="outline" className="text-xs">{j.category…}</Badge>
+  //                   {j.earned && <span className="text-xs text-amber-600 font-semibold">
+  //                     +{j.points} pts</span>}
+  //                 </div>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         ))}
+  //       </div>
+  //     )}
+  // The reference's Achievement entity is a PER-USER row table (the demo
+  // account carries ZERO rows → the empty state is the FACE, not a data
+  // gap). Ours shipped an always-on 2×4 CATALOG grid — the empty state
+  // was UNREACHABLE (the API returns the full 8-row catalog so the
+  // badges.length condition never zeroed). The cure: earned-only rows in
+  // the decoded shape. TWO documented deviations ride the PAD §11 ledger:
+  // the category chip OMITS (the reference's platform rows carry a
+  // category whose values are unobservable at zero rows; our Badge model
+  // has no category column — inventing one is not decode) and the points
+  // span rides justify-end (the reference's justify-between carries its
+  // category chip on the left; with the chip omitted, the right-side
+  // placement is the face).
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const goalsSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/goals/goals-page.tsx"), "utf8"));
+  const plSrc = strip(readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8"));
+  const failures: string[] = [];
+
+  // (a) the record exists with the reference's decoded classes (+ our
+  // dark twins, the amber tip-box convention)
+  const recordNeedles: Array<[string, RegExp]> = [
+    ["container", /container:\s*"space-y-3"/],
+    ["tile", /tile:\s*"p-4 rounded-xl border transition-all bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200 dark:from-yellow-950\/40 dark:to-amber-950\/40 dark:border-yellow-900"/],
+    ["inner", /inner:\s*"flex items-start gap-3"/],
+    ["icon", /icon:\s*"text-3xl"/],
+    ["name", /name:\s*"font-semibold text-gray-900 mb-1 dark:text-gray-100"/],
+    ["description", /description:\s*"text-xs text-gray-600 mb-2 dark:text-gray-400"/],
+    ["row", /row:\s*"flex items-center justify-end"/],
+    ["points", /points:\s*"text-xs text-amber-600 font-semibold dark:text-amber-400"/],
+  ];
+  for (const [name, re] of recordNeedles) {
+    if (!re.test(plSrc)) {
+      failures.push(`ACHIEVEMENT_TILE.${name} must exist in page-layout.ts at the reference's bundle-decoded classes (the WH-29 decode)`);
+    }
+  }
+  if (!/export const ACHIEVEMENT_TILE/.test(plSrc)) {
+    failures.push("the ACHIEVEMENT_TILE record must be exported (the record-per-family doctrine)");
+  }
+
+  // (b) the page renders earned-only: the empty branch conditions on the
+  // EARNED count (never the catalog length), the rows come from the
+  // earnedAt filter
+  if (!/earnedBadges/.test(goalsSrc) || !/b\.earnedAt != null/.test(goalsSrc)) {
+    failures.push("the section's rows must be the EARNED badges (earnedAt != null) — the reference's per-user Achievement rows, not the catalog");
+  }
+  if (!/earnedBadges\.length === 0 \?/.test(goalsSrc)) {
+    failures.push("the empty state's condition must be the EARNED count — the catalog-length condition kept the empty state unreachable for twelve rounds");
+  }
+  if (!/>Achievements will appear here as you progress!</.test(goalsSrc)) {
+    failures.push("the reference's empty-state text stays (now REACHABLE at the seeded zero)");
+  }
+
+  // (c) the render rides the record: the vertical container + the tile +
+  // the H5 name + the +N pts span
+  if (!/<div className=\{ACHIEVEMENT_TILE\.container\}>/.test(goalsSrc)) {
+    failures.push("the rows container must be the reference's vertical DIV at ACHIEVEMENT_TILE.container (space-y-3) — never the 2×4 catalog grid");
+  }
+  if (!/<h5 className=\{ACHIEVEMENT_TILE\.name\}>/.test(goalsSrc)) {
+    failures.push("the row's name must be the reference's H5 at ACHIEVEMENT_TILE.name");
+  }
+  if (!/\{"\+"\{b\.points\} pts"\}/.test(goalsSrc) && !/\+\{b\.points\} pts/.test(goalsSrc)) {
+    failures.push("the earned row carries the reference's amber \"+N pts\" span at ACHIEVEMENT_TILE.points");
+  }
+  if (!/className=\{ACHIEVEMENT_TILE\.points\}/.test(goalsSrc)) {
+    failures.push("the +N pts span rides ACHIEVEMENT_TILE.points");
+  }
+
+  // (d) the retired forms: the catalog grid + the "0/8 earned" action chip
+  if (/grid grid-cols-2 sm:grid-cols-4 gap-4/.test(goalsSrc)) {
+    failures.push('the 2×4 catalog grid ("grid grid-cols-2 sm:grid-cols-4 gap-4") retires from the goals page — the reference renders earned-only vertical tiles');
+  }
+  if (/earned$/.test(goalsSrc) && /\{badgesEarned\}\/\{badgesTotal\} earned/.test(goalsSrc)) {
+    failures.push('the "0/8 earned" section action retires — the reference\'s Achievements header is title-only (the trophy icon + the word)');
+  }
+
+  expect(
+    failures,
+    "the achievements section must hold — the WH-29 cure (earned-only vertical tiles, the reachable empty state, the catalog grid retired)",
+  ).toEqual([]);
+});
+
+it("WH-29: the routines-card census — the DIV card with the UNCLIPPED strip + the div/p benefits + the div titles (the seeded-card element vocabulary)", () => {
+  // The WH-29 probe (live, pixel-verified on the reference): its routine
+  // card is a DIV at
+  //   rounded-xl border bg-card text-card-foreground border-none shadow-lg
+  //   hover:shadow-xl transition-all h-full flex flex-col group
+  // with overflow VISIBLE (computed) — the h-2 category strip paints
+  // SQUARE corners past the 12px radius (the corner scan reads amber
+  // f59e0b at x=0..10/y=0..7 where a clipped card reads the page
+  // background). Ours carried overflow-hidden — the strip followed the
+  // rounded silhouette. The benefits list is a div.space-y-1 of
+  //   <p class="text-xs text-gray-600 flex items-start gap-1">
+  //     <span class="text-green-500">✓</span>…</p>
+  // rows — ours a ul/li. The titles on BOTH seeded cards (tutorial +
+  // routines) are bare DIVs at `font-semibold tracking-tight text-lg
+  // [line-clamp-2]` — ours h3s with an extra text-foreground
+  // (computed-equal; the class is string-level drift).
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const roSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/routines/routines-page.tsx"), "utf8"));
+  const learnSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/learning/learning-page.tsx"), "utf8"));
+  const plSrc = strip(readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8"));
+  const failures: string[] = [];
+
+  // (a) the routines card: a DIV, no overflow-hidden (the strip's square
+  // corners are the reference's own face)
+  if (!/<div\s*key=\{t\.id\}\s*className="rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all h-full flex flex-col"/.test(roSrc)) {
+    failures.push('the routines card must be a DIV at "rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all h-full flex flex-col" — NO overflow-hidden (the reference\'s strip bleeds past the radius, pixel-verified)');
+  }
+  if (/overflow-hidden rounded-xl border-none bg-surface/.test(roSrc)) {
+    failures.push("the overflow-hidden clipping retires from the routines card — the reference's overflow is VISIBLE and its strip corners are SQUARE");
+  }
+  if (/<section\s*key=\{t\.id\}/.test(roSrc)) {
+    failures.push("the routines card's <section> retires — the reference's card is a DIV");
+  }
+
+  // (b) the strip still renders as the card's first child (the category
+  // gradient at h-2 — unchanged)
+  if (!/h-2 bg-gradient-to-r/.test(roSrc)) {
+    failures.push("the h-2 category strip stays (the WH-24 face) — only its corner clipping changes");
+  }
+
+  // (c) the benefits list: the div container + the p rows (the ul/li
+  // retires)
+  if (!/<div className="space-y-1 mb-4">/.test(roSrc)) {
+    failures.push('the benefits list must be a DIV at "space-y-1 mb-4" — the reference\'s div/p family');
+  }
+  if (/<ul className="space-y-1 mb-4">/.test(roSrc) || /<li key=\{b\}/.test(roSrc)) {
+    failures.push("the benefits ul/li retires — the reference renders div rows with <p> children");
+  }
+  if (!/<p key=\{b\} className="flex items-start gap-1 text-xs text-gray-600 dark:text-gray-400">/.test(roSrc)) {
+    failures.push('the benefits rows must be <p> elements carrying the same classes (the ✓ span inside)');
+  }
+
+  // (d) both seeded-card titles are DIVs without text-foreground (the
+  // reference's own strings)
+  if (!/<div className="font-semibold tracking-tight text-lg">\{t\.name\}<\/div>/.test(roSrc)) {
+    failures.push('the routines card title must be a bare DIV at "font-semibold tracking-tight text-lg" — the h3 + text-foreground retire');
+  }
+  if (!/title:\s*"font-semibold tracking-tight text-lg line-clamp-2"/.test(plSrc)) {
+    failures.push('TUTORIAL_CARD.title must drop text-foreground — the reference\'s own string is "font-semibold tracking-tight text-lg line-clamp-2"');
+  }
+  if (!/<div className=\{TUTORIAL_CARD\.title\}>\{t\.title\}<\/div>/.test(learnSrc)) {
+    failures.push("the tutorial card title must render as a DIV at TUTORIAL_CARD.title — the h3 retires");
+  }
+  if (/<h3 className=\{TUTORIAL_CARD\.title\}>/.test(learnSrc) || /<h3 className="font-semibold tracking-tight text-lg/.test(roSrc)) {
+    failures.push("the seeded-card <h3> titles retire on both pages — the reference's element vocabulary is the DIV");
+  }
+
+  expect(
+    failures,
+    "the seeded-card vocabulary must hold — the WH-29 cure (DIV cards, unclipped strip, div/p benefits, DIV titles)",
   ).toEqual([]);
 });

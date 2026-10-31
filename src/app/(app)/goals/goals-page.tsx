@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD, EMPTY_STATE, TEXTAREA_FIELD, FORM_GRID, FORM_BUTTONS } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD, EMPTY_STATE, TEXTAREA_FIELD, FORM_GRID, FORM_BUTTONS, ACHIEVEMENT_TILE } from "@/lib/page-layout";
 import { GOAL_CATEGORIES, GOAL_FREQUENCIES, goalCategoryMeta, goalFrequencyMeta } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -151,6 +151,11 @@ export default function GoalsClientPage() {
   const totalPoints = achievements?.totalPoints ?? 0;
   const badgesEarned = achievements?.badgesEarned ?? 0;
   const badgesTotal = achievements?.badgesTotal ?? 0;
+  // WH-29 (F-G): the Achievements section renders the EARNED badges only —
+  // the reference's per-user Achievement rows (bundle-decoded: its demo
+  // account carries ZERO rows and its section renders the bare empty
+  // state; our always-on 8-tile catalog grid retired with this round).
+  const earnedBadges = (achievements?.badges ?? []).filter((b) => b.earnedAt != null);
 
   if (!hydrated) {
     return (
@@ -404,50 +409,38 @@ export default function GoalsClientPage() {
       <SectionCard
         icon={Trophy}
         title="Achievements"
-        action={
-          <span className="text-xs text-muted">
-            {badgesEarned}/{badgesTotal} earned
-          </span>
-        }
       >
-        {(achievements?.badges.length ?? 0) === 0 ? (
+        {/* WH-29 (F-G): the reference's earned-only face — its header is
+            title-only (the trophy icon + the word; our "0/8 earned"
+            action chip retired) and its body carries the per-user EARNED
+            rows (the bundle-decoded vertical tiles) with the bare empty
+            state at zero earned. The catalog-with-progress view retired
+            with the grid; the 8-badge ENGINE (server-side awarding, the
+            toasts, the points) is unchanged. */}
+        {earnedBadges.length === 0 ? (
           <p className={cn(EMPTY_STATE.p, "text-sm")}>Achievements will appear here as you progress!</p>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {achievements?.badges.map((b) => {
-              const earned = b.earnedAt != null;
-              return (
-                <div
-                  key={b.id}
-                  className={cn(
-                    "flex flex-col items-center gap-1.5 rounded-xl border p-4 text-center",
-                    earned ? "border-primary/30 bg-primary/5" : "border-line bg-line-soft/40",
-                  )}
-                >
-                  <span
-                    className="flex h-12 w-12 items-center justify-center rounded-full text-2xl"
-                    style={{ backgroundColor: earned ? `${b.color}22` : undefined }}
-                    aria-hidden="true"
-                  >
-                    {b.icon}
-                  </span>
-                  <p className="text-sm font-semibold text-foreground">{b.name}</p>
-                  {/* WH-17 (F-4): gray-600 over gray-500 — the muted token
-                      computed 4.48:1 on the line-soft/40 wash (the badge
-                      catalog is our superset surface; the reference ships an
-                      empty state here), and the card-level opacity-60
-                      dimming retired with it (an axe-invisible contrast
-                      hazard — the effective fg compounds far below the
-                      reported ratio). */}
-                  <p className="text-xs text-gray-600 dark:text-gray-400">{b.description}</p>
-                  {earned && (
-                    <p className="text-xs font-medium text-primary">
-                      Earned {formatDate(b.earnedAt as string)} · +{b.points} pts
-                    </p>
-                  )}
+          <div className={ACHIEVEMENT_TILE.container}>
+            {earnedBadges.map((b) => (
+              <div key={b.id} className={ACHIEVEMENT_TILE.tile}>
+                <div className={ACHIEVEMENT_TILE.inner}>
+                  <div className={ACHIEVEMENT_TILE.icon} aria-hidden="true">{b.icon}</div>
+                  <div className="flex-1">
+                    <h5 className={ACHIEVEMENT_TILE.name}>{b.name}</h5>
+                    <p className={ACHIEVEMENT_TILE.description}>{b.description}</p>
+                    {/* The reference's bottom row carries an outline
+                        category Badge LEFT + the amber +N pts RIGHT; our
+                        Badge model carries no category column (the
+                        values are unobservable at the reference's zero
+                        rows) — the chip omits and the points ride the
+                        right edge (the documented PAD §11 deviation). */}
+                    <div className={ACHIEVEMENT_TILE.row}>
+                      <span className={ACHIEVEMENT_TILE.points}>+{b.points} pts</span>
+                    </div>
+                  </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         )}
       </SectionCard>

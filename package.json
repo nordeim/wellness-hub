@@ -1,7 +1,7 @@
 {
   "name": "wellness-hub",
   "version": "1.0.0",
-  "description": "Wellness Hub (EvolveWell) — Next.js 16 + React 19 + Prisma/SQLite student wellbeing application",
+  "description": "Wellness Hub (EvolveWell) \u2014 Next.js 16 + React 19 + Prisma/SQLite student wellbeing application",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
@@ -58,6 +58,7 @@
     "vite": "8.3.5",
     "deepmerge-ts": "8.0.2",
     "source-map-js": "1.2.2",
-    "zod": "4.6.7"
+    "zod": "4.6.7",
+    "minimatch": "11.0.3"
   }
 }

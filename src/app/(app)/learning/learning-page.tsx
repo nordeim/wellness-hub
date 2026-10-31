@@ -99,7 +99,7 @@ export default function LearningClientPage() {
             const c = tutorialCategoryMeta(t.category);
             const d = tutorialDifficultyMeta(t.difficulty);
             return (
-              <section key={t.id} className={TUTORIAL_CARD.card}>
+              <div key={t.id} className={TUTORIAL_CARD.card}>
                 {/* WH-24: the reference's group-hover REVEAL cover — the img
                     scales 1.05, the scrim goes 20% black, the Watch Now
                     rectangle fades in (our permanent scrim + always-visible
@@ -126,17 +126,24 @@ export default function LearningClientPage() {
                 </div>
                 <div className={TUTORIAL_CARD.header}>
                   <div className={TUTORIAL_CARD.titleRow}>
-                    <h3 className={TUTORIAL_CARD.title}>{t.title}</h3>
+                    {/* WH-29 (F-D): the reference's title is a bare DIV —
+                        our h3 + text-foreground retire (computed-equal;
+                        the tag vocabulary is the parity target). */}
+                    <div className={TUTORIAL_CARD.title}>{t.title}</div>
                   </div>
                   <div className={TUTORIAL_CARD.chipsRow}>
                     <OptionChip label={c.label} tint={c.tint} text={c.text} />
-                    <OptionChip label={d.label} tint={d.tint} text={d.text} />
+                    {/* WH-29 (F-B): the difficulty chip rides the OUTLINE
+                        Badge family — a plain visible border, no shadow,
+                        no hover arm (the reference's own variant split,
+                        decoded live: 12 instances). */}
+                    <OptionChip label={d.label} tint={d.tint} text={d.text} variant="outline" />
                   </div>
                 </div>
                 <div className={TUTORIAL_CARD.body}>
                   <p className={TUTORIAL_CARD.desc}>{t.description}</p>
                 </div>
-              </section>
+              </div>
             );
           })}
         </div>

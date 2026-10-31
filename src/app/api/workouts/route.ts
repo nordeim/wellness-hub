@@ -32,7 +32,6 @@ export async function POST(req: Request) {
     // First workout / 10th workout badge check.
     const fresh = await awardBadges(guard.user.id);
     return ok({ ...row, newBadges: fresh });
-    return ok(row);
   } catch {
     return ERR.INTERNAL();
   }

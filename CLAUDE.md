@@ -103,20 +103,20 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 | `bun run start` | Boot the standalone server |
 | `bun run lint` | ESLint (`--max-warnings 0`) |
 | `bun run typecheck` | `tsc --noEmit` |
-| `bun run test` | Vitest unit suite (358 checks) |
-| `bun run test:e2e` | Playwright (66 checks; build first) |
+| `bun run test` | Vitest unit suite (362 checks) |
+| `bun run test:e2e` | Playwright (67 checks; build first) |
 | `bun run gate` | The full chain in one command |
 
 ## Testing Strategy
 
 ### Test Pyramid
 
-- **Unit (Vitest, 358 checks / 25 suites)**: pure seams — auth helpers,
+- **Unit (Vitest, 362 checks / 25 suites)**: pure seams — auth helpers,
   db-path contract, wellness math (streaks/points/badges), schemas,
   theme engine, formatters, the dead-dependency census, the route/ui
   module census, the signup role pin, the docs-counts lockstep pin,
   the src-surface census pin.
-- **E2E (Playwright, 66 checks — 6 specs + the auth setup project)**: the
+- **E2E (Playwright, 67 checks — 6 specs + the auth setup project)**: the
   real UI in Chromium against the
   production standalone server — auth ladder, mobile drawer battery, shell
   nav (both route-case families, + the console-hygiene net: zero console
@@ -218,7 +218,10 @@ Hard rules enforced by lint: no synchronous `setState` in `useEffect`;
 - Domain seams: `src/lib/wellness.ts` (streaks, points, badge awarding,
   reminder status, tag codec) — pure, node-safe, unit-pinned.
 - Server-side badge awarding happens in `src/lib/badges-server.ts` at the
-  CRUD seams — never in components.
+  CRUD seams — never in components. The Goals Achievements section
+  renders EARNED badges only (WH-29, bundle-decoded: the reference's
+  Achievement entity is a per-user row table; the always-on catalog
+  grid retired — `ACHIEVEMENT_TILE` owns the tile geometry).
 
 ### API Design
 

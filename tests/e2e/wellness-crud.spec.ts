@@ -195,6 +195,46 @@ const pointsText = (await pointsCard.getByRole("heading").textContent()) ?? "0";
 expect(Number(pointsText)).toBeGreaterThanOrEqual(50);
 });
 
+test("goals: the achievements section — the reference's earned-only vertical tiles (the catalog grid retired)", async ({ page }) => {
+  // WH-29 (F-G): the reference's own bundle decodes the Achievements
+  // section as a PER-USER Achievement row table (its demo account carries
+  // zero rows — the empty state is the FACE), rendered as vertical
+  // space-y-3 tiles. Our always-on 2×4 catalog grid retired with the
+  // WH-29 cure; the section now renders EARNED badges only. By this leg
+  // of the spec, the earlier exercise + mood tests have earned
+  // first_workout ("First Step") + mood_first ("Self-Aware") — the
+  // section must show them as vertical tiles, NEVER the wholesale
+  // catalog (count < 8), with the decoded tile members (the h5 name +
+  // the amber "+N pts").
+  await page.goto("/Goals");
+
+  // The achievement tiles are the page's only `p-4 rounded-xl border`
+  // family (the Active Goals rows ride their own classes; the catalog
+  // tile retires with this cure). By this leg first_workout + mood_first
+  // (+ goal_first from the leg above) are EARNED and persisted in the
+  // suite's shared e2e db — the tiles are the only legal settled state,
+  // so the visibility wait doubles as the fetch settle (the pre-fetch
+  // face renders the empty-state branch at achievements===undefined;
+  // waiting for a TILE is waiting for the fetch to have landed). The
+  // empty state itself is pinned by the capture round's 11-goals at the
+  // seeded zero + the unit census's reachability condition.
+  const tiles = page.locator("div.p-4.rounded-xl.border");
+  await expect(tiles.first(), "the earned tiles: the earlier legs' badges (first_workout + mood_first) render as vertical tiles").toBeVisible();
+
+  // Never the 8-tile catalog — the reference shows per-user EARNED rows
+  // only (the wholesale catalog grid retired with the WH-29 cure).
+  const count = await tiles.count();
+  expect(count, "the achievements tiles: >= the badges earned by the earlier legs, never the 8-row catalog").toBeGreaterThanOrEqual(2);
+  expect(count, "the wholesale catalog grid never renders — the reference shows per-user EARNED rows only").toBeLessThan(8);
+
+  // The decoded members: the H5 name + the amber "+N pts" span.
+  await expect(tiles.first().locator("h5")).toBeVisible();
+  await expect(tiles.first().getByText(/\+\d+ pts/)).toBeVisible();
+
+  // The retired catalog-grid face: the 2×4 grid container is gone.
+  await expect(page.locator("div.grid.grid-cols-2.sm\\:grid-cols-4")).toHaveCount(0);
+});
+
 test("routines: schedule a template into My Routines", async ({ page }) => {
   await page.goto("/Routines");
 

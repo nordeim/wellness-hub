@@ -32,7 +32,6 @@ export async function POST(req: Request) {
     // Self-Aware + 7-Day Streak badge check.
     const fresh = await awardBadges(guard.user.id);
     return ok({ ...row, newBadges: fresh });
-    return ok(row);
   } catch {
     return ERR.INTERNAL();
   }

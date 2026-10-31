@@ -177,9 +177,9 @@ export default function RoutinesClientPage() {
           const diff = difficultyMeta(t.difficulty);
           const benefits = parseJsonArray(t.benefits);
           return (
-            <section
+            <div
               key={t.id}
-              className="overflow-hidden rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all h-full flex flex-col"
+              className="rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all h-full flex flex-col"
             >
               {/* WH-24: the reference's template card face — the category
                   strip runs DIRECTLY into the header (probed live: its
@@ -187,11 +187,20 @@ export default function RoutinesClientPage() {
                   imgCount 0 — its own template data carries the fields
                   its UI never renders; parity is a property of the
                   RENDERED FACE, so both video branches retire here while
-                  the seed data keeps the columns). */}
+                  the seed data keeps the columns).
+                  WH-29 (F-E): NO overflow-hidden — the reference's card
+                  computes overflow VISIBLE and its h-2 strip paints
+                  SQUARE corners past the 12px radius (pixel-verified:
+                  amber at the corner where a clipped card reads the
+                  page background). Our overflow-hidden was an
+                  undocumented deviation; the reference's own face is
+                  the target. */}
               <div className={cn("h-2 bg-gradient-to-r", routineCategoryStops(t.category))} aria-hidden="true" />
               <div className="flex flex-col space-y-1.5 p-6">
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h3 className="font-semibold tracking-tight text-lg text-foreground">{t.name}</h3>
+                  {/* WH-29 (F-D): the reference's title is a bare DIV —
+                      the h3 + text-foreground retire. */}
+                  <div className="font-semibold tracking-tight text-lg">{t.name}</div>
                   <OptionChip label={diff.label} tint={diff.tint} text={diff.text} />
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">{t.description}</p>
@@ -214,14 +223,17 @@ export default function RoutinesClientPage() {
                   </div>
                 )}
                 <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">Benefits:</p>
-                <ul className="space-y-1 mb-4">
+                {/* WH-29 (F-F): the reference's benefits family — a
+                    div.space-y-1 of <p> rows (the ✓ span inside), not a
+                    ul/li (the mood-list lesson on a seeded surface). */}
+                <div className="space-y-1 mb-4">
                   {benefits.map((b) => (
-                    <li key={b} className="flex items-start gap-1 text-xs text-gray-600 dark:text-gray-400">
+                    <p key={b} className="flex items-start gap-1 text-xs text-gray-600 dark:text-gray-400">
                       <span className="text-green-500" aria-hidden="true">✓</span>
                       {b}
-                    </li>
+                    </p>
                   ))}
-                </ul>
+                </div>
                 {/* WH-24: the reference's button — w-full mt-auto ALONE in
                     the category pair + hover:opacity-90 + the ArrowRight
                     (probed: 256px = the full card body; ours shipped an
@@ -237,7 +249,7 @@ export default function RoutinesClientPage() {
                   Use This Template <ArrowRight className="h-4 w-4 ml-2" />
                 </GradientButton>
               </div>
-            </section>
+            </div>
           );
         })}
       </div>

@@ -313,6 +313,12 @@
   --color-yellow-100: #fef9c3;
   --color-yellow-500: #eab308;
   --color-yellow-600: #ca8a04;
+  /* WH-29 (F-G): the achievement tile's earned family (the
+     bundle-decoded yellow-50→amber-50 gradient + the yellow-200 border)
+     + its dark twins (yellow-950 washes, the yellow-900 border). */
+  --color-yellow-200: #fef08a;
+  --color-yellow-900: #713f12;
+  --color-yellow-950: #422006;
 }
 
 /* ---------------------------------------------------------------------------
