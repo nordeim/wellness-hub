@@ -1436,3 +1436,88 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
       expect(verify.resend!.color).toBe("rgb(51, 65, 85)");
     });
   });
+
+  // WH-31 (o): the shell's a11y TREE — the standing pin. The reference's
+  // round-19 rebuild was decoded through the accessibility snapshot (the
+  // WH-30 suggested-next (d) answer): its nav ships ZERO landmarks — an
+  // anonymous generic wrapper carrying the h2 wordmark + a
+  // `list > listitem[level=1] > link` column (the shadcn Sidebar
+  // `peer/menu-button` family), its drawer the same list form inside the
+  // dialog, and its nav-link icons are NOT aria-hidden (every link exposes
+  // an unlabeled image node). OUR form is the deliberate WCAG superset —
+  // `complementary` (the aside) wrapping `navigation "Main navigation"`
+  // with aria-hidden icons at BOTH nav sites + aria-current on the active
+  // row — same pixels, different trees. The leg pins values that already
+  // compute (born green, the (l) precedent); its job is to keep the
+  // superset DELIBERATE: a future round "fixing" the landmarks toward the
+  // reference's landmark-free form — or a refactor dropping the
+  // aria-hidden/aria-current arms — fails here.
+  test.describe("a11y net — the shell's a11y tree (WH-31 (o))", () => {
+    test("(o) the landmark form at both nav sites — complementary + navigation + aria-hidden icons + the aria-current row", async ({ page }) => {
+      // ---- the desktop sidebar (1280) ----
+      await page.goto("/Dashboard", { waitUntil: "networkidle" });
+      await page.waitForTimeout(600);
+      const desktop = await page.evaluate(() => {
+        const aside = document.querySelector("aside");
+        const nav = document.querySelector("nav");
+        const links = nav ? Array.from(nav.querySelectorAll("a")) : [];
+        const first = links[0] ?? null;
+        const icon = first?.querySelector("svg") ?? null;
+        const current = Array.from(links).find((a) => a.getAttribute("aria-current") === "page") ?? null;
+        return {
+          hasAside: !!aside,
+          asideRole: aside ? aside.getAttribute("role") : null,
+          navLabel: nav ? nav.getAttribute("aria-label") : null,
+          navInsideAside: !!(nav && aside && aside.contains(nav)),
+          linkCount: links.length,
+          iconAriaHidden: icon ? icon.getAttribute("aria-hidden") : null,
+          currentText: current ? current.textContent?.trim() : null,
+        };
+      });
+      expect(desktop.hasAside, "the desktop sidebar is a semantic <aside>").toBe(true);
+      expect(desktop.asideRole, "the aside carries no explicit role — the implicit complementary landmark stands").toBe(null);
+      expect(desktop.navLabel, "the nav exposes the named navigation landmark").toBe("Main navigation");
+      expect(desktop.navInsideAside, "the nav lives inside the aside (complementary > navigation)").toBe(true);
+      expect(desktop.linkCount, "the sidebar nav carries the 10 module links (the Profile card is the footer zone's ProfileCard — outside the nav)").toBe(10);
+      expect(desktop.iconAriaHidden, "the nav icons are aria-hidden (clean accessible names — the reference's are NOT)").toBe("true");
+      expect(desktop.currentText, "the active row carries aria-current=page").toBe("Dashboard");
+
+      // ---- the drawer (390 — the sheet carries the SAME navigation
+      // landmark, not the reference's anonymous list form) ----
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.waitForTimeout(400);
+      await page.locator("header button").first().click();
+      await page.waitForTimeout(500);
+      const sheet = await page.evaluate(() => {
+        const dialog = document.querySelector('[role="dialog"]');
+        const nav = dialog ? dialog.querySelector("nav") : null;
+        const links = nav ? Array.from(nav.querySelectorAll("a")) : [];
+        const icon = links[0]?.querySelector("svg") ?? null;
+        const current = Array.from(links).find((a) => a.getAttribute("aria-current") === "page") ?? null;
+        return {
+          hasDialog: !!dialog,
+          navLabel: nav ? nav.getAttribute("aria-label") : null,
+          linkCount: links.length,
+          iconAriaHidden: icon ? icon.getAttribute("aria-hidden") : null,
+          currentText: current ? current.textContent?.trim() : null,
+        };
+      });
+      expect(sheet.hasDialog, "the drawer sheet is a dialog").toBe(true);
+      expect(sheet.navLabel, "the drawer's nav exposes the same named landmark").toBe("Main navigation");
+      expect(sheet.linkCount, "the drawer nav carries the 10 module links").toBe(10);
+      const sheetProfile = await page.evaluate(() => {
+        const dialog = document.querySelector('[role="dialog"]');
+        const links = dialog ? Array.from(dialog.querySelectorAll("a")) : [];
+        const profile = links.find((a) => /profile & settings/i.test(a.textContent || "")) ?? null;
+        return { total: links.length, profileHref: profile ? profile.getAttribute("href") : null, profileOutsideNav: !!(profile && !profile.closest("nav")) };
+      });
+      expect(sheetProfile.total, "the drawer sheet carries 11 links total (nav 10 + the ProfileCard)").toBe(11);
+      expect(sheetProfile.profileHref, "the Profile card link renders in the sheet's footer zone").toBe("/Profile");
+      expect(sheetProfile.profileOutsideNav, "the Profile card sits OUTSIDE the nav landmark (the footer zone)").toBe(true);
+      expect(sheet.iconAriaHidden, "the drawer's nav icons are aria-hidden too").toBe("true");
+      expect(sheet.currentText, "the drawer's active row carries aria-current=page").toBe("Dashboard");
+      // close via Escape (the reference's own mechanism — its X is hidden)
+      await page.keyboard.press("Escape");
+      await page.waitForTimeout(400);
+    });
+  });

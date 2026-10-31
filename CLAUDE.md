@@ -104,7 +104,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 | `bun run lint` | ESLint (`--max-warnings 0`) |
 | `bun run typecheck` | `tsc --noEmit` |
 | `bun run test` | Vitest unit suite (364 checks) |
-| `bun run test:e2e` | Playwright (68 checks; build first) |
+| `bun run test:e2e` | Playwright (69 checks; build first) |
 | `bun run gate` | The full chain in one command |
 
 ## Testing Strategy
@@ -116,7 +116,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
   theme engine, formatters, the dead-dependency census, the route/ui
   module census, the signup role pin, the docs-counts lockstep pin,
   the src-surface census pin.
-- **E2E (Playwright, 68 checks — 6 specs + the auth setup project)**: the
+- **E2E (Playwright, 69 checks — 6 specs + the auth setup project)**: the
   real UI in Chromium against the
   production standalone server — auth ladder, mobile drawer battery, shell
   nav (both route-case families, + the console-hygiene net: zero console

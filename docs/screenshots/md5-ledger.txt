@@ -1,4 +1,27 @@
-# docs/screenshots md5 ledger — re-based at WH-30 (2026-10-31), 34 files
+# docs/screenshots md5 ledger — re-based at WH-31 (2026-10-31), 34 files
+#
+# The WH-31 round (the redeployment-watch round): the SECOND cross-round
+# byte comparison under the committed procedure — and the round's own
+# verification: the reference's round-19 redeployment (the CSS path shape
+# moved back, a new JS bundle, cdn.tailwindcss.com added) moved NOTHING
+# in any rendered face, and our tree changed zero rendered faces — the
+# capture set proves it: 32/34 byte-stable.
+#
+# The two movers (both root-caused, both the 25-dark-login-focus
+# PRECEDENT class — sub-visible rendering instants, not face changes):
+#   10-learning.png — 16/1,152,000 px (0.0014%), max channel delta 7, a
+#     26×23 region inside the first tutorial card's thumbnail (the img
+#     decode edge); the Learning page carries the app's only photo
+#     thumbnails — where a headless-Chromium build's rasterization
+#     variance shows first.
+#   29-quick-actions-hover.png — 5/1,152,000 px (0.0004%), max channel
+#     delta 1, a 4×4 region on the hovered tile's icon edge.
+# The root cause: CROSS-SESSION headless-Chromium rasterization variance
+# (the sandbox's fresh chromium_headless_shell-1248 install this session
+# vs WH-30's build) — both movers reproduced IDENTICALLY across this
+# session's two takes (the values below are stable), and both sit orders
+# of magnitude under the WH-30 timing-class precedent (0.007%). No face
+# changed; the ledger re-bases at the two movers.
 #
 # The WH-30 round: 6 byte-stable + 28 movers (all root-caused) — the
 # LARGEST capture re-base since WH-15 (the shell-chrome geometry round:
@@ -7,35 +30,6 @@
 # JOINED the procedure this round (the file had ridden the ledger since
 # WH-26's ad-hoc take without a procedural home — the reconstruction
 # class ends for it too).
-#   EXPECTED CURES (27):
-#   02-12 (the light desktop set) — the sidebar: the 32px h-8 nav rows
-#                       (ours were 40px), the 16px icons (ours 20px), the
-#                       border-b brand-header divider, the avatar-card
-#                       Profile footer, the three-zone structure — the
-#                       02 diff is confined to the sidebar column
-#                       (bbox x<255, 9.1% of px).
-#   14-16 + 19 (the mobile set) — the glass header's LEFT CLUSTER (the
-#                       title at x=68, the 28×28 rounded-lg trigger, the
-#                       16px ink icon, no right spacer) + the drawer's
-#                       face (the hidden close X, the border-r, the 32px
-#                       rows, the bottom-pinned footer zone — 15's diff
-#                       spans the full sheet, 16.7%).
-#   17-18 + 24 (the dark set) — the same sidebar cures in dark (the
-#                       neutral-800 dividers, the dark hover twins).
-#   26/28/31/32/33 (the interiors) — the shells around the forms
-#                       (the form interiors themselves unchanged).
-#   27-dark-mood-form — the NEW procedural capture (the shell cures).
-#   29/30 (the hovers) — the shells around the hovered cards.
-#   34-mood-list-interior — the shell around the mirrored row.
-#   PROCEDURE-STATE (1):
-#   25-dark-login-focus — the focus ring's interpolation instant
-#                       (0.007%, the transition-all timing class — the
-#                       WH-29 precedent; the two takes this round
-#                       differed in the same region).
-#   BYTE-STABLE (6): 01/13/20/21/22 (the login family — no shell
-#                       chrome in any of them) + 23-dark-404 (outside
-#                       the shell).
-#
 01-login.png 0eb839b6997d2d0fb14ea1834f39bff8
 02-dashboard.png b396f588554c48d4ceb2cf4ea5df4311
 03-routines.png f328b5dd7f0ba04a17a1cfb66b682394
@@ -45,7 +39,7 @@
 07-events.png 7df71d4fc4d11993025457efb180bbc5
 08-studyresources.png d55df9d487b4c758815c6df05f611482
 09-reminders.png b9a6e1fb97d2426143b3518109ceebd7
-10-learning.png 421150b6886c1abd4d82edc7fefd19fb
+10-learning.png 0c088cbb788d7825506973744ab016d3
 11-goals.png 01596f05cae8a18b75a35b30f9f40506
 12-profile.png 53218b174c58a304d904725237759615
 13-mobile-login.png 479e3bc95a4ca2465691d6b0c5669b90
@@ -64,7 +58,7 @@
 26-events-inline-form.png 4e8cc505a9a051d963bc50e2d7d59ac2
 27-dark-mood-form.png 3e088c5ef27bd5ee831da75329090488
 28-routines-schedule-modal.png 53818da6ae8da44f26d448ad350df9b4
-29-quick-actions-hover.png f756df86ebfcc4551407654fdc65d580
+29-quick-actions-hover.png 7cadbcde9c4691236ce5dd59524d9114
 30-tutorial-card-hover.png bd6004ad8bbb6b0f0b3dbe56753b469b
 31-profile-preferences.png 3eeab6faa67b22b9fb29ac1dac4b7a36
 32-mentalhealth-form-interior.png a40758f3babef992edd3b2852e7c70c4
