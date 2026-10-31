@@ -19,11 +19,10 @@ import {
   GradientButton,
   OptionChip,
 } from "@/components/shared/page-parts";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
 import { RESOURCE_TYPES, resourceTypeMeta } from "@/lib/constants";
 import { matchesQuery, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -182,141 +181,18 @@ export default function StudyResourcesClientPage() {
         }
       />
 
-      {/* The toolbar — search + subject + type (the reference's trio). */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden="true" />
-          <input
-            type="search"
-            aria-label="Search resources, tags..."
-            placeholder="Search resources, tags..."
-            className="flex h-9 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pl-9"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </div>
-        <Select value={subject} onValueChange={setSubject}>
-          <SelectTrigger className="w-full sm:w-40" aria-label="Filter by subject">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Subjects</SelectItem>
-            {subjects.map((s) => (
-              <SelectItem key={s} value={s}>
-                {s}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={type} onValueChange={setType}>
-          <SelectTrigger className="w-full sm:w-40" aria-label="Filter by type">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            {RESOURCE_TYPES.map((t) => (
-              <SelectItem key={t.value} value={t.value}>
-                {t.icon} {t.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {/* The Create/Edit form — the reference's INLINE EXPANDING CARD
+          (WH-21, the modality cure: probed live — its create-forms open
+          in the page flow, no overlay, no scroll lock; only its Routines
+          Schedule flow is a modal). */}
+      {open && (
+        <section className={FORM_CARD.card}>
+          <div className={FORM_CARD.header}>
+            <h2 className={FORM_CARD.title}>{editing ? "Edit Study Resource" : "Add Study Resource"}</h2>
+          </div>
+          <div className={FORM_CARD.body}>
+            <div className="space-y-4">
 
-      {filtered.length === 0 ? (
-        <div className="rounded-xl border border-line bg-surface shadow-lg">
-          <EmptyState
-            icon={FolderOpen}
-            hint="No resources found. Add your study materials to get started!"
-          />
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filtered.map((r) => {
-            const t = resourceTypeMeta(r.type);
-            const tags = parseJsonArray(r.tags);
-            return (
-              <section key={r.id} className="rounded-xl border border-line bg-surface p-5 shadow-lg">
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="min-w-0 font-semibold text-foreground">{r.title}</h3>
-                  <OptionChip label={t.label} icon={t.icon} tint={t.tint} text={t.text} />
-                </div>
-                <p className="mt-0.5 text-xs font-medium text-primary">{r.subject}</p>
-                {r.description && <p className="mt-2 text-sm text-muted">{r.description}</p>}
-                {r.examDate && (
-                  <p className="mt-2 text-xs text-amber-600">Exam: {formatDate(r.examDate)}</p>
-                )}
-                {tags.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full bg-line-soft px-2 py-0.5 text-xs text-muted"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                <div className="mt-3 flex items-center justify-between">
-                  <div className="flex items-center gap-0.5" aria-label={`Rated ${r.rating ?? 0} of 5 stars`}>
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <Star
-                        key={n}
-                        className={cn(
-                          "h-4 w-4",
-                          n <= (r.rating ?? 0) ? "fill-amber-400 text-amber-400" : "text-gray-300",
-                        )}
-                        aria-hidden="true"
-                      />
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    {r.url && (
-                      <a
-                        href={r.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-primary hover:bg-primary/10")}
-                        aria-label={`Open ${r.title}`}
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                      </a>
-                    )}
-                    <button
-                      type="button"
-                      className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-muted hover:bg-line-soft")}
-                      onClick={() => openEdit(r)}
-                      aria-label={`Edit ${r.title}`}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </button>
-                    <button
-                      type="button"
-                      className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/50")}
-                      onClick={() => void remove(r)}
-                      aria-label={`Delete ${r.title}`}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-              </section>
-            );
-          })}
-        </div>
-      )}
-
-      {/* The Add Resource dialog — the reference's field set. */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className={DIALOG_WIDE}>
-          <DialogHeader>
-            <DialogTitle>{editing ? "Edit Study Resource" : "Add Study Resource"}</DialogTitle>
-            <DialogDescription>
-              {editing ? "Update the details below." : "One organized place beats ten open tabs!"}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="sr-title">Resource Title</Label>
               <Input
@@ -464,24 +340,151 @@ export default function StudyResourcesClientPage() {
                 ))}
               </div>
             </div>
+          
+              <div className={FORM_CARD.footer}>
+              <button
+                type="button"
+                className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+              <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.studyresources.button}>
+                {saving ? "Saving…" : editing ? "Save Changes" : "Add Resource"}
+              </GradientButton>
+          
+              </div>
+            </div>
           </div>
-          <DialogFooter>
-            <button
-              type="button"
-              className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.studyresources.button}>
-              {saving ? "Saving…" : editing ? "Save Changes" : "Add Resource"}
-            </GradientButton>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        </section>
+      )}
+
+      {/* The toolbar — search + subject + type (the reference's trio). */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden="true" />
+          <input
+            type="search"
+            aria-label="Search resources, tags..."
+            placeholder="Search resources, tags..."
+            className="flex h-9 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pl-9"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
+        <Select value={subject} onValueChange={setSubject}>
+          <SelectTrigger className="w-full sm:w-40" aria-label="Filter by subject">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Subjects</SelectItem>
+            {subjects.map((s) => (
+              <SelectItem key={s} value={s}>
+                {s}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={type} onValueChange={setType}>
+          <SelectTrigger className="w-full sm:w-40" aria-label="Filter by type">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Types</SelectItem>
+            {RESOURCE_TYPES.map((t) => (
+              <SelectItem key={t.value} value={t.value}>
+                {t.icon} {t.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {filtered.length === 0 ? (
+        <div className="rounded-xl border border-line bg-surface shadow-lg">
+          <EmptyState
+            icon={FolderOpen}
+            hint="No resources found. Add your study materials to get started!"
+          />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {filtered.map((r) => {
+            const t = resourceTypeMeta(r.type);
+            const tags = parseJsonArray(r.tags);
+            return (
+              <section key={r.id} className="rounded-xl border border-line bg-surface p-5 shadow-lg">
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="min-w-0 font-semibold text-foreground">{r.title}</h3>
+                  <OptionChip label={t.label} icon={t.icon} tint={t.tint} text={t.text} />
+                </div>
+                <p className="mt-0.5 text-xs font-medium text-primary">{r.subject}</p>
+                {r.description && <p className="mt-2 text-sm text-muted">{r.description}</p>}
+                {r.examDate && (
+                  <p className="mt-2 text-xs text-amber-600">Exam: {formatDate(r.examDate)}</p>
+                )}
+                {tags.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full bg-line-soft px-2 py-0.5 text-xs text-muted"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <div className="mt-3 flex items-center justify-between">
+                  <div className="flex items-center gap-0.5" aria-label={`Rated ${r.rating ?? 0} of 5 stars`}>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <Star
+                        key={n}
+                        className={cn(
+                          "h-4 w-4",
+                          n <= (r.rating ?? 0) ? "fill-amber-400 text-amber-400" : "text-gray-300",
+                        )}
+                        aria-hidden="true"
+                      />
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {r.url && (
+                      <a
+                        href={r.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-primary hover:bg-primary/10")}
+                        aria-label={`Open ${r.title}`}
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    )}
+                    <button
+                      type="button"
+                      className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-muted hover:bg-line-soft")}
+                      onClick={() => openEdit(r)}
+                      aria-label={`Edit ${r.title}`}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/50")}
+                      onClick={() => void remove(r)}
+                      aria-label={`Delete ${r.title}`}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </section>
+            );
+          })}
+        </div>
+      )}
+
       </div>
     </div>
   );
 }
-
-const DIALOG_WIDE = "max-w-2xl max-h-[90vh] overflow-y-auto";

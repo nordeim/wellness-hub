@@ -19,8 +19,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Production server | `bun run start` | Boots `.next/standalone` |
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
-| Unit tests (335 checks) | `bun run test` | Vitest, node-safe seams |
-| Browser E2E (57 checks) | `bun run test:e2e` | Needs `bun run build` first |
+| Unit tests (340 checks) | `bun run test` | Vitest, node-safe seams |
+| Browser E2E (60 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
 | The full gate in one command | `bun run gate` | lint → tsc → test → build → smoke → e2e |
@@ -29,8 +29,8 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Seed content + demo user | `bun run db:seed` | Idempotent; wipes/reseeds content tables |
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
-`bun run test` (335) → `bun run build` → `bun run smoke` →
-`CI=1 bun run test:e2e` (57: 6 specs + the auth setup project) — or the
+`bun run test` (340) → `bun run build` → `bun run smoke` →
+`CI=1 bun run test:e2e` (60: 6 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
 is NOT set — a type error fails `bun run build`, and the explicit
@@ -96,6 +96,7 @@ bun run db:seed && bun run dev`. Demo login: `sepnetflix2023@outlook.com` /
   changes; loaders use `startTransition`; every list fetch goes through
   the store.
 - **The per-module page identity is a MAP, not scattered literals (WH-15)**: every module page consumes its `PAGE_THEMES` entry from `src/lib/page-layout.ts` (the page-root wash, the H1 gradient stops, the button pair, the container width, the header form) — the reference's 2026-10-30 redesign, probed live. The MODULE pairs are fixed v3 classes (NOT preset-themeable — verified on the reference's own preset engine); only the brand family (wordmark, badge, active pills, mobile/drawer titles) rides `--primary`/`--secondary`. The page-theme census pins the map's coverage, pin-completeness and consumption.
+- **The module create-forms are INLINE CARDS, not dialogs (WH-21)**: the seven action pages (Events, Exercise, MentalHealth, Assignments, Reminders, StudyResources, Goals) render their create/edit forms as inline expanding cards in the page flow (the `FORM_CARD` record from `src/lib/page-layout.ts` — `rounded-xl border bg-surface text-ink border-none shadow-xl`, the `p-6` header, the `p-6 pt-0` body, the `flex justify-end gap-3` footer inside the `space-y-4`), placed directly below the page header, conditionally rendered — the reference's own modality (probed live: its forms open with zero overlays, no scroll lock). Only the Routines "Schedule" flow is a modal (on both apps). The form-modality census + the e2e modality leg pin it — do NOT reintroduce Dialog there; `ui/dialog` keeps its consumers in routines/app-shell/mobile-nav.
 - **Route aliases are intentional**: each module has a canonical lowercase
   folder (`src/app/(app)/dashboard/`) AND a capitalized alias folder
   (`src/app/(app)/Dashboard/`) mirroring the reference app's own hrefs
@@ -279,7 +280,17 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   the gray-200/300/400 both-mode family and the black-scrim overlays are
   the documented structural exemptions) + the interaction-contrast
   arithmetic pin (pairing is not contrast — the pin computes the twin's
-  VALUE from the v3 palette pins against the rendered surface).
+  VALUE from the v3 palette pins against the rendered surface). The
+  WH-21 widening: the FORM-MODALITY axis (the delivery mechanism is an
+  assertion surface of its own — the reference's create-forms are inline
+  cards, not dialogs; pinned by the form-modality census + the CRUD
+  modality leg) + the dark checkbox walk (the F-1 class: state arms
+  (`data-[state=checked]:`) the hover/focus census never covered) + the
+  dark mood-tile walk (Tailwind v4's `scale-105` compiles to the `scale`
+  PROPERTY, not `transform` — read the property, not the old pipeline) +
+  the gradient-ink arithmetic pin (the whole fixed-gradient white-ink
+  family measured: all 16 pairs AA-fail at the worst stop, all
+  reference-shared — documented in PAD §11, pinned, not cured).
 
 ## Git
 

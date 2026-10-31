@@ -1,12 +1,18 @@
 import { expect, test } from "@playwright/test";
 
-// The CRUD battery — one cycle per module, through the real dialogs.
+// The CRUD battery — one cycle per module, through the real forms.
+// WH-21: the seven module create-forms are INLINE expanding cards now
+// (the reference's modality — probed live: its forms open with zero
+// overlays, in-flow, no scroll lock; only its Routines Schedule flow is a
+// modal), so the form-title locators retargeted off role=dialog (the
+// Routines schedule leg below KEEPS its dialog locator — the parity
+// match).
 
 test("exercise: log a workout, see it in Recent Workouts, delete it", async ({ page }) => {
   await page.goto("/Exercise");
 
   await page.getByRole("button", { name: "Log Workout" }).click();
-  await expect(page.getByRole("dialog").getByText("Log New Workout")).toBeVisible();
+  await expect(page.getByText("Log New Workout")).toBeVisible();
 
   await page.getByLabel("Duration (minutes)").fill("30");
   await page.getByLabel("Calories Burned (optional)").fill("250");
@@ -27,9 +33,13 @@ test("mental health: log a mood entry with the emoji picker", async ({ page }) =
   await page.goto("/MentalHealth");
 
   await page.getByRole("button", { name: "New Entry" }).click();
-  await expect(page.getByRole("dialog").getByText("How are you feeling today?")).toBeVisible();
+  await expect(page.getByText("How are you feeling today?")).toBeVisible();
 
-  await page.getByRole("button", { name: /Amazing/ }).click();
+  // WH-21: exact matching — the journal list's delete buttons ("Delete
+  // Amazing entry") also match the loose /Amazing/ form, and a persisted
+  // entry from an earlier spec turns the tile click into a strict-mode
+  // violation (caught live when the worker scheduling shifted).
+  await page.getByRole("button", { name: "Amazing", exact: true }).click();
   await page.locator("#mood-activities").fill("Exercise");
   await page.getByRole("button", { name: "Add", exact: true }).click();
   await page.locator("#mood-gratitude").fill("A quiet morning");
@@ -95,6 +105,42 @@ test("study resources: create with tags + rating, filter by search", async ({ pa
   await expect(page.getByText("No resources found. Add your study materials")).toBeVisible();
   await page.getByLabel("Search resources, tags...").fill("midterm");
   await expect(page.getByText("Chapter 5 Notes")).toBeVisible();
+});
+
+test("events: the create form is an inline expanding card, not a modal (the reference's modality)", async ({ page }) => {
+  await page.goto("/Events");
+
+  await page.getByRole("button", { name: "New Event" }).click();
+  const title = page.getByText("Create New Event");
+  await expect(title).toBeVisible();
+
+  // No dialog role, no overlay scrim — the reference's create-forms are
+  // inline cards (probed live: zero fixed overlay layers when its forms
+  // open; only its Routines Schedule flow is a modal).
+  await expect(page.locator('[role="dialog"]'), "the create-form must NOT ship as a dialog").toHaveCount(0);
+  await expect(page.locator('[class*="bg-black/80"]'), "no overlay scrim may render").toHaveCount(0);
+
+  // In-flow: every ancestor static (not fixed/absolute) and the page not
+  // scroll-locked (the Radix dialog's body lock retires with the modality).
+  const flow = await page.evaluate(() => {
+    const el = Array.from(document.querySelectorAll("h2")).find((h) =>
+      h.textContent?.includes("Create New Event"),
+    );
+    if (!el) return { error: "title missing" as const };
+    let n: Element | null = el;
+    while (n && n !== document.body) {
+      const p = getComputedStyle(n).position;
+      if (p === "fixed" || p === "absolute") return { positioned: p };
+      n = n.parentElement;
+    }
+    return { flow: "static" as const, bodyOverflow: getComputedStyle(document.body).overflow };
+  });
+  expect(flow.flow, "the form card must sit in the page flow (every ancestor static)").toBe("static");
+  expect(flow.bodyOverflow, "the page must NOT be scroll-locked").toBe("visible");
+
+  // Cancel closes the card.
+  await page.getByRole("button", { name: "Cancel" }).click();
+  await expect(title).toBeHidden();
 });
 
 test("reminders: create one, complete it", async ({ page }) => {

@@ -4,7 +4,7 @@
 04-exercise.png 4e09b821d86574869c769be32bcb5354
 05-mentalhealth.png ef293abb761c11d8eb52114ef82e7f87
 06-assignments.png 3652f7b65340f5039d2f4fbce68f4e16
-07-events.png 00394c7e5b87ce260cc1d3f208f625a6
+07-events.png 59bbb51ff8f65ff11889e08e58c93d72
 08-studyresources.png 4900f79b28af67479e0cfa9546baea4e
 09-reminders.png e08fa15de513fc11ac9a0e0d94519d1e
 10-learning.png 28a4eeb6a802598540a06d8e8ceb1634
@@ -21,5 +21,7 @@
 21-dark-signup.png 1105dcb0a18f044a6d72fe0f68e2e88c
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 0256f7333b989d6d0772646ae446c153
-24-dark-exercise-rows.png 6e3e5a563f4eb50080955a3446ec8a1d
+24-dark-exercise-rows.png 446c12d23bf2a4f4bfb0d81d462a45a5
 25-dark-login-focus.png 4933b2d7acfa89736b4df684e583d026
+26-events-inline-form.png 5b07bf6dae0503c129bc9d0369598a06
+27-dark-mood-form.png 2a3919ecfcb78718940af285fe585cbc

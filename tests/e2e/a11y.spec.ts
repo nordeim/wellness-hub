@@ -732,6 +732,17 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
         }
         const after = await fetch("/api/workouts").then((r) => r.json());
         if ((after?.data ?? []).length > 0) throw new Error("workout cleanup incomplete");
+        // WH-21: the toast leg now fires its toast through the mood form —
+        // its saved entry must not survive this describe either (the
+        // journal list's delete buttons match the later CRUD mood flow's
+        // loose /Amazing/ form; the exact-match cure handles the click,
+        // this cleanup handles the residue class itself).
+        const moods = await fetch("/api/mood-entries").then((r) => r.json());
+        for (const m of moods?.data ?? []) {
+          await fetch(`/api/mood-entries/${m.id}`, { method: "DELETE" });
+        }
+        const moodsAfter = await fetch("/api/mood-entries").then((r) => r.json());
+        if ((moodsAfter?.data ?? []).length > 0) throw new Error("mood cleanup incomplete");
       });
     } catch {
       /* best-effort — the reseed backstop below */
@@ -862,14 +873,17 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
     await page.getByRole("button", { name: "Dark", exact: true }).click();
     await expect(page.locator("html")).toHaveClass(/dark/);
 
-    // Trigger a live toast through the real form (the save path), then
-    // hover its dismiss button with a REAL pointer event.
-    await page.goto("/Exercise", { waitUntil: "networkidle" });
-    await page.getByRole("button", { name: /Log Workout/ }).click();
-    const dialog = page.locator('[role="dialog"]');
-    await dialog.waitFor({ state: "visible" });
-    await page.locator("#workout-duration").fill("30");
-    await dialog.getByRole("button", { name: /Save|Log/i }).click();
+    // Trigger a live toast through the real inline form (the save path),
+    // then hover its dismiss button with a REAL pointer event. WH-21: the
+    // leg retargeted from the exercise DIALOG to the mood form's inline
+    // card — the create-forms are inline cards now (the reference's
+    // modality); the mood save fires "Mood check-in saved" the same way
+    // the workout save fired its toast.
+    await page.goto("/MentalHealth", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "New Entry" }).click();
+    await expect(page.getByText("How are you feeling today?")).toBeVisible();
+    await page.getByRole("button", { name: "Amazing", exact: true }).click();
+    await page.getByRole("button", { name: "Save Entry" }).click();
     const toast = page.locator('[role="status"]').first();
     await expect(toast, "the save toast must appear (the live hover surface)").toBeVisible({ timeout: 5000 });
 
@@ -881,5 +895,161 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
       x.ratio,
       `the HOVERED dismiss glyph must compute ≥3:1 (got ${x.ratio}:1, ink ${x.ink} on ${x.bg}) — the F-2 class: the glyph vanished at 1.05:1 exactly when the user aims at it`,
     ).toBeGreaterThanOrEqual(3);
+  });
+
+  test("(e) the dark checkboxes — the checked fill, the unchecked border and the glyph all ≥3:1 on the Preferences wash", async ({ page }) => {
+    // F-1's live leg (the WH-21 cure): the Profile Preferences pair (our
+    // functional superset — the reference ships ZERO checkboxes, probed
+    // live) shipped invisible in dark (neutral-900 fill/border on the
+    // #1a1a1d wash ≈1.12:1). The Appearance tab is the strip's default —
+    // no tab click needed before the Dark flip; the Preferences tab
+    // carries the checkboxes.
+    await page.goto("/Profile", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Dark", exact: true }).click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    await page.getByRole("tab", { name: "Preferences" }).click();
+
+    // The wash is the label row's bg-line-soft/40 composited over the
+    // panel card (the dark surface) — read live (Tailwind v4 computes
+    // alpha-modified tokens in OKLAB, so the page-side reader converts),
+    // blended in Node with the same arithmetic the unit pin uses.
+    const readBox = () =>
+      page.evaluate(() => {
+        const oklabToRgb = (L: number, a: number, b: number) => {
+          const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+          const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+          const s_ = L - 0.0894841775 * a - 1.291485548 * b;
+          const l = l_ * l_ * l_, m = m_ * m_ * m_, s = s_ * s_ * s_;
+          const enc = (x: number) => {
+            x = Math.min(1, Math.max(0, x));
+            return Math.round(255 * (x <= 0.0031308 ? 12.92 * x : 1.055 * Math.pow(x, 1 / 2.4) - 0.055));
+          };
+          return [enc(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+                  enc(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+                  enc(-0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s)];
+        };
+        const parse = (c: string): { rgb: number[]; alpha: number } | null => {
+          if (!c) return null;
+          let m = c.match(/rgba?\((\d+), (\d+), (\d+)(?:, ([\d.]+))?\)/);
+          if (m) return { rgb: [+m[1]!, +m[2]!, +m[3]!], alpha: m[4] === undefined ? 1 : +m[4] };
+          m = c.match(/oklab\(([\d.-]+) ([\d.e-]+) ([\d.e-]+)(?: \/ ([\d.]+))?\)/);
+          if (m) return { rgb: oklabToRgb(+m[1]!, +m[2]!, +m[3]!), alpha: m[4] === undefined ? 1 : +m[4] };
+          return null;
+        };
+        const box = document.querySelector('button[role="checkbox"][aria-label="Enable notifications"]');
+        if (!box) return null;
+        const s = getComputedStyle(box);
+        const row = box.closest("label");
+        const panel = row ? row.closest("section") : null;
+        return {
+          fill: s.backgroundColor,
+          border: s.borderTopColor,
+          ink: s.color,
+          rowBg: row ? parse(getComputedStyle(row).backgroundColor) : null,
+          panelBg: panel ? parse(getComputedStyle(panel).backgroundColor) : null,
+        };
+      });
+    const parse = (c: string): [number, number, number, number] | null => {
+      const m = c.match(/rgba?\((\d+), (\d+), (\d+)(?:, ([\d.]+))?\)/);
+      return m ? [+m[1]!, +m[2]!, +m[3]!, m[4] === undefined ? 1 : +m[4]] : null;
+    };
+
+    // The CHECKED box: the fill and its glyph.
+    const checked = await readBox();
+    expect(checked, "the checked checkbox must render (the Preferences pair)").toBeTruthy();
+    expect(
+      checked!.rowBg && checked!.panelBg,
+      `the wash chain must read (row ${JSON.stringify(checked!.rowBg)}, panel ${JSON.stringify(checked!.panelBg)})`,
+    ).toBeTruthy();
+    const a = checked!.rowBg!.alpha;
+    const wash: [number, number, number] = [
+      Math.round(a * checked!.rowBg!.rgb[0]! + (1 - a) * checked!.panelBg!.rgb[0]!),
+      Math.round(a * checked!.rowBg!.rgb[1]! + (1 - a) * checked!.panelBg!.rgb[1]!),
+      Math.round(a * checked!.rowBg!.rgb[2]! + (1 - a) * checked!.panelBg!.rgb[2]!),
+    ];
+    const fill = parse(checked!.fill)!, glyph = parse(checked!.ink)!;
+    expect(
+      nodeContrast(fill[0]!, fill[1]!, fill[2]!, wash),
+      `the checked fill (${checked!.fill}) must compute ≥3:1 on the Preferences wash rgb(${wash.join(", ")}) — the F-1 class: neutral-900 shipped ≈1.12:1, a fully invisible box`,
+    ).toBeGreaterThanOrEqual(3);
+    expect(
+      nodeContrast(glyph[0]!, glyph[1]!, glyph[2]!, [fill[0]!, fill[1]!, fill[2]!]),
+      `the glyph (${checked!.ink}) must compute ≥3:1 on its own fill (${checked!.fill})`,
+    ).toBeGreaterThanOrEqual(3);
+
+    // The UNCHECKED box (the only visual = its border): flip, read, restore
+    // (probe hygiene — the flip PUTs to the server prefs; the restore
+    // verifies it landed).
+    await page.getByRole("checkbox", { name: "Enable notifications" }).click();
+    await page.waitForTimeout(450); // transition-colors settles
+    const unchecked = await readBox();
+    const border = parse(unchecked!.border)!;
+    expect(
+      nodeContrast(border[0]!, border[1]!, border[2]!, wash),
+      `the unchecked border (${unchecked!.border}) must compute ≥3:1 on the wash — the UNCHECKED box has no glyph; the border is its only visual (it shipped invisible at ≈1.12:1)`,
+    ).toBeGreaterThanOrEqual(3);
+    await page.getByRole("checkbox", { name: "Enable notifications" }).click();
+    await expect
+      .poll(
+        async () =>
+          page.evaluate(async () => {
+            const res = await fetch("/api/prefs");
+            return res.json();
+          }),
+        { timeout: 5000 },
+      )
+      .toMatchObject({ data: { notificationsEnabled: true } });
+  });
+
+  test("(f) the dark mood tiles — the active tile's scale property + gradient, the inactive border the pinned neutral-700", async ({ page }) => {
+    // F-3's live leg (the WH-21 cure): the reference's mood selector is a
+    // block-stacked tile grid with the FIXED blue→cyan active pair — in
+    // dark, the active tile's lift rides Tailwind v4's `scale` PROPERTY
+    // (scale-105 compiles to `scale: 1.05`, NOT transform — the reference's
+    // own matrix(1.05) is its v3-era pipeline), and the inactive border is
+    // our dark superset pair (neutral-700, the @theme v3 pin #404040 —
+    // rgb(64, 64, 64), not an oklch default). The pointer parks away from
+    // the tiles + settles before the border read (transition-all
+    // interpolates border-color; a hovering pointer reads the hover arm).
+    await page.goto("/Profile", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Light", exact: true }).click();
+    await page.getByRole("button", { name: "Dark", exact: true }).click();
+    await expect(page.locator("html")).toHaveClass(/dark/);
+
+    await page.goto("/MentalHealth", { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "New Entry" }).click();
+    await expect(page.getByText("How are you feeling today?")).toBeVisible();
+    await page.mouse.move(8, 300); // park the pointer away from the tiles
+    await page.waitForTimeout(450); // let transition-all settle
+
+    const read = await page.evaluate(() => {
+      const tiles = Array.from(document.querySelectorAll("button[aria-pressed]"));
+      const active = tiles.find((t) => t.getAttribute("aria-pressed") === "true");
+      const inactive = tiles.find((t) => t.getAttribute("aria-pressed") === "false");
+      if (!active || !inactive) return { error: `tiles: ${tiles.length}` };
+      const a = getComputedStyle(active), i = getComputedStyle(inactive);
+      return {
+        count: tiles.length,
+        activeScale: a.scale,
+        activeTransform: a.transform,
+        activeBg: a.backgroundImage,
+        activeInk: a.color,
+        inactiveBorder: i.borderTopColor,
+      };
+    });
+    expect(read.error, `the mood tiles must render (read ${JSON.stringify(read)})`).toBeFalsy();
+    expect(read.count, "the five mood tiles").toBe(5);
+    expect(
+      read.activeScale,
+      "the active tile's lift rides the `scale` property (1.05) — Tailwind v4's scale-105 compiles to scale, not transform (the reference's matrix(1.05) is its own pipeline)",
+    ).toBe("1.05");
+    expect(read.activeTransform, "transform stays none — v4's scale property owns the lift").toBe("none");
+    expect(read.activeBg, "the active tile rides the reference's FIXED blue→cyan pair").toContain("rgb(59, 130, 246)");
+    expect(read.activeBg).toContain("rgb(6, 182, 212)");
+    expect(read.activeInk, "the active tile's ink is white (the module-pair family, never the preset primary)").toBe("rgb(255, 255, 255)");
+    expect(
+      read.inactiveBorder,
+      "the inactive tile's dark border = the pinned neutral-700 (#404040 — the @theme v3 pin, rgb(64, 64, 64); the reference's light-only gray-200 form is its own broken-dark class, our superset cures it)",
+    ).toBe("rgb(64, 64, 64)");
   });
 });

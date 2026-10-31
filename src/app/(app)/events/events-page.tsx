@@ -12,11 +12,10 @@ import {
   GradientButton,
   OptionChip,
 } from "@/components/shared/page-parts";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, SECTION_CARD, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, SECTION_CARD, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
 import { EVENT_CATEGORIES, eventCategoryMeta } from "@/lib/constants";
 import { monthGrid, isSameCalendarDay, formatTimeString } from "@/lib/wellness";
 import { formatMonthYear, formatDateShort } from "@/lib/format";
@@ -148,6 +147,102 @@ export default function EventsClientPage() {
           </GradientButton>
         }
       />
+
+      {/* The Create/Edit form — the reference's INLINE EXPANDING CARD
+          (WH-21, the modality cure: probed live — its create-forms open
+          in the page flow, no overlay, no scroll lock, the card directly
+          below the page header; only its Routines Schedule flow is a
+          modal). */}
+      {open && (
+        <section className={FORM_CARD.card}>
+          <div className={FORM_CARD.header}>
+            <h2 className={FORM_CARD.title}>{editing ? "Edit Event" : "Create New Event"}</h2>
+          </div>
+          <div className={FORM_CARD.body}>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="ev-title">Event Title</Label>
+                <Input
+                  id="ev-title"
+                  required
+                  className="mt-2"
+                  placeholder="Study group"
+                  value={form.title}
+                  onChange={(e) => set("title", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ev-desc">Description</Label>
+                <textarea
+                  id="ev-desc"
+                  className="mt-2 flex min-h-16 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  placeholder="Event details..."
+                  value={form.description}
+                  onChange={(e) => set("description", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ev-date">Date</Label>
+                <Input
+                  id="ev-date"
+                  type="date"
+                  required
+                  className="mt-2"
+                  value={form.date}
+                  onChange={(e) => set("date", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ev-time">Time (optional)</Label>
+                <Input
+                  id="ev-time"
+                  type="time"
+                  className="mt-2"
+                  value={form.time}
+                  onChange={(e) => set("time", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ev-category">Category</Label>
+                <Select value={form.category} onValueChange={(v) => set("category", v)}>
+                  <SelectTrigger id="ev-category" className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {EVENT_CATEGORIES.map((c) => (
+                      <SelectItem key={c.value} value={c.value}>
+                        {c.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ev-location">Location (optional)</Label>
+                <Input
+                  id="ev-location"
+                  className="mt-2"
+                  placeholder="Where?"
+                  value={form.location}
+                  onChange={(e) => set("location", e.target.value)}
+                />
+              </div>
+              <div className={FORM_CARD.footer}>
+                <button
+                  type="button"
+                  className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
+                  onClick={() => setOpen(false)}
+                >
+                  Cancel
+                </button>
+                <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.events.button}>
+                  {saving ? "Saving…" : editing ? "Save Changes" : "Create Event"}
+                </GradientButton>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* The month grid — the reference's Sun-anchored 6x7 matrix. */}
@@ -283,99 +378,6 @@ export default function EventsClientPage() {
           )}
         </SectionCard>
       </div>
-
-      {/* The Create/Edit dialog — the reference's field set. */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>{editing ? "Edit Event" : "Create New Event"}</DialogTitle>
-            <DialogDescription>
-              {editing ? "Update the details below." : "Something to look forward to! ✨"}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="ev-title">Event Title</Label>
-              <Input
-                id="ev-title"
-                required
-                className="mt-2"
-                placeholder="Study group"
-                value={form.title}
-                onChange={(e) => set("title", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="ev-desc">Description</Label>
-              <textarea
-                id="ev-desc"
-                className="mt-2 flex min-h-16 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                placeholder="Event details..."
-                value={form.description}
-                onChange={(e) => set("description", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="ev-date">Date</Label>
-              <Input
-                id="ev-date"
-                type="date"
-                required
-                className="mt-2"
-                value={form.date}
-                onChange={(e) => set("date", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="ev-time">Time (optional)</Label>
-              <Input
-                id="ev-time"
-                type="time"
-                className="mt-2"
-                value={form.time}
-                onChange={(e) => set("time", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="ev-category">Category</Label>
-              <Select value={form.category} onValueChange={(v) => set("category", v)}>
-                <SelectTrigger id="ev-category" className="mt-2 w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {EVENT_CATEGORIES.map((c) => (
-                    <SelectItem key={c.value} value={c.value}>
-                      {c.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="ev-location">Location (optional)</Label>
-              <Input
-                id="ev-location"
-                className="mt-2"
-                placeholder="Where?"
-                value={form.location}
-                onChange={(e) => set("location", e.target.value)}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <button
-              type="button"
-              className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.events.button}>
-              {saving ? "Saving…" : editing ? "Save Changes" : "Create Event"}
-            </GradientButton>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
       </div>
     </div>
   );

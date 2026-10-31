@@ -1569,3 +1569,50 @@ it("WH-20: the interaction-arm dark-pair census — every palette hover:/focus: 
     "every palette-colored interaction arm (hover:/focus: text|bg|border|ring|outline) must carry its dark twin — the WH-20 interaction-states cure; token arms and the gray-200/300/400 both-mode family are the documented exemptions",
   ).toEqual([]);
 });
+
+it("WH-21: the form-modality census — the seven module create-forms are INLINE CARDS, not modal dialogs (the reference's modality)", () => {
+  // WH-21 (F-2, the round's giant finding): the reference's module
+  // create-forms are INLINE EXPANDING CARDS in the page flow — probed live
+  // on its Events page (the form opens with ZERO dialog overlays; every
+  // ancestor position:static; the card at top=136 directly below the page
+  // header, `rounded-xl border bg-card text-card-foreground border-none
+  // shadow-xl` + header `flex flex-col space-y-1.5 p-6` + content
+  // `p-6 pt-0` + the footer `flex justify-end gap-3` inside the
+  // `space-y-4`), and verified inline on all seven modules. Only the
+  // Routines "Schedule" flow is a modal on the reference (probed:
+  // `fixed inset-0 z-50 bg-black/80` + the fixed 50%/50% panel — the
+  // exact anatomy our Routines page mirrors, which is why it is NOT in
+  // this census's page set). Ours shipped the seven create-forms as 512px
+  // Radix modal overlays through twenty rounds — the forms' CONTENT was
+  // parity (every probe read the fields inside the opened overlay); the
+  // DELIVERY MECHANISM never was. The census pins the invariant, two
+  // checks per page: (1) no ui/dialog import may remain (the create-form
+  // must not be a dialog), and (2) the inline card must ride the
+  // FORM_CARD record from page-layout.ts (the probed anatomy, not ad-hoc
+  // literals). mobile-nav (DialogOverlay) + app-shell (the drawer Root)
+  // + routines (the Schedule modal) keep their dialog usage — the
+  // reference's own modality split.
+  const PAGES = [
+    "src/app/(app)/assignments/assignments-page.tsx",
+    "src/app/(app)/events/events-page.tsx",
+    "src/app/(app)/exercise/exercise-page.tsx",
+    "src/app/(app)/goals/goals-page.tsx",
+    "src/app/(app)/mentalhealth/mentalhealth-page.tsx",
+    "src/app/(app)/reminders/reminders-page.tsx",
+    "src/app/(app)/studyresources/studyresources-page.tsx",
+  ] as const;
+  const failures: string[] = [];
+  for (const page of PAGES) {
+    const src = readFileSync(join(REPO_ROOT, page), "utf8");
+    if (/from "@\/components\/ui\/dialog"/.test(src)) {
+      failures.push(`${page}: still imports ui/dialog — the create-form must be the inline card, not a modal (the reference's modality; only the Routines Schedule flow is a dialog)`);
+    }
+    if (!/FORM_CARD/.test(src)) {
+      failures.push(`${page}: the inline form card must ride the FORM_CARD record from page-layout.ts (the probed anatomy — rounded-xl border-none shadow-xl, the p-6 header, the p-6 pt-0 body)`);
+    }
+  }
+  expect(
+    failures,
+    "the seven module create-forms must be inline expanding cards (no dialog import, the FORM_CARD record consumed) — the WH-21 form-modality cure",
+  ).toEqual([]);
+});

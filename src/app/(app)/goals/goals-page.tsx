@@ -12,11 +12,10 @@ import {
   GradientButton,
   OptionChip,
 } from "@/components/shared/page-parts";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
 import { GOAL_CATEGORIES, GOAL_FREQUENCIES, goalCategoryMeta, goalFrequencyMeta } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -175,6 +174,126 @@ export default function GoalsClientPage() {
         }
       />
 
+      {/* The Create/Edit form — the reference's INLINE EXPANDING CARD
+          (WH-21, the modality cure: probed live — its create-forms open
+          in the page flow, no overlay, no scroll lock; only its Routines
+          Schedule flow is a modal). */}
+      {open && (
+        <section className={FORM_CARD.card}>
+          <div className={FORM_CARD.header}>
+            <h2 className={FORM_CARD.title}>{editing ? "Edit Goal" : "Create New Goal"}</h2>
+          </div>
+          <div className={FORM_CARD.body}>
+            <div className="space-y-4">
+
+            <div className="space-y-2">
+              <Label htmlFor="gl-title">Goal Title</Label>
+              <Input
+                id="gl-title"
+                required
+                className="mt-2"
+                placeholder="e.g., Exercise 3 times per week"
+                value={form.title}
+                onChange={(e) => set("title", e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="gl-desc">Description</Label>
+              <textarea
+                id="gl-desc"
+                className="mt-2 flex min-h-16 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                placeholder="Why is this goal important?"
+                value={form.description}
+                onChange={(e) => set("description", e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="gl-category">Category</Label>
+                <Select value={form.category} onValueChange={(v) => set("category", v)}>
+                  <SelectTrigger id="gl-category" className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {GOAL_CATEGORIES.map((c) => (
+                      <SelectItem key={c.value} value={c.value}>
+                        {c.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="gl-frequency">Frequency</Label>
+                <Select value={form.frequency} onValueChange={(v) => set("frequency", v)}>
+                  <SelectTrigger id="gl-frequency" className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {GOAL_FREQUENCIES.map((f) => (
+                      <SelectItem key={f.value} value={f.value}>
+                        {f.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="gl-target">Target Value</Label>
+                <Input
+                  id="gl-target"
+                  type="number"
+                  min={1}
+                  required
+                  className="mt-2"
+                  placeholder="3"
+                  value={form.targetValue}
+                  onChange={(e) => set("targetValue", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="gl-unit">Unit</Label>
+                <Input
+                  id="gl-unit"
+                  required
+                  className="mt-2"
+                  placeholder="e.g., times, hours, days"
+                  value={form.unit}
+                  onChange={(e) => set("unit", e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="gl-deadline">Deadline (optional)</Label>
+              <Input
+                id="gl-deadline"
+                type="date"
+                className="mt-2"
+                value={form.deadline}
+                onChange={(e) => set("deadline", e.target.value)}
+              />
+            </div>
+          
+              <div className={FORM_CARD.footer}>
+              <button
+                type="button"
+                className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+              <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.goals.button}>
+                {saving ? "Saving…" : editing ? "Save Changes" : "Create Goal"}
+              </GradientButton>
+          
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       <div className={PAGE_KPI_GRIDS.three}>
         <div className={cn(STAT_CARD.hero, "from-yellow-500 to-amber-600 p-5")}>
           <p className={cn(STAT_CARD.heroLabel, "text-yellow-100")}>Total Points</p>
@@ -313,120 +432,6 @@ export default function GoalsClientPage() {
         )}
       </SectionCard>
 
-      {/* The Create dialog — the reference's field set. */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>{editing ? "Edit Goal" : "Create New Goal"}</DialogTitle>
-            <DialogDescription>
-              {editing ? "Update the details below." : "Dream big, start small! ✨"}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="gl-title">Goal Title</Label>
-              <Input
-                id="gl-title"
-                required
-                className="mt-2"
-                placeholder="e.g., Exercise 3 times per week"
-                value={form.title}
-                onChange={(e) => set("title", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="gl-desc">Description</Label>
-              <textarea
-                id="gl-desc"
-                className="mt-2 flex min-h-16 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                placeholder="Why is this goal important?"
-                value={form.description}
-                onChange={(e) => set("description", e.target.value)}
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="gl-category">Category</Label>
-                <Select value={form.category} onValueChange={(v) => set("category", v)}>
-                  <SelectTrigger id="gl-category" className="mt-2 w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {GOAL_CATEGORIES.map((c) => (
-                      <SelectItem key={c.value} value={c.value}>
-                        {c.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="gl-frequency">Frequency</Label>
-                <Select value={form.frequency} onValueChange={(v) => set("frequency", v)}>
-                  <SelectTrigger id="gl-frequency" className="mt-2 w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {GOAL_FREQUENCIES.map((f) => (
-                      <SelectItem key={f.value} value={f.value}>
-                        {f.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="gl-target">Target Value</Label>
-                <Input
-                  id="gl-target"
-                  type="number"
-                  min={1}
-                  required
-                  className="mt-2"
-                  placeholder="3"
-                  value={form.targetValue}
-                  onChange={(e) => set("targetValue", e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="gl-unit">Unit</Label>
-                <Input
-                  id="gl-unit"
-                  required
-                  className="mt-2"
-                  placeholder="e.g., times, hours, days"
-                  value={form.unit}
-                  onChange={(e) => set("unit", e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="gl-deadline">Deadline (optional)</Label>
-              <Input
-                id="gl-deadline"
-                type="date"
-                className="mt-2"
-                value={form.deadline}
-                onChange={(e) => set("deadline", e.target.value)}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <button
-              type="button"
-              className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.goals.button}>
-              {saving ? "Saving…" : editing ? "Save Changes" : "Create Goal"}
-            </GradientButton>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
       </div>
     </div>
   );

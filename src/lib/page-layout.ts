@@ -308,6 +308,30 @@ export const PROFILE_PANEL = {
   bodySpaced: "p-6 pt-0 space-y-6",
 } as const;
 
+/** The module create-form card — WH-21 (F-2, the modality cure): the
+ *  reference's create-forms are INLINE EXPANDING CARDS in the page flow
+ *  (probed live 2026-10-31 on its Events page: the form opens with ZERO
+ *  overlay layers, every ancestor position:static, no scroll lock; the
+ *  card at top=136 directly below the page header, width = the
+ *  container's, radius 12, border 0, the shadow-xl stack) — the stock
+ *  shadcn Card anatomy (`rounded-xl border bg-card text-card-foreground
+ *  border-none shadow-xl` on the reference's own token names; ours rides
+ *  the surface/ink tokens) with the header `flex flex-col space-y-1.5
+ *  p-6`, a title-only header (the reference carries NO descriptions —
+ *  the dialog-era DialogDescriptions retired with the modality), the
+ *  body `p-6 pt-0` wrapping ONE `space-y-4` whose LAST child is the
+ *  footer (`flex justify-end gap-3` — probed; the dialog footer's
+ *  flex-col-reverse form retired with the modality). Only the Routines
+ *  "Schedule" flow is a modal on the reference (and ours already
+ *  mirrors it). */
+export const FORM_CARD = {
+  card: "rounded-xl border bg-surface text-ink border-none shadow-xl",
+  header: "flex flex-col space-y-1.5 p-6",
+  title: "text-base font-semibold leading-none tracking-tight",
+  body: "p-6 pt-0",
+  footer: "flex justify-end gap-3",
+} as const;
+
 /** The Profile Theme Mode picker — WH-17 (F-2): the reference's border-2
  *  card grid (probed live): `grid grid-cols-3 gap-3` of `p-4 rounded-xl
  *  border-2 transition-all flex flex-col items-center gap-2` cards with
@@ -448,8 +472,18 @@ export const SELECT_TRIGGER = {
 } as const;
 
 export const CHECKBOX = {
+  // WH-21 (F-1): the dark pairs. The record shipped light-only — on the
+  // dark Preferences wash (surface #18181b + the label row's
+  // bg-line-soft/40 = #1a1a1d) the checked fill/border (neutral-900
+  // #171717) computed ≈1.12:1 and the UNCHECKED box (no glyph) was a
+  // completely invisible control. The cure: neutral-400 (#a3a3a3) at
+  // 6.88:1 on the wash + the neutral-950 (#0a0a0a) glyph at 7.85:1 on
+  // its own fill. The light form stays the stock shadcn values (the
+  // fill vs the white card 17.93:1 — pinned by the interaction-contrast
+  // pin). Our superset: the reference ships ZERO checkboxes (probed
+  // live on its Profile → Preferences tab).
   control:
-    "peer h-4 w-4 shrink-0 rounded-sm border border-neutral-900 shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-neutral-900 data-[state=checked]:text-neutral-50",
+    "peer h-4 w-4 shrink-0 rounded-sm border border-neutral-900 shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-neutral-900 data-[state=checked]:text-neutral-50 dark:border-neutral-400 dark:data-[state=checked]:bg-neutral-400 dark:data-[state=checked]:border-neutral-400 dark:data-[state=checked]:text-neutral-950",
   indicator: "flex items-center justify-center text-current",
 } as const;
 // WH-12 (F-2): the `row`/`label` pair retired with its only consumer —

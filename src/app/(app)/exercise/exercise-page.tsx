@@ -12,11 +12,10 @@ import {
   GradientButton,
   OptionChip,
 } from "@/components/shared/page-parts";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, DIALOG_GROUP, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
 import { WORKOUT_TYPES, WORKOUT_INTENSITIES, workoutTypeMeta, intensityMeta } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -106,6 +105,109 @@ export default function ExerciseClientPage() {
         }
       />
 
+      {/* The Log Workout form — the reference's INLINE EXPANDING CARD
+          (WH-21, the modality cure: probed live — its create-forms open
+          in the page flow, no overlay, no scroll lock; only its Routines
+          Schedule flow is a modal). */}
+      {open && (
+        <section className={FORM_CARD.card}>
+          <div className={FORM_CARD.header}>
+            <h2 className={FORM_CARD.title}>Log New Workout</h2>
+          </div>
+          <div className={FORM_CARD.body}>
+            <div className="space-y-4">
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="workout-type">Exercise Type</Label>
+                <Select value={type} onValueChange={setType}>
+                  <SelectTrigger id="workout-type" className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {WORKOUT_TYPES.map((t) => (
+                      <SelectItem key={t.value} value={t.value}>
+                        {t.icon} {t.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="workout-duration">Duration (minutes)</Label>
+                <Input
+                  id="workout-duration"
+                  type="number"
+                  min={1}
+                  required
+                  className="mt-2"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  placeholder="30"
+                />
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="workout-intensity">Intensity</Label>
+                <Select value={intensity} onValueChange={setIntensity}>
+                  <SelectTrigger id="workout-intensity" className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {WORKOUT_INTENSITIES.map((t) => (
+                      <SelectItem key={t.value} value={t.value}>
+                        {t.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="workout-calories">Calories Burned (optional)</Label>
+                <Input
+                  id="workout-calories"
+                  type="number"
+                  min={0}
+                  className="mt-2"
+                  value={calories}
+                  onChange={(e) => setCalories(e.target.value)}
+                  placeholder="250"
+                />
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="workout-date">Date</Label>
+                <Input
+                  id="workout-date"
+                  type="date"
+                  className="mt-2"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="workout-notes">Notes (optional)</Label>
+                <textarea
+                  id="workout-notes"
+                  className="mt-2 flex min-h-20 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  placeholder="How did you feel? Any achievements?"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                />
+              </div>
+              <div className={FORM_CARD.footer}>
+                <button
+                  type="button"
+                  className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
+                  onClick={() => setOpen(false)}
+                >
+                  Cancel
+                </button>
+                <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.exercise.button}>
+                  {saving ? "Saving…" : "Save Workout"}
+                </GradientButton>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       <div className={PAGE_KPI_GRIDS.three}>
         <div className={cn(STAT_CARD.hero, "from-orange-500 to-red-500 p-5")}>
           <p className={cn(STAT_CARD.heroLabel, "text-orange-100")}>Total Workouts</p>
@@ -168,105 +270,6 @@ export default function ExerciseClientPage() {
           </ul>
         )}
       </SectionCard>
-
-      {/* The Log Workout dialog — the reference's field set. */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Log New Workout</DialogTitle>
-            <DialogDescription>Every session counts — even the small ones!</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="workout-type">Exercise Type</Label>
-              <Select value={type} onValueChange={setType}>
-                <SelectTrigger id="workout-type" className="mt-2 w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {WORKOUT_TYPES.map((t) => (
-                    <SelectItem key={t.value} value={t.value}>
-                      {t.icon} {t.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="workout-duration">Duration (minutes)</Label>
-              <Input
-                id="workout-duration"
-                type="number"
-                min={1}
-                required
-                className="mt-2"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-                placeholder="30"
-              />
-            </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="workout-intensity">Intensity</Label>
-              <Select value={intensity} onValueChange={setIntensity}>
-                <SelectTrigger id="workout-intensity" className="mt-2 w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {WORKOUT_INTENSITIES.map((t) => (
-                    <SelectItem key={t.value} value={t.value}>
-                      {t.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="workout-calories">Calories Burned (optional)</Label>
-              <Input
-                id="workout-calories"
-                type="number"
-                min={0}
-                className="mt-2"
-                value={calories}
-                onChange={(e) => setCalories(e.target.value)}
-                placeholder="250"
-              />
-            </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="workout-date">Date</Label>
-              <Input
-                id="workout-date"
-                type="date"
-                className="mt-2"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
-            </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="workout-notes">Notes (optional)</Label>
-              <textarea
-                id="workout-notes"
-                className="mt-2 flex min-h-20 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                placeholder="How did you feel? Any achievements?"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <button
-              type="button"
-              className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.exercise.button}>
-              {saving ? "Saving…" : "Save Workout"}
-            </GradientButton>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
       </div>
     </div>
   );

@@ -12,11 +12,10 @@ import {
   GradientButton,
   OptionChip,
 } from "@/components/shared/page-parts";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, BUTTON_BASE, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
 import {
   REMINDER_TYPES,
   REMINDER_REPEATS,
@@ -157,6 +156,116 @@ export default function RemindersClientPage() {
         }
       />
 
+      {/* The Create/Edit form — the reference's INLINE EXPANDING CARD
+          (WH-21, the modality cure: probed live — its create-forms open
+          in the page flow, no overlay, no scroll lock; only its Routines
+          Schedule flow is a modal). */}
+      {open && (
+        <section className={FORM_CARD.card}>
+          <div className={FORM_CARD.header}>
+            <h2 className={FORM_CARD.title}>{editing ? "Edit Reminder" : "Create New Reminder"}</h2>
+          </div>
+          <div className={FORM_CARD.body}>
+            <div className="space-y-4">
+
+            <div className="space-y-2">
+              <Label htmlFor="rm-title">What should we remind you about?</Label>
+              <Input
+                id="rm-title"
+                required
+                className="mt-2"
+                placeholder="e.g., Study for Math exam"
+                value={form.title}
+                onChange={(e) => set("title", e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="rm-details">Additional Details (optional)</Label>
+              <textarea
+                id="rm-details"
+                className="mt-2 flex min-h-16 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                placeholder="Any specific notes..."
+                value={form.details}
+                onChange={(e) => set("details", e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="rm-when">Remind Me On</Label>
+              <Input
+                id="rm-when"
+                type="datetime-local"
+                required
+                className="mt-2"
+                value={form.remindAt}
+                onChange={(e) => set("remindAt", e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="rm-type">Type</Label>
+                <Select value={form.type} onValueChange={(v) => set("type", v)}>
+                  <SelectTrigger id="rm-type" className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {REMINDER_TYPES.map((t) => (
+                      <SelectItem key={t.value} value={t.value}>
+                        {t.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="rm-priority">Priority</Label>
+                <Select value={form.priority} onValueChange={(v) => set("priority", v)}>
+                  <SelectTrigger id="rm-priority" className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ASSIGNMENT_PRIORITIES.map((p) => (
+                      <SelectItem key={p.value} value={p.value}>
+                        {p.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="rm-repeat">Repeat</Label>
+                <Select value={form.repeat} onValueChange={(v) => set("repeat", v)}>
+                  <SelectTrigger id="rm-repeat" className="mt-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {REMINDER_REPEATS.map((t) => (
+                      <SelectItem key={t.value} value={t.value}>
+                        {t.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          
+              <div className={FORM_CARD.footer}>
+              <button
+                type="button"
+                className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+              <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.reminders.button}>
+                {saving ? "Saving…" : editing ? "Save Changes" : "Create Reminder"}
+              </GradientButton>
+          
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       <div className={PAGE_KPI_GRIDS.three}>
         <div className={cn(STAT_CARD.card, "p-5")}>
           <p className={STAT_CARD.label}>Upcoming</p>
@@ -256,108 +365,6 @@ export default function RemindersClientPage() {
         )}
       </SectionCard>
 
-      {/* The Create dialog — the reference's field set. */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>{editing ? "Edit Reminder" : "Create New Reminder"}</DialogTitle>
-            <DialogDescription>Small nudges, big wins.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="rm-title">What should we remind you about?</Label>
-              <Input
-                id="rm-title"
-                required
-                className="mt-2"
-                placeholder="e.g., Study for Math exam"
-                value={form.title}
-                onChange={(e) => set("title", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="rm-details">Additional Details (optional)</Label>
-              <textarea
-                id="rm-details"
-                className="mt-2 flex min-h-16 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                placeholder="Any specific notes..."
-                value={form.details}
-                onChange={(e) => set("details", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="rm-when">Remind Me On</Label>
-              <Input
-                id="rm-when"
-                type="datetime-local"
-                required
-                className="mt-2"
-                value={form.remindAt}
-                onChange={(e) => set("remindAt", e.target.value)}
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="rm-type">Type</Label>
-                <Select value={form.type} onValueChange={(v) => set("type", v)}>
-                  <SelectTrigger id="rm-type" className="mt-2 w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {REMINDER_TYPES.map((t) => (
-                      <SelectItem key={t.value} value={t.value}>
-                        {t.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="rm-priority">Priority</Label>
-                <Select value={form.priority} onValueChange={(v) => set("priority", v)}>
-                  <SelectTrigger id="rm-priority" className="mt-2 w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {ASSIGNMENT_PRIORITIES.map((p) => (
-                      <SelectItem key={p.value} value={p.value}>
-                        {p.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="rm-repeat">Repeat</Label>
-                <Select value={form.repeat} onValueChange={(v) => set("repeat", v)}>
-                  <SelectTrigger id="rm-repeat" className="mt-2 w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {REMINDER_REPEATS.map((t) => (
-                      <SelectItem key={t.value} value={t.value}>
-                        {t.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <button
-              type="button"
-              className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.reminders.button}>
-              {saving ? "Saving…" : editing ? "Save Changes" : "Create Reminder"}
-            </GradientButton>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
       </div>
     </div>
   );

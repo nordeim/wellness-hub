@@ -11,10 +11,9 @@ import {
   LoadingBlock,
   GradientButton,
 } from "@/components/shared/page-parts";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, DIALOG_GROUP, BUTTON_CLASSES } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
 import { MOODS, moodMeta } from "@/lib/constants";
 import { averageEnergy, currentStreak, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -109,6 +108,152 @@ export default function MentalHealthClientPage() {
         }
       />
 
+      {/* The New Entry form — the reference's INLINE EXPANDING CARD (WH-21,
+          the modality cure: probed live — its create-forms open in the page
+          flow, no overlay, no scroll lock; only its Routines Schedule flow
+          is a modal) carrying the mood TILE selector (F-3: the reference's
+          own anatomy — block-stacked 173×104 tiles, the FIXED blue→cyan
+          active pair, never the preset-themeable primary). */}
+      {open && (
+        <section className={FORM_CARD.card}>
+          <div className={FORM_CARD.header}>
+            <h2 className={FORM_CARD.title}>How are you feeling today?</h2>
+          </div>
+          <div className={FORM_CARD.body}>
+            <div className="space-y-4">
+              <div className={DIALOG_GROUP.group}>
+                <Label>Choose your mood</Label>
+                <div className="mt-2 grid grid-cols-2 md:grid-cols-5 gap-3">
+                  {MOODS.map((m) => (
+                    <button
+                      key={m.value}
+                      type="button"
+                      onClick={() => setMood(m.value)}
+                      aria-pressed={mood === m.value}
+                      className={cn(
+                        "p-4 rounded-2xl border-2 transition-all text-center",
+                        mood === m.value
+                          ? "bg-gradient-to-br from-blue-500 to-cyan-500 text-white border-transparent shadow-lg scale-105"
+                          : "border-gray-200 hover:border-gray-300 dark:border-neutral-700 dark:hover:border-neutral-600",
+                      )}
+                    >
+                      <span aria-hidden="true" className="block text-4xl mb-2">
+                        {m.icon}
+                      </span>
+                      <span className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        {m.label}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="mood-energy">Energy Level: {energy}/10</Label>
+                <input
+                  id="mood-energy"
+                  type="range"
+                  min={0}
+                  max={10}
+                  value={energy}
+                  onChange={(e) => setEnergy(Number(e.target.value))}
+                  className="mt-3 w-full accent-[var(--color-primary)]"
+                />
+                <div className="flex justify-between text-xs text-subtle">
+                  <span>Low</span>
+                  <span>High</span>
+                </div>
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="mood-activities">Activities that affected your mood</Label>
+                <div className="mt-2 flex gap-2">
+                  <Input
+                    id="mood-activities"
+                    placeholder="e.g., Exercise, Work, Friends"
+                    value={activityInput}
+                    onChange={(e) => setActivityInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        addActivity();
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className={cn(BUTTON_CLASSES, "h-9 rounded-md border border-line px-4 hover:bg-line-soft")}
+                    onClick={addActivity}
+                  >
+                    Add
+                  </button>
+                </div>
+                {activities.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {activities.map((a) => (
+                      <span
+                        key={a}
+                        className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
+                      >
+                        {a}
+                        <button
+                          type="button"
+                          aria-label={`Remove ${a}`}
+                          className="text-primary/70 hover:text-primary"
+                          onClick={() => setActivities(activities.filter((x) => x !== a))}
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="mood-gratitude">What are you grateful for today?</Label>
+                <textarea
+                  id="mood-gratitude"
+                  className="mt-2 flex min-h-16 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  placeholder="Write something you're thankful for..."
+                  value={gratitude}
+                  onChange={(e) => setGratitude(e.target.value)}
+                />
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="mood-reflection">Daily Reflection</Label>
+                <textarea
+                  id="mood-reflection"
+                  className="mt-2 flex min-h-20 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  placeholder="How was your day? Any thoughts or feelings to note?"
+                  value={reflection}
+                  onChange={(e) => setReflection(e.target.value)}
+                />
+              </div>
+              <div className={DIALOG_GROUP.group}>
+                <Label htmlFor="mood-date">Date</Label>
+                <Input
+                  id="mood-date"
+                  type="date"
+                  className="mt-2"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+              </div>
+              <div className={FORM_CARD.footer}>
+                <button
+                  type="button"
+                  className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
+                  onClick={() => setOpen(false)}
+                >
+                  Cancel
+                </button>
+                <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.mentalhealth.button}>
+                  {saving ? "Saving…" : "Save Entry"}
+                </GradientButton>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       <div className={PAGE_KPI_GRIDS.three}>
         <div className={cn(STAT_CARD.hero, "from-emerald-500 to-teal-500 p-5")}>
           <p className={cn(STAT_CARD.heroLabel, "text-emerald-100")}>Total Entries</p>
@@ -181,145 +326,7 @@ export default function MentalHealthClientPage() {
             })}
           </ul>
         )}
-      </SectionCard>
-
-      {/* The New Entry dialog — "How are you feeling today?" */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>How are you feeling today?</DialogTitle>
-            <DialogDescription>
-              There are no wrong answers. This is your space. 💜
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className={DIALOG_GROUP.group}>
-              <Label>Choose your mood</Label>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {MOODS.map((m) => (
-                  <button
-                    key={m.value}
-                    type="button"
-                    onClick={() => setMood(m.value)}
-                    aria-pressed={mood === m.value}
-                    className={cn(
-                      BUTTON_CLASSES,
-                      "h-10 rounded-full border px-4 text-sm",
-                      mood === m.value
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-line bg-surface hover:bg-line-soft",
-                    )}
-                  >
-                    <span aria-hidden="true">{m.icon}</span> {m.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="mood-energy">Energy Level: {energy}/10</Label>
-              <input
-                id="mood-energy"
-                type="range"
-                min={0}
-                max={10}
-                value={energy}
-                onChange={(e) => setEnergy(Number(e.target.value))}
-                className="mt-3 w-full accent-[var(--color-primary)]"
-              />
-              <div className="flex justify-between text-xs text-subtle">
-                <span>Low</span>
-                <span>High</span>
-              </div>
-            </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="mood-activities">Activities that affected your mood</Label>
-              <div className="mt-2 flex gap-2">
-                <Input
-                  id="mood-activities"
-                  placeholder="e.g., Exercise, Work, Friends"
-                  value={activityInput}
-                  onChange={(e) => setActivityInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      addActivity();
-                    }
-                  }}
-                />
-                <button
-                  type="button"
-                  className={cn(BUTTON_CLASSES, "h-9 rounded-md border border-line px-4 hover:bg-line-soft")}
-                  onClick={addActivity}
-                >
-                  Add
-                </button>
-              </div>
-              {activities.length > 0 && (
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {activities.map((a) => (
-                    <span
-                      key={a}
-                      className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
-                    >
-                      {a}
-                      <button
-                        type="button"
-                        aria-label={`Remove ${a}`}
-                        className="text-primary/70 hover:text-primary"
-                        onClick={() => setActivities(activities.filter((x) => x !== a))}
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="mood-gratitude">What are you grateful for today?</Label>
-              <textarea
-                id="mood-gratitude"
-                className="mt-2 flex min-h-16 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                placeholder="Write something you're thankful for..."
-                value={gratitude}
-                onChange={(e) => setGratitude(e.target.value)}
-              />
-            </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="mood-reflection">Daily Reflection</Label>
-              <textarea
-                id="mood-reflection"
-                className="mt-2 flex min-h-20 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                placeholder="How was your day? Any thoughts or feelings to note?"
-                value={reflection}
-                onChange={(e) => setReflection(e.target.value)}
-              />
-            </div>
-            <div className={DIALOG_GROUP.group}>
-              <Label htmlFor="mood-date">Date</Label>
-              <Input
-                id="mood-date"
-                type="date"
-                className="mt-2"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <button
-              type="button"
-              className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-8 hover:bg-line-soft")}
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-            <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.mentalhealth.button}>
-              {saving ? "Saving…" : "Save Entry"}
-            </GradientButton>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        </SectionCard>
       </div>
     </div>
   );
