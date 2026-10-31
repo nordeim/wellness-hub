@@ -4,6 +4,7 @@ import * as React from "react";
 import {
   BookOpen,
   ExternalLink,
+  Filter,
   Pencil,
   Plus,
   Search,
@@ -22,7 +23,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, BUTTON_CLASSES, FORM_CARD, SECTION_CARD, EMPTY_STATE } from "@/lib/page-layout";
+import { PAGE_THEMES, BUTTON_CLASSES, FORM_CARD, SECTION_CARD, EMPTY_STATE, TOOLBAR , TEXTAREA_FIELD } from "@/lib/page-layout";
 import { RESOURCE_TYPES, resourceTypeMeta } from "@/lib/constants";
 import { matchesQuery, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -219,7 +220,7 @@ export default function StudyResourcesClientPage() {
               <Label htmlFor="sr-desc">Description</Label>
               <textarea
                 id="sr-desc"
-                className="mt-2 flex min-h-16 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className={TEXTAREA_FIELD}
                 placeholder="What does this resource cover?"
                 value={form.description}
                 onChange={(e) => set("description", e.target.value)}
@@ -311,7 +312,7 @@ export default function StudyResourcesClientPage() {
               <Label htmlFor="sr-notes">Personal Notes (optional)</Label>
               <textarea
                 id="sr-notes"
-                className="mt-2 flex min-h-16 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className={TEXTAREA_FIELD}
                 placeholder="Your thoughts about this resource..."
                 value={form.personalNotes}
                 onChange={(e) => set("personalNotes", e.target.value)}
@@ -359,45 +360,50 @@ export default function StudyResourcesClientPage() {
         </section>
       )}
 
-      {/* The toolbar — search + subject + type (the reference's trio). */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden="true" />
-          <input
+      {/* The toolbar — search + subject + type (WH-24: the reference's
+          stock family — the Input + pl-10, the Filter-icon wrapper, the
+          fixed w-40 pair, the gap-4/md container). */}
+      <div className={TOOLBAR.container}>
+        <div className={TOOLBAR.searchWrap}>
+          <Search className={TOOLBAR.searchIcon} aria-hidden="true" />
+          <Input
             type="search"
             aria-label="Search resources, tags..."
             placeholder="Search resources, tags..."
-            className="flex h-9 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pl-9"
+            className="pl-10"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
-        <Select value={subject} onValueChange={setSubject}>
-          <SelectTrigger className="w-full sm:w-40" aria-label="Filter by subject">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Subjects</SelectItem>
-            {subjects.map((s) => (
-              <SelectItem key={s} value={s}>
-                {s}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={type} onValueChange={setType}>
-          <SelectTrigger className="w-full sm:w-40" aria-label="Filter by type">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            {RESOURCE_TYPES.map((t) => (
-              <SelectItem key={t.value} value={t.value}>
-                {t.icon} {t.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className={TOOLBAR.selectsWrap}>
+          <Filter className={TOOLBAR.filterIcon} aria-hidden="true" />
+          <Select value={subject} onValueChange={setSubject}>
+            <SelectTrigger className="w-40" aria-label="Filter by subject">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Subjects</SelectItem>
+              {subjects.map((s) => (
+                <SelectItem key={s} value={s}>
+                  {s}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={type} onValueChange={setType}>
+            <SelectTrigger className="w-40" aria-label="Filter by type">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              {RESOURCE_TYPES.map((t) => (
+                <SelectItem key={t.value} value={t.value}>
+                  {t.icon} {t.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* WH-23: the reference's OWN special empty card (probed): the

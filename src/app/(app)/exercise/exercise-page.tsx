@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD , TEXTAREA_FIELD } from "@/lib/page-layout";
 import { WORKOUT_TYPES, WORKOUT_INTENSITIES, workoutTypeMeta, intensityMeta } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -185,7 +185,7 @@ export default function ExerciseClientPage() {
                 <Label htmlFor="workout-notes">Notes (optional)</Label>
                 <textarea
                   id="workout-notes"
-                  className="mt-2 flex min-h-20 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  className={TEXTAREA_FIELD}
                   placeholder="How did you feel? Any achievements?"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}

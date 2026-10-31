@@ -2005,3 +2005,320 @@ it("WH-23: the empty-form + omission census — the reference's empty states are
     "the empty forms + the zero-row omissions must mirror the reference — the WH-23 cure",
   ).toEqual([]);
 });
+
+// WH-24: the card-family geometry census (the sibling families) — the
+// Learning tutorial cards + the Events calendar card, the two declared
+// targets WH-23's ledger pointed at. The tutorial cards are a
+// GROUP-HOVER REVEAL family (the img scales 1.05, a 20% scrim fades in,
+// the Watch Now button fades from opacity-0 — probed live with a real
+// pointer: our permanent scrim + always-visible rounded-full pill never
+// matched), the body rides the CardHeader/CardContent anatomy with the
+// line-clamp-2 title + the gap-2 chips row + the line-clamp-3
+// description, and the grid is gap-6 with 2-col from md / 3-col from lg
+// (ours shipped gap-5 with sm/xl arms). The calendar card rides the same
+// CardHeader/CardContent forms ours escaped (the hand-built px-5 py-4
+// header — the calendar never rides the SectionCard component), its
+// title row carries the title classes with a bare span, its nav is the
+// stock OUTLINE trio with TEXT arrows at flex gap-2 (ours: ghost
+// buttons with lucide chevrons at gap-1), and the day numbers carry the
+// mb-1 + the space-y-1 events container (ours: mt-1 flex flex-wrap
+// gap-0.5). Probed live 2026-10-31 (computed styles + DOM, real
+// pointer for the hover families, settled ≥400 ms).
+it("WH-24: the card-family geometry census — the tutorial + calendar cards ride the reference's probed anatomy (the sibling families WH-23 did not walk)", () => {
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const failures: string[] = [];
+
+  // (a) the TUTORIAL_CARD record — the probed reveal family + the split body
+  const TC = layoutSrc.match(/export const TUTORIAL_CARD = \{([\s\S]*?)\n\} as const;/);
+  expect(TC, "the TUTORIAL_CARD record must exist in page-layout.ts").toBeTruthy();
+  const TC_MEMBERS: [string, string][] = [
+    ["card", "overflow-hidden rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all group"],
+    ["cover", "relative aspect-video bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden"],
+    ["cover", "dark:from-neutral-800 dark:to-neutral-900"],
+    ["img", "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"],
+    ["overlay", "absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center"],
+    ["watchBtn", "opacity-0 group-hover:opacity-100 transition-opacity bg-white text-gray-900 hover:bg-gray-100"],
+    ["watchBtn", "shadow h-9 px-4 py-2"],
+    ["duration", "bg-black/70 text-white text-xs px-2 py-1 rounded"],
+    ["header", "flex flex-col space-y-1.5 p-6"],
+    ["titleRow", "flex items-start justify-between gap-2 mb-2"],
+    ["title", "font-semibold tracking-tight text-lg line-clamp-2"],
+    ["chipsRow", "flex flex-wrap gap-2"],
+    ["body", "p-6 pt-0"],
+    ["desc", "text-sm text-gray-600 line-clamp-3 dark:text-gray-400"],
+    ["grid", "grid md:grid-cols-2 lg:grid-cols-3 gap-6"],
+  ];
+  for (const [member, expectCls] of TC_MEMBERS) {
+    const m = TC![1].match(new RegExp(`${member}:\\s*"([^"]*)"`));
+    if (!m || !m[1]!.includes(expectCls)) {
+      failures.push(`TUTORIAL_CARD.${member} must carry the probed form "${expectCls}" (read "${m?.[1] ?? "—"}")`);
+    }
+  }
+
+  // (b) the learning page consumes the record; the permanent-scrim +
+  // always-visible-pill family RETIRES (probed: the reference's resting
+  // card carries NO scrim and an opacity-0 button)
+  const learnRaw = readFileSync(join(REPO_ROOT, "src/app/(app)/learning/learning-page.tsx"), "utf8");
+  const learnSrc = strip(learnRaw);
+  if (!learnSrc.includes("TUTORIAL_CARD")) failures.push("learning-page.tsx must consume the TUTORIAL_CARD record");
+  if (/bg-black\/30/.test(learnSrc)) {
+    failures.push("the tutorial cover's scrim must be the reference's REVEAL form (bg-black/0 group-hover:bg-black/20) — the permanent bg-black/30 retires");
+  }
+  if (/rounded-full bg-white\/95/.test(learnSrc)) {
+    failures.push("the Watch Now affordance must be the reference's rectangle (the stock base + opacity-0 group-hover:opacity-100) — the always-visible rounded-full pill retires");
+  }
+  if (/sm:grid-cols-2 xl:grid-cols-3 gap-5/.test(learnSrc)) {
+    failures.push("the tutorial grid must be the reference's grid md:grid-cols-2 lg:grid-cols-3 gap-6 — the sm/xl gap-5 form retires");
+  }
+  if (/"p-4"/.test(learnSrc)) {
+    failures.push("the tutorial card's body must ride the CardHeader/CardContent split (p-6 + p-6 pt-0) — the single p-4 body retires");
+  }
+  if (/mt-1\.5 flex flex-wrap gap-1\.5/.test(learnSrc)) {
+    failures.push("the chips row must be the header's second child at flex flex-wrap gap-2 — the mt-1.5 gap-1.5 form retires");
+  }
+
+  // (c) the CALENDAR record — the CardHeader/CardContent anatomy + the
+  // outline nav trio with TEXT arrows + the mb-1 day numbers
+  const CAL = layoutSrc.match(/export const CALENDAR = \{([\s\S]*?)\n\} as const;/);
+  expect(CAL, "the CALENDAR record must exist in page-layout.ts").toBeTruthy();
+  const CAL_MEMBERS: [string, string][] = [
+    ["headerRow", "font-semibold leading-none tracking-tight flex items-center justify-between"],
+    ["navRow", "flex gap-2"],
+    ["navBtn", "border border-line bg-surface shadow-sm hover:bg-line-soft hover:text-neutral-900"],
+    ["navBtn", "dark:hover:text-neutral-100"],
+    ["navBtn", "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"],
+    ["navBtn", "h-8 rounded-md px-3 text-xs"],
+    ["grid", "grid grid-cols-7 gap-2"],
+    ["dayNum", "text-sm font-medium mb-1"],
+    ["dayEvents", "space-y-1"],
+  ];
+  for (const [member, expectCls] of CAL_MEMBERS) {
+    const m = CAL![1].match(new RegExp(`${member}:\\s*"([^"]*)"`));
+    if (!m || !m[1]!.includes(expectCls)) {
+      failures.push(`CALENDAR.${member} must carry the probed form "${expectCls}" (read "${m?.[1] ?? "—"}")`);
+    }
+  }
+
+  // (d) the events page consumes the forms; the hand-built header + the
+  // lucide chevrons + the grid padding RETIRE
+  const eventsSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/events/events-page.tsx"), "utf8"));
+  if (!eventsSrc.includes("CALENDAR")) failures.push("events-page.tsx must consume the CALENDAR record");
+  if (!eventsSrc.includes("SECTION_CARD.header") || !eventsSrc.includes("SECTION_CARD.body")) {
+    failures.push("the calendar card must ride the CardHeader/CardContent anatomy (SECTION_CARD.header/body) — the hand-built header escapes the WH-23 cure");
+  }
+  if (/px-5 py-4/.test(eventsSrc)) {
+    failures.push("the calendar header's px-5 py-4 form retires — the reference's header is the CardHeader form (p-6) wrapping the title row");
+  }
+  if (/p-4 pt-2/.test(eventsSrc)) {
+    failures.push("the calendar grid's p-4 pt-2 padding retires — the reference's grid rides bare inside the p-6 pt-0 body");
+  }
+  if (/ChevronLeft|ChevronRight/.test(eventsSrc)) {
+    failures.push("the calendar nav must carry the reference's TEXT arrows (←/→) — the lucide chevron imports retire");
+  }
+  if (/"flex items-center gap-1"/.test(eventsSrc)) {
+    failures.push("the calendar nav row must be the reference's flex gap-2 (no items-center, 8px gaps)");
+  }
+  if (/mt-1 flex flex-wrap gap-0\.5/.test(eventsSrc)) {
+    failures.push("the day-cell events container must be the reference's space-y-1 — the mt-1 flex flex-wrap gap-0.5 form retires");
+  }
+
+  expect(
+    failures,
+    "the tutorial + calendar card families must mirror the reference — the WH-24 cure",
+  ).toEqual([]);
+});
+
+// WH-24: the module-toolbar + chip-form census — the Learning +
+// StudyResources toolbars ride the reference's stock-input family (the
+// container flex flex-col md:flex-row gap-4, the search the STOCK Input
+// form + pl-10 with a w-5 h-5 gray-400 icon, the selects in a
+// Filter-icon flex items-center gap-2 wrapper at FIXED w-48/w-40 — ours
+// shipped hand-rolled py-2 text-sm shadow-xs pl-9 strings, h-4 w-4
+// muted icons, no wrapper, no Filter icon, and w-full-sm: breakpoints),
+// and the shared OptionChip carries the stock shadcn Badge arms
+// (transition-colors + the focus:ring-2 family + shadow +
+// hover:bg-primary/80 — probed on the reference's rendered badges; our
+// gap-1 arm retires, the reference has none).
+it("WH-24: the module-toolbar + chip-form census — the stock search family + the Filter-icon select wrappers + the Badge arms", () => {
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const partsSrc = readFileSync(join(REPO_ROOT, "src/components/shared/page-parts.tsx"), "utf8");
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const failures: string[] = [];
+
+  // (a) the TOOLBAR record
+  const TB = layoutSrc.match(/export const TOOLBAR = \{([\s\S]*?)\n\} as const;/);
+  expect(TB, "the TOOLBAR record must exist in page-layout.ts").toBeTruthy();
+  const TB_MEMBERS: [string, string][] = [
+    ["container", "flex flex-col md:flex-row gap-4"],
+    ["searchWrap", "flex-1 relative"],
+    ["searchIcon", "absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"],
+    ["selectsWrap", "flex items-center gap-2"],
+    ["filterIcon", "h-5 w-5 text-gray-400"],
+  ];
+  for (const [member, expectCls] of TB_MEMBERS) {
+    const m = TB![1].match(new RegExp(`${member}:\\s*"([^"]*)"`));
+    if (!m || !m[1]!.includes(expectCls)) {
+      failures.push(`TOOLBAR.${member} must carry the probed form "${expectCls}" (read "${m?.[1] ?? "—"}")`);
+    }
+  }
+
+  // (b) the learning page: the Input component + pl-10 + the fixed w-48
+  const learnSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/learning/learning-page.tsx"), "utf8"));
+  if (!learnSrc.includes("TOOLBAR.")) failures.push("learning-page.tsx must consume the TOOLBAR record");
+  if (!/from "@\/components\/ui\/input"/.test(learnSrc)) {
+    failures.push("the learning search must ride the Input component (the stock form) — the hand-rolled string retires");
+  }
+  if (!/pl-10/.test(learnSrc)) failures.push("the learning search input must carry the reference's pl-10 (the icon's w-5 clearance)");
+  if (/py-2 text-sm shadow-xs/.test(learnSrc)) {
+    failures.push("the hand-rolled search string (py-2 text-sm shadow-xs) retires — the reference rides the stock py-1 text-base md:text-sm shadow-sm form");
+  }
+  if (/w-full sm:w-48/.test(learnSrc)) {
+    failures.push("the learning category trigger must be FIXED w-48 (probed at 1280 AND 390 — the w-full-sm: breakpoint form retires)");
+  }
+
+  // (c) the studyresources page: the same family (the Filter wrapper + the fixed w-40s)
+  const srSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/studyresources/studyresources-page.tsx"), "utf8"));
+  if (!srSrc.includes("TOOLBAR.")) failures.push("studyresources-page.tsx must consume the TOOLBAR record");
+  if (!/Filter/.test(srSrc)) failures.push("the studyresources selects must ride the Filter-icon wrapper (probed: lucide-filter w-5 h-5 text-gray-400 leading the selects row)");
+  if (/w-full sm:w-40/.test(srSrc)) {
+    failures.push("the studyresources triggers must be FIXED w-40 (the w-full-sm: breakpoint form retires)");
+  }
+  if (/py-2 text-sm shadow-xs/.test(srSrc)) {
+    failures.push("the hand-rolled input/textarea string retires on studyresources too — the stock Input + pl-10 / the TEXTAREA_FIELD form");
+  }
+
+  // (d) the OptionChip's stock Badge arms (probed on the reference's
+  // rendered badges: transition-colors focus:outline-none focus:ring-2
+  // focus:ring-ring focus:ring-offset-2 border-transparent shadow
+  // hover:bg-primary/80 + the tint)
+  const chipSrc = partsSrc;
+  const chipClass = chipSrc.match(/function OptionChip[\s\S]{0,900}?"([^"]*rounded[^"]*)"/)?.[1] ?? "";
+  for (const arm of [
+    "transition-colors",
+    "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+    "shadow",
+    "hover:bg-primary/80",
+  ]) {
+    if (!chipClass.includes(arm)) {
+      failures.push(`the OptionChip must carry the stock Badge arm "${arm}" (probed on the reference's badges)`);
+    }
+  }
+  if (/gap-1/.test(chipClass)) {
+    failures.push("the OptionChip's gap-1 arm retires — the reference's Badge carries no gap (the one icon consumer renders an unobservable face)");
+  }
+
+  // (e) the form TEXTAREAS ride the reference's stock form (probed on
+  // EVERY form it renders — events + studyresources + exercise +
+  // assignments + mentalhealth x2 + the Schedule modal: all eight are
+  // byte-identical `min-h-[60px] ... text-base shadow-sm ... md:text-sm`;
+  // ours shipped min-h-16/min-h-20 (64/80px) + text-sm-only + shadow-xs
+  // hand-rolled strings — the mobile 16px text and the 60px floor were
+  // never ours)
+  const pagesWithTextareas = [
+    "src/app/(app)/mentalhealth/mentalhealth-page.tsx",
+    "src/app/(app)/reminders/reminders-page.tsx",
+    "src/app/(app)/goals/goals-page.tsx",
+    "src/app/(app)/routines/routines-page.tsx",
+    "src/app/(app)/exercise/exercise-page.tsx",
+    "src/app/(app)/assignments/assignments-page.tsx",
+    "src/app/(app)/events/events-page.tsx",
+    "src/app/(app)/studyresources/studyresources-page.tsx",
+  ];
+  const taSrc = layoutSrc.match(/export const TEXTAREA_FIELD =\s*\n?\s*"([^"]*)"/)?.[1] ?? "";
+  expect(taSrc, "the TEXTAREA_FIELD record must exist in page-layout.ts").toContain("min-h-[60px]");
+  expect(taSrc).toContain("text-base");
+  expect(taSrc).toContain("md:text-sm");
+  for (const pg of pagesWithTextareas) {
+    const s = strip(readFileSync(join(REPO_ROOT, pg), "utf8"));
+    const tas = s.match(/<textarea/g)?.length ?? 0;
+    if (tas > 0 && !s.includes("TEXTAREA_FIELD")) {
+      failures.push(`${pg}: the ${tas} textarea(s) must ride the TEXTAREA_FIELD form (the reference's stock min-h-[60px] text-base family)`);
+    }
+    if (/min-h-16|min-h-20/.test(s)) {
+      failures.push(`${pg}: the min-h-16/min-h-20 textarea floors retire — the reference's floor is min-h-[60px] on every form`);
+    }
+  }
+
+  expect(
+    failures,
+    "the module toolbars + the chip form must mirror the reference — the WH-24 cure",
+  ).toEqual([]);
+});
+
+// WH-24: the routines template-card census — the reference's template
+// cards render NO thumbnail and NO Watch Video anywhere (probed live:
+// imgCount 0, hasWatchVideo false — its own template DATA carries the
+// fields its UI never renders; parity is a property of the RENDERED
+// FACE, not the data), the meta rows carry clock/calendar icons at
+// w-4 h-4 (ours: Clock/Sun at h-3.5 w-3.5), the Benefits rows are
+// items-start gap-1 with the ✓ text glyph (ours: items-center gap-2
+// with lucide CheckCircle2), the grid is md:grid-cols-2 lg:grid-cols-3
+// gap-6 (ours: grid-cols-1 md:grid-cols-2), the "Browse Templates"
+// heading is text-2xl font-bold text-gray-900 mb-4 with the 16px
+// text-gray-600 mb-6 subtitle, and the Use This Template button is
+// w-full mt-auto in the category pair with hover:opacity-90 + the
+// ArrowRight icon (ours: an auto-width pair in a justify-between row).
+it("WH-24: the routines template-card census — the thumbnail-free face + the meta/benefits glyphs + the w-full category-pair button", () => {
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const failures: string[] = [];
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const rSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/routines/routines-page.tsx"), "utf8"));
+
+  // (a) the thumbnail + Watch Video face RETIRES (the reference renders
+  // neither — the seed DATA keeps the fields)
+  if (/t\.thumbnail/.test(rSrc)) {
+    failures.push("the template card must NOT render the thumbnail branch — the reference's face carries none (imgCount 0, probed)");
+  }
+  if (/Watch Video/.test(rSrc)) {
+    failures.push("the template card must NOT render any Watch Video affordance — the reference's face carries none (probed)");
+  }
+
+  // (b) the meta rows: clock + calendar at w-4 h-4
+  if (!/Calendar/.test(rSrc)) failures.push("the timeOfDay row must carry the reference's Calendar glyph (ours shipped Sun)");
+  if (/h-3\.5 w-3\.5/.test(rSrc)) {
+    failures.push("the meta rows' icons must be the reference's w-4 h-4 (ours shipped h-3.5 w-3.5)");
+  }
+  if (/\bSun\b/.test(rSrc)) failures.push("the Sun glyph retires — the reference's second meta icon is the Calendar");
+
+  // (c) the Benefits rows: items-start gap-1 + the ✓ text glyph
+  if (!/items-start gap-1/.test(rSrc)) {
+    failures.push("the Benefits rows must be the reference's flex items-start gap-1 (ours: items-center gap-2)");
+  }
+  if (!/text-green-500" aria-hidden="true">✓/.test(rSrc)) {
+    failures.push("the Benefits rows must carry the reference's ✓ text glyph in text-green-500 (the lucide CheckCircle2 marker retires — the one remaining CheckCircle2 is the My-Routines Done button, an unobservable zero-row face)");
+  }
+
+  // (d) the grid + the heading + the button
+  if (!/md:grid-cols-2 lg:grid-cols-3 gap-6/.test(rSrc)) {
+    failures.push("the template grid must be the reference's md:grid-cols-2 lg:grid-cols-3 gap-6 (ours: grid-cols-1 md:grid-cols-2)");
+  }
+  // the MAP stays BARE — the reference's Use This Template carries NO 600
+  // hover arms (its hover is opacity-90 alone, probed live); the module
+  // primaries that DO darken their stops ride PAGE_THEMES (probed live on
+  // New Event + Log Workout — a different button family)
+  const catMap = layoutSrc.match(/export const ROUTINE_CATEGORY_GRADIENTS[^=]*=\s*\{([\s\S]*?)\};/)?.[1] ?? "";
+  if (/hover:from-/.test(catMap)) {
+    failures.push("the ROUTINE_CATEGORY_GRADIENTS members must be BARE pairs — the reference's Use This Template button darkens nothing on hover (opacity-90 alone); the 600 arms belong to PAGE_THEMES' module primaries only");
+  }
+  if (!/text-2xl font-bold text-gray-900 mb-4/.test(rSrc)) {
+    failures.push('the "Browse Templates" heading must be the reference\'s text-2xl font-bold text-gray-900 mb-4 (ours: text-xl font-semibold)');
+  }
+  if (!/text-gray-600 mb-6/.test(rSrc)) {
+    failures.push('the "Browse Templates" subtitle must be the reference\'s 16px text-gray-600 mb-6 (ours: text-sm text-muted)');
+  }
+  if (!/w-full mt-auto/.test(rSrc)) {
+    failures.push("the Use This Template button must be w-full mt-auto — the reference's button fills the card alone (ours: auto-width in a justify-between row)");
+  }
+  if (!/hover:opacity-90/.test(rSrc)) {
+    failures.push("the Use This Template button must carry the reference's hover:opacity-90 hover family");
+  }
+  if (!/ArrowRight/.test(rSrc)) {
+    failures.push("the Use This Template button must carry the reference's ArrowRight icon (w-4 h-4 ml-2)");
+  }
+
+  expect(
+    failures,
+    "the routines template card must mirror the reference's face — the WH-24 cure",
+  ).toEqual([]);
+});

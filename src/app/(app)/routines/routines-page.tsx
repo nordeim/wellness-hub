@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import {
+  ArrowRight,
+  Calendar,
   CalendarCheck,
   CheckCircle2,
   Clock,
-  Play,
-  Sun,
   Trash2,
 } from "lucide-react";
 import { useWellnessStore } from "@/stores/wellness-store";
@@ -21,7 +21,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PAGE_THEMES, ROUTINE_CATEGORY_GRADIENTS, routineCategoryStops, BUTTON_CLASSES, SCHEDULE_MODAL } from "@/lib/page-layout";
+import { PAGE_THEMES, ROUTINE_CATEGORY_GRADIENTS, routineCategoryStops, BUTTON_CLASSES, SCHEDULE_MODAL , TEXTAREA_FIELD } from "@/lib/page-layout";
 import { difficultyMeta } from "@/lib/constants";
 import { parseJsonArray } from "@/lib/wellness";
 import { formatDateShort } from "@/lib/format";
@@ -162,14 +162,17 @@ export default function RoutinesClientPage() {
       </SectionCard>
       )}
 
+      {/* WH-24: the reference's section heading — text-2xl font-bold
+          gray-900 mb-4 with the 16px gray-600 mb-6 subtitle (probed live;
+          ours shipped text-xl font-semibold + text-sm muted). */}
       <div>
-        <h2 className="text-xl font-semibold text-foreground">Browse Templates</h2>
-        <p className="text-sm text-muted">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4 dark:text-gray-100">Browse Templates</h2>
+        <p className="text-gray-600 mb-6 dark:text-gray-400">
           Choose a template that resonates with you. Remember: starting is the hardest part, but you've got this! 🌟
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {routineTemplates.map((t) => {
           const diff = difficultyMeta(t.difficulty);
           const benefits = parseJsonArray(t.benefits);
@@ -178,29 +181,14 @@ export default function RoutinesClientPage() {
               key={t.id}
               className="overflow-hidden rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all h-full flex flex-col"
             >
+              {/* WH-24: the reference's template card face — the category
+                  strip runs DIRECTLY into the header (probed live: its
+                  cards render NO thumbnail and NO Watch Video anywhere,
+                  imgCount 0 — its own template data carries the fields
+                  its UI never renders; parity is a property of the
+                  RENDERED FACE, so both video branches retire here while
+                  the seed data keeps the columns). */}
               <div className={cn("h-2 bg-gradient-to-r", routineCategoryStops(t.category))} aria-hidden="true" />
-              {t.thumbnail && (
-                <div className="relative h-40 overflow-hidden">
-                  <img
-                    src={t.thumbnail}
-                    alt={t.name}
-                    className="h-40 w-full object-cover"
-                    loading="lazy"
-                  />
-                  {t.videoUrl && (
-                    <button
-                      type="button"
-                      className="absolute inset-0 flex items-center justify-center gap-2 bg-black/30 text-sm font-medium text-white transition-colors hover:bg-black/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      onClick={() => {
-                        const url = t.videoUrl;
-                        if (url) window.open(url, "_blank", "noopener,noreferrer");
-                      }}
-                    >
-                      <Play className="h-5 w-5" /> Watch Video
-                    </button>
-                  )}
-                </div>
-              )}
               <div className="flex flex-col space-y-1.5 p-6">
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <h3 className="font-semibold tracking-tight text-lg text-foreground">{t.name}</h3>
@@ -211,10 +199,10 @@ export default function RoutinesClientPage() {
               <div className="p-6 pt-0 flex-1 flex flex-col">
                 <div className="space-y-3 mb-4">
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <Clock className="h-3.5 w-3.5" aria-hidden="true" /> {t.duration}
+                    <Clock className="h-4 w-4" aria-hidden="true" /> {t.duration}
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <Sun className="h-3.5 w-3.5" aria-hidden="true" /> {t.timeOfDay}
+                    <Calendar className="h-4 w-4" aria-hidden="true" /> {t.timeOfDay}
                   </div>
                 </div>
                 {t.tipsForProcrastinators && (
@@ -228,29 +216,26 @@ export default function RoutinesClientPage() {
                 <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">Benefits:</p>
                 <ul className="space-y-1 mb-4">
                   {benefits.map((b) => (
-                    <li key={b} className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-                      <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" aria-hidden="true" />
+                    <li key={b} className="flex items-start gap-1 text-xs text-gray-600 dark:text-gray-400">
+                      <span className="text-green-500" aria-hidden="true">✓</span>
                       {b}
                     </li>
                   ))}
                 </ul>
-                <div className="mt-auto flex items-center justify-between gap-2">
-                  <GradientButton onClick={() => openSchedule(t)} gradient={ROUTINE_CATEGORY_GRADIENTS[t.category] ?? ROUTINE_CATEGORY_GRADIENTS.morning}>
-                    Use This Template
-                  </GradientButton>
-                  {t.videoUrl && !t.thumbnail && (
-                    <button
-                      type="button"
-                      className={cn(BUTTON_CLASSES, "h-10 rounded-md border border-line px-4 hover:bg-line-soft")}
-                      onClick={() => {
-                        const url = t.videoUrl;
-                        if (url) window.open(url, "_blank", "noopener,noreferrer");
-                      }}
-                    >
-                      <Play className="h-4 w-4" /> Watch Video
-                    </button>
-                  )}
-                </div>
+                {/* WH-24: the reference's button — w-full mt-auto ALONE in
+                    the category pair + hover:opacity-90 + the ArrowRight
+                    (probed: 256px = the full card body; ours shipped an
+                    auto-width pair in a justify-between row). The trailing
+                    `shadow` overrides the shared base's shadow-lg through
+                    tailwind-merge — the reference's button is the stock
+                    DEFAULT variant (`shadow`), not the module primaries'
+                    shadow-lg family. */}
+                <GradientButton
+                  onClick={() => openSchedule(t)}
+                  gradient={`${ROUTINE_CATEGORY_GRADIENTS[t.category] ?? ROUTINE_CATEGORY_GRADIENTS.morning} hover:opacity-90 w-full mt-auto shadow`}
+                >
+                  Use This Template <ArrowRight className="h-4 w-4 ml-2" />
+                </GradientButton>
               </div>
             </section>
           );
@@ -324,7 +309,7 @@ export default function RoutinesClientPage() {
                     <Label htmlFor="routine-notes">Personal Notes (Optional)</Label>
                     <textarea
                       id="routine-notes"
-                      className="mt-2 flex min-h-20 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                      className={TEXTAREA_FIELD}
                       placeholder="Any modifications or reminders for yourself?"
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}

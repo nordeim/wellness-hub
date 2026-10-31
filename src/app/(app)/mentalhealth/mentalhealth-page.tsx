@@ -13,7 +13,7 @@ import {
 } from "@/components/shared/page-parts";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD , TEXTAREA_FIELD } from "@/lib/page-layout";
 import { MOODS, moodMeta } from "@/lib/constants";
 import { averageEnergy, currentStreak, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -211,7 +211,7 @@ export default function MentalHealthClientPage() {
                 <Label htmlFor="mood-gratitude">What are you grateful for today?</Label>
                 <textarea
                   id="mood-gratitude"
-                  className="mt-2 flex min-h-16 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  className={TEXTAREA_FIELD}
                   placeholder="Write something you're thankful for..."
                   value={gratitude}
                   onChange={(e) => setGratitude(e.target.value)}
@@ -221,7 +221,7 @@ export default function MentalHealthClientPage() {
                 <Label htmlFor="mood-reflection">Daily Reflection</Label>
                 <textarea
                   id="mood-reflection"
-                  className="mt-2 flex min-h-20 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  className={TEXTAREA_FIELD}
                   placeholder="How was your day? Any thoughts or feelings to note?"
                   value={reflection}
                   onChange={(e) => setReflection(e.target.value)}

@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD, EMPTY_STATE } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, BUTTON_BASE, BUTTON_CLASSES, FORM_CARD, EMPTY_STATE , TEXTAREA_FIELD } from "@/lib/page-layout";
 import { GOAL_CATEGORIES, GOAL_FREQUENCIES, goalCategoryMeta, goalFrequencyMeta } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -201,7 +201,7 @@ export default function GoalsClientPage() {
               <Label htmlFor="gl-desc">Description</Label>
               <textarea
                 id="gl-desc"
-                className="mt-2 flex min-h-16 w-full rounded-md border border-line bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className={TEXTAREA_FIELD}
                 placeholder="Why is this goal important?"
                 value={form.description}
                 onChange={(e) => set("description", e.target.value)}

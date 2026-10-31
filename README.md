@@ -5,7 +5,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.19-2D3748?logo=prisma)](https://www.prisma.io/)
-[![Tests](https://img.shields.io/badge/tests-344%20unit%20+%2061%20e2e-brightgreen)](#testing)
+[![Tests](https://img.shields.io/badge/tests-347%20unit%20+%2063%20e2e-brightgreen)](#testing)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
 A complete, self-hostable **student wellbeing application** — a production-grade
@@ -57,8 +57,8 @@ Vitest + Playwright test battery pinning all of it in place.
 | ORM | Prisma | 6.19 | Schema + SQLite driver |
 | Database | SQLite | — | `db/custom.db` at the repo root, git-ignored |
 | Validation | Zod | 4 | Every API body boundary (`parseBody()`) |
-| Unit tests | Vitest | 5 | 344 checks / 24 suites |
-| E2E tests | Playwright | 1.64 | 61 checks (6 specs + the auth setup project) against the production standalone server |
+| Unit tests | Vitest | 5 | 347 checks / 24 suites |
+| E2E tests | Playwright | 1.64 | 63 checks (6 specs + the auth setup project) against the production standalone server |
 
 ```mermaid
 flowchart TB
@@ -146,8 +146,8 @@ Requires **Node.js ≥ 20** and **bun ≥ 1.1**.
 ## Testing
 
 ```bash
-bun run test         # Vitest — 344 checks, 24 suites (node-safe seams)
-bun run test:e2e     # Playwright — 61 checks (run `bun run build` first:
+bun run test         # Vitest — 347 checks, 24 suites (node-safe seams)
+bun run test:e2e     # Playwright — 63 checks (run `bun run build` first:
                      # boots the PRODUCTION standalone server on an isolated
                      # port with its own scratch db/e2e.db)
 bun run lint         # eslint, --max-warnings 0
@@ -207,7 +207,7 @@ reference's own preset engine behaves), and mounts at the ROOT layout
 - PWA manifest + per-route OpenGraph/Twitter metadata + `sitemap.xml`
 - Accessibility superset: focus rings, aria states, 44px touch targets — pinned by the axe a11y net + the computed-contrast leg (WCAG 2.1+2.2 A+AA, zero violations, light AND dark states, every login-family route)
 - Zod validation at every API boundary; bounded readers; per-IP rate limits
-- 344 unit + 61 e2e checks pinning the behavior
+- 347 unit + 63 e2e checks pinning the behavior
 
 ## Deployment
 

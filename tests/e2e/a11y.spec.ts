@@ -1140,4 +1140,119 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
       .poll(async () => page.evaluate(() => getComputedStyle(document.body).overflow), { timeout: 4000 })
       .toBe("visible");
   });
+
+  // WH-24 (h): the tutorial card's hover-REVEAL family — the reference's
+  // cards ship an invisible-at-rest Watch Now affordance (opacity-0 +
+  // a transparent scrim) that REVEALS on card hover (the img scales 1.05,
+  // the scrim goes 20% black, the button fades in) — read with a REAL
+  // pointer + settled (the WH-20 doctrine), reading the scale PROPERTY
+  // (the WH-21 lesson: Tailwind v4 compiles scale-105 to the `scale`
+  // property, not the transform pipeline).
+  test("(h) the tutorial card's hover-reveal family — the resting card carries NO scrim and an opacity-0 button; the hover reveals all three", async ({ page }) => {
+    await page.goto("/Learning");
+    await page.waitForTimeout(600);
+
+    const readCard = () =>
+      page.evaluate(() => {
+        const all = Array.from(document.querySelectorAll("*"));
+        const t = all.find((n) => n.children.length === 0 && n.textContent?.trim() === "Overcoming Procrastination: The 2-Minute Rule");
+        if (!t) return null;
+        let card = t;
+        for (let i = 0; i < 6; i++) {
+          card = card.parentElement!;
+          const cs = getComputedStyle(card);
+          if (cs.borderRadius !== "0px" && cs.boxShadow !== "none") break;
+        }
+        const img = card.querySelector("img");
+        const overlay = img?.nextElementSibling ?? null; // the overlay is the img's SIBLING inside the cover
+        const btn = overlay?.querySelector("button") ?? null;
+        const cs = (el: Element | null) => (el ? getComputedStyle(el) : null);
+        return {
+          btnOpacity: cs(btn)?.opacity ?? null,
+          overlayBg: cs(overlay)?.backgroundColor ?? null,
+          imgScale: cs(img)?.scale ?? null,
+          cardGroup: card.className.includes("group"),
+        };
+      });
+
+    const resting = await readCard();
+    expect(resting, "the first seeded tutorial card must render").toBeTruthy();
+    expect(resting!.cardGroup, "the card must carry the group class (the reveal family's scope)").toBe(true);
+    expect(resting!.btnOpacity, "the Watch Now button is INVISIBLE at rest (opacity-0 — the reference's reveal family)").toBe("0");
+    expect(resting!.overlayBg, "the cover scrim is TRANSPARENT at rest (bg-black/0 — Tailwind v4 computes the alpha token in oklab, the WH-21 lesson)").toBe("oklab(0 0 0 / 0)");
+    expect(resting!.imgScale, "the img rests unscaled (the scale property's initial none — the WH-21 (f)-leg form)").toBe("none");
+
+    const cardLoc = page
+      .getByText("Overcoming Procrastination: The 2-Minute Rule", { exact: true })
+      .locator("xpath=ancestor::*[contains(@class,'rounded')][1]")
+      .first();
+    await cardLoc.scrollIntoViewIfNeeded();
+    await cardLoc.hover(); // REAL pointer — synthetic mouseenter never sets :hover
+    await page.waitForTimeout(600); // the settle doctrine
+    const hovered = await readCard();
+    expect(hovered!.btnOpacity, "the Watch Now button fades IN on card hover (group-hover:opacity-100)").toBe("1");
+    expect(hovered!.overlayBg, "the cover scrim goes 20% black on card hover (the oklab alpha form — v4's pipeline)").toBe("oklab(0 0 0 / 0.2)");
+    expect(hovered!.imgScale, "the img scales to 1.05 on card hover (the scale PROPERTY — the v4 form)").toBe("1.05");
+
+    await page.mouse.move(640, 20);
+    await page.waitForTimeout(500);
+    const reverted = await readCard();
+    expect(reverted!.btnOpacity, "the reveal reverts with the pointer away").toBe("0");
+    expect(reverted!.imgScale, "the img scale reverts to the initial none").toBe("none");
+  });
+
+  // WH-24 (i): the calendar's computed anatomy — the nav trio rides the
+  // stock OUTLINE form (1px border, white bg, the line-soft hover wash),
+  // the TODAY cell carries the violet-100→purple-100 gradient with the
+  // violet-300 border, and the day cells ride the 8px-radius/96px-min
+  // geometry (probed live on the reference; the cell forms themselves
+  // were already parity — this leg pins the computed values so the
+  // hand-built header's cure cannot regress them).
+  test("(i) the calendar's computed anatomy — the outline nav trio, the today-cell gradient, the day-cell geometry", async ({ page }) => {
+    await page.goto("/Events");
+    await page.waitForTimeout(600);
+
+    const today = page.getByRole("button", { name: "Previous month" }).locator("xpath=following-sibling::button[1]");
+    await expect(today, "the Today nav button renders").toBeVisible();
+    const resting = await today.evaluate((el) => {
+      const cs = getComputedStyle(el);
+      return { bg: cs.backgroundColor, border: cs.borderColor, bw: cs.borderWidth, radius: cs.borderRadius, h: cs.height, color: cs.color };
+    });
+    expect(resting.bg, "the nav button's bg is white (the stock outline form's bg-surface)").toBe("rgb(255, 255, 255)");
+    expect(resting.border, "the nav button's border is the line token (rgb(229,229,229) — the reference's border-input computes the same)").toBe("rgb(229, 229, 229)");
+    expect(resting.bw).toBe("1px");
+    expect(resting.radius, "the nav button rides rounded-md (6px)").toBe("6px");
+    expect(resting.h, "the nav button is the h-8 outline (32px)").toBe("32px");
+
+    await today.hover(); // REAL pointer + settle
+    await page.waitForTimeout(600);
+    const hovered = await today.evaluate((el) => ({ bg: getComputedStyle(el).backgroundColor, color: getComputedStyle(el).color }));
+    expect(hovered.bg, "the nav button's hover wash is the line-soft (rgb(245,245,245) — the reference's accent computes the same)").toBe("rgb(245, 245, 245)");
+    expect(hovered.color, "the hovered label lightens to neutral-900 (rgb(23,23,23))").toBe("rgb(23, 23, 23)");
+    await page.mouse.move(640, 20);
+    await page.waitForTimeout(400);
+
+    const cells = await page.evaluate(() => {
+      const grid = document.querySelector("div[class*='grid-cols-7']");
+      if (!grid) return null;
+      const kids = Array.from(grid.children).slice(7);
+      const dayCells = kids.filter((k) => /^\d+$/.test(k.textContent?.trim() ?? ""));
+      const todayCell = dayCells.find((k) => getComputedStyle(k).backgroundImage !== "none") ?? null;
+      const midCell = dayCells.find((k) => getComputedStyle(k).backgroundImage === "none") ?? null;
+      const read = (el: Element | null) => {
+        if (!el) return null;
+        const cs = getComputedStyle(el);
+        return { radius: cs.borderRadius, minH: cs.minHeight, border: cs.borderColor, bgImg: cs.backgroundImage, num: el.querySelector("div, span")?.className ?? "" };
+      };
+      return { today: read(todayCell), mid: read(midCell), dayCount: dayCells.length };
+    });
+    expect(cells, "the calendar grid renders").toBeTruthy();
+    expect(cells!.dayCount).toBeGreaterThan(27);
+    expect(cells!.mid!.radius, "a day cell rides rounded-lg (8px)").toBe("8px");
+    expect(cells!.mid!.minH, "a day cell is min-h-24 (96px)").toBe("96px");
+    expect(cells!.today!.bgImg, "the today cell carries the violet-100→purple-100 gradient").toContain("rgb(237, 233, 254)");
+    expect(cells!.today!.bgImg).toContain("rgb(243, 232, 255)");
+    expect(cells!.today!.border, "the today cell's border is violet-300").toBe("rgb(196, 181, 253)");
+    expect(cells!.today!.num, "the today number carries the mb-1 rhythm + the violet-700 ink").toContain("mb-1");
+  });
 });

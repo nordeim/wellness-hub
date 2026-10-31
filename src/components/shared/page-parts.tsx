@@ -152,7 +152,14 @@ export function OptionChip({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-md border border-transparent px-2.5 py-0.5 text-xs font-semibold",
+        // WH-24: the stock shadcn Badge form (probed on the reference's
+        // rendered chips — the Learning category badges + the routines
+        // difficulty badges): transition-colors + the plain-focus ring-2
+        // family + the shadow + hover:bg-primary/80, NO gap arm (the
+        // reference's Badge carries none; the one icon consumer renders
+        // an unobservable zero-row face). The tint classes compose after
+        // the base exactly as the reference's variants do.
+        "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent shadow hover:bg-primary/80",
         tint,
         text,
       )}

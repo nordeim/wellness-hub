@@ -161,17 +161,22 @@ export const PAGE_THEMES: Record<
  *  top bars + "Use This Template" buttons, probed on all 11 seeded
  *  templates in grid order — the category→pair mapping is exact). */
 export const ROUTINE_CATEGORY_GRADIENTS: Record<string, string> = {
-  morning: "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600",
-  exercise: "bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600",
-  study: "bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600",
-  evening: "bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600",
-  self_care: "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600",
-  creative: "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600",
-  productivity: "bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600",
+  morning: "bg-gradient-to-r from-amber-500 to-orange-500",
+  exercise: "bg-gradient-to-r from-red-500 to-pink-500",
+  study: "bg-gradient-to-r from-blue-500 to-cyan-500",
+  evening: "bg-gradient-to-r from-indigo-500 to-purple-500",
+  self_care: "bg-gradient-to-r from-emerald-500 to-teal-500",
+  creative: "bg-gradient-to-r from-pink-500 to-rose-500",
+  productivity: "bg-gradient-to-r from-violet-500 to-purple-500",
 };
 
 /** The bare gradient-stop pair for a routine category (the card's h-2
- *  top bar — the buttonless form of ROUTINE_CATEGORY_GRADIENTS). */
+ *  top bar — the buttonless form of ROUTINE_CATEGORY_GRADIENTS). WH-24:
+ *  the map's members are BARE pairs — the reference's Use This Template
+ *  button carries NO 600 hover arms (its hover is opacity-90 alone,
+ *  probed live); the MODULE primaries are the family that darkens its
+ *  stops on hover (PAGE_THEMES' buttons, probed live on New Event + Log
+ *  Workout — a different button family entirely). */
 export const routineCategoryStops = (category: string): string =>
   (ROUTINE_CATEGORY_GRADIENTS[category] ?? ROUTINE_CATEGORY_GRADIENTS.morning)
     .split(" ")
@@ -371,6 +376,97 @@ export const QUICK_ACTIONS = {
   label: "text-sm font-medium",
 } as const;
 
+/** The Learning tutorial cards — WH-24 (the one card family WH-23 did
+ *  not walk, probed live field-by-field with a real pointer): a
+ *  GROUP-HOVER REVEAL family — the card is the `group`, the cover's img
+ *  SCALES to 1.05 (`group-hover:scale-105 transition-transform
+ *  duration-300`), the scrim is INVISIBLE at rest (`bg-black/0`) going
+ *  20% black on hover, and the Watch Now button is a rounded-md
+ *  RECTANGLE (the stock base + `shadow h-9 px-4 py-2`) that fades from
+ *  `opacity-0` to `opacity-100` on card hover — NEVER our permanent
+ *  scrim + always-visible rounded-full pill. The body rides the
+ *  CardHeader/CardContent anatomy (the `p-6` header holding the
+ *  `flex items-start justify-between gap-2 mb-2` title row + the gap-2
+ *  chips row; the `p-6 pt-0` body holding the line-clamp-3 description),
+ *  the title is `text-lg` with `line-clamp-2` + `tracking-tight` (18px,
+ *  clamped — ours shipped 16px unclamped), and the grid is `gap-6` with
+ *  2-col from md / 3-col from lg (ours shipped gap-5 with sm/xl arms).
+ *  Our h3 title keeps heading semantics (the SectionCard superset
+ *  precedent); the dark twins follow the WH-23 pattern. */
+export const TUTORIAL_CARD = {
+  card: "overflow-hidden rounded-xl border-none bg-surface shadow-lg hover:shadow-xl transition-all group",
+  cover: "relative aspect-video bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden dark:from-neutral-800 dark:to-neutral-900",
+  img: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300",
+  overlay: "absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center",
+  /** The stock shadcn base + the reveal arms (self-contained per the
+   *  lesson-25 form — the reference's own string, minus nothing; its
+   *  Play icon carries `w-5 h-5 mr-2` at the call site). The dark twin
+   *  on the hover arm declares the mode-independent VALUE explicitly —
+   *  the button's face is white in both modes, so the wash stays
+   *  gray-100 in dark exactly as in light (the dark-pair census's
+   *  structural contract). */
+  watchBtn:
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-9 px-4 py-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-100",
+  duration: "absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded",
+  header: "flex flex-col space-y-1.5 p-6",
+  titleRow: "flex items-start justify-between gap-2 mb-2",
+  title: "font-semibold tracking-tight text-lg line-clamp-2 text-foreground",
+  chipsRow: "flex flex-wrap gap-2",
+  body: "p-6 pt-0",
+  desc: "text-sm text-gray-600 line-clamp-3 dark:text-gray-400",
+  grid: "grid md:grid-cols-2 lg:grid-cols-3 gap-6",
+} as const;
+
+/** The module toolbar — WH-24 (probed live on the reference's Learning +
+ *  StudyResources pages, desktop + 390px): the container `flex flex-col
+ *  md:flex-row gap-4` (16px gaps, row from md), the search a STOCK
+ *  Input + `pl-10` in a `flex-1 relative` wrapper with the Search icon
+ *  `absolute left-3 top-1/2 h-5 w-5 text-gray-400` (ours shipped a
+ *  hand-rolled py-2 text-sm shadow-xs pl-9 string with an h-4 w-4 muted
+ *  icon), and the selects in a `flex items-center gap-2` wrapper LED by
+ *  the lucide Filter icon `w-5 h-5 text-gray-400` at FIXED widths
+ *  (w-48 the category select / w-40 the pair — fixed at every viewport;
+ *  ours shipped w-full-sm: breakpoints with no wrapper and no icon). */
+export const TOOLBAR = {
+  container: "flex flex-col md:flex-row gap-4",
+  searchWrap: "flex-1 relative",
+  searchIcon: "absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400",
+  selectsWrap: "flex items-center gap-2",
+  filterIcon: "h-5 w-5 text-gray-400",
+} as const;
+
+/** The Events calendar card — WH-24 (the calendar escaped the WH-23
+ *  card-geometry cure because it never rides the SectionCard component;
+ *  probed live): the card rides the CardHeader/CardContent anatomy —
+ *  the `p-6` header wrapping the TITLE ROW `font-semibold leading-none
+ *  tracking-tight flex items-center justify-between` (the title classes
+ *  ON the row, the month text a bare span — our h2 keeps the heading
+ *  semantics carrying the same classes), the nav row `flex gap-2` of
+ *  the stock OUTLINE trio (`h-8 rounded-md px-3 text-xs` — computed:
+ *  the border rgb(229,229,229), the bg white, the hovered bg
+ *  rgb(245,245,245) = our line-soft, the hovered label rgb(23,23,23))
+ *  with TEXT arrows ←/→ (no lucide glyphs — our aria-labels stay, the
+ *  superset), the body `p-6 pt-0` wrapping the BARE `grid grid-cols-7
+ *  gap-2` (ours shipped the grid padding p-4 pt-2), and the day numbers
+ *  `text-sm font-medium mb-1` with the events container `space-y-1`
+ *  (ours shipped no mb-1 + a flex-wrap row). The day-cell borders +
+ *  hover + the today-cell gradient were ALREADY parity (verified with a
+ *  real pointer). */
+export const CALENDAR = {
+  headerRow: "font-semibold leading-none tracking-tight flex items-center justify-between",
+  navRow: "flex gap-2",
+  /** The nav button — BUTTON_CLASSES + the outline arms in our
+   *  computed-equal tokens (border-line = the reference's border-input's
+   *  rgb(229,229,229); bg-surface = its white bg-background; the hover
+   *  wash the line-soft = its accent's rgb(245,245,245)), plus the
+   *  focus arms the reference's own base carries. */
+  navBtn:
+    "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring border border-line bg-surface shadow-sm hover:bg-line-soft hover:text-neutral-900 dark:hover:text-neutral-100 h-8 rounded-md px-3 text-xs",
+  grid: "grid grid-cols-7 gap-2",
+  dayNum: "text-sm font-medium mb-1",
+  dayEvents: "space-y-1",
+} as const;
+
 /** The Profile appearance panels — WH-17 (F-2): the reference's shadcn
  *  Card anatomy (probed live 2026-10-30 on every Profile panel):
  *  `rounded-xl border bg-card border-none shadow-lg` + the header block
@@ -526,6 +622,21 @@ export const INPUT_BASE = {
   focusRing: "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
   file: "file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground",
 } as const;
+
+/** The form textareas — WH-24 (probed live on EVERY form the reference
+ *  renders: events + studyresources + exercise + assignments +
+ *  mentalhealth x2 + the Schedule modal — all eight ride the IDENTICAL
+ *  stock form): `flex min-h-[60px] w-full rounded-md border border-input
+ *  bg-transparent px-3 py-2 text-base shadow-sm ... md:text-sm` — ours
+ *  shipped min-h-16/min-h-20 (64/80px) + text-sm-only + shadow-xs
+ *  hand-rolled strings (the same family as the toolbar searches; the
+ *  mobile 16px text + the 60px floor were never ours). Our token
+ *  substitutions compute equal: border-line = the reference's
+ *  border-input (#e5e5e5), placeholder:muted-ink = its
+ *  muted-foreground (#737373). The mt-2 rides the WH-22-probed field
+ *  form (the label+mt-2-input groups). */
+export const TEXTAREA_FIELD =
+  "mt-2 flex min-h-[60px] w-full rounded-md border border-line bg-transparent px-3 py-2 text-base shadow-sm placeholder:text-muted-ink focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm";
 
 /** The empty states — WH-23 (probed: the reference's module empty states
  *  are a BARE centered paragraph, the full body innerHTML carrying no
