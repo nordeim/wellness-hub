@@ -26,7 +26,8 @@
 26-events-inline-form.png 9b1c399ad3e7084215bf03a3f6e6a181
 27-dark-mood-form.png 8782f2dc6d3a4702592a0f12724fe61f
 28-routines-schedule-modal.png 7326740453d3fa754960c238026d2ee9
-29-quick-actions-hover.png 5430a5dfaee4be97c979e9985f21bbe8
+29-quick-actions-hover.png 495838cdd7a5d4649959597e36896f63
 30-tutorial-card-hover.png ab6b68a4e8bf4acc60bba4fb994b4ed4
 31-profile-preferences.png 6c994caadc8f44e8306a23f8769c21f6
 32-mentalhealth-form-interior.png 15d775f4b5513c181d24c0e1580920bd
+33-sr-form-interior.png 76b0a559208e315ba97a05f415c40c3c

@@ -2718,3 +2718,103 @@ it("WH-26: the form-interior census — the mood form's own family + the shared 
     "the form-interior family must hold — the WH-26 cure (the F-1 active-label bug + the redeployment round's field-interior cures)",
   ).toEqual([]);
 });
+
+it("WH-27: the sr chip-family census — the stock Badge on the sr form, the emerald on the mood form (the TWO-SITE SPLIT)", () => {
+  // The WH-27 probe (live, client-state, the full-HTML decode): the two
+  // tag-chip sites carry DIFFERENT families on the reference — the mood
+  // form's chip is the emerald pill SPAN (px-3 py-1 bg-emerald-100
+  // text-emerald-700 rounded-full text-sm + the bare × button + the row
+  // flex flex-wrap gap-2 mt-3), while the sr form's chip is the stock
+  // Badge DEFAULT variant rendered as a DIV (inline-flex items-center
+  // rounded-md border px-2.5 py-0.5 text-xs font-semibold
+  // transition-colors focus:outline-none focus:ring-2 focus:ring-ring
+  // focus:ring-offset-2 text-foreground gap-2 — computed 22px,
+  // transparent bg, border rgb(229,229,229), ink rgb(10,10,10)) + the
+  // same bare × button + the row flex flex-wrap gap-2 BARE (no mt-3).
+  // The WH-26 conversion generalized the mood decode to the sr site —
+  // the sr site cures to its own family.
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const failures: string[] = [];
+  const mhSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/mentalhealth/mentalhealth-page.tsx"), "utf8"));
+  const srSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/studyresources/studyresources-page.tsx"), "utf8"));
+
+  // (a) the SR_CHIP record exists with the Badge-default classes in our
+  // computed-equal tokens (border-line = the reference's border-input's
+  // rgb(229,229,229); text-ink = its text-foreground's rgb(10,10,10))
+  const SC = layoutSrc.match(/export const SR_CHIP = \{([\s\S]*?)\n\} as const;/);
+  expect(SC, "the SR_CHIP record must exist in page-layout.ts").toBeTruthy();
+  const scChip = SC![1].match(/chip:\s*"([^"]*)"/)?.[1] ?? "";
+  const scRow = SC![1].match(/row:\s*"([^"]*)"/)?.[1] ?? "";
+  for (const arm of ["inline-flex items-center rounded-md border", "border-line", "px-2.5 py-0.5", "text-xs font-semibold", "text-ink", "gap-2"]) {
+    if (!scChip.includes(arm)) {
+      failures.push(`SR_CHIP.chip must carry the reference's Badge-default arm "${arm}" — read "${scChip.slice(0, 90)}…"`);
+    }
+  }
+  if (!/dark:border-neutral-700/.test(scChip) || !/dark:text-neutral-100/.test(scChip)) {
+    failures.push("SR_CHIP.chip must carry our dark twins (the chromatic border-line/text-ink pair — the dark-pair census's requirement)");
+  }
+  if (scRow !== "flex flex-wrap gap-2") {
+    failures.push(`SR_CHIP.row must be the reference's BARE "flex flex-wrap gap-2" (the mood site's mt-3 is its own) — read "${scRow}"`);
+  }
+  // (b) the sr page consumes SR_CHIP; TAG_CHIP retires from the sr site
+  if (!/SR_CHIP\.chip/.test(srSrc) || !/SR_CHIP\.row/.test(srSrc)) {
+    failures.push("the sr page must consume SR_CHIP.chip + SR_CHIP.row (the two-site split)");
+  }
+  if (/TAG_CHIP/.test(srSrc)) {
+    failures.push("TAG_CHIP retires from the sr page — the emerald family is the MOOD form's own (probed: the sr chip is the stock Badge)");
+  }
+  // (c) the chip renders as a div (the reference's own form) with the
+  // aria-label × superset
+  if (!/<div key=\{tag\} className=\{SR_CHIP\.chip\}>/.test(srSrc)) {
+    failures.push("the sr chips render as <div key={tag} className={SR_CHIP.chip}> (the reference renders a DIV, not a span)");
+  }
+  if (!/aria-label=\{`Remove tag \$\{tag\}`\}/.test(srSrc)) {
+    failures.push("the × keeps our aria-label association (the superset over the reference's unlabelled bare button)");
+  }
+  // (d) the MOOD page keeps the emerald family (the split holds both ways)
+  if (!/TAG_CHIP\.chip/.test(mhSrc) || !/TAG_CHIP\.row/.test(mhSrc)) {
+    failures.push("the mood page KEEPS TAG_CHIP (the emerald family + the mt-3 row — the two-site split's other half)");
+  }
+  const TC = layoutSrc.match(/export const TAG_CHIP = \{([\s\S]*?)\n\} as const;/);
+  const tcRow = TC![1].match(/row:\s*"([^"]*)"/)?.[1] ?? "";
+  if (tcRow !== "flex flex-wrap gap-2 mt-3") {
+    failures.push(`TAG_CHIP.row stays the mood site's "flex flex-wrap gap-2 mt-3" — read "${tcRow}"`);
+  }
+
+  expect(
+    failures,
+    "the sr chip family must hold — the WH-27 two-site split (the Badge on sr, the emerald on mood; never one family generalized across both)",
+  ).toEqual([]);
+});
+
+it("WH-27: the rating-glyph census — the ⭐ fill (U+2B50, the reference's own emoji), never the ★ text glyph", () => {
+  // The WH-27 probe (live, client-state, the full-HTML decode): clicking
+  // the reference's 3rd star renders ⭐⭐⭐☆☆ — the selected stars flip to
+  // the ⭐ EMOJI (U+2B50), the unselected stay ☆ (U+2606). The WH-26
+  // "the reference's own click state is inert" narration was FALSE — the
+  // fill exists; the WH-26 probe's ☆/★ regex could never match the emoji
+  // codepoint (the decoder-vocabulary lesson). Our picker flips its fill
+  // glyph to ⭐; the radiogroup semantics + the click-toggle stay the
+  // functional superset.
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+  const srSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/studyresources/studyresources-page.tsx"), "utf8"));
+  const failures: string[] = [];
+
+  // (a) the fill: ⭐ for selected, ☆ for the rest — the ★ form retires
+  if (!/n <= form\.rating \? "⭐" : "☆"/.test(srSrc)) {
+    failures.push('the rating fill must render the reference\'s own pair — {n <= form.rating ? "⭐" : "☆"} (the ⭐ EMOJI U+2B50 for selected, never the ★ text glyph U+2605)');
+  }
+  if (/n <= form\.rating \? "★" : "☆"/.test(srSrc)) {
+    failures.push('the ★ (U+2605) fill retires — the reference\'s selected stars render the ⭐ emoji (probed: ⭐⭐⭐☆☆ after the 3-star click)');
+  }
+  // (b) the semantics superset stays
+  if (!/role="radiogroup"/.test(srSrc) || !/role="radio"/.test(srSrc) || !/aria-checked=\{form\.rating === n\}/.test(srSrc)) {
+    failures.push("the radiogroup semantics stay (the role + the radio roles + aria-checked — our functional superset over the reference's unlabelled buttons)");
+  }
+
+  expect(
+    failures,
+    "the rating glyph family must hold — the WH-27 cure (the ⭐ fill + the semantics superset)",
+  ).toEqual([]);
+});

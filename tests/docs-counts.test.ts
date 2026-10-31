@@ -57,8 +57,8 @@ const CANONICAL = {
   unitSuites: 24, // tests/*.test.ts (INCLUDING this suite — WH-21: +tests/gradient-ink.test.ts)
   e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 350, // `bun run test` total (WH-26: 348 + the form-grid family census + the form-interior census — the field interiors the modality/card rounds never walked)
-  e2eChecks: 64, // `CI=1 bun run test:e2e` total (WH-26: 63 + the (k) mood-form computed-interior leg)
+  unitChecks: 352, // `bun run test` total (WH-27: 350 + the sr chip-family census + the rating-glyph census — the two-site chip split + the ⭐ fill)
+  e2eChecks: 65, // `CI=1 bun run test:e2e` total (WH-27: 64 + the (l) login-family computed-interior leg — the standing drift pin)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
   // WH-18: ThemeBoot joined src/components/layout/ — the counts move with it.
   layoutComponents: 8, // modules under src/components/layout/

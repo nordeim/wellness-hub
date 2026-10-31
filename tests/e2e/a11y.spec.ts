@@ -1316,3 +1316,128 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
     await page.getByRole("button", { name: "Cancel", exact: true }).click();
     await expect(page.getByText("How are you feeling today?")).toBeHidden();
   });
+
+  // WH-27 (l): the login family's computed interior — the standing pin.
+  // The five views' geometry was probe-verified on the reference at
+  // WH-26 (and every value re-verified on OUR dev server at WH-27 before
+  // this leg was written — the leg pins values that already compute
+  // equal, so it is born green; its job is to CATCH THE NEXT
+  // REDEPLOYMENT'S DRIFT the same day, the (j)/(k) precedent). The
+  // members are the probe's STABLE geometry (the fonts, the inks, the
+  // sizes — never data-dependent text).
+  test.describe("a11y net — the login family's computed interior (WH-27 (l))", () => {
+    test.use({ storageState: { cookies: [], origins: [] } });
+
+    test("(l) the five login views' computed geometry — the h1/h2/back ladder, the 44px signup inputs, the 64px sent icon, the 40×44 code inputs", async ({ page }) => {
+      // ---- the signin view ----
+      await page.goto("/login", { waitUntil: "networkidle" });
+      await page.waitForTimeout(600);
+      const h1 = await page.evaluate(() => {
+        const el = document.querySelector("h1");
+        if (!el) return null;
+        const cs = getComputedStyle(el);
+        return { fs: cs.fontSize, fw: cs.fontWeight, color: cs.color, w: Math.round(el.getBoundingClientRect().width) };
+      });
+      expect(h1, "the signin h1 renders").toBeTruthy();
+      expect(h1!.fs, "the h1 is 30px (the reference's probed title)").toBe("30px");
+      expect(h1!.fw, "the h1 is 700").toBe("700");
+      expect(h1!.color, "the h1 ink is slate-900 rgb(15,23,42)").toBe("rgb(15, 23, 42)");
+      expect(h1!.w, "the h1 spans the 368px card column").toBe(368);
+
+      // the per-view ladder reader (h2 + back button)
+      const readView = () =>
+        page.evaluate(() => {
+          const h2 = document.querySelector("h2");
+          const back = Array.from(document.querySelectorAll("button")).find((b) => /back to sign in/i.test(b.textContent || "")) ?? null;
+          const pick = (el: Element | null) => {
+            if (!el) return null;
+            const cs = getComputedStyle(el);
+            const r = el.getBoundingClientRect();
+            return { fs: cs.fontSize, fw: cs.fontWeight, color: cs.color, gap: cs.gap, w: Math.round(r.width), h: Math.round(r.height) };
+          };
+          return { h2: pick(h2), back: pick(back) };
+        });
+
+      // ---- the signup view ----
+      await page.getByText("Need an account?").click();
+      await page.waitForTimeout(500);
+      let view = await readView();
+      expect(view.h2, "the signup h2 renders").toBeTruthy();
+      expect(view.h2!.fs).toBe("24px");
+      expect(view.h2!.fw).toBe("700");
+      expect(view.h2!.color).toBe("rgb(15, 23, 42)");
+      expect(view.h2!.w).toBe(368);
+      expect(view.h2!.h).toBe(32);
+      expect(view.back!.fs, "the back button is 14px/500 slate-500").toBe("14px");
+      expect(view.back!.fw).toBe("500");
+      expect(view.back!.color).toBe("rgb(100, 116, 139)");
+      expect(view.back!.gap, "the back button's icon gap is 8px").toBe("8px");
+      expect(view.back!.h).toBe(20);
+      const suInputs = await page.evaluate(() =>
+        Array.from(document.querySelectorAll("input")).map((i) => ({ h: Math.round(i.getBoundingClientRect().height), type: i.type })),
+      );
+      expect(suInputs.length, "the signup view carries 3 inputs (email/password/confirm)").toBe(3);
+      for (const i of suInputs) expect(i.h, "every signup input is h-11 (44px)").toBe(44);
+
+      // ---- the reset view ----
+      await page.getByRole("button", { name: /back to sign in/i }).click();
+      await page.waitForTimeout(400);
+      await page.getByText("Forgot password?").click();
+      await page.waitForTimeout(500);
+      view = await readView();
+      expect(view.h2!.fs, "the reset h2 rides the same 24px/700 ladder").toBe("24px");
+      expect(view.h2!.w).toBe(368);
+
+      // ---- the sent view (submit the reset with the demo email) ----
+      await page.fill('input[type="email"]', "sepnetflix2023@outlook.com");
+      await page.getByRole("button", { name: /send.*link|send reset|reset link/i }).click();
+      await page.waitForTimeout(1200);
+      const sent = await page.evaluate(() => {
+        const icon = document.querySelector("div[class*='rounded-full']");
+        const callout = Array.from(document.querySelectorAll("div")).find((d) => (d.getAttribute("class") || "").includes("green-50") && (d.textContent || "").trim().length > 10);
+        return {
+          icon: icon ? { w: Math.round(icon.getBoundingClientRect().width), h: Math.round(icon.getBoundingClientRect().height) } : null,
+          callout: callout ? { w: Math.round(callout.getBoundingClientRect().width) } : null,
+        };
+      });
+      expect(sent.icon, "the sent iconCircle renders").toBeTruthy();
+      expect(sent.icon!.w, "the sent iconCircle is 64×64").toBe(64);
+      expect(sent.icon!.h).toBe(64);
+      expect(sent.callout!.w, "the sent callout spans the 368px column").toBe(368);
+
+      // ---- the verify view (the signup submit → the OTP inputs) ----
+      await page.getByRole("button", { name: /back to sign in/i }).click();
+      await page.waitForTimeout(400);
+      await page.getByText("Need an account?").click();
+      await page.waitForTimeout(400);
+      await page.locator('input[type="email"]').first().fill(`wh27-leg-${Date.now()}@example.com`);
+      const pws = await page.locator('input[type="password"]').all();
+      for (const el of pws) await el.fill("Wh27Leg#Pass1");
+      await page.getByRole("button", { name: /create account/i }).click();
+      await page.waitForTimeout(1500);
+      const verify = await page.evaluate(() => {
+        const inputs = Array.from(document.querySelectorAll('input[aria-label^="Digit"]'));
+        const wrap = inputs[0]?.parentElement ?? null;
+        const resend = Array.from(document.querySelectorAll("button")).find((b) => /resend/i.test(b.textContent || ""));
+        const pick = (el: Element | null | undefined) => {
+          if (!el) return null;
+          const cs = getComputedStyle(el);
+          return { fs: cs.fontSize, fw: cs.fontWeight, color: cs.color, gap: cs.gap, display: cs.display };
+        };
+        return {
+          codeCount: inputs.length,
+          first: inputs[0] ? { w: Math.round(inputs[0].getBoundingClientRect().width), h: Math.round(inputs[0].getBoundingClientRect().height) } : null,
+          wrap: pick(wrap),
+          resend: pick(resend),
+        };
+      });
+      expect(verify.codeCount, "the verify view carries 6 code inputs").toBe(6);
+      expect(verify.first!.w, "each code input is w-10 (40px)").toBe(40);
+      expect(verify.first!.h, "each code input is h-11 (44px)").toBe(44);
+      expect(verify.wrap!.display, "the code wrap is flex").toBe("flex");
+      expect(verify.wrap!.gap, "the code wrap's gap is 6px (gap-1.5)").toBe("6px");
+      expect(verify.resend!.fs, "the resend is 14px/500 slate-600").toBe("14px");
+      expect(verify.resend!.fw).toBe("500");
+      expect(verify.resend!.color).toBe("rgb(51, 65, 85)");
+    });
+  });

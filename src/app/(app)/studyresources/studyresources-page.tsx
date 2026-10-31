@@ -23,7 +23,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PAGE_THEMES, BUTTON_CLASSES, FORM_CARD, SECTION_CARD, EMPTY_STATE, TOOLBAR, TEXTAREA_FIELD, FORM_GRID, FORM_BUTTONS, TAG_CHIP, UPLOAD_FIELD, RATING_PICKER } from "@/lib/page-layout";
+import { PAGE_THEMES, BUTTON_CLASSES, FORM_CARD, SECTION_CARD, EMPTY_STATE, TOOLBAR, TEXTAREA_FIELD, FORM_GRID, FORM_BUTTONS, SR_CHIP, UPLOAD_FIELD, RATING_PICKER } from "@/lib/page-layout";
 import { RESOURCE_TYPES, resourceTypeMeta } from "@/lib/constants";
 import { matchesQuery, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -281,11 +281,14 @@ export default function StudyResourcesClientPage() {
                 <Input id="sr-file" type="file" className="flex-1" />
               </div>
             </div>
-            {/* WH-26 (F-6): the tags row — the reference's flex gap-2 mb-2
-                (the label gap is the 4px line-box artifact) + the solid
-                stock Add + the emerald chip family. Our Enter-to-add
-                stays the functional superset (the reference's Enter does
-                nothing — probed). */}
+            {/* WH-26 (F-6) + WH-27 (F-1): the tags row — the reference's
+                flex gap-2 mb-2 (the label gap is the 4px line-box
+                artifact) + the solid stock Add; the CHIPS are the stock
+                Badge DEFAULT family (a DIV — the WH-27 full-HTML decode;
+                the emerald pill is the MOOD form's own family, never
+                generalized across sites). Our Enter-to-add stays the
+                functional superset (the reference's Enter does nothing —
+                probed). */}
             <div>
               <Label htmlFor="sr-tags">Tags</Label>
               <div className="flex gap-2 mb-2">
@@ -306,9 +309,9 @@ export default function StudyResourcesClientPage() {
                 </button>
               </div>
               {form.tags.length > 0 && (
-                <div className={TAG_CHIP.row}>
+                <div className={SR_CHIP.row}>
                   {form.tags.map((tag) => (
-                    <span key={tag} className={TAG_CHIP.chip}>
+                    <div key={tag} className={SR_CHIP.chip}>
                       {tag}
                       <button
                         type="button"
@@ -317,7 +320,7 @@ export default function StudyResourcesClientPage() {
                       >
                         ×
                       </button>
-                    </span>
+                    </div>
                   ))}
                 </div>
               )}
@@ -332,10 +335,14 @@ export default function StudyResourcesClientPage() {
                 onChange={(e) => set("personalNotes", e.target.value)}
               />
             </div>
-            {/* WH-26 (F-10): the Rating picker — the reference's five
-                BARE text-2xl ☆ buttons in a flex gap-2 row (probed live;
-                the reference's own click state is inert — our ★ fill +
-                the radiogroup semantics stay the functional superset). */}
+            {/* WH-26 (F-10) + WH-27 (F-2): the Rating picker — the
+                reference's five BARE text-2xl buttons in a flex gap-2
+                row, and the click state IS interactive: the selected
+                stars flip to the ⭐ EMOJI (U+2B50 — probed: ⭐⭐⭐☆☆
+                after the 3-star click; the WH-26 "inert" claim was the
+                probe-regex trap — a ☆/★ regex can never match the emoji
+                codepoint). Our radiogroup semantics + the click-toggle
+                stay the functional superset. */}
             <div>
               <Label>Rating (optional)</Label>
               <div className={RATING_PICKER.row} role="radiogroup" aria-label="Rating">
@@ -349,7 +356,7 @@ export default function StudyResourcesClientPage() {
                     onClick={() => set("rating", form.rating === n ? 0 : n)}
                     className={cn(RATING_PICKER.star, "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm")}
                   >
-                    {n <= form.rating ? "★" : "☆"}
+                    {n <= form.rating ? "⭐" : "☆"}
                   </button>
                 ))}
               </div>

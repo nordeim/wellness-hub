@@ -573,6 +573,28 @@ export const TAG_CHIP = {
   row: "flex flex-wrap gap-2 mt-3",
 } as const;
 
+/** WH-27 (F-1): the sr form's tags chip — the OTHER family. Probed live
+ *  (client-state, the full-HTML decode — the chip renders as a DIV the
+ *  WH-26 span-search could never see): the reference's sr chip is the
+ *  stock shadcn Badge DEFAULT variant, NOT the mood form's emerald pill
+ *  — `inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs
+ *  font-semibold transition-colors focus:outline-none focus:ring-2
+ *  focus:ring-ring focus:ring-offset-2 text-foreground gap-2` (computed:
+ *  22px tall, transparent bg, border rgb(229,229,229), ink rgb(10,10,10))
+ *  + the same bare × button, in the chips row `flex flex-wrap gap-2`
+ *  BARE (the mood site's mt-3 is its own). Expressed in our
+ *  computed-equal tokens (border-line = its border-input's
+ *  rgb(229,229,229); text-ink = its text-foreground's rgb(10,10,10) —
+ *  the WH-25 token doctrine); the dark twins are our documented superset
+ *  (the reference's form is light-only — its own broken-dark class).
+ *  The WH-26 conversion generalized the mood decode to this site — the
+ *  two-site split is the lesson: probe EVERY consumption site before
+ *  converting a shared record. */
+export const SR_CHIP = {
+  chip: "inline-flex items-center rounded-md border border-line px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-ink gap-2 dark:border-neutral-700 dark:text-neutral-100",
+  row: "flex flex-wrap gap-2",
+} as const;
+
 /** WH-26 (F-1/F-2/F-3/F-8/F-11): the mood form's own interior — the ONE
  *  create-form that deviates from its space-y-4 siblings (probed live on
  *  the redeployed reference, the full DOM + computed walk): the wrapper
@@ -611,11 +633,14 @@ export const UPLOAD_FIELD = {
   wrap: "flex items-center gap-2",
 } as const;
 
-/** WH-26 (F-10): the sr Rating picker — the reference's five BARE
- *  `text-2xl` ☆ buttons in a `flex gap-2` row (probed live; the ink
- *  near-black rgb(10,10,10), the click state inert on the reference's
- *  own demo). Our radiogroup semantics + the ★ fill stay the functional
- *  superset. */
+/** WH-26 (F-10) + WH-27 (F-2): the sr Rating picker — the reference's five
+ *  BARE `text-2xl` buttons in a `flex gap-2` row (probed live). WH-27
+ *  corrected the click state: the fill IS interactive — the selected
+ *  stars flip to the ⭐ EMOJI (U+2B50), the unselected stay ☆ (probed:
+ *  ⭐⭐⭐☆☆ after the 3-star click; the WH-26 "inert" reading was the
+ *  probe-regex trap — a ☆/★ regex cannot match the emoji codepoint; the
+ *  fill glyph lives at the page's call site). Our radiogroup semantics +
+ *  the click-toggle stay the functional superset. */
 export const RATING_PICKER = {
   row: "flex gap-2",
   star: "text-2xl",
