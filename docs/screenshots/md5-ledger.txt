@@ -1,144 +1,23 @@
-# docs/screenshots md5 ledger — re-based at WH-38 (2026-11-01), 34 files
+# docs/screenshots md5 ledger — re-based at WH-39 (2026-11-01), 34 files
 
-# The WH-38 round (the fourth parity surface round — procedure-side only,
-# ZERO src/ changes): the NINTH cross-round byte comparison under the
-# committed procedure — 32/34 byte-stable, the CLEANEST round yet, TWO
-# movers both root-caused as the standing precedents BEFORE this re-base:
-#   25-dark-login-focus (77 px, 0.0067%, maxdelta 5, bbox x[457-824]
-#     y[562-683]) = the file's own focus-instant precedent, now the
-#     SIXTH consecutive round at the IDENTICAL signature (WH-33/34/35/
-#     36/37/38 — the caret/focus rasterization instant, not a face
-#     change; the watch round 27's login surface read MATCH on the same
-#     build).
+# The WH-39 round (the fifth parity surface round — procedure-side only,
+# ZERO src/ changes): the TENTH cross-round byte comparison under the
+# committed procedure — 33/34 byte-stable, the CLEANEST round yet (one
+# better than WH-38's 32), ONE mover root-caused as the standing
+# precedent BEFORE this re-base:
 #   29-quick-actions-hover (5 px, 0.0004%, maxdelta 1, bbox x[503-508]
 #     y[326-331]) = the sub-visible hover-instant/rasterization class
-#     (the WH-31/32/36/37 record; maxdelta 1 — a single antialiasing
-#     edge on the hovered card).
-#   The 32 BYTE-STABLE include every data-bearing + sidebar-bearing face
-#   (02-12, 14-19, 24, 26-28, 30-34) — the round changed no src/ file,
-#   and the captures confirm it byte-for-byte.
+#     at the IDENTICAL signature to the WH-38 record (the fifth round
+#     in the class's history: WH-31/32/36/37/38/39 — a single
+#     antialiasing pixel on the hovered quick-action cell's icon edge,
+#     never a face change; the watch round 28's dashboard digest read
+#     MATCH on the same build).
+# The 33 byte-stable include every data-bearing + sidebar-bearing +
+# dark + mobile face — the round shipped ZERO src/ changes and the
+# captures confirm it byte-for-byte. All 34 files health-checked
+# (29 desktop 1280x900 + 5 mobile 390x844, zero blank captures);
+# census MATCH after the re-seed (moods=1).
 
-#
-# The WH-37 round (the demo-account data parity + the shell nav parity
-# surface round): the EIGHTH cross-round byte comparison under the
-# committed procedure — 7/34 byte-stable, TWENTY-SEVEN movers all
-# root-caused to this round's TWO DESIGNED pixel cures + the known
-# sub-visible precedents BEFORE this re-base:
-#   THE F-2 DATA CLASS (the seeded demo mood entry — the reference's
-#   own demo face, mirrored: the journey row [Good / Oct 29, 2026 /
-#   Energy Level: 5/10] + the 5.0/10·1·1 stat trio + the dashboard
-#   tile 1 + the feed's Mood check-in row now render where the empty
-#   faces stood): 02-dashboard (4.48%), 05-mentalhealth (5.06%),
-#   14-mobile-dashboard (0.81%), 17-dark-dashboard, 34-mood-list-
-#   interior (14.67% — the whole journey section), and 29-quick-
-#   actions-hover (21.30% — the capture's own "with the feed row in
-#   the account" state: the phase-7 workout row is now joined by the
-#   SEEDED mood row, the feed section reflowing the whole bottom
-#   band; NOT an anomaly — the F-2 cure BY DESIGN).
-#   THE F-3 SHELL CLASS (the five literal cures: the nav rows and
-#   active pills at font-weight 400 at both sites, the drawer rows'
-#   solid zinc-700 ink, the wordmark block's mt-0): every sidebar-
-#   bearing face — 03-12 (the desktop pages; the isolated regions
-#   read exactly the x[0-255] sidebar column, e.g. 12-profile
-#   0.98%), 15/18/19 (the drawer rows), 24, 26-28, 30-33.
-#   THE KNOWN PRECEDENTS: 25-dark-login-focus (77 px, 0.0067%,
-#   maxdelta 5 — the file's own focus-instant precedent, the fifth
-#   consecutive round) + the residual sub-visible rasterization/
-#   hover-instant arms on 29/30 (the WH-31/32/35 record).
-#   The 7 BYTE-STABLE: the logged-out faces (01, 13, 20-23 — no
-#   sidebar, no data) + 16-mobile-drawer-nav-exercise (the drawer
-#   CLOSES on the route change — the mobile exercise page carries
-#   neither sidebar nor data).
-
-#
-# The WH-36 round (the parity net's second-surface round): the SEVENTH
-# cross-round byte comparison under the committed procedure — 30/34
-# byte-stable, FOUR movers all root-caused before this re-base:
-#   10-learning (16 px, 0.0014%, maxdelta 7, two glyph-edge clusters
-#     at x[304-314] y[146-147] + x[288-290] y[166-169]) = the
-#     SUB-VISIBLE TEXT-RASTERIZATION class (Chromium glyph-antialiasing
-#     variance on the page's H1/subtitle edges — deltas 1-7 on
-#     light-gray glyph pixels over the amber wash; the FIRST landing of
-#     the standing rasterization class [the WH-31/32 record] on this
-#     file). No src/ change shipped this round; the watch round 25's
-#     learning surface read MATCH (12 imgs, 12 Watch Now, the outline
-#     chips) on the same build this set was captured against — the
-#     computed face identical, only 16 antialiasing pixels moved.
-#   25-dark-login-focus (77 px, 0.0067%, maxdelta 5, the focus-ring
-#     zone) = the file's OWN focus-instant precedent (the WH-33/34/35
-#     record; the interpolation instant of the focus ring).
-#   29-quick-actions-hover (5 px, 0.0004%, maxdelta 1) + 30-tutorial-
-#     card-hover (17 px, 0.0015%, maxdelta 40) = the sub-visible
-#     rasterization/hover-instant classes (the WH-31/32/35 record).
-
-#
-# The WH-35 round (the live-vs-live round): the SIXTH cross-round byte
-# comparison under the committed procedure — 30/34 byte-stable, FOUR
-# movers all root-caused before this re-base: 26-events-inline-form
-# (0.0333%, region x[1117-1207] y[573-582], maxdelta exactly 15 = the
-# 5-per-channel x 3 ink delta) = THE F-2b CURE BY DESIGN (the Create
-# Event submit's glyph pixels at the new neutral-50 ink — the only
-# form-submit capture whose button rides inside the 900px fold; the
-# taller forms' submits — the mood + sr interiors — sit below the fold,
-# their new ink verified LIVE by the parity script's 20/20 + the
-# 7-button rendered pass instead); 25-dark-login-focus (0.0067%) = the
-# file's own focus-ring interpolation-instant precedent (WH-33/34);
-# 29-quick-actions-hover (0.0004%, 5px) + 30-tutorial-card-hover
-# (0.0015%, 17px) = the sub-visible rasterization/hover-instant
-# classes (the WH-31/32 precedents). The WH-34 base and this set were
-# captured on the same calendar day (no date-rollover class).
-
-#
-# The WH-34 round (the stable-read round): the FIFTH cross-round byte
-# comparison under the committed procedure — the CLEANEST yet: 34/34
-# byte-stable, ZERO movers. Zero rendered-face changes shipped (both
-# cures procedure-side: the watch script's jsPath form normalization +
-# the moodForm surface extension — no src/ change), and for the first
-# time no procedure-state class fired either: both the WH-33 base and
-# this set were captured on the SAME calendar day (2026-11-01 — no
-# date-rollover class), no focus-instant, no form-interior caret band.
-# The data lines below are therefore UNCHANGED from the WH-33 base —
-# this header is the round's only edit (the md5-ledger doctrine: the
-# ledger re-bases in the same commit as any cure; a zero-mover round
-# re-bases nothing but the record).
-#
-# The WH-33 round (the watch-companion round): the FOURTH cross-round byte
-# comparison under the committed procedure. ZERO rendered-face changes
-# shipped that round (no src/ change — the round's cures were the (q) e2e
-# leg + the committed watch-round.mjs procedure) and the comparison
-# confirms it: 28/34 byte-stable, all SIX movers root-caused as
-# procedure-state classes below.
-#
-# The WH-33 movers (all root-caused before the re-base):
-#   07-events (1.81%, delta 245) + 26-events-inline-form (0.90%, delta
-#     245) — THE DATE-ROLLOVER CLASS (first of its kind): the events
-#     calendar's face is keyed to the SYSTEM DATE, and the WH-32 base was
-#     captured pre-midnight on 2026-10-31 (the calendar band rendering
-#     "October 2026") while this round's set was captured after midnight
-#     on 2026-11-01 (the band now "November 2026" — verified live). The
-#     diff regions are exactly the calendar band (x 312-894); no code
-#     change. A NEW procedure-state class for the ledger: cross-midnight
-#     (and cross-month) capture sessions legitimately move every
-#     date-keyed face — the events calendar + any relative-date text.
-#   25-dark-login-focus (0.0069%, delta 4) — the file's own precedent
-#     class (the WH-32 record; the focus-ring interpolation instant).
-#   27-dark-mood-form + 32-mentalhealth-form-interior (0.0115%/0.0115%,
-#     delta 226/245) — the standing form-interior class (the WH-29..32
-#     record; the mood-form textarea's caret/antialias band, IDENTICAL
-#     narrow regions x[336-358] y[856-864] on both files — the light and
-#     dark captures of the same form).
-#   28-routines-schedule-modal (0.0118%, delta 204) — the same
-#     narrow-band class inside the modal's content (a caret row at
-#     x[352-374] y[670-678]; the modal's own face is unchanged — the
-#     WH-22 map + the (q)/sibling e2e legs assert it live in the gate).
-#
-# The prior ledger head (WH-32): 29/34 byte-stable; five movers
-# root-caused (2 = the F-1 cure by design, 1 = the cure's backdrop
-# knock-on, 2 = the sub-visible rasterization/transition-instant
-# classes).
-
-
-# ---- the data lines (re-based at WH-37) ----
 01-login.png 0eb839b6997d2d0fb14ea1834f39bff8
 02-dashboard.png d9754490ed784a32688fcb6e0ba4ae9f
 03-routines.png 43a821116e44d66d56d338482e770b42
@@ -167,7 +46,7 @@
 26-events-inline-form.png 6fee97e127497ef798f23be47967a28f
 27-dark-mood-form.png fedd2292bdac01420655969bcf6a7999
 28-routines-schedule-modal.png 751150e2eb0ff1df77dae3b8e0404d0e
-29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
+29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
 30-tutorial-card-hover.png f389b6004f8632af940c7544bef8464e
 31-profile-preferences.png f6624079394ce66ab0a280fd489e6f0a
 32-mentalhealth-form-interior.png 3edc7f80aa75b05a35051b273a06d4dd

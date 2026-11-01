@@ -55,18 +55,20 @@ const BASE = "https://evolve-well-d6cec85d.base44.app";
 const EMAIL = "sepnetflix2023@outlook.com";
 const PASSWORD = "$Abcd1234";
 
-/** The canonical ledger — round-27 form (WH-38: the DOUBLE move —
- *  the CSS content hash changed for the FIRST TIME since round 20
- *  (/static/index-BHjkUcdg.css -> /static/index--nhcow2j.css) AND the
- *  js bundle moved again (/static/index-CcEolDtM.js ->
- *  /static/index-CaQQhuPL.js, the SEVENTH distinct bundle) — the
- *  round-20 class (a stylesheet CONTENT change, the rarest signal;
- *  round 20's carried one real face change). The same-run PASS-2
- *  digest read 15/15 MATCH on the new assets, and the round's parity
- *  battery — login 34/34, moodForm 20/20, shell 61/61, + the new
- *  FOURTH SURFACE parity-dashboard 105/105 (born this round) —
- *  verified the rendered face byte-held through the css content
- *  move, the widest same-round battery yet). */
+/** The canonical ledger — round-28 form (WH-39: the DOUBLE move —
+ *  the CSS content hash changed for the SECOND TIME in two rounds
+ *  (/static/index--nhcow2j.css -> /static/index-CMHVFeas.css) AND the
+ *  js bundle moved again (/static/index-CaQQhuPL.js ->
+ *  /static/index-NVr-T2eL.js, the EIGHTH distinct bundle) — the
+ *  round-20/27 class (a stylesheet CONTENT change, the rarest signal,
+ *  now twice in two rounds: the active-development cadence is the
+ *  standing state). The same-run PASS-2 digest read 15/15 MATCH on
+ *  the new assets, and the round's parity battery — the widened
+ *  battery's first full run: login 34/34 (fourth), moodForm 20/20
+ *  (fifth), shell 61/61 (third), dashboard 105/105 (third) — verified
+ *  the rendered face byte-held through the css content move BEFORE
+ *  the round's own FIFTH SURFACE parity-headers 192/192 (born this
+ *  round, the PAGE_THEMES identity family) widened the net again). */
 const LEDGER = {
   // The watch (informational — reported, never fails the run).
   // FORM CONTRACT (WH-34, F-1): both asset entries carry the probe's
@@ -77,12 +79,12 @@ const LEDGER = {
   // hashes unchanged, the js axis still read "run the full lesson-30
   // walk"). An informational signal that always fires is a signal that
   // gets ignored — the entry is jsPath now, form-matched to cssPath.
-  cssPath: "/static/index--nhcow2j.css",
-  // WH-38 re-base (round 27's genuine DOUBLE move — the seventh bundle
-  // + the first css content change since round 20; birth-verified on
+  cssPath: "/static/index-CMHVFeas.css",
+  // WH-39 re-base (round 28's genuine DOUBLE move — the eighth bundle
+  // + the second css content change in two rounds; birth-verified on
   // the quiet state per the WH-34 doctrine: the re-run after this edit
   // reads "assets stable" + the 15/15 digest).
-  jsPath: "/static/index-CaQQhuPL.js",
+  jsPath: "/static/index-NVr-T2eL.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):
