@@ -903,6 +903,21 @@ export const GRADIENT_BUTTON = `${GRADIENT_BUTTON_BASE} h-10 rounded-md px-8 bg-
 
 export const GRADIENT_BUTTON_COMPACT = `${GRADIENT_BUTTON_BASE} h-9 rounded-md px-4 py-2`;
 
+/** WH-35 (the form-submit ink split): the inline form-card primaries ink
+ *  NEUTRAL-50 where the activator family inks white — the reference's own
+ *  two-family split, decoded live on both apps (its seven form submits —
+ *  Save Workout, Save Entry, Create Goal/Event/Assignment/Reminder, Add
+ *  Resource — all compute rgb(250,250,250); its header primaries, the
+ *  routines card, the Schedule modal and the big Profile save all compute
+ *  rgb(255,255,255)). Constructed as COMPACT with exactly the one ink arm
+ *  swapped so the two constants can never drift apart except on the ink
+ *  itself (pinned in tests/gradient-ink.test.ts: the byte-diff + the seven
+ *  pass-sites). Caught by scripts/parity-moodform.mjs's first live-vs-live
+ *  run — the drift rode invisible through every green round since WH-15
+ *  because the reference's pin recorded 250 while our leg pinned the TILE
+ *  family's white, and nobody ever diffed the two apps' submit inks. */
+export const GRADIENT_BUTTON_SUBMIT = GRADIENT_BUTTON_COMPACT.replace("text-white", "text-neutral-50");
+
 export const BUTTON_BASE = {
   focusRing: "focus-visible:ring-1 focus-visible:ring-ring",
   svgSize: "[&_svg]:size-4",

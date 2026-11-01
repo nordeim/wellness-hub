@@ -201,7 +201,7 @@ export default function ExerciseClientPage() {
                 <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                   Cancel
                 </button>
-                <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.exercise.button}>
+                <GradientButton submit onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.exercise.button}>
                   {saving ? "Saving…" : "Save Workout"}
                 </GradientButton>
               </div>

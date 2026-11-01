@@ -366,7 +366,7 @@ export default function StudyResourcesClientPage() {
               <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                 Cancel
               </button>
-              <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.studyresources.button}>
+              <GradientButton submit onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.studyresources.button}>
                 {saving ? "Saving…" : editing ? "Save Changes" : "Add Resource"}
               </GradientButton>
           

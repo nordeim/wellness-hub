@@ -57,7 +57,7 @@ const CANONICAL = {
   unitSuites: 25, // tests/*.test.ts (INCLUDING this suite — WH-28: +tests/activity-feed.test.ts)
   e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 365, // `bun run test` total (WH-32: 364 + the routines video-card census)
+  unitChecks: 366, // `bun run test` total (WH-35: 365 + the form-submit ink-split pin)
   e2eChecks: 71, // `CI=1 bun run test:e2e` total (WH-33: 70 + the (q) family-B Schedule-modal step-count leg)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
   // WH-18: ThemeBoot joined src/components/layout/ — the counts move with it.

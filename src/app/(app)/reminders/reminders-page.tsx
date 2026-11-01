@@ -256,7 +256,7 @@ export default function RemindersClientPage() {
               <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                 Cancel
               </button>
-              <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.reminders.button}>
+              <GradientButton submit onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.reminders.button}>
                 {saving ? "Saving…" : editing ? "Save Changes" : "Create Reminder"}
               </GradientButton>
           

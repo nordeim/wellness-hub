@@ -288,7 +288,7 @@ export default function GoalsClientPage() {
               <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                 Cancel
               </button>
-              <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.goals.button}>
+              <GradientButton submit onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.goals.button}>
                 {saving ? "Saving…" : editing ? "Save Changes" : "Create Goal"}
               </GradientButton>
           

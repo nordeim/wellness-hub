@@ -1256,6 +1256,7 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
       const reflect = Array.from(card.querySelectorAll("textarea"))[1];
       const cancel = Array.from(card.querySelectorAll("button")).find((b) => b.textContent.trim() === "Cancel")!;
       const add = Array.from(card.querySelectorAll("button")).find((b) => b.textContent.trim() === "Add")!;
+      const save = Array.from(card.querySelectorAll("button")).find((b) => /Save Entry/i.test(b.textContent.trim()))!;
       const lowHigh = Array.from(card.querySelectorAll("div")).find((d) => d.textContent.trim() === "LowHigh" && d.querySelector("span"));
       const activeTile = Array.from(card.querySelectorAll("button[aria-pressed]")).find((t) => t.getAttribute("aria-pressed") === "true");
       const activeLabel = activeTile?.querySelectorAll("span")[1] as HTMLElement | undefined;
@@ -1273,6 +1274,7 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
         cancelBg: getComputedStyle(cancel).backgroundColor,
         addBg: getComputedStyle(add).backgroundColor,
         activeLabelColor: activeLabel ? getComputedStyle(activeLabel).color : null,
+        saveEntryColor: save ? getComputedStyle(save).color : null,
         labelCount: labels.length,
       };
     });
@@ -1290,6 +1292,14 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
     expect(read.cancelBg, "the Cancel carries the surface wash (bg-background ≈ our bg-surface)").toBe("rgb(255, 255, 255)");
     expect(read.addBg, "the Add is the reference's solid --primary at its own zinc value rgb(23,23,23)").toBe("rgb(23, 23, 23)");
     expect(read.activeLabelColor, "THE F-1 CURE: the active tile's LABEL flips to white (the WH-21 pin asserted the button's arm while the constant-gray span overrode it)").toBe("rgb(255, 255, 255)");
+    // WH-35 (the form-submit ink split): the Save Entry submit inks
+    // NEUTRAL-50 — the reference's inline form-card family (probed on
+    // all seven submits), NOT the activator family's white. The drift
+    // (our old shared text-white base) was caught by the parity
+    // script's first live-vs-live run; the split is pinned in
+    // tests/gradient-ink.test.ts (the constant's byte-diff + the seven
+    // pass-sites).
+    expect(read.saveEntryColor, "the Save Entry submit inks neutral-50 — the reference's form-card family, not the activator family's white (the WH-35 ink split, caught by the parity script's first run)").toBe("rgb(250, 250, 250)");
 
     // the chip: added client-state only (never saved — zero writes)
     await page.locator("input[placeholder*='Exercise']").fill("(k)probe");

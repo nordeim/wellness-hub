@@ -1,7 +1,7 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { expect, it } from "vitest";
-import { GRADIENT_BUTTON, PAGE_THEMES, ROUTINE_CATEGORY_GRADIENTS } from "../src/lib/page-layout";
+import { GRADIENT_BUTTON, GRADIENT_BUTTON_COMPACT, GRADIENT_BUTTON_SUBMIT, PAGE_THEMES, ROUTINE_CATEGORY_GRADIENTS } from "../src/lib/page-layout";
 
 /** WH-21 (F-4): the fixed-gradient white-ink arithmetic pin — the
  * preset-axis doctrine (WH-19's tests/preset-contrast.test.ts) applied to
@@ -225,4 +225,91 @@ it("WH-22: the Schedule modal's step circles — the reference's own solid purpl
     row!.includes("step circle"),
     "the PAD row must name the Schedule modal's step circle (the solid-fill member of the family)",
   ).toBe(true);
+});
+
+it("WH-35: the form-submit ink split — the inline form-card primaries ink neutral-50 where the activator family inks white (the reference's own two-family split, decoded live on both apps)", () => {
+  // The parity script's first flight (scripts/parity-moodform.mjs — the
+  // same-round live-vs-live read) caught what two green pin sets had
+  // never compared: the reference inks its seven INLINE FORM-CARD
+  // submits neutral-50 (rgb(250,250,250) — probed live on all seven:
+  // Save Workout, Save Entry, Create Goal, Create Event, Create
+  // Assignment, Create Reminder, Add Resource) while its header/
+  // activator primaries, the routines card activator, the Schedule
+  // modal's submit and the big Profile save all ink WHITE — and OUR
+  // shared GRADIENT_BUTTON_BASE carried text-white for BOTH families,
+  // so every form submit drifted 5/255 (sub-visible, computed). The
+  // gap's provenance: the WH-34 watch ledger recorded the reference's
+  // saveEntryColor 250 and the (k) leg pinned the TILE ink white
+  // (correct — the tile family IS white) — nobody ever diffed the two
+  // apps' SAVE inks. The pin below asserts the SPLIT is structural:
+  // SUBMIT is COMPACT with exactly the one ink arm swapped, the seven
+  // form-submit pass-sites carry the prop, and nothing else does.
+  const SUBMIT_SWAPS = GRADIENT_BUTTON_COMPACT.replace("text-white", "text-neutral-50");
+  expect(
+    GRADIENT_BUTTON_SUBMIT,
+    `GRADIENT_BUTTON_SUBMIT must be GRADIENT_BUTTON_COMPACT with EXACTLY the text-white -> text-neutral-50 arm swapped (the construction pins the byte-diff to the one arm — the two constants can never drift apart except on the ink itself; read "${GRADIENT_BUTTON_SUBMIT}")`,
+  ).toBe(SUBMIT_SWAPS);
+  expect(
+    GRADIENT_BUTTON_COMPACT.includes("text-white"),
+    "the activator family (COMPACT) keeps the white ink — the reference's header/modal/Profile family (probed)",
+  ).toBe(true);
+  expect(
+    GRADIENT_BUTTON_SUBMIT.includes("text-neutral-50"),
+    "the submit family carries the neutral-50 ink — the reference's form-card family (probed on all seven)",
+  ).toBe(true);
+
+  // The composition: GradientButton must select SUBMIT over COMPACT on
+  // the prop (the component's own contract).
+  const pageParts = readFileSync(join(import.meta.dirname, "..", "src", "components", "shared", "page-parts.tsx"), "utf8");
+  expect(
+    pageParts.includes("submit ? GRADIENT_BUTTON_SUBMIT : GRADIENT_BUTTON_COMPACT"),
+    "GradientButton's composition must select GRADIENT_BUTTON_SUBMIT when the submit prop is passed (the two-family split lives in the component)",
+  ).toBe(true);
+
+  // The pass-site census: exactly the seven form submits carry the
+  // prop — one per module page's inline form card — and nothing else
+  // (the activators, the routines card + modal, the Profile save stay
+  // compact-white, the reference's own split).
+  const PAGES = join(import.meta.dirname, "..", "src", "app", "(app)");
+  const modules = readdirSync(PAGES, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name);
+  const submitSites: string[] = [];
+  const allGradientButtons: string[] = [];
+  for (const mod of modules) {
+    const dir = join(PAGES, mod);
+    const files = readdirSync(dir, { withFileTypes: true })
+      .filter((f) => f.isFile() && f.name.endsWith("-page.tsx"))
+      .map((f) => join(dir, f.name));
+    for (const f of files) {
+      const src = readFileSync(f, "utf8");
+      const tags = src.match(/<GradientButton[\s\S]*?>/g) ?? [];
+      allGradientButtons.push(...tags.map(() => mod));
+      const withSubmit = tags.filter((t) => /\ssubmit\b/.test(t));
+      if (withSubmit.length > 0) submitSites.push(mod);
+    }
+  }
+  expect(
+    submitSites.sort().join(","),
+    "the submit prop's pass-sites are EXACTLY the seven form submits (exercise/goals/events/mentalhealth/assignments/reminders/studyresources — one inline form card each; a new site moves this pin in the SAME commit)",
+  ).toBe("assignments,events,exercise,goals,mentalhealth,reminders,studyresources");
+  expect(
+    allGradientButtons.length,
+    `the tree's GradientButton count stays ${allGradientButtons.length} (7 activators + 7 form submits + the routines card + the Profile save — the Schedule modal rides its own SCHEDULE_MODAL.button, pinned separately with its text-white arm) — a new call site moves this pin in the SAME commit`,
+  ).toBe(16);
+
+  // The neutral-50 sub-family stays inside the family's documented
+  // ALL-FAIL class (the WH-21 row): neutral-50 is strictly dimmer than
+  // white, so the worst pair (goals) fails a touch lower than the
+  // row's white-ink 1.92 — the row's class claim still holds.
+  const NEUTRAL_50_LUM = lum("#fafafa");
+  const goals = stops(PAGE_THEMES.goals.button);
+  const r50 = Math.min(
+    ratio(NEUTRAL_50_LUM, lum(v3(goals.from, "the goals from-stop"))),
+    ratio(NEUTRAL_50_LUM, lum(v3(goals.to, "the goals to-stop"))),
+  );
+  expect(
+    r50,
+    `neutral-50 on the form submits' worst pair (goals) = ${r50.toFixed(2)}:1 — still inside the family's documented ALL-FAIL class; if a re-pair ever passes, the PAD §11 row and this claim move in the SAME commit`,
+  ).toBeLessThan(1.92);
 });

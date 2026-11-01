@@ -260,7 +260,7 @@ export default function MentalHealthClientPage() {
                 <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                   Cancel
                 </button>
-                <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.mentalhealth.button}>
+                <GradientButton submit onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.mentalhealth.button}>
                   {saving ? "Saving…" : "Save Entry"}
                 </GradientButton>
               </div>

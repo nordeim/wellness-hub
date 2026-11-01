@@ -8,6 +8,7 @@ import {
   EMPTY_STATE,
   GRADIENT_BUTTON,
   GRADIENT_BUTTON_COMPACT,
+  GRADIENT_BUTTON_SUBMIT,
 } from "@/lib/page-layout";
 import type { PageTheme } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
@@ -45,19 +46,25 @@ export function PageHeader({
  *  module form (h-9 px-4 py-2 + the module's pair); the bare form is
  *  the BIG brand pair (h-10 px-8, indigo/purple — Profile's save). The
  *  pairs are FIXED palette classes: the reference's own preset engine
- *  does not re-skin them (verified live), and neither does ours. */
+ *  does not re-skin them (verified live), and neither does ours.
+ *  WH-35 (the form-submit ink split): `submit` swaps the base to
+ *  GRADIENT_BUTTON_SUBMIT — the inline form-card primaries ink
+ *  neutral-50 where the activator family inks white (the reference's
+ *  own two-family split, probed live on both apps). */
 export function GradientButton({
   children,
   gradient,
+  submit,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
   gradient?: string;
+  submit?: boolean;
 }) {
   return (
     <button
       type="button"
-      className={gradient ? cn(GRADIENT_BUTTON_COMPACT, gradient) : GRADIENT_BUTTON}
+      className={gradient ? cn(submit ? GRADIENT_BUTTON_SUBMIT : GRADIENT_BUTTON_COMPACT, gradient) : GRADIENT_BUTTON}
       {...props}
     >
       {children}

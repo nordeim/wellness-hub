@@ -235,7 +235,7 @@ export default function EventsClientPage() {
                 <button type="button" className={FORM_BUTTONS.cancel} onClick={() => setOpen(false)}>
                   Cancel
                 </button>
-                <GradientButton onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.events.button}>
+                <GradientButton submit onClick={() => void submit()} disabled={saving} gradient={PAGE_THEMES.events.button}>
                   {saving ? "Saving…" : editing ? "Save Changes" : "Create Event"}
                 </GradientButton>
               </div>

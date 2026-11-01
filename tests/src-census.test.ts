@@ -492,7 +492,7 @@ const PROPPED_COMPONENTS: Record<string, string[]> = {
   ],
   "src/components/ui/tabs.tsx:TabsPanel": ["children", "className", "tab"],
   "src/components/shared/page-parts.tsx:PageHeader": ["actions", "subtitle", "theme", "title"],
-  "src/components/shared/page-parts.tsx:GradientButton": ["children", "gradient"],
+  "src/components/shared/page-parts.tsx:GradientButton": ["children", "gradient", "submit"], // WH-35: +submit (the form-submit ink split)
   "src/components/shared/page-parts.tsx:SectionCard": ["action", "children", "icon", "title"],
   // WH-23: EmptyState's `icon` prop retired with the icon chip — the
   // reference's empty states are a bare centered paragraph (probed:
