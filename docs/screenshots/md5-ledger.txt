@@ -1,4 +1,25 @@
-# docs/screenshots md5 ledger — re-based at WH-35 (2026-11-01), 34 files
+# docs/screenshots md5 ledger — re-based at WH-36 (2026-11-01), 34 files
+
+# The WH-36 round (the parity net's second-surface round): the SEVENTH
+# cross-round byte comparison under the committed procedure — 30/34
+# byte-stable, FOUR movers all root-caused before this re-base:
+#   10-learning (16 px, 0.0014%, maxdelta 7, two glyph-edge clusters
+#     at x[304-314] y[146-147] + x[288-290] y[166-169]) = the
+#     SUB-VISIBLE TEXT-RASTERIZATION class (Chromium glyph-antialiasing
+#     variance on the page's H1/subtitle edges — deltas 1-7 on
+#     light-gray glyph pixels over the amber wash; the FIRST landing of
+#     the standing rasterization class [the WH-31/32 record] on this
+#     file). No src/ change shipped this round; the watch round 25's
+#     learning surface read MATCH (12 imgs, 12 Watch Now, the outline
+#     chips) on the same build this set was captured against — the
+#     computed face identical, only 16 antialiasing pixels moved.
+#   25-dark-login-focus (77 px, 0.0067%, maxdelta 5, the focus-ring
+#     zone) = the file's OWN focus-instant precedent (the WH-33/34/35
+#     record; the interpolation instant of the focus ring).
+#   29-quick-actions-hover (5 px, 0.0004%, maxdelta 1) + 30-tutorial-
+#     card-hover (17 px, 0.0015%, maxdelta 40) = the sub-visible
+#     rasterization/hover-instant classes (the WH-31/32/35 record).
+
 #
 # The WH-35 round (the live-vs-live round): the SIXTH cross-round byte
 # comparison under the committed procedure — 30/34 byte-stable, FOUR
@@ -74,7 +95,7 @@
 07-events.png 729319b2e5c91ecde6e5de8dea0950ca
 08-studyresources.png d55df9d487b4c758815c6df05f611482
 09-reminders.png b9a6e1fb97d2426143b3518109ceebd7
-10-learning.png 421150b6886c1abd4d82edc7fefd19fb
+10-learning.png 0c088cbb788d7825506973744ab016d3
 11-goals.png 01596f05cae8a18b75a35b30f9f40506
 12-profile.png 53218b174c58a304d904725237759615
 13-mobile-login.png 479e3bc95a4ca2465691d6b0c5669b90
@@ -89,12 +110,12 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png 554a5ac802b890e129a5c9309db81725
-25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
+25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
 26-events-inline-form.png a042e99ae17060b6cb2ce2f47a8f9159
 27-dark-mood-form.png adc78dbc036d9e40f89697f0897dbed6
 28-routines-schedule-modal.png dafe291049936103b8b9527f0ec9dc20
-29-quick-actions-hover.png f756df86ebfcc4551407654fdc65d580
-30-tutorial-card-hover.png 5f727d0651fc1109cc2f0b953f45c65c
+29-quick-actions-hover.png 7cadbcde9c4691236ce5dd59524d9114
+30-tutorial-card-hover.png bd6004ad8bbb6b0f0b3dbe56753b469b
 31-profile-preferences.png 3eeab6faa67b22b9fb29ac1dac4b7a36
 32-mentalhealth-form-interior.png 212565a5fbfb4d19d73d5ceed24dfc89
 33-sr-form-interior.png 55b390793b2fa19af7b0dad1425a7205
