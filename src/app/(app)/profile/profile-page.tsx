@@ -99,8 +99,11 @@ export default function ProfileClientPage({ user }: { user: AppUser | null }) {
           sticky bottom-4 (the floating right-aligned bar; ours shipped
           a bare div). */}
       <div className="flex justify-end gap-3 sticky bottom-4">
+        {/* WH-44 (F-6, decoded live): the reference's Save All Changes
+            button is TEXT-ONLY (the ✨ emoji rides the text, 207px) —
+            our Sparkles icon added the exact 24px width delta. */}
         <GradientButton onClick={() => void save()} disabled={saving}>
-          <Sparkles className="h-4 w-4" /> {saving ? "Saving…" : "Save All Changes ✨"}
+          {saving ? "Saving…" : "Save All Changes ✨"}
         </GradientButton>
       </div>
       </div>
@@ -200,7 +203,11 @@ function AppearancePanel() {
 
         {/* WH-25 (probed live): the picker rows — grid md:grid-cols-2
             gap-6 of bare div groups; the row flex gap-3 items-center
-            mt-2; the color input the stock form + w-20 h-12 (80×48). */}
+            mt-2; the color input the stock form + w-20 h-12 (80×48).
+            WH-44 (F-5, decoded live): the stock form INCLUDES the
+            rounded-md text-sm px-3 py-1 arms (computed 6px radius,
+            14px font, 4px 12px padding) — our bare input rendered
+            0px radius at 16px. */}
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <Label htmlFor="pref-primary">Primary Color</Label>
@@ -210,7 +217,7 @@ function AppearancePanel() {
                 type="color"
                 value={theme.primaryColor}
                 onChange={(e) => theme.setTheme({ primaryColor: e.target.value })}
-                className="w-20 h-12 cursor-pointer"
+                className="w-20 h-12 cursor-pointer rounded-md text-sm px-3 py-1"
                 aria-label="Primary color picker"
               />
               <Input
@@ -230,7 +237,7 @@ function AppearancePanel() {
                 type="color"
                 value={theme.secondaryColor}
                 onChange={(e) => theme.setTheme({ secondaryColor: e.target.value })}
-                className="w-20 h-12 cursor-pointer"
+                className="w-20 h-12 cursor-pointer rounded-md text-sm px-3 py-1"
                 aria-label="Secondary color picker"
               />
               <Input

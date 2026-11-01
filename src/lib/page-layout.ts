@@ -870,7 +870,10 @@ export const THEME_MODE_PICKER = {
   // chip in dark mode inherits the DARK foreground (#fafafa on
   // #eef2ff = 1.2:1); the near-black is mode-independent (the WH-17
   // "fixed indigo active pair" completed for the dark state).
-  active: "border-indigo-500 bg-indigo-50 text-neutral-900",
+  // WH-44 (F-3, decoded live): the reference's active card computes
+  // rgb(10, 10, 10) — neutral-950, not the neutral-900 the WH-17 note
+  // carried (the border/bg arms held; the ink arm re-decoded).
+  active: "border-indigo-500 bg-indigo-50 text-neutral-950",
   // WH-18: the inactive card's dark border pair (coherence — the fixed
   // gray-200 border rides the light token set).
   inactive: "border-gray-200 hover:border-gray-300 dark:border-neutral-700 dark:hover:border-neutral-600",
@@ -894,7 +897,12 @@ export const PRESET_CARD = {
    *  call site. */
   swatches: "flex gap-2 mb-2",
   swatch: "w-6 h-6 rounded-full",
-  label: "text-xs font-medium",
+  // WH-44 (F-4, decoded live): the reference's preset label is a block
+  // P — our bare inline SPAN rode the button's 20px strut line box,
+  // making every inactive card 82px against the reference's 74px (the
+  // +8 line-box class). The block arm renders the same computed face
+  // (12px/16px/500/ink) at the reference's height.
+  label: "text-xs font-medium block",
   activeLabel: "mt-1 flex items-center gap-1 text-xs text-foreground",
 } as const;
 

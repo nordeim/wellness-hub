@@ -50,15 +50,18 @@ it("WH-19: the preset-axis contrast table — all 8 presets measured, the PAD le
 
   // The documented table (PAD §11) — the exact numbers the ledger entry
   // carries. Rounded to 2 decimals, the live probe's precision.
+  // WH-44 (F-1): recomputed at the reference's re-authored catalog (the
+  // monochromatic pairs, decoded 2026-11-02) — the WH-19-era table rode
+  // the two-hue catalog that no longer exists on either app.
   const documented: Record<string, number> = {
     "Indigo Dream": 3.96,
-    "Ocean Blue": 2.77,
-    "Forest Green": 1.98,
-    "Sunset Orange": 2.8,
-    "Rose Pink": 3.53,
-    "Royal Purple": 4.23,
-    "Crimson Red": 2.8,
-    "Golden Yellow": 1.92,
+    "Ocean Blue": 2.43,
+    "Forest Green": 2.54,
+    "Sunset Orange": 2.26,
+    "Rose Pink": 2.65,
+    "Royal Purple": 3.96,
+    "Crimson Red": 3.76,
+    "Golden Yellow": 1.53,
   };
 
   for (const { label, ratio: r } of computed) {

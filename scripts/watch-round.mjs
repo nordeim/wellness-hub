@@ -87,19 +87,24 @@ const LEDGER = {
   // (login 34/34 + moodForm 20/20 + shell 61/61 + dashboard 105/105 +
   // headers 192/192 + toolbars 98/98 + kpis 315/315 + routines 697/697
   // — 1,522 computed members) — verified the rendered face byte-held
-  // through the double-axis move).
+  // through the double-axis move. WH-44: the css axis read STABLE at
+  // CapATpwD for the second consecutive round.)
   cssPath: "/static/index-CapATpwD.css",
-  // WH-43 re-base (round 32's FINAL read: the SIXTEENTH bundle
-  // /static/index-qi2AnSYN.js -> /static/index-a8mtclnh.js fired at
-  // the round's watch, then the SEVENTEENTH /static/index-DrgN_FlZ.js
-  // fired during the first re-base's OWN born-verification — the
-  // WH-40/41/42 intra-round class, the FIFTH consecutive round with
-  // an intra-round move; the same-run digest read 15/15 MATCH on the
-  // new bundle, the rendered face byte-held. Re-based ONCE to the
-  // round's final read per the doctrine, born-verified on the quiet
-  // state per the WH-34 doctrine: the re-run after this edit reads
+  // WH-44 re-base (round 33: the EIGHTEENTH bundle
+  // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
+  // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
+  // born-verification — the WH-40/41/42/43 intra-round class, the SIXTH
+  // consecutive round with an intra-round move; the css axis STABLE at
+  // CapATpwD for the second consecutive round. The same-run digest read
+  // 15/15 MATCH on every bundle, and the round's standing battery — the
+  // SIXTH full-width run, all NINE legs green (login 34/34 + moodForm
+  // 20/20 + shell 61/61 + dashboard 105/105 + headers 192/192 + toolbars
+  // 98/98 + kpis 315/315 + routines 697/697 + tutorials 790/790 — 2,312
+  // computed members) — verified the rendered face byte-held through the
+  // moves. Re-based ONCE to the round's final read per the doctrine,
+  // born-verified on the quiet state: the re-run after this edit reads
   // "assets stable" + the 15/15 digest).
-  jsPath: "/static/index-DrgN_FlZ.js",
+  jsPath: "/static/index-BA3Eznmu.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):

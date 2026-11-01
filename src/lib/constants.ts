@@ -230,16 +230,24 @@ interface ColorPreset {
   secondary: string;
 }
 
-/** The reference's Quick Presets (its Appearance tab, decoded live). */
+/** The reference's Quick Presets (its Appearance tab, decoded live).
+ *  WH-44 (F-1): the reference RE-AUTHORED its catalog between the WH-43
+ *  and WH-44 rounds — 7 of the 8 pairs moved to monochromatic same-hue
+ *  steps (500/400 or 600/500); only Indigo Dream (the brand default)
+ *  held. The pairs below are the decoded live values (computed swatch
+ *  reads, 2026-11-02, two consecutive same-round reads identical);
+ *  `tests/wellness-domain.test.ts`'s WH-44 contract pins them and
+ *  `scripts/parity-profile.mjs`'s preset-card members compare them
+ *  live-vs-live every round. */
 export const COLOR_PRESETS: ColorPreset[] = [
   { key: "indigo_dream", label: "Indigo Dream", primary: "#6366f1", secondary: "#a855f7" },
-  { key: "ocean_blue", label: "Ocean Blue", primary: "#0ea5e9", secondary: "#6366f1" },
-  { key: "forest_green", label: "Forest Green", primary: "#10b981", secondary: "#84cc16" },
-  { key: "sunset_orange", label: "Sunset Orange", primary: "#f97316", secondary: "#f43f5e" },
-  { key: "rose_pink", label: "Rose Pink", primary: "#f43f5e", secondary: "#ec4899" },
-  { key: "royal_purple", label: "Royal Purple", primary: "#8b5cf6", secondary: "#6366f1" },
-  { key: "crimson_red", label: "Crimson Red", primary: "#ef4444", secondary: "#f97316" },
-  { key: "golden_yellow", label: "Golden Yellow", primary: "#eab308", secondary: "#f59e0b" },
+  { key: "ocean_blue", label: "Ocean Blue", primary: "#0ea5e9", secondary: "#06b6d4" },
+  { key: "forest_green", label: "Forest Green", primary: "#10b981", secondary: "#059669" },
+  { key: "sunset_orange", label: "Sunset Orange", primary: "#f97316", secondary: "#fb923c" },
+  { key: "rose_pink", label: "Rose Pink", primary: "#ec4899", secondary: "#f472b6" },
+  { key: "royal_purple", label: "Royal Purple", primary: "#9333ea", secondary: "#a855f7" },
+  { key: "crimson_red", label: "Crimson Red", primary: "#dc2626", secondary: "#ef4444" },
+  { key: "golden_yellow", label: "Golden Yellow", primary: "#eab308", secondary: "#facc15" },
 ];
 
 export const THEME_MODES = [

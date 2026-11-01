@@ -1443,6 +1443,57 @@ it("WH-17: the chip-vocabulary census — every OptionMeta chip rides the refere
   expect(chipSrc.includes('variant === "outline" ? OUTLINE_BASE : SOLID_BASE'), "the variant arm selects between the two bases (the WH-29 split)").toBe(true);
 });
 
+it("WH-44: the Profile appearance computed-face cures census (the tenth-surface decode's four cures, source-pinned)", () => {
+  // WH-44 (F-3/F-4/F-5/F-6, decoded live on both apps 2026-11-02): the
+  // tenth surface's decode caught four computed-face drifts on the
+  // Profile appearance family. This census pins the SOURCE form of each
+  // cure; the LIVE pins are scripts/parity-profile.mjs's members (the
+  // mode-card ink, the preset label's display, the color-input form, the
+  // save bar's icon-less width).
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+
+  // F-3: the active Theme-Mode card's ink — the reference computes
+  // rgb(10, 10, 10) (neutral-950); ours shipped neutral-900.
+  expect(
+    layoutSrc.includes("text-neutral-950"),
+    "THEME_MODE_PICKER.active must carry text-neutral-950 (the reference's active-card ink, rgb(10,10,10) — decoded at WH-44; the neutral-900 arm is the drift)",
+  ).toBe(true);
+  expect(
+    !layoutSrc.includes("text-neutral-900"),
+    "the stale neutral-900 active-card ink must not return (the WH-17 note's text arm, re-decoded at WH-44)",
+  ).toBe(false);
+
+  // F-4: the preset label renders display:block — the reference's label
+  // is a block P (74px card); our bare inline SPAN rode the button's
+  // 20px strut line box (+8px on every inactive card).
+  expect(
+    /label:\s*"text-xs font-medium block"/.test(layoutSrc),
+    'PRESET_CARD.label must carry the block arm ("text-xs font-medium block") — the inline span rode the 20px strut line box (+8px per card, decoded at WH-44)',
+  ).toBe(true);
+
+  // F-5: the two color inputs carry the reference's stock form
+  // (rounded-md text-sm + the 4px 12px padding — computed 6px radius,
+  // 14px font); ours were bare (0px radius, 16px font).
+  const profileSrc = readFileSync(join(REPO_ROOT, "src/app/(app)/profile/profile-page.tsx"), "utf8");
+  expect(
+    profileSrc.includes('className="w-20 h-12 cursor-pointer rounded-md text-sm px-3 py-1"'),
+    'the color inputs must carry the stock form ("w-20 h-12 cursor-pointer rounded-md text-sm px-3 py-1") on BOTH sites — the reference\'s computed 6px radius + 14px font, decoded at WH-44',
+  ).toBe(true);
+
+  // F-6: the Save All Changes button is TEXT-ONLY on the reference (the
+  // ✨ emoji rides the text; 207px wide) — our Sparkles icon added the
+  // exact 24px width delta (16px icon + 8px gap).
+  const saveCall = profileSrc.slice(
+    profileSrc.indexOf("<GradientButton onClick"),
+    profileSrc.indexOf("</GradientButton>", profileSrc.indexOf("<GradientButton onClick")),
+  );
+  expect(saveCall.length, "the save-bar GradientButton call must exist in the profile page").toBeGreaterThan(0);
+  expect(
+    !saveCall.includes("<Sparkles") && !saveCall.includes("<Check"),
+    "the save button must NOT wrap an icon — the reference's button is text-only, our Sparkles icon added the exact 24px width delta (decoded at WH-44)",
+  ).toBe(true);
+});
+
 it("WH-43: the search-input census — the two search inputs render type=\"text\" (the reference's DOM; the Chromium clear-button superset retires)", () => {
   // WH-43 (F-4, the ninth-surface decode's DOM-shape finding with a
   // rendered consequence): the reference's search inputs (Learning +

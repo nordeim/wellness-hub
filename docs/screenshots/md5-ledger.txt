@@ -1,43 +1,25 @@
-# docs/screenshots md5 ledger — re-based at WH-43 (2026-11-02), 34 files
+# docs/screenshots md5 ledger — re-based at WH-44 (2026-11-02), 34 files
 
-# The WH-43 round (the ninth parity surface round — the reference's
-# re-ordered tutorial catalog cured): the FOURTEENTH cross-round byte
-# comparison under the committed procedure — 30/34 byte-stable, FOUR
-# movers root-caused BEFORE this re-base:
-#   10-learning + 30-tutorial-card-hover = the DELIBERATE our-side face
-#     change (the WH-43 F-1 cure: the tutorial-grid ORDER re-sequenced
-#     to the reference's live order — the page's rendered card sequence
-#     changed on purpose, the hovered card riding the same cure;
-#     everything else byte-held);
-#   25-dark-login-focus (77 px, maxdelta 5) = the standing signature
-#     VERBATIM (the FOURTH consecutive round at the identical stats —
-#     the rasterization-phase class);
-#   29-quick-actions-hover (5 px, maxdelta 1) = the standing
-#     signature's quietest read yet (the same sub-visible family).
+# The WH-44 round (the tenth parity surface round — the reference's
+# re-authored preset catalog cured + the four Profile face cures): the
+# FIFTEENTH cross-round byte comparison under the committed procedure —
+# 30/34 byte-stable, FOUR movers root-caused BEFORE this re-base:
+#   12-profile (11.902% of sampled px, maxdelta 247) + 31-profile-
+#     preferences (0.828%, maxdelta 154, first diff in the save-bar
+#     zone) = the DELIBERATE our-side face changes (the WH-44 F-1
+#     catalog cure re-authored 7 of the 8 preset pairs' swatches, and
+#     the F-3..F-6 cures changed the mode-card ink, the preset labels'
+#     block heights, the color inputs' radius and the save button's
+#     icon-less width — the Preferences capture carries the save bar);
+#   10-learning (0.001%, maxdelta 5) = the sub-visible rasterization
+#     family's newest member (the WH-43 29-hover class);
+#   25-dark-login-focus (0.007%, maxdelta 4) = the standing signature
+#     (the FIFTH consecutive round in the same family at the identical
+#     magnitude).
 # All 34 captures health-checked (29 desktop 1280x900 + 5 mobile
 # 390x844); the ledger re-based on the four new hashes; census MATCH
 # after the re-seed.
 
-# The WH-42 record (the THIRTEENTH comparison, 30/34 stable):
-#   03-routines + 18-dark-routines = the DELIBERATE our-side face
-#     change (the WH-42 F-1 cures: the template-grid ORDER re-sequenced
-#     to the reference's live order + the six video templates' benefit
-#     rows trimmed to three — the routines page's rendered card sequence
-#     changed on purpose; every other capture byte-held);
-#   28-routines-schedule-modal = the order cure propagating through the
-#     capture's POSITIONAL picker (`.first()` on Use This Template — the
-#     first card is now "10-Minute Home Workout" where it was "5-Minute
-#     Morning Energizer": the modal's title/description/steps/tile
-#     changed with the template, the ANATOMY unchanged and pinned by the
-#     e2e (q) leg + the watch's scheduleModal surface);
-#   25-dark-login-focus (77 px, 0.0067%, maxdelta 5, bbox x[457-823]
-#     y[562-682]) = the standing signature VERBATIM (the third
-#     consecutive round at the identical stats — the neutral edge-gray
-#     antialiasing/transition interpolation phase in the input band,
-#     the rasterization-phase class).
-# All 34 captures health-checked (29 desktop 1280x900 + 5 mobile
-# 390x844); the ledger re-based on the four new hashes; census MATCH
-# after the re-seed.
 01-login.png 0eb839b6997d2d0fb14ea1834f39bff8
 02-dashboard.png d9754490ed784a32688fcb6e0ba4ae9f
 03-routines.png 018a40ef34de3c99bc5c7ac7bc167445
@@ -47,9 +29,9 @@
 07-events.png e6cc18e1f31c15e24d5e299e32cec187
 08-studyresources.png ddc38c2096b0868b7ba7203bb627aecd
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
-10-learning.png 6539dfe3a48872186ef49df3c81400b1
+10-learning.png 82346c9dc003975fc8e31fd85394de9a
 11-goals.png 56a0ae5483cdda64d2168932e8359983
-12-profile.png dc6ab57f5a5b8448f8f8dec0dee54d49
+12-profile.png edb647d4bde50a717af5a88995e1a048
 13-mobile-login.png 479e3bc95a4ca2465691d6b0c5669b90
 14-mobile-dashboard.png affcfc1c87b3b812456cdbd1974af759
 15-mobile-nav-open.png 4e787b6e77719931f5b490369f5fbc88
@@ -62,13 +44,13 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
+25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
 26-events-inline-form.png 6fee97e127497ef798f23be47967a28f
 27-dark-mood-form.png fedd2292bdac01420655969bcf6a7999
 28-routines-schedule-modal.png 0eb6d158a83917feeaee801d540ae1da
 29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
 30-tutorial-card-hover.png 02c457e32bc267e8073bbc4da48f27cd
-31-profile-preferences.png f6624079394ce66ab0a280fd489e6f0a
+31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
 32-mentalhealth-form-interior.png 3edc7f80aa75b05a35051b273a06d4dd
 33-sr-form-interior.png 4485faec00fbf04f37ffda19916e2919
 34-mood-list-interior.png 00c9dfdef6d9eccd895c31969e6850ad

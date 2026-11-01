@@ -138,6 +138,27 @@ describe("the appearance vocabulary", () => {
     ]);
   });
 
+  // WH-44 (F-1): the preset-catalog parity contract. The reference
+  // RE-AUTHORED its Quick Presets between the WH-43 and WH-44 rounds
+  // (decode-settled live 2026-11-02, two consecutive same-round reads
+  // identical, computed swatch reads on both apps): 7 of its 8 pairs
+  // moved to monochromatic same-hue steps — only Indigo Dream (the
+  // brand default) held. This pin freezes the decoded pairs; the LIVE
+  // pins are scripts/parity-profile.mjs's preset-card swatch members
+  // (the DATA compared as-is, per the parity-dashboard doctrine).
+  it("WH-44: the preset catalog mirrors the reference's live pairs (the monochromatic re-authoring, decoded 2026-11-02)", () => {
+    expect(COLOR_PRESETS.map((p) => [p.label, p.primary, p.secondary])).toEqual([
+      ["Indigo Dream", "#6366f1", "#a855f7"], // indigo-500 / purple-500 (the brand pair, unchanged)
+      ["Ocean Blue", "#0ea5e9", "#06b6d4"], // sky-500 / cyan-500
+      ["Forest Green", "#10b981", "#059669"], // emerald-500 / emerald-600
+      ["Sunset Orange", "#f97316", "#fb923c"], // orange-500 / orange-400
+      ["Rose Pink", "#ec4899", "#f472b6"], // pink-500 / pink-400
+      ["Royal Purple", "#9333ea", "#a855f7"], // purple-600 / purple-500
+      ["Crimson Red", "#dc2626", "#ef4444"], // red-600 / red-500
+      ["Golden Yellow", "#eab308", "#facc15"], // yellow-500 / yellow-400
+    ]);
+  });
+
   it("every preset color is a valid #rrggbb", () => {
     for (const p of COLOR_PRESETS) {
       expect(p.primary).toMatch(/^#[0-9a-f]{6}$/);
