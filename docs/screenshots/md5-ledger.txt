@@ -1,39 +1,47 @@
-# docs/screenshots md5 ledger — re-based at WH-32 (2026-11-01), 34 files
+# docs/screenshots md5 ledger — re-based at WH-33 (2026-11-01), 34 files
 #
-# The WH-32 round (the routines video-card round): the THIRD cross-round
-# byte comparison under the committed procedure. The reference's round-20
-# redeployment changed ONE rendered face (the routines video-card family)
-# and the WH-32 cure changed the same face on OUR side — the comparison's
-# expected movers, root-caused below. 29/34 byte-stable.
+# The WH-33 round (the watch-companion round): the FOURTH cross-round byte
+# comparison under the committed procedure. ZERO rendered-face changes
+# shipped this round (no src/ change — the round's cures were the (q) e2e
+# leg + the committed watch-round.mjs procedure) and the comparison
+# confirms it: 28/34 byte-stable, all SIX movers root-caused as
+# procedure-state classes below.
 #
-# The WH-32 movers (all root-caused before the re-base):
-#   03-routines + 18-dark-routines (15.0%/15.0% of sampled px, delta
-#     255/250) — THE F-1 CURE BY DESIGN: the six video templates now
-#     render the h-40 thumbnail zone on both modes.
-#   28-routines-schedule-modal (4.5%, delta 51) — THE CURE'S KNOCK-ON:
-#     95% of the differing samples sit OUTSIDE the 672px modal column
-#     (2932 outside vs 147 inside) — the backdrop behind the scrim now
-#     renders the video thumbnails; the modal's own face is unchanged
-#     (the WH-22 map verified live on the reference this round).
-#   10-learning (0.0014%, delta 5) — the cross-session headless-Chromium
-#     rasterization class (the WH-31 mover, same file, same magnitude:
-#     the Learning page's photo thumbnails show a fresh Chromium build's
-#     rasterization variance first).
-#   25-dark-login-focus (0.0069%, delta 4) — the sub-visible rendering
-#     instant (the file's own precedent class: the transition-all
-#     box-shadow interpolation sampled mid-fade).
+# The WH-33 movers (all root-caused before the re-base):
+#   07-events (1.81%, delta 245) + 26-events-inline-form (0.90%, delta
+#     245) — THE DATE-ROLLOVER CLASS (first of its kind): the events
+#     calendar's face is keyed to the SYSTEM DATE, and the WH-32 base was
+#     captured pre-midnight on 2026-10-31 (the calendar band rendering
+#     "October 2026") while this round's set was captured after midnight
+#     on 2026-11-01 (the band now "November 2026" — verified live). The
+#     diff regions are exactly the calendar band (x 312-894); no code
+#     change. A NEW procedure-state class for the ledger: cross-midnight
+#     (and cross-month) capture sessions legitimately move every
+#     date-keyed face — the events calendar + any relative-date text.
+#   25-dark-login-focus (0.0069%, delta 4) — the file's own precedent
+#     class (the WH-32 record; the focus-ring interpolation instant).
+#   27-dark-mood-form + 32-mentalhealth-form-interior (0.0115%/0.0115%,
+#     delta 226/245) — the standing form-interior class (the WH-29..32
+#     record; the mood-form textarea's caret/antialias band, IDENTICAL
+#     narrow regions x[336-358] y[856-864] on both files — the light and
+#     dark captures of the same form).
+#   28-routines-schedule-modal (0.0118%, delta 204) — the same
+#     narrow-band class inside the modal's content (a caret row at
+#     x[352-374] y[670-678]; the modal's own face is unchanged — the
+#     WH-22 map + the (q)/sibling e2e legs assert it live in the gate).
 #
-# The prior ledger head (WH-31): 32/34 byte-stable; two movers
-# root-caused as the cross-session Chromium rasterization class
-# (0.0014%/0.0004%, sub-visible).
-#
+# The prior ledger head (WH-32): 29/34 byte-stable; five movers
+# root-caused (2 = the F-1 cure by design, 1 = the cure's backdrop
+# knock-on, 2 = the sub-visible rasterization/transition-instant
+# classes).
+
 01-login.png 0eb839b6997d2d0fb14ea1834f39bff8
 02-dashboard.png b396f588554c48d4ceb2cf4ea5df4311
 03-routines.png 431e0010b2f5d7798ac777d560b6c5c4
 04-exercise.png 8774683d2108e9c3be6d6f4ff17ba7f1
 05-mentalhealth.png 3cc6a5e0356c41b1b0794e7b75d7e69e
 06-assignments.png 4ed037698b278a6a69e5f60eccbdb6c8
-07-events.png 7df71d4fc4d11993025457efb180bbc5
+07-events.png 729319b2e5c91ecde6e5de8dea0950ca
 08-studyresources.png d55df9d487b4c758815c6df05f611482
 09-reminders.png b9a6e1fb97d2426143b3518109ceebd7
 10-learning.png 421150b6886c1abd4d82edc7fefd19fb
@@ -51,13 +59,13 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png 554a5ac802b890e129a5c9309db81725
-25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
-26-events-inline-form.png 4e8cc505a9a051d963bc50e2d7d59ac2
-27-dark-mood-form.png 3e088c5ef27bd5ee831da75329090488
-28-routines-schedule-modal.png 4843f599aa74f2589926c73519b8304c
+25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
+26-events-inline-form.png 5e9af33c19ea6e866748db13298fc0e8
+27-dark-mood-form.png adc78dbc036d9e40f89697f0897dbed6
+28-routines-schedule-modal.png dafe291049936103b8b9527f0ec9dc20
 29-quick-actions-hover.png 7cadbcde9c4691236ce5dd59524d9114
 30-tutorial-card-hover.png bd6004ad8bbb6b0f0b3dbe56753b469b
 31-profile-preferences.png 3eeab6faa67b22b9fb29ac1dac4b7a36
-32-mentalhealth-form-interior.png a40758f3babef992edd3b2852e7c70c4
+32-mentalhealth-form-interior.png 212565a5fbfb4d19d73d5ceed24dfc89
 33-sr-form-interior.png 55b390793b2fa19af7b0dad1425a7205
 34-mood-list-interior.png f2732a93d130cdd2c7d56dd76fd58f02

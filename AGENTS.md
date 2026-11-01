@@ -20,7 +20,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 | Lint | `bun run lint` | `--max-warnings 0` |
 | Type check | `bun run typecheck` | Fast signal, run before test |
 | Unit tests (365 checks) | `bun run test` | Vitest, node-safe seams |
-| Browser E2E (70 checks) | `bun run test:e2e` | Needs `bun run build` first |
+| Browser E2E (71 checks) | `bun run test:e2e` | Needs `bun run build` first |
 | Smoke the standalone artifact | `bun run smoke` | Needs build first |
 | DB census (path + counts) | `bun run db:census` | |
 | The full gate in one command | `bun run gate` | lint → tsc → test → build → smoke → e2e |
@@ -30,7 +30,7 @@ via `docs/ssh_git_wrapper_v3.py`.
 
 **Gate order before every push:** `bun run lint` → `bun run typecheck` →
 `bun run test` (365) → `bun run build` → `bun run smoke` →
-`CI=1 bun run test:e2e` (70: 6 specs + the auth setup project) — or the
+`CI=1 bun run test:e2e` (71: 6 specs + the auth setup project) — or the
 one-command `bun run gate`. There is
 no hosted CI; the local gate is the only gate. `typescript.ignoreBuildErrors`
 is NOT set — a type error fails `bun run build`, and the explicit
@@ -194,7 +194,7 @@ All live in `src/app/globals.css`; each one is a real bug fixed once:
   `skills/` + `docs/` markdown corpus compiles into the production
   stylesheet (71% dead weight before the pin). Pinned by the src-census.
 - Dark mode = `.dark` class token overrides, same file.
-- The compiled-CSS watch (the reference's redeployment detector) moved to `/assets/` at round 16 (2026-10-31: `/static/index-s8d1FO8M.css` → `/assets/index-heGLHP2e.css`), then flipped BACK at round 19 (WH-31, same day: `/assets/index-heGLHP2e.css` → `/static/index-s8d1FO8M.css` — the PRE-round-16 content hash, so the stylesheet content was byte-identical and only the path shape moved), with a NEW JS bundle (`index-5-N3MB6y.js`) and the platform adding `cdn.tailwindcss.com` (the Tailwind Play CDN — runtime-compiled classes) + `/api/frontend-config.js?v=3`. **Round 20 (WH-32, 2026-11-01): the first stylesheet CONTENT change since round 16** — `/static/index-s8d1FO8M.css` → `/static/index-BHjkUcdg.css` + a new JS bundle (`index-BFu7mt5f.js`), the CDN pipeline still present. The lesson-30 walk found exactly ONE rendered-face change (the routines video-card family — the WH-32 F-1 cure); every other standing map held byte-parity. The watch matches BOTH path shapes (`/static/` and `/assets/`) — and while the platform keeps the CDN, a runtime-compiled Tailwind can drift computed values WITHOUT a bundle hash change (the watch may need a computed spot-check companion). The WH-15 washes carry `dark:` neutral variants (our superset over the reference's partially-broken dark).
+- The compiled-CSS watch (the reference's redeployment detector) moved to `/assets/` at round 16 (2026-10-31: `/static/index-s8d1FO8M.css` → `/assets/index-heGLHP2e.css`), then flipped BACK at round 19 (WH-31, same day: `/assets/index-heGLHP2e.css` → `/static/index-s8d1FO8M.css` — the PRE-round-16 content hash, so the stylesheet content was byte-identical and only the path shape moved), with a NEW JS bundle (`index-5-N3MB6y.js`) and the platform adding `cdn.tailwindcss.com` (the Tailwind Play CDN — runtime-compiled classes) + `/api/frontend-config.js?v=3`. **Round 20 (WH-32, 2026-11-01): the first stylesheet CONTENT change since round 16** — `/static/index-s8d1FO8M.css` → `/static/index-BHjkUcdg.css` + a new JS bundle (`index-BFu7mt5f.js`), the CDN pipeline still present. The lesson-30 walk found exactly ONE rendered-face change (the routines video-card family — the WH-32 F-1 cure); every other standing map held byte-parity. **Rounds 21+22 (WH-33, same day): the JS bundle moved TWICE more** (`index-BFu7mt5f.js` → `index-DT3tkBuH.js` → `index-CXmO9oF_.js` — four distinct bundles in two days) with the CSS content hash STABLE — the active development cadence the WH-32 plan predicted; the walks (manual round 21 + the committed script's 14-surface digest on the newest bundle) found ZERO rendered-face drift. The watch matches BOTH path shapes (`/static/` and `/assets/`) — and the CDN companion question is CLOSED (WH-33): the watch + the computed spot-check are the committed one-command `scripts/watch-round.mjs` (PASS 1 the asset forms logged-out; PASS 2 the one-login 14-surface computed digest with a MATCH/DRIFT report — network-dependent, OUTSIDE the gate; the ledger re-bases in the same commit as any cure). While the reference's cadence holds, run it EVERY round — a stable content hash does not prove the computed values didn't move (the runtime-compiled CDN layer has no bundle hash to watch). The WH-15 washes carry `dark:` neutral variants (our superset over the reference's partially-broken dark).
 - The 26 redesign palette pairs joined the session-88 pin block (121 pairs total, all v3-verified — the equivalence census holds in both directions; WH-19 added the login-family dark-pair pins: emerald-400/950, green-400/900/950, neutral-500, red-400/900) — the pins⇔usage census holds in both directions.
 
 ## Conventions that differ from defaults

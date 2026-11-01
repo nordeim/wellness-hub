@@ -302,6 +302,64 @@ test("routines: schedule a template into My Routines", async ({ page }) => {
   await expect(page.getByText("My Routines").locator("..").getByText("1 scheduled")).toBeVisible();
 });
 
+test("routines: the family-B Schedule modal — the dynamic step count (the WH-33 (q) leg)", async ({ page }) => {
+  await page.goto("/Routines");
+
+  // WH-33 (F-2, the (c) probe decoded on the reference's round-21 build):
+  // the Schedule modal's ANATOMY is identical across template families —
+  // the split is the STEP COUNT, data-driven through each template's own
+  // steps on BOTH apps (family-A "5-Minute Morning Energizer" renders 3
+  // step circles, family-B "Creative Flow Session" renders 5 — probed
+  // live on the reference). The sibling leg above exercises only
+  // family-A's 3; this leg pins the family-B count — the dynamic
+  // `scheduling.steps` rendering AND the seed's family-B step data
+  // guarded (a born-green standing drift guard, the (o) leg precedent).
+  const creativeCard = page
+    .locator("div.group")
+    .filter({ has: page.getByText("Creative Flow Session", { exact: true }) });
+  // The family-B marker: the thumbnail img (alt = the template name) —
+  // the (p) leg's family, asserted here only as the split's context.
+  await expect(creativeCard.getByRole("img", { name: "Creative Flow Session" })).toBeVisible();
+  await creativeCard.getByRole("button", { name: "Use This Template" }).click();
+
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByText(/Schedule: Creative Flow Session/)).toBeVisible();
+  await expect(dialog.getByText("Routine Steps:")).toBeVisible();
+  // Settle ≥400 ms before the reads — the dialog's zoom-in-95 animate-in
+  // interpolates the transform scale (the WH-20 transition-settle
+  // doctrine; the sibling leg's own wait, dialog-animation edition).
+  await page.waitForTimeout(450);
+
+  const familyB = await page.evaluate(() => {
+    const d = document.querySelector('[role="dialog"]');
+    if (!d) return { error: "no dialog" };
+    const purpleCircles = Array.from(d.querySelectorAll("span.rounded-full")).filter(
+      (s) => getComputedStyle(s).backgroundColor === "rgb(168, 85, 247)",
+    );
+    const stepTitles = Array.from(d.querySelectorAll("ol li p:first-of-type")).map((p) =>
+      p.textContent?.trim(),
+    );
+    return {
+      circleCount: purpleCircles.length,
+      circleTexts: purpleCircles.map((s) => s.textContent?.trim()),
+      firstStep: stepTitles[0] ?? "(none)",
+    };
+  });
+  expect(familyB.error, `the modal face must read (${JSON.stringify(familyB)})`).toBeFalsy();
+  expect(
+    familyB.circleCount,
+    `family-B's modal renders the template's OWN five steps (read ${familyB.circleCount}: ${familyB.circleTexts?.join(",")}) — family-A's sibling leg schedules the 3-step template; the split is data, not renderer`,
+  ).toBe(5);
+  expect(
+    familyB.firstStep,
+    "the first family-B step title flows from the seed's step list (the data path — API → store → modal)",
+  ).toBe("Set up inspiring space");
+
+  // Read-only leg: never submit — Escape back out (the zero-write class).
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+});
+
 test("learning: the seeded catalog renders and search filters it", async ({ page }) => {
   await page.goto("/Learning");
 
