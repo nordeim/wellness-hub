@@ -281,10 +281,17 @@ test("routines: schedule a template into My Routines", async ({ page }) => {
   await expect(page.getByText("Browse Templates")).toBeVisible();
   await expect(page.getByText("5-Minute Morning Energizer").first()).toBeVisible();
 
-  await page
-    .getByRole("button", { name: "Use This Template" })
-    .first()
-    .click();
+  // WH-42: the picker is TEXT-SCOPED, never positional — the reference
+  // re-ordered its template grid (the WH-42 F-1 cure re-sequenced our
+  // seed to match) and `.first()` now opens the FIRST card in the
+  // reference's order ("10-Minute Home Workout"), not family-A. The
+  // test's intent is to schedule the 3-step family-A template (the (q)
+  // leg's sibling contract); the (q) leg's own filter pattern, applied
+  // here verbatim.
+  const familyACard = page
+    .locator("div.group")
+    .filter({ has: page.getByText("5-Minute Morning Energizer", { exact: true }) });
+  await familyACard.getByRole("button", { name: "Use This Template" }).click();
   await expect(page.getByRole("dialog").getByText(/Schedule: 5-Minute Morning Energizer/)).toBeVisible();
   await expect(page.getByText("Routine Steps:")).toBeVisible();
 

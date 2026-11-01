@@ -103,7 +103,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 | `bun run start` | Boot the standalone server |
 | `bun run lint` | ESLint (`--max-warnings 0`) |
 | `bun run typecheck` | `tsc --noEmit` |
-| `bun run test` | Vitest unit suite (369 checks) |
+| `bun run test` | Vitest unit suite (371 checks) |
 | `bun run test:e2e` | Playwright (72 checks; build first) |
 | `bun run gate` | The full chain in one command |
 
@@ -111,7 +111,7 @@ Demo login: `sepnetflix2023@outlook.com` / `$Abcd1234`.
 
 ### Test Pyramid
 
-- **Unit (Vitest, 369 checks / 26 suites)**: pure seams — auth helpers,
+- **Unit (Vitest, 371 checks / 26 suites)**: pure seams — auth helpers,
   db-path contract, wellness math (streaks/points/badges), schemas,
   theme engine, formatters, the dead-dependency census, the route/ui
   module census, the signup role pin, the docs-counts lockstep pin,

@@ -1,26 +1,31 @@
-# docs/screenshots md5 ledger — re-based at WH-40 (2026-11-01), 34 files
+# docs/screenshots md5 ledger — re-based at WH-42 (2026-11-01), 34 files
 
-# The WH-40 round (the sixth parity surface round — procedure-side only,
-# ZERO src/ changes): the ELEVENTH cross-round byte comparison under the
-# committed procedure — 32/34 byte-stable, TWO movers root-caused as the
-# sub-visible class BEFORE this re-base:
-#   29-quick-actions-hover (5 px, 0.0004%, maxdelta 1, bbox x[503-507]
-#     y[326-330]) = the standing precedent at the IDENTICAL signature to
-#     the WH-36/37/38/39 records (a single antialiasing pixel on the
-#     hovered quick-action cell's icon edge — the hover-instant class);
+# The WH-42 round (the eighth parity surface round — the reference's
+# routine-template content re-authoring cured): the THIRTEENTH
+# cross-round byte comparison under the committed procedure — 30/34
+# byte-stable, FOUR movers root-caused BEFORE this re-base:
+#   03-routines + 18-dark-routines = the DELIBERATE our-side face
+#     change (the WH-42 F-1 cures: the template-grid ORDER re-sequenced
+#     to the reference's live order + the six video templates' benefit
+#     rows trimmed to three — the routines page's rendered card sequence
+#     changed on purpose; every other capture byte-held);
+#   28-routines-schedule-modal = the order cure propagating through the
+#     capture's POSITIONAL picker (`.first()` on Use This Template — the
+#     first card is now "10-Minute Home Workout" where it was "5-Minute
+#     Morning Energizer": the modal's title/description/steps/tile
+#     changed with the template, the ANATOMY unchanged and pinned by the
+#     e2e (q) leg + the watch's scheduleModal surface);
 #   25-dark-login-focus (77 px, 0.0067%, maxdelta 5, bbox x[457-823]
-#     y[562-682]) = the SAME class family's first appearance here: every
-#     diff pixel is a +-1..5/255 shift on the dark card's neutral EDGE
-#     grays (74->78, 31->34, 49->50) inside the two input fields' edge
-#     band — the focus-state capture's antialiasing/transition
-#     interpolation phase, no hue or geometry change (the
-#     rasterization-phase class, first-time mover, root-caused).
+#     y[562-682]) = the standing signature VERBATIM (the third
+#     consecutive round at the identical stats — the neutral edge-gray
+#     antialiasing/transition interpolation phase in the input band,
+#     the rasterization-phase class).
 # All 34 captures health-checked (29 desktop 1280x900 + 5 mobile
-# 390x844); the ledger re-based on the two new hashes; census MATCH
+# 390x844); the ledger re-based on the four new hashes; census MATCH
 # after the re-seed.
 01-login.png 0eb839b6997d2d0fb14ea1834f39bff8
 02-dashboard.png d9754490ed784a32688fcb6e0ba4ae9f
-03-routines.png 43a821116e44d66d56d338482e770b42
+03-routines.png 018a40ef34de3c99bc5c7ac7bc167445
 04-exercise.png 8b8f3d2e1f4732384227794e2892bfa6
 05-mentalhealth.png 0de7e1d727c53703c302fc3c3fa10c52
 06-assignments.png 89a258070de2916fc4f00ca5eed6cb07
@@ -35,17 +40,17 @@
 15-mobile-nav-open.png 4e787b6e77719931f5b490369f5fbc88
 16-mobile-drawer-nav-exercise.png a73a87cfcf49d4069ac94a30817ce513
 17-dark-dashboard.png a1fd57709c79b485dd00abdfc96e95fc
-18-dark-routines.png 84ec13499481e8975f3b44d0c11040e0
+18-dark-routines.png bf642f3519daedb040b832edcf06ec1e
 19-dark-mobile-nav-open.png f06d822330b0a527922b3560d12642ef
 20-dark-login.png 9ad84a98f04c63d08f37ab668388484f
 21-dark-signup.png 1105dcb0a18f044a6d72fe0f68e2e88c
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
+25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
 26-events-inline-form.png 6fee97e127497ef798f23be47967a28f
 27-dark-mood-form.png fedd2292bdac01420655969bcf6a7999
-28-routines-schedule-modal.png 751150e2eb0ff1df77dae3b8e0404d0e
+28-routines-schedule-modal.png 0eb6d158a83917feeaee801d540ae1da
 29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
 30-tutorial-card-hover.png f389b6004f8632af940c7544bef8464e
 31-profile-preferences.png f6624079394ce66ab0a280fd489e6f0a

@@ -79,26 +79,21 @@ const LEDGER = {
   // hashes unchanged, the js axis still read "run the full lesson-30
   // walk"). An informational signal that always fires is a signal that
   // gets ignored — the entry is jsPath now, form-matched to cssPath.
-  // WH-41 re-base (round 30's DOUBLE move — the THIRD css CONTENT
-  // change: /static/index-CMHVFeas.css -> /static/index-T8A-IXoy.css;
-  // birth-verified on the quiet state per the WH-34 doctrine: the
-  // re-run after this edit reads "assets stable" + the 15/15 digest).
-  cssPath: "/static/index-T8A-IXoy.css",
-  // WH-41 re-base (round 30 shipped the round's hottest cadence yet —
-  // an INTRA-ROUND TRIPLE js move + a REVERT: the ELEVENTH
-  // /static/index-B3stYFo-.js (riding the third css content move),
-  // the TWELFTH /static/index-6yfO0HkE.js, then the THIRTEENTH
-  // /static/index-DBRn9GKt.js — whose digest fired the battery's
-  // first 1-DRIFT read — and then the platform REVERTED to the
-  // twelfth bundle within minutes, the standing face reading 15/15
-  // clean on it. The transient thirteenth carried a real one-surface
-  // rendered-face change that the rollback removed (its surface
-  // detail lost to a filtered first read — the WH-41 lesson-45
-  // sibling: capture the FULL watch output every run; a transient
-  // deployment can vanish before the re-run). The ledger re-based to
-  // the ROUND'S FINAL READ (the reverted twelfth), born-verified on
-  // the quiet state per the WH-34+WH-40 doctrine).
-  jsPath: "/static/index-6yfO0HkE.js",
+  // WH-42 re-base (round 31: the FOURTH css CONTENT change
+  // /static/index-T8A-IXoy.css -> /static/index-DsYCKxwV.css; the css
+  // axis held through the round's intra-round js move — the FIFTEENTH
+  // bundle fired during the first re-base's own born-verification, the
+  // WH-40/41 intra-round class, the fourth consecutive round with an
+  // intra-round move; every same-run digest 15/15 MATCH on its own
+  // bundle, the rendered face byte-held through all of them).
+  cssPath: "/static/index-DsYCKxwV.css",
+  // WH-42 re-base (round 31's FINAL read: the FIFTEENTH distinct js
+  // bundle /static/index-BH_eVSe7.js -> /static/index-qi2AnSYN.js —
+  // the intra-round move the born-verification re-run itself caught;
+  // re-based ONCE to the round's final read per the WH-40/41 doctrine,
+  // born-verified on the quiet state per the WH-34 doctrine: the re-run
+  // after this edit reads "assets stable" + the 15/15 digest).
+  jsPath: "/static/index-qi2AnSYN.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):

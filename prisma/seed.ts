@@ -57,26 +57,13 @@ interface SeedTutorial {
   sortOrder: number;
 }
 
+
+// WH-42 (F-1): the array order == the reference's LIVE grid order
+// (decode-settled 2026-11-01; the sortOrder fields renumber with the
+// array). The rendered SEQUENCE is part of the parity face — the
+// offline pin lives in tests/seed-parity.test.ts, the live-vs-live
+// ORDER member in scripts/parity-routines.mjs.
 const ROUTINE_TEMPLATES: SeedTemplate[] = [
-  {
-    key: "5_minute_morning_energizer",
-    name: "5-Minute Morning Energizer",
-    description: "A super quick morning routine to jumpstart your day—perfect when you hit snooze too many times!",
-    category: "morning",
-    timeOfDay: "Right after waking up",
-    duration: "5 minutes",
-    difficulty: "easy",
-    benefits: ["Increases energy", "Creates momentum", "Improves hydration"],
-    tipsForProcrastinators: "Keep a water bottle by your bed so you literally just have to reach for it. The key is starting SUPER small—once you're up and moving, the rest flows naturally!",
-    videoUrl: null,
-    thumbnail: null,
-    sortOrder: 0,
-    steps: [
-        { title: "Drink a glass of water", duration: "1 min", description: "Rehydrate after sleep" },
-        { title: "2-minute stretch", duration: "2 min", description: "Simple stretches in bed or standing" },
-        { title: "Make your bed", duration: "2 min", description: "Start with one small win" }
-    ],
-  },
   {
     key: "10_minute_home_workout",
     name: "10-Minute Home Workout",
@@ -89,13 +76,32 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     tipsForProcrastinators: "Tell yourself you're just doing the warm-up. Once you start moving, your body will want to continue. And if you stop after 2 minutes? That's still better than nothing!",
     videoUrl: null,
     thumbnail: null,
-    sortOrder: 1,
+    sortOrder: 0,
     steps: [
         { title: "Warm-up: Jumping jacks", duration: "2 min", description: "Get your heart rate up" },
         { title: "20 squats", duration: "2 min", description: "Focus on form" },
         { title: "10 push-ups (modified OK!)", duration: "2 min", description: "Do what you can" },
         { title: "30-second plank", duration: "2 min", description: "Core strength" },
         { title: "Cool-down stretch", duration: "2 min", description: "Gentle stretching" }
+    ],
+  },
+  {
+    key: "5_minute_morning_energizer",
+    name: "5-Minute Morning Energizer",
+    description: "A super quick morning routine to jumpstart your day—perfect when you hit snooze too many times!",
+    category: "morning",
+    timeOfDay: "Right after waking up",
+    duration: "5 minutes",
+    difficulty: "easy",
+    benefits: ["Increases energy", "Creates momentum", "Improves hydration"],
+    tipsForProcrastinators: "Keep a water bottle by your bed so you literally just have to reach for it. The key is starting SUPER small—once you're up and moving, the rest flows naturally!",
+    videoUrl: null,
+    thumbnail: null,
+    sortOrder: 1,
+    steps: [
+        { title: "Drink a glass of water", duration: "1 min", description: "Rehydrate after sleep" },
+        { title: "2-minute stretch", duration: "2 min", description: "Simple stretches in bed or standing" },
+        { title: "Make your bed", duration: "2 min", description: "Start with one small win" }
     ],
   },
   {
@@ -118,26 +124,6 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     ],
   },
   {
-    key: "calm_evening_wind_down",
-    name: "Calm Evening Wind-Down",
-    description: "Prepare your mind and body for better sleep",
-    category: "evening",
-    timeOfDay: "1 hour before bed",
-    duration: "20 minutes",
-    difficulty: "easy",
-    benefits: ["Better sleep quality", "Reduced anxiety", "Clearer mind"],
-    tipsForProcrastinators: "Start with JUST putting your phone away. That's the hardest part. The rest will feel easier once you're not scrolling mindlessly.",
-    videoUrl: null,
-    thumbnail: null,
-    sortOrder: 3,
-    steps: [
-        { title: "Put phone on Do Not Disturb", duration: "1 min", description: "Reduce blue light exposure" },
-        { title: "Light stretching or yoga", duration: "10 min", description: "Release physical tension" },
-        { title: "Gratitude journal", duration: "5 min", description: "Write 3 things you're grateful for" },
-        { title: "Deep breathing", duration: "4 min", description: "4-7-8 breathing technique" }
-    ],
-  },
-  {
     key: "self_care_sunday_reset",
     name: "Self-Care Sunday Reset",
     description: "Recharge and prepare for the week ahead",
@@ -149,12 +135,54 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     tipsForProcrastinators: "Pick ONE thing from this list. Just one. Even cleaning your desk for 5 minutes counts. Progress over perfection!",
     videoUrl: null,
     thumbnail: null,
-    sortOrder: 4,
+    sortOrder: 3,
     steps: [
         { title: "Clean your space", duration: "15 min", description: "Clear desk, make bed, tidy room" },
         { title: "Meal prep for Monday", duration: "15 min", description: "Prepare something easy" },
         { title: "Review weekly goals", duration: "10 min", description: "Plan your week" },
         { title: "Do something fun", duration: "5 min", description: "Read, music, or hobby" }
+    ],
+  },
+  {
+    key: "calm_evening_wind_down",
+    name: "Calm Evening Wind-Down",
+    description: "Prepare your mind and body for better sleep",
+    category: "evening",
+    timeOfDay: "1 hour before bed",
+    duration: "20 minutes",
+    difficulty: "easy",
+    benefits: ["Better sleep quality", "Reduced anxiety", "Clearer mind"],
+    tipsForProcrastinators: "Start with JUST putting your phone away. That's the hardest part. The rest will feel easier once you're not scrolling mindlessly.",
+    videoUrl: null,
+    thumbnail: null,
+    sortOrder: 4,
+    steps: [
+        { title: "Put phone on Do Not Disturb", duration: "1 min", description: "Reduce blue light exposure" },
+        { title: "Light stretching or yoga", duration: "10 min", description: "Release physical tension" },
+        { title: "Gratitude journal", duration: "5 min", description: "Write 3 things you're grateful for" },
+        { title: "Deep breathing", duration: "4 min", description: "4-7-8 breathing technique" }
+    ],
+  },
+  {
+    key: "focused_study_session",
+    name: "Focused Study Session",
+    description: "Beat procrastination with structured study time that actually works",
+    category: "study",
+    timeOfDay: "Any focused time block",
+    duration: "90 minutes",
+    difficulty: "moderate",
+    benefits: ["Maximizes retention and understanding", "Prevents burnout", "Builds consistent study habits"],
+    tipsForProcrastinators: "Commit to just ONE 25-minute block. Tell yourself you can stop after. Usually you'll want to continue! The hardest part is starting. 📚",
+    videoUrl: "https://youtube.com/watch?v=example-study",
+    thumbnail: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800",
+    sortOrder: 5,
+    steps: [
+        { title: "Gather all materials", duration: "5 min", description: "Books, notes, laptop, snacks, water" },
+        { title: "Deep work block 1", duration: "25 min", description: "Pure focus on hardest task first (Pomodoro)" },
+        { title: "Break: move & hydrate", duration: "5 min", description: "Walk around, stretch, drink water" },
+        { title: "Deep work block 2", duration: "25 min", description: "Continue or switch to next priority" },
+        { title: "Break: snack & refresh", duration: "10 min", description: "Healthy snack, fresh air if possible" },
+        { title: "Deep work block 3", duration: "25 min", description: "Final push or review what you learned" }
     ],
   },
   {
@@ -165,38 +193,17 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     timeOfDay: "When you feel inspired",
     duration: "60 minutes",
     difficulty: "easy",
-    benefits: ["Reduces perfectionism", "Builds creative confidence", "Provides stress relief", "Reconnects with your passions"],
+    benefits: ["Reduces perfectionism", "Builds creative confidence", "Provides stress relief"],
     tipsForProcrastinators: "Give yourself permission to make 'bad' art. The goal is process, not product. Just showing up is creative success! 🎨",
     videoUrl: "https://youtube.com/watch?v=example-creative",
     thumbnail: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800",
-    sortOrder: 5,
+    sortOrder: 6,
     steps: [
         { title: "Set up inspiring space", duration: "5 min", description: "Good lighting, music, materials ready" },
         { title: "Warm-up exercise", duration: "10 min", description: "Doodle, free write, improvise—no rules" },
         { title: "Main creative work", duration: "35 min", description: "Create without editing or judging" },
         { title: "Step back and appreciate", duration: "5 min", description: "Acknowledge what you made, no criticism" },
         { title: "Note ideas for next time", duration: "5 min", description: "Capture inspiration while fresh" }
-    ],
-  },
-  {
-    key: "quick_productivity_reset",
-    name: "Quick Productivity Reset",
-    description: "15-minute reboot when you're stuck or overwhelmed",
-    category: "productivity",
-    timeOfDay: "Whenever needed",
-    duration: "15 minutes",
-    difficulty: "easy",
-    benefits: ["Clears mental fog", "Reduces overwhelm", "Restores motivation", "Creates quick wins"],
-    tipsForProcrastinators: "This is your procrastination escape hatch! When stuck, do this routine instead of scrolling. It breaks the paralysis. 🚀",
-    videoUrl: "https://youtube.com/watch?v=example-reset",
-    thumbnail: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800",
-    sortOrder: 6,
-    steps: [
-        { title: "Brain dump", duration: "3 min", description: "Write down everything in your head" },
-        { title: "Pick ONE thing", duration: "2 min", description: "What's the smallest next step?" },
-        { title: "Movement break", duration: "5 min", description: "Walk, dance, stretch—anything physical" },
-        { title: "Clean workspace", duration: "3 min", description: "Clear desk = clear mind" },
-        { title: "Start that ONE thing", duration: "2 min", description: "Just begin. Progress beats perfection." }
     ],
   },
   {
@@ -207,7 +214,7 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     timeOfDay: "7:00 AM - 8:00 AM",
     duration: "30 minutes",
     difficulty: "easy",
-    benefits: ["Boosts energy and alertness", "Reduces morning stress", "Creates positive momentum for the day", "Improves focus and productivity"],
+    benefits: ["Boosts energy and alertness", "Reduces morning stress", "Creates positive momentum for the day"],
     tipsForProcrastinators: "Just do the first step (drink water). Momentum builds naturally. You don't have to be perfect—any start is a good start! 💧",
     videoUrl: "https://youtube.com/watch?v=example-morning",
     thumbnail: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
@@ -228,7 +235,7 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     timeOfDay: "Sunday afternoon",
     duration: "2 hours",
     difficulty: "easy",
-    benefits: ["Reduces Sunday anxiety", "Makes the week feel manageable", "Prioritizes self-compassion", "Creates something to look forward to"],
+    benefits: ["Reduces Sunday anxiety", "Makes the week feel manageable", "Prioritizes self-compassion"],
     tipsForProcrastinators: "Treat this as non-negotiable 'you' time. Future you will thank present you! Start with just the bath if that's all you can manage. 🛁",
     videoUrl: "https://youtube.com/watch?v=example-selfcare",
     thumbnail: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800",
@@ -242,25 +249,24 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     ],
   },
   {
-    key: "focused_study_session",
-    name: "Focused Study Session",
-    description: "Beat procrastination with structured study time that actually works",
-    category: "study",
-    timeOfDay: "Any focused time block",
-    duration: "90 minutes",
-    difficulty: "moderate",
-    benefits: ["Maximizes retention and understanding", "Prevents burnout", "Builds consistent study habits", "Makes studying feel less overwhelming"],
-    tipsForProcrastinators: "Commit to just ONE 25-minute block. Tell yourself you can stop after. Usually you'll want to continue! The hardest part is starting. 📚",
-    videoUrl: "https://youtube.com/watch?v=example-study",
-    thumbnail: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800",
+    key: "quick_productivity_reset",
+    name: "Quick Productivity Reset",
+    description: "15-minute reboot when you're stuck or overwhelmed",
+    category: "productivity",
+    timeOfDay: "Whenever needed",
+    duration: "15 minutes",
+    difficulty: "easy",
+    benefits: ["Clears mental fog", "Reduces overwhelm", "Restores motivation"],
+    tipsForProcrastinators: "This is your procrastination escape hatch! When stuck, do this routine instead of scrolling. It breaks the paralysis. 🚀",
+    videoUrl: "https://youtube.com/watch?v=example-reset",
+    thumbnail: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800",
     sortOrder: 9,
     steps: [
-        { title: "Gather all materials", duration: "5 min", description: "Books, notes, laptop, snacks, water" },
-        { title: "Deep work block 1", duration: "25 min", description: "Pure focus on hardest task first (Pomodoro)" },
-        { title: "Break: move & hydrate", duration: "5 min", description: "Walk around, stretch, drink water" },
-        { title: "Deep work block 2", duration: "25 min", description: "Continue or switch to next priority" },
-        { title: "Break: snack & refresh", duration: "10 min", description: "Healthy snack, fresh air if possible" },
-        { title: "Deep work block 3", duration: "25 min", description: "Final push or review what you learned" }
+        { title: "Brain dump", duration: "3 min", description: "Write down everything in your head" },
+        { title: "Pick ONE thing", duration: "2 min", description: "What's the smallest next step?" },
+        { title: "Movement break", duration: "5 min", description: "Walk, dance, stretch—anything physical" },
+        { title: "Clean workspace", duration: "3 min", description: "Clear desk = clear mind" },
+        { title: "Start that ONE thing", duration: "2 min", description: "Just begin. Progress beats perfection." }
     ],
   },
   {
@@ -271,7 +277,7 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     timeOfDay: "9:00 PM - 10:00 PM",
     duration: "45 minutes",
     difficulty: "easy",
-    benefits: ["Improves sleep quality", "Reduces anxiety", "Creates closure on the day", "Makes mornings easier"],
+    benefits: ["Improves sleep quality", "Reduces anxiety", "Creates closure on the day"],
     tipsForProcrastinators: "Start just 15 minutes before bed. Small rituals compound into better sleep over time. You deserve rest! 🌙",
     videoUrl: "https://youtube.com/watch?v=example-evening",
     thumbnail: "https://images.unsplash.com/photo-1511295742362-92c96b1cf484?w=800",

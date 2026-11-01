@@ -83,3 +83,105 @@ describe("WH-37 F-2: the demo-account data parity contract", () => {
     expect(CENSUS).toMatch(/goals:\s*0\b/);
   });
 });
+
+// WH-42 (F-1): the seeded template grid-ORDER contract. The decode
+// found the reference had re-ordered its eleven routine templates (the
+// rendered card SEQUENCE is part of the face — the seeded-content watch
+// byte-pins the NAMES and the e2e finds templates by text, so the ORDER
+// rode invisible through every round since WH-24; the two-clocks class
+// on the ORDER axis: our seed was decoded once and never re-diffed).
+// This pin reads the seed SOURCE (the fs-read pattern this suite owns)
+// and asserts the sortOrder-sorted key sequence equals the reference's
+// live grid order, decode-settled 2026-11-01 (two consecutive same-round
+// reads identical; the rendered face is pinned live by
+// scripts/parity-routines.mjs's ORDER member — this is the offline
+// guard that keeps the seed from silently regressing between rounds).
+describe("WH-42 F-1: the seeded template grid-order contract", () => {
+  it("the ROUTINE_TEMPLATES sortOrder sequence mirrors the reference's live grid order (decoded 2026-11-01)", () => {
+    // slice to the ROUTINE_TEMPLATES array (the tutorials follow it)
+    const marker = SEED.indexOf("const ROUTINE_TEMPLATES");
+    expect(marker, "the seed carries the ROUTINE_TEMPLATES array").toBeGreaterThan(0);
+    const body = SEED.slice(marker, SEED.indexOf("];", marker));
+    // the (key, sortOrder) pairs in source order
+    const pairs = [...body.matchAll(/key:\s*"([^"]+)"[\s\S]*?sortOrder:\s*(\d+)/g)].map(
+      (m) => ({ key: m[1], sortOrder: Number(m[2]) }),
+    );
+    expect(pairs.length, "eleven seeded templates").toBe(11);
+    // every sortOrder unique 0..10
+    const orders = pairs.map((p) => p.sortOrder).sort((a, b) => a - b);
+    expect(orders).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    // the sortOrder-sorted sequence == the reference's live grid order
+    const byOrder = [...pairs].sort((a, b) => a.sortOrder - b.sortOrder).map((p) => p.key);
+    expect(byOrder).toEqual([
+      "10_minute_home_workout",
+      "5_minute_morning_energizer",
+      "the_pomodoro_power_study_session",
+      "self_care_sunday_reset",
+      "calm_evening_wind_down",
+      "focused_study_session",
+      "creative_flow_session",
+      "energizing_morning_kickstart",
+      "self_care_sunday",
+      "quick_productivity_reset",
+      "peaceful_evening_wind_down",
+    ]);
+  });
+
+  it("the seeded benefits lists mirror the reference's rendered rows — the WH-42 trim (every template exactly three; the six video templates' lists exact)", () => {
+    // The parity-routines born-flight caught the second half of the
+    // reference's content re-authoring: its six VIDEO templates render
+    // THREE benefit rows where ours rendered four (the 4th row dropped
+    // in the same edit class as the order change — the plain five
+    // carried three all along, which is why the WH-24 decode never saw
+    // the split). The rendered face is the parity claim; the seed
+    // mirrors what the reference RENDERS (the live pin is the
+    // benefits.texts member in scripts/parity-routines.mjs).
+    const marker = SEED.indexOf("const ROUTINE_TEMPLATES");
+    const body = SEED.slice(marker, SEED.indexOf("];", marker));
+    const entries = [...body.matchAll(/key:\s*"([^"]+)"[\s\S]*?benefits:\s*\[([^\]]*)\]/g)].map(
+      (m) => ({
+        key: m[1],
+        benefits: [...m[2].matchAll(/"([^"]*)"/g)].map((q) => q[1]),
+      }),
+    );
+    expect(entries.length, "eleven seeded templates").toBe(11);
+    for (const e of entries) {
+      expect(
+        e.benefits.length,
+        `${e.key} renders the reference's three benefit rows (the WH-42 trim)`,
+      ).toBe(3);
+    }
+    // the six video templates' decoded reference lists, exact
+    const byKey = new Map(entries.map((e) => [e.key, e.benefits]));
+    expect(byKey.get("focused_study_session")).toEqual([
+      "Maximizes retention and understanding",
+      "Prevents burnout",
+      "Builds consistent study habits",
+    ]);
+    expect(byKey.get("creative_flow_session")).toEqual([
+      "Reduces perfectionism",
+      "Builds creative confidence",
+      "Provides stress relief",
+    ]);
+    expect(byKey.get("energizing_morning_kickstart")).toEqual([
+      "Boosts energy and alertness",
+      "Reduces morning stress",
+      "Creates positive momentum for the day",
+    ]);
+    expect(byKey.get("self_care_sunday")).toEqual([
+      "Reduces Sunday anxiety",
+      "Makes the week feel manageable",
+      "Prioritizes self-compassion",
+    ]);
+    expect(byKey.get("quick_productivity_reset")).toEqual([
+      "Clears mental fog",
+      "Reduces overwhelm",
+      "Restores motivation",
+    ]);
+    expect(byKey.get("peaceful_evening_wind_down")).toEqual([
+      "Improves sleep quality",
+      "Reduces anxiety",
+      "Creates closure on the day",
+    ]);
+  });
+});
