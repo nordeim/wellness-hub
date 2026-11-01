@@ -383,7 +383,7 @@ export default function StudyResourcesClientPage() {
         <div className={TOOLBAR.searchWrap}>
           <Search className={TOOLBAR.searchIcon} aria-hidden="true" />
           <Input
-            type="search"
+            type="text"
             aria-label="Search resources, tags..."
             placeholder="Search resources, tags..."
             className="pl-10"

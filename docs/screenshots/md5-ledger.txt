@@ -1,9 +1,24 @@
-# docs/screenshots md5 ledger — re-based at WH-42 (2026-11-01), 34 files
+# docs/screenshots md5 ledger — re-based at WH-43 (2026-11-02), 34 files
 
-# The WH-42 round (the eighth parity surface round — the reference's
-# routine-template content re-authoring cured): the THIRTEENTH
-# cross-round byte comparison under the committed procedure — 30/34
-# byte-stable, FOUR movers root-caused BEFORE this re-base:
+# The WH-43 round (the ninth parity surface round — the reference's
+# re-ordered tutorial catalog cured): the FOURTEENTH cross-round byte
+# comparison under the committed procedure — 30/34 byte-stable, FOUR
+# movers root-caused BEFORE this re-base:
+#   10-learning + 30-tutorial-card-hover = the DELIBERATE our-side face
+#     change (the WH-43 F-1 cure: the tutorial-grid ORDER re-sequenced
+#     to the reference's live order — the page's rendered card sequence
+#     changed on purpose, the hovered card riding the same cure;
+#     everything else byte-held);
+#   25-dark-login-focus (77 px, maxdelta 5) = the standing signature
+#     VERBATIM (the FOURTH consecutive round at the identical stats —
+#     the rasterization-phase class);
+#   29-quick-actions-hover (5 px, maxdelta 1) = the standing
+#     signature's quietest read yet (the same sub-visible family).
+# All 34 captures health-checked (29 desktop 1280x900 + 5 mobile
+# 390x844); the ledger re-based on the four new hashes; census MATCH
+# after the re-seed.
+
+# The WH-42 record (the THIRTEENTH comparison, 30/34 stable):
 #   03-routines + 18-dark-routines = the DELIBERATE our-side face
 #     change (the WH-42 F-1 cures: the template-grid ORDER re-sequenced
 #     to the reference's live order + the six video templates' benefit
@@ -32,7 +47,7 @@
 07-events.png e6cc18e1f31c15e24d5e299e32cec187
 08-studyresources.png ddc38c2096b0868b7ba7203bb627aecd
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
-10-learning.png 158b842086569e8666011d12e921ceac
+10-learning.png 6539dfe3a48872186ef49df3c81400b1
 11-goals.png 56a0ae5483cdda64d2168932e8359983
 12-profile.png dc6ab57f5a5b8448f8f8dec0dee54d49
 13-mobile-login.png 479e3bc95a4ca2465691d6b0c5669b90
@@ -47,12 +62,12 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
+25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
 26-events-inline-form.png 6fee97e127497ef798f23be47967a28f
 27-dark-mood-form.png fedd2292bdac01420655969bcf6a7999
 28-routines-schedule-modal.png 0eb6d158a83917feeaee801d540ae1da
-29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
-30-tutorial-card-hover.png f389b6004f8632af940c7544bef8464e
+29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
+30-tutorial-card-hover.png 02c457e32bc267e8073bbc4da48f27cd
 31-profile-preferences.png f6624079394ce66ab0a280fd489e6f0a
 32-mentalhealth-form-interior.png 3edc7f80aa75b05a35051b273a06d4dd
 33-sr-form-interior.png 4485faec00fbf04f37ffda19916e2919

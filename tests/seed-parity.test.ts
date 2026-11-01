@@ -185,3 +185,48 @@ describe("WH-42 F-1: the seeded template grid-order contract", () => {
     ]);
   });
 });
+
+// WH-43 (F-1): the tutorial grid-order contract. The ninth-surface
+// decode (scripts/parity-tutorials.mjs's precursor, the scratch decode
+// probe) found the reference's tutorial grid RE-ORDERED — the exact
+// class the WH-42 round cured for the ROUTINE_TEMPLATES grid: the set
+// is identical (all twelve titles + per-title data byte-equal), only
+// the SEQUENCE moved (the head 1-6 + the tail 9-12 reshuffled;
+// positions 7-8 held). The order is part of the rendered face; the
+// watch byte-pins the COUNTS (12 imgs / 12 Watch Now) and the e2e
+// finds tutorials by TEXT — the order rode invisible between rounds.
+// The live pin is the ORDER member in scripts/parity-tutorials.mjs;
+// this is the offline guard that keeps the seed from silently
+// regressing between rounds (decoded live 2026-11-02, two consecutive
+// same-round reads identical).
+describe("WH-43 F-1: the seeded tutorial grid-order contract", () => {
+  it("the TUTORIALS sortOrder sequence mirrors the reference's live grid order (decoded 2026-11-02)", () => {
+    const marker = SEED.indexOf("const TUTORIALS");
+    expect(marker, "the seed carries the TUTORIALS array").toBeGreaterThan(0);
+    const body = SEED.slice(marker, SEED.indexOf("];", marker));
+    // the (key, sortOrder) pairs in source order
+    const pairs = [...body.matchAll(/key:\s*"([^"]+)"[\s\S]*?sortOrder:\s*(\d+)/g)].map(
+      (m) => ({ key: m[1], sortOrder: Number(m[2]) }),
+    );
+    expect(pairs.length, "twelve seeded tutorials").toBe(12);
+    // every sortOrder unique 0..11
+    const orders = pairs.map((p) => p.sortOrder).sort((a, b) => a - b);
+    expect(orders).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+    // the sortOrder-sorted sequence == the reference's live grid order
+    const byOrder = [...pairs].sort((a, b) => a.sortOrder - b.sortOrder).map((p) => p.key);
+    expect(byOrder).toEqual([
+      "the_power_of_tiny_habits",
+      "self_compassion_for_perfectionists",
+      "overcoming_procrastination_the_2_minute_rule",
+      "building_morning_routines_that_actually_stick",
+      "beating_decision_fatigue",
+      "the_science_of_motivation",
+      "healthy_meal_prep_guide",
+      "building_better_habits",
+      "10_minute_morning_yoga_flow",
+      "mindfulness_meditation_for_anxiety",
+      "time_management_mastery",
+      "effective_study_techniques",
+    ]);
+  });
+});

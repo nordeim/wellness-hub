@@ -79,21 +79,27 @@ const LEDGER = {
   // hashes unchanged, the js axis still read "run the full lesson-30
   // walk"). An informational signal that always fires is a signal that
   // gets ignored — the entry is jsPath now, form-matched to cssPath.
-  // WH-42 re-base (round 31: the FOURTH css CONTENT change
-  // /static/index-T8A-IXoy.css -> /static/index-DsYCKxwV.css; the css
-  // axis held through the round's intra-round js move — the FIFTEENTH
-  // bundle fired during the first re-base's own born-verification, the
-  // WH-40/41 intra-round class, the fourth consecutive round with an
-  // intra-round move; every same-run digest 15/15 MATCH on its own
-  // bundle, the rendered face byte-held through all of them).
-  cssPath: "/static/index-DsYCKxwV.css",
-  // WH-42 re-base (round 31's FINAL read: the FIFTEENTH distinct js
-  // bundle /static/index-BH_eVSe7.js -> /static/index-qi2AnSYN.js —
-  // the intra-round move the born-verification re-run itself caught;
-  // re-based ONCE to the round's final read per the WH-40/41 doctrine,
-  // born-verified on the quiet state per the WH-34 doctrine: the re-run
-  // after this edit reads "assets stable" + the 15/15 digest).
-  jsPath: "/static/index-qi2AnSYN.js",
+  // WH-43 re-base (round 32: the FIFTH css CONTENT change
+  // /static/index-DsYCKxwV.css -> /static/index-CapATpwD.css — the
+  // css content axis moved for the THIRD consecutive round; the same-
+  // run digest read 15/15 MATCH on the new assets, and the round's
+  // standing battery — the FIFTH full-width run, all EIGHT legs green
+  // (login 34/34 + moodForm 20/20 + shell 61/61 + dashboard 105/105 +
+  // headers 192/192 + toolbars 98/98 + kpis 315/315 + routines 697/697
+  // — 1,522 computed members) — verified the rendered face byte-held
+  // through the double-axis move).
+  cssPath: "/static/index-CapATpwD.css",
+  // WH-43 re-base (round 32's FINAL read: the SIXTEENTH bundle
+  // /static/index-qi2AnSYN.js -> /static/index-a8mtclnh.js fired at
+  // the round's watch, then the SEVENTEENTH /static/index-DrgN_FlZ.js
+  // fired during the first re-base's OWN born-verification — the
+  // WH-40/41/42 intra-round class, the FIFTH consecutive round with
+  // an intra-round move; the same-run digest read 15/15 MATCH on the
+  // new bundle, the rendered face byte-held. Re-based ONCE to the
+  // round's final read per the doctrine, born-verified on the quiet
+  // state per the WH-34 doctrine: the re-run after this edit reads
+  // "assets stable" + the 15/15 digest).
+  jsPath: "/static/index-DrgN_FlZ.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):

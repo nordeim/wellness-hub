@@ -63,7 +63,7 @@ export default function LearningClientPage() {
         <div className={TOOLBAR.searchWrap}>
           <Search className={TOOLBAR.searchIcon} aria-hidden="true" />
           <Input
-            type="search"
+            type="text"
             aria-label="Search tutorials"
             placeholder="Search tutorials..."
             className="pl-10"

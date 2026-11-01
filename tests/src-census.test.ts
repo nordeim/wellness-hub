@@ -1443,6 +1443,34 @@ it("WH-17: the chip-vocabulary census — every OptionMeta chip rides the refere
   expect(chipSrc.includes('variant === "outline" ? OUTLINE_BASE : SOLID_BASE'), "the variant arm selects between the two bases (the WH-29 split)").toBe(true);
 });
 
+it("WH-43: the search-input census — the two search inputs render type=\"text\" (the reference's DOM; the Chromium clear-button superset retires)", () => {
+  // WH-43 (F-4, the ninth-surface decode's DOM-shape finding with a
+  // rendered consequence): the reference's search inputs (Learning +
+  // StudyResources, decoded live) are type="text" where ours shipped
+  // type="search". The difference is sub-DOM at rest — but Chromium
+  // renders a clear (✕) button on type=search inputs with content that
+  // type=text never shows (an interaction-state difference, the WH-20
+  // class), and the a11y tree maps search→searchbox vs text→textbox.
+  // The reference is the contract: both sites flip to "text". The LIVE
+  // pins are scripts/parity-tutorials.mjs's landscape.searchType +
+  // sr.type members; this census pins the source structurally.
+  const SITES = [
+    "src/app/(app)/learning/learning-page.tsx",
+    "src/app/(app)/studyresources/studyresources-page.tsx",
+  ];
+  for (const site of SITES) {
+    const src = readFileSync(join(REPO_ROOT, site), "utf8");
+    expect(
+      src.includes('type="text"'),
+      `${site} must render its search input as type="text" (the reference's DOM — the Chromium clear-button superset retired at WH-43)`,
+    ).toBe(true);
+    expect(
+      !/type:\s*"search"/.test(src),
+      `${site} must NOT carry type="search" (Chromium renders a clear button the reference's type="text" input never shows)`,
+    ).toBe(true);
+  }
+});
+
 it("WH-18: the dark-variant pin — globals.css declares the class-based dark variant (the dark-mode strategy cure)", () => {
   // WH-18 (F-1): the compiled production stylesheet wrapped EVERY dark:*
   // utility in @media (prefers-color-scheme:dark) — Tailwind v4's DEFAULT
