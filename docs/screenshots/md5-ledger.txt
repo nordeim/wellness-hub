@@ -1,23 +1,23 @@
-# docs/screenshots md5 ledger — re-based at WH-39 (2026-11-01), 34 files
+# docs/screenshots md5 ledger — re-based at WH-40 (2026-11-01), 34 files
 
-# The WH-39 round (the fifth parity surface round — procedure-side only,
-# ZERO src/ changes): the TENTH cross-round byte comparison under the
-# committed procedure — 33/34 byte-stable, the CLEANEST round yet (one
-# better than WH-38's 32), ONE mover root-caused as the standing
-# precedent BEFORE this re-base:
-#   29-quick-actions-hover (5 px, 0.0004%, maxdelta 1, bbox x[503-508]
-#     y[326-331]) = the sub-visible hover-instant/rasterization class
-#     at the IDENTICAL signature to the WH-38 record (the fifth round
-#     in the class's history: WH-31/32/36/37/38/39 — a single
-#     antialiasing pixel on the hovered quick-action cell's icon edge,
-#     never a face change; the watch round 28's dashboard digest read
-#     MATCH on the same build).
-# The 33 byte-stable include every data-bearing + sidebar-bearing +
-# dark + mobile face — the round shipped ZERO src/ changes and the
-# captures confirm it byte-for-byte. All 34 files health-checked
-# (29 desktop 1280x900 + 5 mobile 390x844, zero blank captures);
-# census MATCH after the re-seed (moods=1).
-
+# The WH-40 round (the sixth parity surface round — procedure-side only,
+# ZERO src/ changes): the ELEVENTH cross-round byte comparison under the
+# committed procedure — 32/34 byte-stable, TWO movers root-caused as the
+# sub-visible class BEFORE this re-base:
+#   29-quick-actions-hover (5 px, 0.0004%, maxdelta 1, bbox x[503-507]
+#     y[326-330]) = the standing precedent at the IDENTICAL signature to
+#     the WH-36/37/38/39 records (a single antialiasing pixel on the
+#     hovered quick-action cell's icon edge — the hover-instant class);
+#   25-dark-login-focus (77 px, 0.0067%, maxdelta 5, bbox x[457-823]
+#     y[562-682]) = the SAME class family's first appearance here: every
+#     diff pixel is a +-1..5/255 shift on the dark card's neutral EDGE
+#     grays (74->78, 31->34, 49->50) inside the two input fields' edge
+#     band — the focus-state capture's antialiasing/transition
+#     interpolation phase, no hue or geometry change (the
+#     rasterization-phase class, first-time mover, root-caused).
+# All 34 captures health-checked (29 desktop 1280x900 + 5 mobile
+# 390x844); the ledger re-based on the two new hashes; census MATCH
+# after the re-seed.
 01-login.png 0eb839b6997d2d0fb14ea1834f39bff8
 02-dashboard.png d9754490ed784a32688fcb6e0ba4ae9f
 03-routines.png 43a821116e44d66d56d338482e770b42
@@ -42,11 +42,11 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
+25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
 26-events-inline-form.png 6fee97e127497ef798f23be47967a28f
 27-dark-mood-form.png fedd2292bdac01420655969bcf6a7999
 28-routines-schedule-modal.png 751150e2eb0ff1df77dae3b8e0404d0e
-29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
+29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
 30-tutorial-card-hover.png f389b6004f8632af940c7544bef8464e
 31-profile-preferences.png f6624079394ce66ab0a280fd489e6f0a
 32-mentalhealth-form-interior.png 3edc7f80aa75b05a35051b273a06d4dd

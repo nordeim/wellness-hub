@@ -80,11 +80,15 @@ const LEDGER = {
   // walk"). An informational signal that always fires is a signal that
   // gets ignored — the entry is jsPath now, form-matched to cssPath.
   cssPath: "/static/index-CMHVFeas.css",
-  // WH-39 re-base (round 28's genuine DOUBLE move — the eighth bundle
-  // + the second css content change in two rounds; birth-verified on
-  // the quiet state per the WH-34 doctrine: the re-run after this edit
+  // WH-40 re-base (round 29's genuine js MOVED — twice in the round:
+  // the ninth bundle /static/index-NVr-T2eL.js ->
+  // /static/index-BzrvnYzb.js mid-round, then the TENTH ->
+  // /static/index-DA6CuPbY.js before the re-base landed; the css
+  // content hash STABLE since round 28. Both same-run PASS-2 digests
+  // read 15/15 MATCH on their new bundles; birth-verified on the
+  // quiet state per the WH-34 doctrine: the re-run after this edit
   // reads "assets stable" + the 15/15 digest).
-  jsPath: "/static/index-NVr-T2eL.js",
+  jsPath: "/static/index-DA6CuPbY.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):

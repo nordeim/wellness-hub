@@ -1,0 +1,33 @@
+The workspace survived intact: WH-39 shipped at 6d7b397 (confirmed on the remote), the tree clean, the dev server up. The pull brought in the operator's session_76 log push (81 lines narrating the WH-39 ship). Per the WH-39 plan's suggested-next, this round is WH-40.
+
+The baseline gate re-run live: lint 0/0 · tsc 0 · unit 369/369 (26 suites) · build OK · smoke 14/14 · e2e 72/72 · census MATCH (moods=1) · bun audit zero — the documented WH-39 ship state, reproduced. The instruction's checklist items verified on the tree (the .env/db contract, the vitest/playwright configs, the sitemap/robots handlers, the v4 pins, .env.example).
+
+**Watch round 29: a genuine js MOVED — TWICE in the round.** PASS 1 fired MOVED on the js axis (`/static/index-NVr-T2eL.js` → `/static/index-BzrvnYzb.js`, the ninth distinct bundle; the CSS content hash stable at `index-CMHVFeas.css` since round 28). The same-run digest read 15/15 MATCH on the new bundle. Then, between the re-base edit and its born-verification re-run, the reference deployed AGAIN — the TENTH distinct bundle (`/static/index-DA6CuPbY.js`). The hottest cadence yet: two bundle moves inside one round. Both same-run digests read 15/15 MATCH; the ledger re-based once, to the round's final read, born-verified on the quiet state (`assets stable` + 15/15).
+
+**The standing battery's second full-width run — all six legs, all quiet on the new builds**: login 34/34 (fifth consecutive), moodForm 20/20 (sixth), shell 61/61 (fourth — the drawer battery, the instruction's standing mobile-menu emphasis), dashboard 105/105 (fourth), headers 192/192 (third) — 412 computed members live-vs-live, zero manual evals. The rendered face held through the ninth and tenth bundle moves.
+
+The sixth-surface decision: the module toolbar family (the `TOOLBAR` record's data-independent candidate) over the Profile panels (UserPrefs-state-dependent) and the empty states (data-dependent). The decode probe — written scratch, zero-write, one login per app, all 10 non-dashboard pages — settled the landscape first: exactly TWO toolbar pages on both apps (StudyResources: search + 2 triggers; Learning: search + 1 trigger), EIGHT absence pages on both. The WH-39 plan's own "10 pages" candidate description corrected by the probe — a plan's candidate scope is a hypothesis the decode settles (the lesson-41 premise rule applied to the plan's own text). The absence pins became members: a toolbar appearing or disappearing on either app now fires the surface.
+
+Every scalar member byte-identical except exactly two known classes: the lesson-40 shadow var-chain zero-layers (the input + every trigger — the real-layers filter, the parity-dashboard precedent verbatim) and **the transform-vs-translate INTER-PROPERTY class** — the round's new lesson-40 family member. The search icon's centering (`-translate-y-1/2`) computes as `transform: matrix(1, 0, 0, 1, 0, -10)` on the reference's CDN runtime build, while our build-time Tailwind v4 emits the SEPARATE `translate: 0px -50%` property — our computed `transform` reads `none`, which a naive diff would read as "ours has no transform at all" (and a naive cure would ADD one to a working icon). A dedicated rect probe verified the rendered fact: icon top 8px / left 12px on BOTH apps. The member is the bounding-box position, never either property's serialization — the color form split two syntaxes of one property (lesson 43); the geometry form split two properties of one mechanism; the inter-property form splits the mechanism itself.
+
+**NO real drift anywhere in the family** — the lesson-42 born-quiet prediction (the family was probed at WH-24 and pinned by the census). The committed `scripts/parity-toolbars.mjs` written (98 members: 10 landscape + 51 studyResources + 37 learning; ONE login per app, zero-write). **BORN-VERIFIED: 98/98 MATCH on the first flight + stable on the second consecutive flight.**
+
+The neo-crm sibling rechecked: v1.204.0, unchanged from the WH-39 record (informational).
+
+The docs ladder: PAD §11 (the watch row's round-29 record + the F-2 sixth-surface row), AGENTS (round 29 + the SIX-script standing battery), SKILL v1.37.0 → v1.38.0 (the parity row widened to six surfaces + **LESSON 44** — the inter-property form, the scope-as-decode-settled-fact rule, and the intra-round double move), README/CLAUDE verified unchanged (lockstep), the worklog WH-40 entry, the plan's execution record, this log.
+
+**The ELEVENTH cross-round byte comparison: 32/34 byte-stable.** TWO movers root-caused before the re-base: 29-quick-actions-hover at the IDENTICAL standing-precedent signature (5px, 0.0004%, maxdelta 1), and 25-dark-login-focus — a first-time mover in the same rasterization-phase family (77px, 0.0067%, maxdelta 5; every diff pixel a ±1..5/255 neutral-edge-gray shift inside the dark login card's input band, no hue or geometry change). All 34 captures health-checked; the ledger re-based, verified 0 mismatches; census MATCH after.
+
+The scratch probes deleted; the full gate re-run on the final tree; the commit + the SSH-wrapper push.
+
+## WH-40 轮次总结
+
+**基准与现行程序**：拉取至 cf79124（操作员的 session_76 日志推送）；基准门禁全绿复现（369/369 · 72/72 · census MATCH · audit 零）。**Watch 第 29 轮：轮内双重 js 变动** —— 第九个 bundle（`NVr-T2eL` → `BzrvnYzb`）与第十个（`BzrvnYzb` → `DA6CuPbY`）在同一轮内先后落地（css 内容哈希自第 28 轮保持稳定）；两次同轮摘要均 **15/15 MATCH**；账本一次性重基至轮末终读，静息态 born-verified（`assets stable` + 15/15）。
+
+**扩容电池第二次全宽运行全绿**（login 34/34 ×5、moodForm 20/20 ×6、shell 61/61 ×4、dashboard 105/105 ×4、headers 192/192 ×3 —— **412 成员**同轮 live-vs-live，零手动 eval）—— 渲染面在第九与第十次 bundle 变动下字节保持，移动端抽屉电池（指令的重点项）再次全绿。
+
+**F-2 —— 轮次核心（parity 网第六面）**：`scripts/parity-toolbars.mjs`（模块工具栏族 —— `TOOLBAR` 记录的两个消费页 + **地貌事实本身**：8 个缺席页同为成员，任一 app 上工具栏的出现或消失都会触发）。解码先行修正了 WH-39 计划自己的"10 页"候选描述（实为 2 工具栏页 + 8 缺席页 —— lesson-41 前提类用于计划自身文本）。全标量成员字节相同或属两类：lesson-40 阴影零层类（real-layers 归一化）与 **transform-vs-translate 跨属性类（新，lesson 44）** —— 参考站 CDN 把 `-translate-y-1/2` 编译为 transform 矩阵，我们的 v4 发出独立的 `translate` 属性（计算 transform 读 `none`，并非无位移）；成员 = 渲染包围盒位置（双端实测 8px/12px 相同）。**无真实漂移。Born-verified 98/98 ×2。**
+
+**门禁/文档**：单元 **369/369（26 suites）** · e2e **72/72** · 冒烟 14/14 · census MATCH（moods=1）· audit 零；计数阶梯持平（程序侧轮次）；SKILL **v1.38.0 + lesson 44**、PAD §11、AGENTS、README/CLAUDE 验证不变（lockstep）、worklog、计划执行记录、session_77；捕获重基（第十一次比对：**32/34 字节稳定**，两个移动者均为亚可见类 —— 已知先例的相同签名 + 25-dark-login-focus 的同族首现 [77px/0.0067%/maxdelta 5，暗色登录卡输入带边缘灰 ±1..5/255 相移，无色相/几何变化]）。
+
+**WH-41 建议的下一步**：(a) 全宽常设电池（watch 第 30 轮 + 六个 parity 脚本，每轮七次参考站登录 —— 预算内 10/15min 的上限之下）；(b) 降温政策仍需连续两次以上稳定读（第 27/28/29 轮每轮都动了至少一轴）；(c) 第七面候选：Profile 外观面板（部分数据依赖）、空状态族（数据依赖）或模块 KPI 行（`MODULE_KPI` 记录族，数据无关）；(d) 常设封锁复检。
