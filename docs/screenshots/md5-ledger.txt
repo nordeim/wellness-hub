@@ -1,8 +1,21 @@
-# docs/screenshots md5 ledger — re-based at WH-33 (2026-11-01), 34 files
+# docs/screenshots md5 ledger — re-based at WH-34 (2026-11-01), 34 files
+#
+# The WH-34 round (the stable-read round): the FIFTH cross-round byte
+# comparison under the committed procedure — the CLEANEST yet: 34/34
+# byte-stable, ZERO movers. Zero rendered-face changes shipped (both
+# cures procedure-side: the watch script's jsPath form normalization +
+# the moodForm surface extension — no src/ change), and for the first
+# time no procedure-state class fired either: both the WH-33 base and
+# this set were captured on the SAME calendar day (2026-11-01 — no
+# date-rollover class), no focus-instant, no form-interior caret band.
+# The data lines below are therefore UNCHANGED from the WH-33 base —
+# this header is the round's only edit (the md5-ledger doctrine: the
+# ledger re-bases in the same commit as any cure; a zero-mover round
+# re-bases nothing but the record).
 #
 # The WH-33 round (the watch-companion round): the FOURTH cross-round byte
 # comparison under the committed procedure. ZERO rendered-face changes
-# shipped this round (no src/ change — the round's cures were the (q) e2e
+# shipped that round (no src/ change — the round's cures were the (q) e2e
 # leg + the committed watch-round.mjs procedure) and the comparison
 # confirms it: 28/34 byte-stable, all SIX movers root-caused as
 # procedure-state classes below.

@@ -41,6 +41,13 @@
 // since round 20). The run itself is the ledger's verification: on the
 // first run after any ledger edit, a mismatch is either a real drift
 // (a finding) or a wrong member (fix the member before committing).
+// WH-34, F-1 — the doctrine's own amendment: a ledger edit must
+// birth-verify BOTH outcomes, the firing state AND the quiet state.
+// The WH-33 re-base (the js asset's basename form) shipped without a
+// PASS-1 re-run against the stable read; round 23 then fired a
+// false-positive MOVED on an unchanged hash — the exact class the
+// "the run itself is the ledger's verification" rule exists to catch,
+// missed because the re-run only exercised the DRIFT branch.
 
 import { chromium } from "@playwright/test";
 
@@ -48,16 +55,22 @@ const BASE = "https://evolve-well-d6cec85d.base44.app";
 const EMAIL = "sepnetflix2023@outlook.com";
 const PASSWORD = "$Abcd1234";
 
-/** The canonical ledger — round-22 form (WH-33: the session itself caught
- *  TWO mid-session JS redeployments after round 21's — index-BFu7mt5f.js
- *  → index-DT3tkBuH.js → index-CXmO9oF_.js — with the CSS content hash
- *  STABLE at index-BHjkUcdg.css through all of them, and the full
- *  14-surface computed set verified MATCHING on the newest bundle; the
- *  reference is deploying continuously, and the watch runs every round). */
+/** The canonical ledger — round-23 form (WH-34: the STABLE READ — both
+ *  content hashes unchanged from the round-22 form, the first quiet
+ *  round since 20; the 14-surface computed set ALL MATCH through it, and
+ *  the moodForm surface joins as the 15th this round). */
 const LEDGER = {
-  // The watch (informational — reported, never fails the run):
+  // The watch (informational — reported, never fails the run).
+  // FORM CONTRACT (WH-34, F-1): both asset entries carry the probe's
+  // RETURN form — the FULL PATH. The WH-33 re-base wrote jsBundle as the
+  // bare basename while the probe returns "/static/index-*.js", so the js
+  // comparison could NEVER read stable and PASS 1 fired a false-positive
+  // MOVED on every quiet round (round 23 proved it live: both content
+  // hashes unchanged, the js axis still read "run the full lesson-30
+  // walk"). An informational signal that always fires is a signal that
+  // gets ignored — the entry is jsPath now, form-matched to cssPath.
   cssPath: "/static/index-BHjkUcdg.css",
-  jsBundle: "index-CXmO9oF_.js",
+  jsPath: "/static/index-CXmO9oF_.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):
@@ -112,6 +125,36 @@ const LEDGER = {
   calendar: { trioBorder: "rgb(229, 229, 229)", gap: "8px" },
   profile: { tablistW: 960, tabs: 3, comboboxes: 4 },
   mentalHealth: { entries: "1", avg: "5.0/10", streak: "1", journey: "Your Journey" },
+  // WH-34 (F-3, the (d) surface): the mood form's computed interior —
+  // every member probed live this round (three passes: the structural
+  // ladder, the active-tile/Save-Entry states, the default open state).
+  // The form opens with GOOD pre-selected on BOTH apps (our
+  // useState("good") — the default-state question settled by a dedicated
+  // probe), so the active-tile read needs NO click: the zero-write
+  // doctrine at its cleanest (open → read → Cancel).
+  moodForm: {
+    heading: "How are you feeling today?",
+    groupCount: 7, // the ONE space-y-6 form (its siblings ride space-y-4)
+    groupGap: 24, // the space-y-6 ladder's computed gap
+    moodLabelMb: 16, // the mb-4 label→grid gap
+    tiles: 5, // Amazing/Good/Okay/Low/Struggling
+    activeTileText: "😊Good", // the DEFAULT-selected tile (no click)
+    activeTileStops: ["59, 130, 246", "6, 182, 212"], // blue-500 → cyan-500
+    activeTileColor: "rgb(255, 255, 255)",
+    inactiveTileBorder: "rgb(229, 231, 235)", // gray-200
+    energyLabel: "Energy Level: 5/10", // the useState(5) default, both apps
+    rangeH: 8, // the h-2 track
+    rangeMin: "1", // min=1 (the schema's min(0) stays the API superset)
+    rangeBg: "rgb(229, 231, 235)", // the gray-200 track
+    lowHighMt: "4px", // mt-1
+    lowHighColor: "rgb(107, 114, 128)", // gray-500
+    reflectH: 96, // the h-24 reflection
+    reflectMinH: "60px", // the stock gratitude form both textareas share
+    cancelH: 36, // the h-9 outline Cancel
+    saveEntryH: 36,
+    saveEntryStops: ["16, 185, 129", "20, 184, 166"], // emerald-500 → teal-500
+    saveEntryColor: "rgb(250, 250, 250)", // neutral-50 ink
+  },
   studyResources: { empty: "No resource", uploadField: "Upload File (optional)" },
   exercise: { empty: "No workouts" },
   assignments: { listSectionAbsent: true },
@@ -174,7 +217,7 @@ if (assets.__error) {
 } else {
   const moved = [];
   if (assets.css !== LEDGER.cssPath) moved.push(`css ${LEDGER.cssPath} -> ${assets.css}`);
-  if (assets.js !== LEDGER.jsBundle) moved.push(`js ${LEDGER.jsBundle} -> ${assets.js}`);
+  if (assets.js !== LEDGER.jsPath) moved.push(`js ${LEDGER.jsPath} -> ${assets.js}`);
   if (assets.cdn !== LEDGER.cdnPipeline) moved.push(`cdnPipeline -> ${assets.cdn}`);
   if (assets.cfg !== LEDGER.frontendConfig) moved.push(`frontendConfig -> ${assets.cfg}`);
   console.log(
@@ -531,6 +574,145 @@ await page.waitForTimeout(1200); // the tiles render async — the first run rac
       "mentalHealth",
       ok,
       ok ? `1 entry, 5.0/10 avg, streak 1, the Your Journey list` : JSON.stringify(mh),
+    );
+  }
+}
+
+// — the mood form's computed interior (WH-34, F-3 — the (d) surface; the
+//   (k) leg's map on our side, the reference side finally ledgered: the
+//   form rides the SAME inline-card modality as the sr form — opened
+//   read-only, closed via Cancel, ZERO-WRITE) —
+{
+  const mf = await probe(async () => {
+    await gotoApp("/MentalHealth");
+    const openBtn = page.locator("main button", { hasText: /New Entry/i }).first();
+    await openBtn.click();
+    // settle on the form's own heading (the SPA-render lesson: never read
+    // straight after the click)
+    await page.waitForSelector("text=How are you feeling today?", { timeout: 8000 });
+    await page.waitForTimeout(450);
+    const read = await page.evaluate(() => {
+      const range = document.querySelector("input[type='range']");
+      if (!range) return { error: "no range (form not open?)" };
+      let card = range;
+      while (card && card !== document.body) {
+        if ((card.getAttribute("class") || "").includes("shadow-xl")) break;
+        card = card.parentElement;
+      }
+      const heading = Array.from(card.querySelectorAll("h2, h3, [class*='font-semibold']")).find((h) =>
+        /How are you feeling today\?/i.test(h.textContent || ""),
+      );
+      // the body (p-6 pt-0) → its ONE child = the space-y-6 wrapper → the groups
+      const body = Array.from(card.children).find((c) => (c.getAttribute("class") || "").includes("pt-0"));
+      const wrapper = body?.firstElementChild;
+      const groups = wrapper ? Array.from(wrapper.children) : [];
+      const grid = card.querySelector("div[class*='grid-cols-2']");
+      const tiles = grid ? Array.from(grid.querySelectorAll("button")) : [];
+      // the DEFAULT-selected tile — no click: both apps open with Good
+      // pre-selected (probed; our useState("good") twin)
+      const active = tiles.find((t) => (getComputedStyle(t).backgroundImage || "").includes("gradient"));
+      const inactive = tiles.find((t) => t !== active);
+      const labels = Array.from(card.querySelectorAll("label"));
+      const energyLabel = labels.find((l) => /Energy/i.test(l.textContent || ""));
+      const textareas = Array.from(card.querySelectorAll("textarea"));
+      const reflect = textareas[textareas.length - 1];
+      const buttons = Array.from(card.querySelectorAll("button"));
+      const cancel = buttons.find((b) => b.textContent.trim() === "Cancel");
+      const save = buttons.find((b) => /Save Entry/i.test(b.textContent.trim()));
+      return {
+        heading: heading?.textContent.trim(),
+        wrapperCls: wrapper?.getAttribute("class"),
+        groupCount: groups.length,
+        groupGap:
+          groups.length >= 2
+            ? Math.round(groups[1].getBoundingClientRect().y - groups[0].getBoundingClientRect().y - groups[0].getBoundingClientRect().height)
+            : null,
+        moodLabelMb:
+          grid && labels[0]
+            ? Math.round(grid.getBoundingClientRect().y - labels[0].getBoundingClientRect().bottom)
+            : null,
+        tiles: tiles.length,
+        activeTileText: active?.textContent.replace(/\s+/g, "").trim(),
+        activeTileBg: active ? getComputedStyle(active).backgroundImage : null,
+        activeTileColor: active ? getComputedStyle(active).color : null,
+        inactiveTileBorder: inactive ? getComputedStyle(inactive).borderColor : null,
+        energyLabel: energyLabel?.textContent.replace(/\s+/g, " ").trim(),
+        rangeH: Math.round(range.getBoundingClientRect().height),
+        rangeMin: range.min,
+        rangeBg: getComputedStyle(range).backgroundColor,
+        lowHighMt: null,
+        lowHighColor: null,
+        reflectH: reflect ? Math.round(reflect.getBoundingClientRect().height) : null,
+        reflectMinH: reflect ? getComputedStyle(reflect).minHeight : null,
+        cancelH: cancel ? Math.round(cancel.getBoundingClientRect().height) : null,
+        saveEntryH: save ? Math.round(save.getBoundingClientRect().height) : null,
+        saveEntryBg: save ? getComputedStyle(save).backgroundImage : null,
+        saveEntryColor: save ? getComputedStyle(save).color : null,
+      };
+    });
+    if (read.error) return read;
+    // the Low/High row (computed AFTER the card walk — its locator needs
+    // the collapsed-text match, evaluated in the same context)
+    const lowHigh = await page.evaluate(() => {
+      const range = document.querySelector("input[type='range']");
+      let card = range;
+      while (card && card !== document.body) {
+        if ((card.getAttribute("class") || "").includes("shadow-xl")) break;
+        card = card.parentElement;
+      }
+      const row = Array.from(card.querySelectorAll("div")).find(
+        (d) => d.textContent.replace(/\s+/g, "") === "LowHigh" && d.querySelector("span"),
+      );
+      return row
+        ? { lowHighMt: getComputedStyle(row).marginTop, lowHighColor: getComputedStyle(row.querySelector("span")).color }
+        : { lowHighMt: null, lowHighColor: null };
+    });
+    // close read-only via Cancel (the inline form's own affordance —
+    // Escape is not it, probed)
+    await page.getByRole("button", { name: "Cancel", exact: true }).click();
+    await page.waitForTimeout(400);
+    const closed = await page.evaluate(() => {
+      const range = document.querySelector("input[type='range']");
+      return range === null;
+    });
+    return { ...read, ...lowHigh, closed };
+  });
+  if (mf.__error) report("moodForm", false, `PROBE-ERROR ${mf.__error}`);
+  else if (mf.error) report("moodForm", false, `PROBE-ERROR ${mf.error}`);
+  else {
+    const L = LEDGER.moodForm;
+    const activeStopsOk = L.activeTileStops.every((s) => (mf.activeTileBg || "").includes(s));
+    const saveStopsOk = L.saveEntryStops.every((s) => (mf.saveEntryBg || "").includes(s));
+    const ok =
+      mf.heading === L.heading &&
+      (mf.wrapperCls || "").includes("space-y-6") &&
+      mf.groupCount === L.groupCount &&
+      mf.groupGap === L.groupGap &&
+      mf.moodLabelMb === L.moodLabelMb &&
+      mf.tiles === L.tiles &&
+      mf.activeTileText === L.activeTileText &&
+      activeStopsOk &&
+      mf.activeTileColor === L.activeTileColor &&
+      mf.inactiveTileBorder === L.inactiveTileBorder &&
+      mf.energyLabel === L.energyLabel &&
+      mf.rangeH === L.rangeH &&
+      mf.rangeMin === L.rangeMin &&
+      mf.rangeBg === L.rangeBg &&
+      mf.lowHighMt === L.lowHighMt &&
+      mf.lowHighColor === L.lowHighColor &&
+      mf.reflectH === L.reflectH &&
+      mf.reflectMinH === L.reflectMinH &&
+      mf.cancelH === L.cancelH &&
+      mf.saveEntryH === L.saveEntryH &&
+      saveStopsOk &&
+      mf.saveEntryColor === L.saveEntryColor &&
+      mf.closed;
+    report(
+      "moodForm",
+      ok,
+      ok
+        ? `space-y-6 x${mf.groupCount}@${mf.groupGap}px, mb-4 ${mf.moodLabelMb}px, ${mf.tiles} tiles (default ${mf.activeTileText} blue→cyan), range 8px/min1 gray-200, Low/High mt-1 gray-500, reflect ${mf.reflectH}px, Cancel/Save Entry 36px (emerald→teal), closed via Cancel`
+        : JSON.stringify(mf),
     );
   }
 }
