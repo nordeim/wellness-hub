@@ -54,11 +54,11 @@ const CANONICAL = {
   models: 15, // prisma/schema.prisma `^model` declarations
   apiRouteFamilies: 15, // directories under src/app/api/
   uiModules: 6, // .tsx modules under src/components/ui/
-  unitSuites: 25, // tests/*.test.ts (INCLUDING this suite — WH-28: +tests/activity-feed.test.ts)
+  unitSuites: 26, // tests/*.test.ts (INCLUDING this suite — WH-37: +tests/seed-parity.test.ts, the demo-account data parity contract)
   e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 366, // `bun run test` total (WH-35: 365 + the form-submit ink-split pin)
-  e2eChecks: 71, // `CI=1 bun run test:e2e` total (WH-33: 70 + the (q) family-B Schedule-modal step-count leg)
+  unitChecks: 369, // `bun run test` total (WH-37: 366 + the seed-parity suite's 2 + the nav-weight census)
+  e2eChecks: 72, // `CI=1 bun run test:e2e` total (WH-37: 71 + the demo-face leg, the seeded mood entry's rendered face)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
   // WH-18: ThemeBoot joined src/components/layout/ — the counts move with it.
   layoutComponents: 8, // modules under src/components/layout/
@@ -232,7 +232,7 @@ it("WH-10: PAD §8.1's test-distribution rows sum to the canonical totals", () =
   const pad = readDoc("Project_Architecture_Document.md");
 
   const unitRows = pad.match(/^\| Unit —.*$/gm) ?? [];
-  expect(unitRows.length, "§8.1 unit rows (auth / wellness / infra)").toBe(3);
+  expect(unitRows.length, "§8.1 unit rows (auth / wellness / infra / seed-parity)").toBe(4);
   const unitFiles = unitRows.reduce((sum, row) => sum + (bareNumberCells(row)[0] ?? 0), 0);
   const unitChecks = unitRows.reduce((sum, row) => sum + (bareNumberCells(row)[1] ?? 0), 0);
   expect(unitFiles, "§8.1 unit rows' files sum (must equal the suite count)").toBe(CANONICAL.unitSuites);

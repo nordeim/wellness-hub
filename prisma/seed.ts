@@ -492,6 +492,38 @@ async function main() {
   });
   console.log(`[seed] demo user upserted: ${demo.email}`);
 
+  // ---- the demo mood entry (WH-37, F-2 — the demo-account data
+  // parity cure) --------------------------------------------------------
+  // The reference's DEMO account carries exactly one mood entry
+  // (decoded live on both apps, read-only): its journey row renders
+  // [Good / Oct 29, 2026 / Energy Level: 5/10] with no activities,
+  // gratitude or reflection lines, its mental-health stats read
+  // 5.0/10 · streak 1 · total 1, its dashboard's Mood Entries tile
+  // reads 1 and its Recent Activity feed carries the
+  // 💚 "Mood check-in / good / Oct 29" row. Our seeded demo account
+  // shipped EMPTY — three rendered faces differed on the same login
+  // through every round since the reference's demo account gained the
+  // row (the watch pinned its "1 entry" against its own ledger, the
+  // census pinned our 0 against its own contract — two clocks, the
+  // lesson-39 class on the DATA axis).
+  // The date is FIXED (local noon Oct 29 2026) because the
+  // reference's own row is fixed data — a relative seed date would
+  // drift the two faces apart over time; local noon keeps
+  // formatDate's local date parts stable across timezone offsets.
+  // A DIRECT Prisma write — the badge engine awards at the API CRUD
+  // seams only, so this row never awards "Self-Aware" (the
+  // capture-state doctrine's badgesEarned=0 assertion depends on it;
+  // the reference's own demo account likewise shows 0 badges).
+  await db.moodEntry.create({
+    data: {
+      userId: demo.id,
+      mood: "good",
+      energy: 5,
+      date: new Date(2026, 9, 29, 12, 0, 0),
+    },
+  });
+  console.log("[seed] demo mood entry seeded (the reference's demo face: good, 5/10, Oct 29 2026)");
+
   // ---- routine templates + steps ------------------------------------------
   for (const t of ROUTINE_TEMPLATES) {
     const created = await db.routineTemplate.create({

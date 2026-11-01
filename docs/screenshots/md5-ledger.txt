@@ -1,5 +1,37 @@
-# docs/screenshots md5 ledger — re-based at WH-36 (2026-11-01), 34 files
+# docs/screenshots md5 ledger — re-based at WH-37 (2026-11-01), 34 files
 
+# The WH-37 round (the demo-account data parity + the shell nav parity
+# surface round): the EIGHTH cross-round byte comparison under the
+# committed procedure — 7/34 byte-stable, TWENTY-SEVEN movers all
+# root-caused to this round's TWO DESIGNED pixel cures + the known
+# sub-visible precedents BEFORE this re-base:
+#   THE F-2 DATA CLASS (the seeded demo mood entry — the reference's
+#   own demo face, mirrored: the journey row [Good / Oct 29, 2026 /
+#   Energy Level: 5/10] + the 5.0/10·1·1 stat trio + the dashboard
+#   tile 1 + the feed's Mood check-in row now render where the empty
+#   faces stood): 02-dashboard (4.48%), 05-mentalhealth (5.06%),
+#   14-mobile-dashboard (0.81%), 17-dark-dashboard, 34-mood-list-
+#   interior (14.67% — the whole journey section), and 29-quick-
+#   actions-hover (21.30% — the capture's own "with the feed row in
+#   the account" state: the phase-7 workout row is now joined by the
+#   SEEDED mood row, the feed section reflowing the whole bottom
+#   band; NOT an anomaly — the F-2 cure BY DESIGN).
+#   THE F-3 SHELL CLASS (the five literal cures: the nav rows and
+#   active pills at font-weight 400 at both sites, the drawer rows'
+#   solid zinc-700 ink, the wordmark block's mt-0): every sidebar-
+#   bearing face — 03-12 (the desktop pages; the isolated regions
+#   read exactly the x[0-255] sidebar column, e.g. 12-profile
+#   0.98%), 15/18/19 (the drawer rows), 24, 26-28, 30-33.
+#   THE KNOWN PRECEDENTS: 25-dark-login-focus (77 px, 0.0067%,
+#   maxdelta 5 — the file's own focus-instant precedent, the fifth
+#   consecutive round) + the residual sub-visible rasterization/
+#   hover-instant arms on 29/30 (the WH-31/32/35 record).
+#   The 7 BYTE-STABLE: the logged-out faces (01, 13, 20-23 — no
+#   sidebar, no data) + 16-mobile-drawer-nav-exercise (the drawer
+#   CLOSES on the route change — the mobile exercise page carries
+#   neither sidebar nor data).
+
+#
 # The WH-36 round (the parity net's second-surface round): the SEVENTH
 # cross-round byte comparison under the committed procedure — 30/34
 # byte-stable, FOUR movers all root-caused before this re-base:
@@ -86,37 +118,39 @@
 # knock-on, 2 = the sub-visible rasterization/transition-instant
 # classes).
 
+
+# ---- the data lines (re-based at WH-37) ----
 01-login.png 0eb839b6997d2d0fb14ea1834f39bff8
-02-dashboard.png b396f588554c48d4ceb2cf4ea5df4311
-03-routines.png 431e0010b2f5d7798ac777d560b6c5c4
-04-exercise.png 8774683d2108e9c3be6d6f4ff17ba7f1
-05-mentalhealth.png 3cc6a5e0356c41b1b0794e7b75d7e69e
-06-assignments.png 4ed037698b278a6a69e5f60eccbdb6c8
-07-events.png 729319b2e5c91ecde6e5de8dea0950ca
-08-studyresources.png d55df9d487b4c758815c6df05f611482
-09-reminders.png b9a6e1fb97d2426143b3518109ceebd7
-10-learning.png 0c088cbb788d7825506973744ab016d3
-11-goals.png 01596f05cae8a18b75a35b30f9f40506
-12-profile.png 53218b174c58a304d904725237759615
+02-dashboard.png d9754490ed784a32688fcb6e0ba4ae9f
+03-routines.png 43a821116e44d66d56d338482e770b42
+04-exercise.png 8b8f3d2e1f4732384227794e2892bfa6
+05-mentalhealth.png 0de7e1d727c53703c302fc3c3fa10c52
+06-assignments.png 89a258070de2916fc4f00ca5eed6cb07
+07-events.png e6cc18e1f31c15e24d5e299e32cec187
+08-studyresources.png ddc38c2096b0868b7ba7203bb627aecd
+09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
+10-learning.png dfc1f622c82aa811135127d06207d4a4
+11-goals.png 56a0ae5483cdda64d2168932e8359983
+12-profile.png dc6ab57f5a5b8448f8f8dec0dee54d49
 13-mobile-login.png 479e3bc95a4ca2465691d6b0c5669b90
-14-mobile-dashboard.png 402f99b9660608633b750c175c2088a3
-15-mobile-nav-open.png 889d3e0632af845055da8a1a030aa79b
+14-mobile-dashboard.png affcfc1c87b3b812456cdbd1974af759
+15-mobile-nav-open.png 4e787b6e77719931f5b490369f5fbc88
 16-mobile-drawer-nav-exercise.png a73a87cfcf49d4069ac94a30817ce513
-17-dark-dashboard.png 95b9646f49fd606b14acfdc9e30adb76
-18-dark-routines.png e855e9a2397dc2785e28919cb4090a12
-19-dark-mobile-nav-open.png daac2f7cf710667926056b61db708a53
+17-dark-dashboard.png a1fd57709c79b485dd00abdfc96e95fc
+18-dark-routines.png 84ec13499481e8975f3b44d0c11040e0
+19-dark-mobile-nav-open.png f06d822330b0a527922b3560d12642ef
 20-dark-login.png 9ad84a98f04c63d08f37ab668388484f
 21-dark-signup.png 1105dcb0a18f044a6d72fe0f68e2e88c
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
-24-dark-exercise-rows.png 554a5ac802b890e129a5c9309db81725
-25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
-26-events-inline-form.png a042e99ae17060b6cb2ce2f47a8f9159
-27-dark-mood-form.png adc78dbc036d9e40f89697f0897dbed6
-28-routines-schedule-modal.png dafe291049936103b8b9527f0ec9dc20
-29-quick-actions-hover.png 7cadbcde9c4691236ce5dd59524d9114
-30-tutorial-card-hover.png bd6004ad8bbb6b0f0b3dbe56753b469b
-31-profile-preferences.png 3eeab6faa67b22b9fb29ac1dac4b7a36
-32-mentalhealth-form-interior.png 212565a5fbfb4d19d73d5ceed24dfc89
-33-sr-form-interior.png 55b390793b2fa19af7b0dad1425a7205
-34-mood-list-interior.png f2732a93d130cdd2c7d56dd76fd58f02
+24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
+25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
+26-events-inline-form.png 6fee97e127497ef798f23be47967a28f
+27-dark-mood-form.png fedd2292bdac01420655969bcf6a7999
+28-routines-schedule-modal.png 751150e2eb0ff1df77dae3b8e0404d0e
+29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
+30-tutorial-card-hover.png f389b6004f8632af940c7544bef8464e
+31-profile-preferences.png f6624079394ce66ab0a280fd489e6f0a
+32-mentalhealth-form-interior.png 3edc7f80aa75b05a35051b273a06d4dd
+33-sr-form-interior.png 4485faec00fbf04f37ffda19916e2919
+34-mood-list-interior.png 00c9dfdef6d9eccd895c31969e6850ad

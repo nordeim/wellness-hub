@@ -55,13 +55,14 @@ const BASE = "https://evolve-well-d6cec85d.base44.app";
 const EMAIL = "sepnetflix2023@outlook.com";
 const PASSWORD = "$Abcd1234";
 
-/** The canonical ledger — round-24 form (WH-35: the js bundle moved
- *  AGAIN — /static/index-CXmO9oF_.js -> /static/index-BKhnHaM4.js, the
- *  FIFTH distinct bundle since round 20, while the CSS content hash
+/** The canonical ledger — round-26 form (WH-37: the js bundle moved
+ *  AGAIN — /static/index-BKhnHaM4.js -> /static/index-CcEolDtM.js, the
+ *  SIXTH distinct bundle since round 20, while the CSS content hash
  *  stayed STABLE at index-BHjkUcdg.css — NOT the second consecutive
- *  stable read, so no cooling policy; the 15-surface computed set ALL
- *  MATCHed on the new bundle in the same run, the walk the MOVED
- *  signal demands done by the companion itself). */
+ *  stable read (round 25's stable streak broke again), so no cooling
+ *  policy; the 15-surface computed set ALL MATCHed on the new bundle
+ *  in the same run, the walk the MOVED signal demands done by the
+ *  companion itself). */
 const LEDGER = {
   // The watch (informational — reported, never fails the run).
   // FORM CONTRACT (WH-34, F-1): both asset entries carry the probe's
@@ -73,9 +74,10 @@ const LEDGER = {
   // walk"). An informational signal that always fires is a signal that
   // gets ignored — the entry is jsPath now, form-matched to cssPath.
   cssPath: "/static/index-BHjkUcdg.css",
-  // WH-35 re-base (round 24's genuine move; birth-verified on the quiet
-  // state per the WH-34 doctrine — the re-run read "assets stable").
-  jsPath: "/static/index-BKhnHaM4.js",
+  // WH-37 re-base (round 26's genuine move — the sixth bundle;
+  // birth-verified on the quiet state per the WH-34 doctrine: the
+  // re-run after this edit reads "assets stable" + the 15/15 digest).
+  jsPath: "/static/index-CcEolDtM.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):

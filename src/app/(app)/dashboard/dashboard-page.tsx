@@ -189,7 +189,18 @@ export default function DashboardClientPage() {
                       <p className="font-medium text-gray-900 truncate dark:text-gray-100">{item.title}</p>
                       {item.detail && <p className="text-sm text-gray-500 dark:text-gray-400">{item.detail}</p>}
                     </div>
-                    <span className="text-xs text-gray-400 dark:text-gray-500">{formatDateShort(item.at)}</span>
+                    {/* WH-37: the date ink is the reference's own face —
+                        its feed dates compute gray-400 rgb(156,163,175)
+                        at 12px (decoded live on its demo feed row). A
+                        reference-shared AA failure: the light arm stays
+                        byte-parity (PAD §11's shared-contrast class, the
+                        a11y net's one documented axe ignore entry). The
+                        former dark:text-gray-500 arm retired — gray-400
+                        rides BOTH modes (the census's gray both-mode
+                        exemption family): light = parity, dark =
+                        7.2:1 (our dark superset's own AA standard,
+                        which the gray-500 arm failed at 3.3:1). */}
+                    <span className="text-xs text-gray-400">{formatDateShort(item.at)}</span>
                   </div>
                 ))}
               </div>

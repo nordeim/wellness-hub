@@ -8,6 +8,46 @@ import { expect, test } from "@playwright/test";
 // Routines schedule leg below KEEPS its dialog locator — the parity
 // match).
 
+// WH-37 (F-2): the demo-account DATA parity leg — the seeded mood
+// entry's rendered face. Runs FIRST in the battery: it asserts the
+// PRISTINE seeded state (the stats 5.0/10 · 1 · 1 and the tile's exact
+// "1" hold only before this spec's own CRUD legs add their residue;
+// the a11y suite's afterEach cleanup — which runs before this file —
+// preserves the seeded row by its fixed 2026-10-29 date). The
+// reference's demo account carries exactly one mood row (decoded live
+// on both apps: journey row [Good / Oct 29, 2026 / Energy Level:
+// 5/10], no activities/gratitude/reflection lines) and our seed
+// mirrors it — this leg pins the RENDERED face (the source-level
+// contract is pinned by tests/seed-parity.test.ts; this leg keeps the
+// rendered reality honest — the round's own lesson: a source pin can
+// drift from what actually renders). The FIXED date mirrors the
+// reference's own fixed row: the assertions are stable across time by
+// construction, never relative.
+test("the demo account's seeded mood entry renders the reference's demo face", async ({ page }) => {
+  // The mental-health page: the stat trio + the journey row.
+  await page.goto("/MentalHealth");
+  await expect(page.getByText("5.0/10")).toBeVisible();
+  await expect(page.getByText("Current Streak").locator("..").getByText(/^1$/)).toBeVisible();
+  const journeyRow = page.locator("main").getByText("Good", { exact: true }).first();
+  await expect(journeyRow).toBeVisible();
+  const row = journeyRow.locator("xpath=ancestor::div[contains(@class,'rounded-2xl')][1]");
+  await expect(row).toContainText("Oct 29, 2026");
+  await expect(row).toContainText("Energy Level: 5/10");
+
+  // The dashboard: the Mood Entries tile reads 1 + the feed row
+  // renders the reference's 💚 "Mood check-in / good / Oct 29" (the
+  // hasText "good" filter pins the seeded row's own feed entry).
+  await page.goto("/dashboard");
+  await expect(
+    page.locator("main").getByText("Mood Entries").locator("xpath=../..").getByText("1", { exact: true }),
+  ).toBeVisible();
+  const feedRow = page.locator("div.space-y-3 > div", { hasText: "Mood check-in" }).filter({ hasText: "good" });
+  await expect(feedRow).toBeVisible();
+  await expect(feedRow).toContainText("good");
+  await expect(feedRow).toContainText("Oct 29");
+  await expect(feedRow).toContainText("💚");
+});
+
 test("exercise: log a workout, see it in Recent Workouts, delete it", async ({ page }) => {
   await page.goto("/Exercise");
 
@@ -431,3 +471,4 @@ test("dashboard: the Recent Activity feed — the reference's 3-kind builder wit
   await page.getByRole("button", { name: /Delete .* workout/ }).click();
   await expect(page.getByText("No workouts logged yet")).toBeVisible();
 });
+

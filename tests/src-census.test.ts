@@ -1242,6 +1242,52 @@ it("WH-15: the shell-contract census — the brand family rides the 135deg to-br
   );
 });
 
+it("WH-37: the nav-weight census — the shell nav's font-weight family, ink and wordmark margins mirror the reference (the third-surface decode)", () => {
+  // Decoded live-vs-live at WH-37 (the parity net's third surface —
+  // the shell nav family): the reference renders its nav rows AND its
+  // active pills at font-weight 400 at BOTH nav sites (desktop +
+  // drawer) — the active state distinguishes by the gradient + white
+  // ink ONLY, never by weight. Ours shipped the chassis's
+  // font-medium (500) on the rows + font-semibold (600) on the active
+  // pills. The drawer rows additionally rode text-sidebar-foreground/80
+  // (80% alpha ≈ rgb(102,102,108) on the white sheet) where the
+  // reference computes SOLID rgb(63,63,70) — and the wordmark block's
+  // -mt-0.5 arm pulled our brand column to 42px against the
+  // reference's 44px (marginTop −2px vs 0px). All five drifts were
+  // chassis inheritances no round ever diffed: the watch's
+  // desktopShell surface reads geometry only, the e2e asserts
+  // behavior only. Pinned by the parity-shell script's live-vs-live
+  // flight + this census (the source-level guard).
+  const layoutSrc = readFileSync(join(REPO_ROOT, "src/lib/page-layout.ts"), "utf8");
+  const record = (block: string, name: string): string => {
+    const blockSrc = layoutSrc.slice(layoutSrc.indexOf(`export const ${block}`));
+    const m = blockSrc.match(new RegExp(`\\n  ${name}:\\s*"([^"\\n]*)"`));
+    return m ? m[1] : "";
+  };
+
+  const navLink = record("NAV_LAYOUT", "link");
+  const navActive = record("NAV_LAYOUT", "linkActive");
+  const sheetLink = record("MOBILE_NAV_SHEET", "link");
+  const sheetActive = record("MOBILE_NAV_SHEET", "linkActive");
+
+  // the font-weight family: NO medium/semibold anywhere in the four
+  // row records — the reference's 400 (normal) at both sites
+  expect(navLink, "the desktop rows carry no font-medium (the reference's 400)").not.toContain("font-medium");
+  expect(navLink, "the desktop rows carry no font-semibold").not.toContain("font-semibold");
+  expect(navActive, "the desktop active pill carries no font-semibold — the gradient + white ink ARE the active state").not.toContain("font-semibold");
+  expect(sheetLink, "the drawer rows carry no font-medium (the reference's 400)").not.toContain("font-medium");
+  expect(sheetActive, "the drawer active pill carries no font-semibold").not.toContain("font-semibold");
+
+  // the drawer rows' ink: SOLID sidebar-foreground — no /80 alpha arm
+  // (the reference computes rgb(63,63,70) on the white sheet)
+  expect(sheetLink, "the drawer rows' ink is SOLID sidebar-foreground (no /80 alpha)").not.toContain("/80");
+  expect(sheetLink, "the drawer rows carry no dead hover:text un-dim arm (the base is solid)").not.toContain("hover:text-sidebar-foreground");
+
+  // the wordmark block's subtitle: no -mt-0.5 (the reference's
+  // marginTop 0px / the 44px brand column)
+  expect(record("NAV_LAYOUT", "brandSubtitle"), "the wordmark subtitle carries no -mt-0.5 (the reference's marginTop 0)").not.toContain("mt-0.5");
+});
+
 it("WH-15: the login-monochrome census — the login accent/glow/badge ride the slate pairs (the redesign's login)", () => {
   // The reference's login went monochrome with the redesign: the card
   // accent bar from-slate-200 via-slate-300 to-slate-200 (ours was the
@@ -3427,10 +3473,14 @@ it("WH-30: the shell-chrome geometry census — the mobile header interior, the 
 
   // (c) the nav row family: the 32px h-8 rows + the 16px icons + the
   // gray-50 hover + transition-all (desktop AND drawer)
+  // WH-37 (F-3): the `font-[a-z]+` arm requirement RETIRES with the
+  // weight cure — the reference renders its rows AND active pill at
+  // font-weight 400 (no weight utility at all); the pinned form is the
+  // weightless one (the nav-weight census owns the absence).
   for (const member of ["link", "linkActive"]) {
-    const re = new RegExp(`${member}:\\s*"flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm font-[a-z]+ `);
+    const re = new RegExp(`${member}:\\s*"flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm (?:text-sidebar-foreground|text-white) `);
     if (!re.test(plSrc)) {
-      failures.push(`NAV_LAYOUT.${member} must carry "h-8 … px-4 py-3" — the reference's rows compute 32px (ours shipped py-2.5 uncapped = 40px desktop)`);
+      failures.push(`NAV_LAYOUT.${member} must carry "h-8 … px-4 py-3 text-sm" with NO weight arm — the reference's rows compute 32px at font-weight 400 (the WH-37 decode)`);
     }
   }
   if (!/icon:\s*"h-4 w-4 shrink-0"/.test(plSrc)) {
@@ -3442,9 +3492,13 @@ it("WH-30: the shell-chrome geometry census — the mobile header interior, the 
   if (/hover:opacity-95/.test(plSrc)) {
     failures.push("the active pill's hover:opacity-95 arm retires — the reference's active row carries no hover arm");
   }
-  const sheetLinkRe = /link:\s*"flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm font-medium text-sidebar-foreground\/80 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-neutral-800 hover:text-sidebar-foreground"/;
+  // WH-37 (F-3): the pinned form flips with the weight/ink cure — no
+  // font-medium, SOLID text-sidebar-foreground (the /80 alpha + its
+  // dead hover:text un-dim arm retire; the reference computes
+  // rgb(63,63,70) on the white sheet).
+  const sheetLinkRe = /link:\s*"flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm text-sidebar-foreground transition-all duration-300 hover:bg-gray-50 dark:hover:bg-neutral-800"/;
   if (!sheetLinkRe.test(plSrc)) {
-    failures.push("MOBILE_NAV_SHEET.link must carry the same h-8/icon/hover family — the drawer's rows are the same 32px family (ours shipped py-3 uncapped = 44px)");
+    failures.push("MOBILE_NAV_SHEET.link must carry the same h-8/icon/hover family with NO weight arm and SOLID ink — the drawer's rows are the reference's own 32px/400/zinc-700 family (the WH-37 decode)");
   }
 
   // (d) the Profile card: the avatar-card anatomy at BOTH footer sites

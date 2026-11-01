@@ -23,8 +23,14 @@ import { runtimeDatabaseUrl } from "../src/lib/db-path";
 
 // The seed contract — prisma/seed.ts's row counts. Keep in sync with the
 // seed: the demo user (1), 11 routine templates, their steps, 12
-// tutorials, 8 badges; the per-user domain tables seed EMPTY (the
-// reference's own fresh-account face).
+// tutorials, 8 badges; the per-user domain tables seed EMPTY (a FRESH
+// signup's face) with ONE deliberate exception — the demo mood entry
+// (WH-37, F-2): the reference's own DEMO account carries exactly one
+// mood row (good, 5/10, Oct 29 2026 — decoded live), and the parity
+// doctrine mirrors the DEMO account's rendered face, not the
+// fresh-account one. The other domain tables stay empty — the
+// reference's demo account carries no workouts/assignments/events/
+// goals rows (the watch's dashboard tiles read 0/1/0/0 on it).
 const EXPECTED = {
   users: 1,
   routineTemplates: 11,
@@ -32,7 +38,7 @@ const EXPECTED = {
   tutorials: 12,
   badges: 8,
   workouts: 0,
-  moodEntries: 0,
+  moodEntries: 1,
   assignments: 0,
   events: 0,
   studyResources: 0,

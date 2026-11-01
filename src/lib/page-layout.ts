@@ -228,7 +228,7 @@ export const NAV_LAYOUT = {
     "w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-lg",
   brandWordmark:
     "font-bold text-lg bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent",
-  brandSubtitle: "text-xs text-muted -mt-0.5",
+  brandSubtitle: "text-xs text-muted",
   // WH-30 (F-2): the nav rows converge on the reference's 32px h-8 family
   // (h-8 capping py-3 — ours shipped py-2.5 uncapped at 40px desktop / 44px
   // drawer) with the 16px icons ([&>svg]:size-4 on the reference — ours
@@ -236,10 +236,15 @@ export const NAV_LAYOUT = {
   // sidebar-hover token #f4f4f5). The active pill keeps its gradient
   // family; its hover:opacity-95 arm retires (the reference's active
   // carries no hover arm).
+  // WH-37 (F-3, the third-surface decode): the reference renders its
+  // rows AND its active pill at font-weight 400 — the medium/semibold
+  // arms retire (the active state is the gradient + white ink only),
+  // and the brandSubtitle's -mt-0.5 retires with them (the
+  // reference's brand column computes marginTop 0 / 44px).
   list: "flex w-full min-w-0 flex-col gap-1 space-y-1",
-  link: "flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm font-medium text-sidebar-foreground transition-all duration-300 hover:bg-gray-50 dark:hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+  link: "flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm text-sidebar-foreground transition-all duration-300 hover:bg-gray-50 dark:hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
   linkActive:
-    "flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm font-semibold text-white bg-gradient-to-br from-primary to-secondary shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+    "flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm text-white bg-gradient-to-br from-primary to-secondary shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
   icon: "h-4 w-4 shrink-0",
   label: "truncate",
 } as const;
@@ -289,9 +294,14 @@ export const MOBILE_NAV_SHEET = {
   header: "flex flex-col gap-2 border-b border-gray-100 p-6 dark:border-neutral-800",
   title: "text-left text-lg font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent mb-0",
   description: "text-xs text-muted",
-  link: "flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm font-medium text-sidebar-foreground/80 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-neutral-800 hover:text-sidebar-foreground",
+  // WH-37 (F-3, the third-surface decode): the drawer rows join the
+  // desktop cure — no font-medium (the reference's 400 at BOTH sites)
+  // and SOLID text-sidebar-foreground (the reference computes
+  // rgb(63,63,70) on the white sheet; the /80 alpha arm + its dead
+  // hover:text un-dim arm retire with the weight).
+  link: "flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm text-sidebar-foreground transition-all duration-300 hover:bg-gray-50 dark:hover:bg-neutral-800",
   linkActive:
-    "flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm font-semibold text-white bg-gradient-to-br from-primary to-secondary shadow-lg transition-all duration-300",
+    "flex items-center gap-3 h-8 rounded-xl px-4 py-3 text-sm text-white bg-gradient-to-br from-primary to-secondary shadow-lg transition-all duration-300",
   icon: "h-4 w-4",
 } as const;
 

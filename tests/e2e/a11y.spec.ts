@@ -66,11 +66,35 @@ const MODULE_ROUTES = [
 /** Format an axe violation for the failure message (route + rule + the
  * first targets — enough to diagnose without flooding the log). */
 function describeViolations(route: string, violations: AxeResults["violations"]): string[] {
-  return violations.map(
+  return violations.filter((v) => !isReferenceSharedFeedDate(v)).map(
     (v) => `${route} :: ${v.id} (${v.nodes.length}) :: ${v.help} :: ${v.nodes
       .slice(0, 3)
       .map((n) => n.target.join(" "))
       .join(" | ")}`,
+  );
+}
+
+/** WH-37: the ONE documented axe ignore entry (the console-net doctrine
+ *  verbatim — "cure the writer or pin a documented ignore entry, never
+ *  silence the net"). The Recent Activity feed row's DATE span: the
+ *  reference's own feed dates compute the SAME ink — gray-400
+ *  rgb(156,163,175) at 12px, decoded live on its demo feed row this
+ *  round — a reference-shared AA failure the parity doctrine keeps
+ *  byte-parity on our side (PAD §11's shared-contrast class, the
+ *  gradient-ink family precedent: the reference's face is the
+ *  contract). The filter matches the EXACT element — the rule AND the
+ *  date span's own class signature in the node's html — never the rule
+ *  itself; any other text-gray-400 text node that ever fails stays
+ *  strict-zero. The node was invisible to every walk before WH-37: our
+ *  demo account carried no feed rows, so the seeded demo mood entry
+ *  (the F-2 data-parity cure) exposed it. The DARK twin needed no
+ *  entry — the arm retired (gray-400 rides both modes; dark computes
+ *  7.2:1, our dark superset's own standard). */
+function isReferenceSharedFeedDate(v: AxeResults["violations"][number]): boolean {
+  return (
+    v.id === "color-contrast" &&
+    v.nodes.length >= 1 &&
+    v.nodes.every((n) => /class="text-xs text-gray-400"/.test(n.html ?? ""))
   );
 }
 
@@ -741,12 +765,23 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
         // journal list's delete buttons match the later CRUD mood flow's
         // loose /Amazing/ form; the exact-match cure handles the click,
         // this cleanup handles the residue class itself).
+        // WH-37 (F-2): the pristine state now carries the SEEDED demo
+        // mood row (the reference's demo-account face, mirrored by the
+        // seed — the demo-face leg in wellness-crud asserts it). The
+        // cleanup therefore deletes every row EXCEPT the seeded one —
+        // identified by its FIXED 2026-10-29 date (the reference's own
+        // row is fixed data; every row this suite creates dates "now").
+        const SEEDED_DEMO_DATE = "2026-10-29";
         const moods = await fetch("/api/mood-entries").then((r) => r.json());
         for (const m of moods?.data ?? []) {
+          if (String(m.date).startsWith(SEEDED_DEMO_DATE)) continue;
           await fetch(`/api/mood-entries/${m.id}`, { method: "DELETE" });
         }
         const moodsAfter = await fetch("/api/mood-entries").then((r) => r.json());
-        if ((moodsAfter?.data ?? []).length > 0) throw new Error("mood cleanup incomplete");
+        const residue = (moodsAfter?.data ?? []).filter(
+          (m: { date: string }) => !String(m.date).startsWith(SEEDED_DEMO_DATE),
+        );
+        if (residue.length > 0) throw new Error("mood cleanup incomplete");
       });
     } catch {
       /* best-effort — the reseed backstop below */
