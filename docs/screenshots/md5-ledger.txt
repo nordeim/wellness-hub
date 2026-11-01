@@ -27,7 +27,7 @@
 07-events.png e6cc18e1f31c15e24d5e299e32cec187
 08-studyresources.png ddc38c2096b0868b7ba7203bb627aecd
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
-10-learning.png dfc1f622c82aa811135127d06207d4a4
+10-learning.png 158b842086569e8666011d12e921ceac
 11-goals.png 56a0ae5483cdda64d2168932e8359983
 12-profile.png dc6ab57f5a5b8448f8f8dec0dee54d49
 13-mobile-login.png 479e3bc95a4ca2465691d6b0c5669b90
@@ -42,11 +42,11 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
+25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
 26-events-inline-form.png 6fee97e127497ef798f23be47967a28f
 27-dark-mood-form.png fedd2292bdac01420655969bcf6a7999
 28-routines-schedule-modal.png 751150e2eb0ff1df77dae3b8e0404d0e
-29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
+29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
 30-tutorial-card-hover.png f389b6004f8632af940c7544bef8464e
 31-profile-preferences.png f6624079394ce66ab0a280fd489e6f0a
 32-mentalhealth-form-interior.png 3edc7f80aa75b05a35051b273a06d4dd

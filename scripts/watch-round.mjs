@@ -79,16 +79,26 @@ const LEDGER = {
   // hashes unchanged, the js axis still read "run the full lesson-30
   // walk"). An informational signal that always fires is a signal that
   // gets ignored — the entry is jsPath now, form-matched to cssPath.
-  cssPath: "/static/index-CMHVFeas.css",
-  // WH-40 re-base (round 29's genuine js MOVED — twice in the round:
-  // the ninth bundle /static/index-NVr-T2eL.js ->
-  // /static/index-BzrvnYzb.js mid-round, then the TENTH ->
-  // /static/index-DA6CuPbY.js before the re-base landed; the css
-  // content hash STABLE since round 28. Both same-run PASS-2 digests
-  // read 15/15 MATCH on their new bundles; birth-verified on the
-  // quiet state per the WH-34 doctrine: the re-run after this edit
-  // reads "assets stable" + the 15/15 digest).
-  jsPath: "/static/index-DA6CuPbY.js",
+  // WH-41 re-base (round 30's DOUBLE move — the THIRD css CONTENT
+  // change: /static/index-CMHVFeas.css -> /static/index-T8A-IXoy.css;
+  // birth-verified on the quiet state per the WH-34 doctrine: the
+  // re-run after this edit reads "assets stable" + the 15/15 digest).
+  cssPath: "/static/index-T8A-IXoy.css",
+  // WH-41 re-base (round 30 shipped the round's hottest cadence yet —
+  // an INTRA-ROUND TRIPLE js move + a REVERT: the ELEVENTH
+  // /static/index-B3stYFo-.js (riding the third css content move),
+  // the TWELFTH /static/index-6yfO0HkE.js, then the THIRTEENTH
+  // /static/index-DBRn9GKt.js — whose digest fired the battery's
+  // first 1-DRIFT read — and then the platform REVERTED to the
+  // twelfth bundle within minutes, the standing face reading 15/15
+  // clean on it. The transient thirteenth carried a real one-surface
+  // rendered-face change that the rollback removed (its surface
+  // detail lost to a filtered first read — the WH-41 lesson-45
+  // sibling: capture the FULL watch output every run; a transient
+  // deployment can vanish before the re-run). The ledger re-based to
+  // the ROUND'S FINAL READ (the reverted twelfth), born-verified on
+  // the quiet state per the WH-34+WH-40 doctrine).
+  jsPath: "/static/index-6yfO0HkE.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):
