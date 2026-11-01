@@ -1,5 +1,24 @@
-# docs/screenshots md5 ledger — re-based at WH-37 (2026-11-01), 34 files
+# docs/screenshots md5 ledger — re-based at WH-38 (2026-11-01), 34 files
 
+# The WH-38 round (the fourth parity surface round — procedure-side only,
+# ZERO src/ changes): the NINTH cross-round byte comparison under the
+# committed procedure — 32/34 byte-stable, the CLEANEST round yet, TWO
+# movers both root-caused as the standing precedents BEFORE this re-base:
+#   25-dark-login-focus (77 px, 0.0067%, maxdelta 5, bbox x[457-824]
+#     y[562-683]) = the file's own focus-instant precedent, now the
+#     SIXTH consecutive round at the IDENTICAL signature (WH-33/34/35/
+#     36/37/38 — the caret/focus rasterization instant, not a face
+#     change; the watch round 27's login surface read MATCH on the same
+#     build).
+#   29-quick-actions-hover (5 px, 0.0004%, maxdelta 1, bbox x[503-508]
+#     y[326-331]) = the sub-visible hover-instant/rasterization class
+#     (the WH-31/32/36/37 record; maxdelta 1 — a single antialiasing
+#     edge on the hovered card).
+#   The 32 BYTE-STABLE include every data-bearing + sidebar-bearing face
+#   (02-12, 14-19, 24, 26-28, 30-34) — the round changed no src/ file,
+#   and the captures confirm it byte-for-byte.
+
+#
 # The WH-37 round (the demo-account data parity + the shell nav parity
 # surface round): the EIGHTH cross-round byte comparison under the
 # committed procedure — 7/34 byte-stable, TWENTY-SEVEN movers all
@@ -144,11 +163,11 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
+25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
 26-events-inline-form.png 6fee97e127497ef798f23be47967a28f
 27-dark-mood-form.png fedd2292bdac01420655969bcf6a7999
 28-routines-schedule-modal.png 751150e2eb0ff1df77dae3b8e0404d0e
-29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
+29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
 30-tutorial-card-hover.png f389b6004f8632af940c7544bef8464e
 31-profile-preferences.png f6624079394ce66ab0a280fd489e6f0a
 32-mentalhealth-form-interior.png 3edc7f80aa75b05a35051b273a06d4dd

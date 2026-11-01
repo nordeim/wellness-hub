@@ -55,14 +55,18 @@ const BASE = "https://evolve-well-d6cec85d.base44.app";
 const EMAIL = "sepnetflix2023@outlook.com";
 const PASSWORD = "$Abcd1234";
 
-/** The canonical ledger — round-26 form (WH-37: the js bundle moved
- *  AGAIN — /static/index-BKhnHaM4.js -> /static/index-CcEolDtM.js, the
- *  SIXTH distinct bundle since round 20, while the CSS content hash
- *  stayed STABLE at index-BHjkUcdg.css — NOT the second consecutive
- *  stable read (round 25's stable streak broke again), so no cooling
- *  policy; the 15-surface computed set ALL MATCHed on the new bundle
- *  in the same run, the walk the MOVED signal demands done by the
- *  companion itself). */
+/** The canonical ledger — round-27 form (WH-38: the DOUBLE move —
+ *  the CSS content hash changed for the FIRST TIME since round 20
+ *  (/static/index-BHjkUcdg.css -> /static/index--nhcow2j.css) AND the
+ *  js bundle moved again (/static/index-CcEolDtM.js ->
+ *  /static/index-CaQQhuPL.js, the SEVENTH distinct bundle) — the
+ *  round-20 class (a stylesheet CONTENT change, the rarest signal;
+ *  round 20's carried one real face change). The same-run PASS-2
+ *  digest read 15/15 MATCH on the new assets, and the round's parity
+ *  battery — login 34/34, moodForm 20/20, shell 61/61, + the new
+ *  FOURTH SURFACE parity-dashboard 105/105 (born this round) —
+ *  verified the rendered face byte-held through the css content
+ *  move, the widest same-round battery yet). */
 const LEDGER = {
   // The watch (informational — reported, never fails the run).
   // FORM CONTRACT (WH-34, F-1): both asset entries carry the probe's
@@ -73,11 +77,12 @@ const LEDGER = {
   // hashes unchanged, the js axis still read "run the full lesson-30
   // walk"). An informational signal that always fires is a signal that
   // gets ignored — the entry is jsPath now, form-matched to cssPath.
-  cssPath: "/static/index-BHjkUcdg.css",
-  // WH-37 re-base (round 26's genuine move — the sixth bundle;
-  // birth-verified on the quiet state per the WH-34 doctrine: the
-  // re-run after this edit reads "assets stable" + the 15/15 digest).
-  jsPath: "/static/index-CcEolDtM.js",
+  cssPath: "/static/index--nhcow2j.css",
+  // WH-38 re-base (round 27's genuine DOUBLE move — the seventh bundle
+  // + the first css content change since round 20; birth-verified on
+  // the quiet state per the WH-34 doctrine: the re-run after this edit
+  // reads "assets stable" + the 15/15 digest).
+  jsPath: "/static/index-CaQQhuPL.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):
