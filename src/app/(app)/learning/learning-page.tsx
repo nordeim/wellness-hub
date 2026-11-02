@@ -58,7 +58,10 @@ export default function LearningClientPage() {
 
       {/* The toolbar — search + category combobox (WH-24: the reference's
           stock family — the Input + pl-10, the Filter-icon wrapper, the
-          fixed w-48, the gap-4/md container). */}
+          fixed w-48, the gap-4/md container; WH-47 F-1: the whole row
+          rides INSIDE the card wrapper — the reference's decoded chrome,
+          Card > p-6 > the flex row). */}
+      <div className={TOOLBAR.card}>
       <div className={TOOLBAR.container}>
         <div className={TOOLBAR.searchWrap}>
           <Search className={TOOLBAR.searchIcon} aria-hidden="true" />
@@ -87,6 +90,7 @@ export default function LearningClientPage() {
             </SelectContent>
           </Select>
         </div>
+      </div>
       </div>
 
       {filtered.length === 0 ? (

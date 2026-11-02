@@ -1,4 +1,29 @@
-# docs/screenshots md5 ledger — re-based at WH-46 (2026-11-02), 34 files
+# docs/screenshots md5 ledger — re-based at WH-47 (2026-11-02), 34 files
+
+# The WH-47 round (the thirteenth parity surface round — the module
+# toolbars' CARD WRAPPER cured + the list-interiors surface born): the
+# EIGHTEENTH cross-round byte comparison under the committed procedure
+# — 30/34 byte-stable, FOUR movers ALL root-caused as the round's own
+# DELIBERATE our-side face changes before this re-base (the WH-44
+# precedent; the same-round computed parity green — the battery's
+# TWELVE legs at 3,387 members incl. the widened toolbars 114/114 with
+# the F-1 wrapper members + the thirteenth surface listinteriors 88/88
+# with the sr y-ladder 252/332/412 — confirms every other face held):
+#   08-studyresources + 10-learning = the F-1 CURE'S PRIMARY FACE — the
+#     toolbar now rides inside the card chrome (rounded-xl + border-none
+#     + shadow-lg + p-6, h=84) where the bare 36px flex row rendered at
+#     WH-46; the whole page ladder below the toolbar sits 48px lower,
+#     exactly the reference's decoded geometry.
+#   30-tutorial-card-hover + 33-sr-form-interior = the F-1 CURE'S
+#     BELOW-FOLD SHIFT — the tutorial grid and the open sr form are the
+#     first content surfaces below the toolbar card on their pages; both
+#     moved with the same 48px offset (the interiors themselves are
+#     byte-pinned by the tutorials surface's 790 members + the
+#     form-interior census — the capture movement is the ladder, not the
+#     face).
+# No environmental movers this round (no date-axis crossing — the
+# WH-46 captures and this round's both render Nov 2; no caret-blink
+# catches; the standing signatures quiet).
 
 # The WH-46 round (the twelfth parity surface round — the login family's
 # forgot/sent/signup views, born-quiet): the SEVENTEENTH cross-round byte
@@ -35,9 +60,9 @@
 05-mentalhealth.png 0de7e1d727c53703c302fc3c3fa10c52
 06-assignments.png 89a258070de2916fc4f00ca5eed6cb07
 07-events.png 63f6e41213c3a3c0ff7f1b66aa95f659
-08-studyresources.png ddc38c2096b0868b7ba7203bb627aecd
+08-studyresources.png 66442104ebac81afca43628cb7a5ef53
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
-10-learning.png 82346c9dc003975fc8e31fd85394de9a
+10-learning.png 4c8ef4e95feae62e32a715674868c945
 11-goals.png 56a0ae5483cdda64d2168932e8359983
 12-profile.png edb647d4bde50a717af5a88995e1a048
 13-mobile-login.png 479e3bc95a4ca2465691d6b0c5669b90
@@ -57,8 +82,8 @@
 27-dark-mood-form.png d839162031d8f6ea3317aa55235bc0fe
 28-routines-schedule-modal.png 8779cbfc8e467db3784ce47835e7f3c6
 29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
-30-tutorial-card-hover.png 02c457e32bc267e8073bbc4da48f27cd
+30-tutorial-card-hover.png 69a0cee125cded7d042b51bb3ace6218
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
 32-mentalhealth-form-interior.png 8efa6ce8d975483f92fe6ee86279ad40
-33-sr-form-interior.png 4485faec00fbf04f37ffda19916e2919
+33-sr-form-interior.png 74ed140c9d101aa5fe537405ee3ded12
 34-mood-list-interior.png 00c9dfdef6d9eccd895c31969e6850ad

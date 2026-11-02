@@ -5,6 +5,16 @@
 // fixed-width triggers) plus the LANDSCAPE fact itself (which of the
 // ten non-dashboard pages render a toolbar at all).
 //
+// WH-47 (F-1) WIDENING — the CARD WRAPPER members: the reference wraps
+// both toolbars in the card chrome (rounded-xl + bg-card + border-none
+// + shadow-lg + p-6; h=84 = the 36px row + 2×24px padding, radius 12px,
+// white bg). Ours shipped the bare flex row through eight green
+// full-width battery runs — the interior-anchored member set never read
+// the wrapper (the lesson-48 blind-spot class). The wrapper members
+// ride the surface from this round: the chrome (radius/bg/border/shadow
+// via the real-layers filter) + the rendered row offsets inside the
+// card (the padding as GEOMETRY — the lesson-43 form).
+//
 // The two-clocks gap it closes: the WH-24 census pins OUR toolbar
 // source forms (the TOOLBAR record's five strings + the two consumer
 // pages' stock-input + fixed-width classes) and the watch's
@@ -122,6 +132,36 @@ const runPass = async (page, base) => {
       const wrap = input.parentElement; // the .relative icon wrapper
       const cont = wrap ? wrap.parentElement : null;
       if (!cont) return { toolbar: false };
+      // WH-47 (F-1): the CARD WRAPPER — the reference nests the flex row
+      // inside a p-6 content div which sits inside the chrome Card
+      // (Card > p-6 > row); ours carries p-6 on the card itself (Card >
+      // row) — the same rendered face at a different DOM depth (the
+      // lesson-47/48 vocabulary class). The anchor CLIMBS from the
+      // container's parent to the first ancestor carrying the card
+      // chrome (radius or shadow — never a fixed parent-hop), bounded
+      // so a chrome-less tree can never over-climb into the page wash.
+      let cardEl = cont.parentElement;
+      for (let hop = 0; hop < 4 && cardEl && cardEl !== document.body; hop++) {
+        const s = getComputedStyle(cardEl);
+        if (s.borderTopLeftRadius !== "0px" || s.boxShadow !== "none") break;
+        cardEl = cardEl.parentElement;
+      }
+      const cardCs = cardEl && cardEl !== document.body ? getComputedStyle(cardEl) : null;
+      const cardR = cardEl ? cardEl.getBoundingClientRect() : null;
+      const contR = cont.getBoundingClientRect();
+      const card = cardCs
+        ? {
+            tag: cardEl.tagName,
+            radius: cardCs.borderTopLeftRadius,
+            bg: cardCs.backgroundColor,
+            borderWidth: cardCs.borderTopWidth,
+            borderColor: cardCs.borderTopColor,
+            shadow: cardCs.boxShadow,
+            h: cardR ? Math.round(cardR.height) : null,
+            rowOffsetTop: cardR ? Math.round(contR.top - cardR.top) : null,
+            rowOffsetLeft: cardR ? Math.round(contR.left - cardR.left) : null,
+          }
+        : null;
       const ics = getComputedStyle(input);
       const ccs = getComputedStyle(cont);
       // the search icon: the wrap's first svg + its RENDERED position
@@ -179,6 +219,7 @@ const runPass = async (page, base) => {
       });
       return {
         toolbar: true,
+        card,
         input: {
           placeholder: input.placeholder,
           h: ics.height,
@@ -301,6 +342,21 @@ for (const p of PAGES) {
   // the container + the selects wrapper + the Filter icon
   for (const k of Object.keys(A.cont)) {
     report(`${p.key}.cont.${k}`, A.cont[k] === (B.cont || {})[k], `${A.cont[k]}`);
+  }
+
+  // WH-47 (F-1): the CARD WRAPPER — the chrome members (tag exempted:
+  // our semantic superset may legitimately differ) + the real-layers
+  // shadow + the rendered row offsets (the padding as GEOMETRY, never
+  // the serialized padding — the lesson-43 form)
+  if (A.card && B.card) {
+    for (const k of ["radius", "bg", "borderWidth", "borderColor", "h", "rowOffsetTop", "rowOffsetLeft"]) {
+      report(`${p.key}.card.${k}`, A.card[k] === B.card[k], `${A.card[k]}`);
+    }
+    const ra = realLayers(A.card.shadow);
+    const rb = realLayers(B.card.shadow);
+    report(`${p.key}.card.shadow`, ra === rb && ra !== "", `real layers [${ra}]`);
+  } else {
+    report(`${p.key}.card.__probe`, false, `ref [${JSON.stringify(A.card)}] vs ours [${JSON.stringify(B.card)}]`);
   }
   if (A.selwrap && B.selwrap) {
     for (const k of Object.keys(A.selwrap)) {

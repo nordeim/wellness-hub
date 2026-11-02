@@ -549,8 +549,19 @@ export const TUTORIAL_CARD = {
  *  icon), and the selects in a `flex items-center gap-2` wrapper LED by
  *  the lucide Filter icon `w-5 h-5 text-gray-400` at FIXED widths
  *  (w-48 the category select / w-40 the pair — fixed at every viewport;
- *  ours shipped w-full-sm: breakpoints with no wrapper and no icon). */
+ *  ours shipped w-full-sm: breakpoints with no wrapper and no icon).
+ *
+ *  WH-47 (F-1): the CARD WRAPPER — the toolbar rides INSIDE the card
+ *  chrome on the reference (decoded live on both consumer pages after
+ *  the sr-page ladder caught a 48px y-offset our interior-anchored
+ *  surfaces read green around): `rounded-xl border bg-card
+ *  text-card-foreground border-none shadow-lg` + `p-6` — the card
+ *  computes h=84 (the 36px flex row + 2×24px padding), radius 12px,
+ *  white bg, shadow-lg. The SECTION_CARD chrome family verbatim (the
+ *  same rendered face); the container is the card's child, never a
+ *  bare page child. */
 export const TOOLBAR = {
+  card: "bg-surface text-ink rounded-xl border-none shadow-lg p-6",
   container: "flex flex-col md:flex-row gap-4",
   searchWrap: "flex-1 relative",
   searchIcon: "absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400",

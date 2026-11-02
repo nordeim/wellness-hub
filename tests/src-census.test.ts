@@ -2297,6 +2297,7 @@ it("WH-24: the module-toolbar + chip-form census — the stock search family + t
   const TB = layoutSrc.match(/export const TOOLBAR = \{([\s\S]*?)\n\} as const;/);
   expect(TB, "the TOOLBAR record must exist in page-layout.ts").toBeTruthy();
   const TB_MEMBERS: [string, string][] = [
+    ["card", "rounded-xl border-none shadow-lg p-6"],
     ["container", "flex flex-col md:flex-row gap-4"],
     ["searchWrap", "flex-1 relative"],
     ["searchIcon", "absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"],
@@ -2309,10 +2310,31 @@ it("WH-24: the module-toolbar + chip-form census — the stock search family + t
       failures.push(`TOOLBAR.${member} must carry the probed form "${expectCls}" (read "${m?.[1] ?? "—"}")`);
     }
   }
+  // (a2) WH-47 (F-1): the toolbar's CARD WRAPPER — the reference wraps
+  // both toolbars in the card chrome (rounded-xl + bg-card +
+  // border-none + shadow-lg + p-6; the card computes h=84 = the 36px
+  // row + 2×24px padding, radius 12px, white bg, shadow-lg — decoded
+  // live on both consumer pages after the sr-page ladder caught the
+  // 48px y-offset). The member must ride the SECTION_CARD chrome
+  // family (the same rendered face), never a hand-rolled string.
+  const SC = layoutSrc.match(/export const SECTION_CARD = \{([\s\S]*?)\n\} as const;/);
+  const scCard = SC?.[1]?.match(/card:\s*"([^"]*)"/)?.[1] ?? "";
+  const tbCard = TB?.[1]?.match(/card:\s*"([^"]*)"/)?.[1] ?? "";
+  if (!scCard || !tbCard.startsWith(scCard)) {
+    failures.push(
+      `TOOLBAR.card must extend SECTION_CARD.card ("${scCard}") — the reference's wrapper is the card chrome family verbatim (read "${tbCard}")`,
+    );
+  }
 
   // (b) the learning page: the Input component + pl-10 + the fixed w-48
   const learnSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/learning/learning-page.tsx"), "utf8"));
   if (!learnSrc.includes("TOOLBAR.")) failures.push("learning-page.tsx must consume the TOOLBAR record");
+  // WH-47 (F-1): the toolbar rides INSIDE the card wrapper — the
+  // container is the card's child, never a bare page child (the
+  // reference's decoded structure: Card > p-6 body > the flex row).
+  if (!/className=\{TOOLBAR\.card\}[\s\S]*className=\{TOOLBAR\.container\}/.test(learnSrc)) {
+    failures.push("the learning toolbar must wrap TOOLBAR.container in TOOLBAR.card (the reference's card chrome — the WH-47 F-1 cure)");
+  }
   if (!/from "@\/components\/ui\/input"/.test(learnSrc)) {
     failures.push("the learning search must ride the Input component (the stock form) — the hand-rolled string retires");
   }
@@ -2327,6 +2349,9 @@ it("WH-24: the module-toolbar + chip-form census — the stock search family + t
   // (c) the studyresources page: the same family (the Filter wrapper + the fixed w-40s)
   const srSrc = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/studyresources/studyresources-page.tsx"), "utf8"));
   if (!srSrc.includes("TOOLBAR.")) failures.push("studyresources-page.tsx must consume the TOOLBAR record");
+  if (!/className=\{TOOLBAR\.card\}[\s\S]*className=\{TOOLBAR\.container\}/.test(srSrc)) {
+    failures.push("the studyresources toolbar must wrap TOOLBAR.container in TOOLBAR.card (the reference's card chrome — the WH-47 F-1 cure)");
+  }
   if (!/Filter/.test(srSrc)) failures.push("the studyresources selects must ride the Filter-icon wrapper (probed: lucide-filter w-5 h-5 text-gray-400 leading the selects row)");
   if (/w-full sm:w-40/.test(srSrc)) {
     failures.push("the studyresources triggers must be FIXED w-40 (the w-full-sm: breakpoint form retires)");

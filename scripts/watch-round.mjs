@@ -119,7 +119,22 @@ const LEDGER = {
   // the move. Re-based ONCE to the round's final read per the
   // doctrine, born-verified on the quiet state: the re-run after this
   // edit reads "assets stable" + the 15/15 digest).
-  jsPath: "/static/index-l0vUUttr.js",
+  // WH-47 re-base (round 36: the TWENTY-FIRST bundle
+  // /static/index-l0vUUttr.js -> /static/index-OLDXOew4.js — the
+  // single-axis move class again; the css axis STABLE at CapATpwD for
+  // the FOURTH consecutive round. The same-run digest read 15/15 MATCH
+  // on the new bundle, and the round's standing battery — the NINTH
+  // full-width run, all TWELVE legs green (login 34/34 + moodForm
+  // 20/20 + shell 61/61 + dashboard 105/105 + headers 192/192 +
+  // toolbars 114/114 — the WH-47-widened card-wrapper members riding
+  // the F-1 cure + kpis 315/315 + routines 697/697 + tutorials 790/790
+  // + profile 433/433 + account 146/146 + authviews 192/192 + the
+  // thirteenth surface listinteriors 88/88 — 3,387 computed members)
+  // — verified the rendered face byte-held through the move. Re-based
+  // ONCE to the round's final read per the doctrine, born-verified on
+  // the quiet state: the re-run after this edit reads "assets stable"
+  // + the 15/15 digest).
+  jsPath: "/static/index-OLDXOew4.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):
