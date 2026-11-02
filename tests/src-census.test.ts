@@ -1967,6 +1967,35 @@ it("WH-23: the card-geometry census — the dashboard + card family rides the re
   if (!/from-green-500 to-emerald-500/.test(assignSrc)) {
     failures.push("assignments-page.tsx must ship the probed green→emerald Completed hero tile");
   }
+  // WH-48 (F-1) — the MH page's "days" sub-line: the reference's OWN
+  // two-site split (the subs-scope probe, decoded live): its dashboard
+  // + goals tile subs all ride text-sm (14px/20px — byte-identical to
+  // our STAT_CARD.sub there), but its MH page's "days" sub rides
+  // text-xs (fs 12px / lh 16px). Ours shipped STAT_CARD.sub (text-sm)
+  // at the MH site — a 4px tile-height drift (132 vs 128) that lowers
+  // the whole Your Journey ladder 4px. The cure is SCOPED to the MH
+  // site (the WH-27 two-site doctrine: never generalize one site's
+  // family to the other).
+  const mhSrc48 = strip(readFileSync(join(REPO_ROOT, "src/app/(app)/mentalhealth/mentalhealth-page.tsx"), "utf8"));
+  if (!/text-xs text-gray-500 dark:text-gray-400/.test(mhSrc48)) {
+    failures.push("mentalhealth-page.tsx: the Current Streak tile's days sub must carry the reference's probed text-xs form (text-xs text-gray-500 dark:text-gray-400 — fs 12px / lh 16px, the WH-48 F-1 cure; STAT_CARD.sub's text-sm 20px line box drifts the tile 4px)");
+  }
+  if (/<p className=\{STAT_CARD\.sub\}>days<\/p>/.test(mhSrc48)) {
+    failures.push("mentalhealth-page.tsx: the days sub must NOT ride STAT_CARD.sub at the MH site (the reference's two-site split — its dashboard/goals subs stay text-sm, its MH days sub is text-xs)");
+  }
+  // WH-48 (F-2) — the journey tile's delete button: the superset's
+  // GEOMETRY is part of the rendered face it lives in (the WH-30
+  // doctrine's own form). The reference's labelRow box is the H4's
+  // text-lg line box (28px); our h-8 (32px) button overrode it — the
+  // labelRow grew to 32px and the whole tile/card +4px. The cure:
+  // h-7 (28px — exactly the reference's line box, WCAG 2.5.8-compliant
+  // at 28px >= the 24px floor). Scoped to the MH site (the decoded
+  // face — the only data-bearing row that renders at the demo state;
+  // the sibling pages' delete buttons stay h-8, documented in the
+  // WH-48 plan's F-2 scope note).
+  if (!/h-7 rounded-md px-2/.test(mhSrc48)) {
+    failures.push("mentalhealth-page.tsx: the journey tile's delete button must ride h-7 (28px — the reference's labelRow line box; h-8's 32px inflates the labelRow/tile/card by 4px each, the WH-48 F-2 cure)");
+  }
 
   // (d) the SECTION_CARD anatomy — the CardHeader/CardContent forms
   const SC = layoutSrc.match(/export const SECTION_CARD = \{([\s\S]*?)\} as const;/);

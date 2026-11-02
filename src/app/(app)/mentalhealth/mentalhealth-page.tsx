@@ -301,7 +301,13 @@ export default function MentalHealthClientPage() {
               <div>
                 <p className={MODULE_KPI.label}>Current Streak</p>
                 <h3 className={MODULE_KPI.value}>{streak}</h3>
-                <p className={STAT_CARD.sub}>days</p>
+                {/* WH-48 (F-1): the reference's days sub rides text-xs
+                    (fs 12px / lh 16px) — its OWN two-site split (its
+                    dashboard/goals subs stay text-sm); our STAT_CARD.sub
+                    (text-sm, 20px line box) drifted the tile 4px and
+                    lowered the whole journey ladder. Scoped to this
+                    site — the dashboard/goals subs keep STAT_CARD.sub. */}
+                <p className="text-xs text-gray-500 dark:text-gray-400">days</p>
               </div>
               <Smile className={cn(MODULE_KPI.bigIcon, "text-yellow-500")} aria-hidden="true" />
             </div>
@@ -334,9 +340,15 @@ export default function MentalHealthClientPage() {
                         <h4 className={MOOD_ENTRY_LIST.label}>{meta.label}</h4>
                         <div className="flex items-center gap-2">
                           <span className={MOOD_ENTRY_LIST.date}>{formatDate(m.date)}</span>
+                          {/* WH-48 (F-2): the delete button's h-7 (28px) =
+                              the reference's labelRow line box (the H4's
+                              text-lg box); h-8's 32px inflated the
+                              labelRow/tile/card by 4px each. The superset
+                              kept — its geometry now FITS the face it
+                              lives in. */}
                           <button
                             type="button"
-                            className={cn(BUTTON_CLASSES, "h-8 rounded-md px-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40")}
+                            className={cn(BUTTON_CLASSES, "h-7 rounded-md px-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40")}
                             onClick={async () => {
                               const res = await deleteMoodEntry(m.id);
                               if (!res.ok) toast.error(res.error);
