@@ -1,11 +1,30 @@
-# docs/screenshots md5 ledger — re-based at WH-52 (2026-11-03), 34 files
+# docs/screenshots md5 ledger — re-based at WH-53 (2026-11-03), 34 files
+#
+# The WH-53 round (the standing audit round — the double-axis asset move
+#   [css DbZzBCYa -> xihcXjhm, the SEVENTH content change + js jFHbfiCi
+#   -> GX9h1ywM, the TWENTY-SEVENTH bundle] carrying ZERO rendered-face
+#   change: the same-run digest 15/15 + the full seventeen-surface
+#   battery 3,555/3,555 live-vs-live): the TWENTY-FOURTH cross-round
+#   byte comparison under the committed procedure — 31/34 byte-stable,
+#   THREE movers ALL root-caused before this re-base (the WH-52
+#   precedent; the same-round computed parity green confirms every other
+#   face held):
+#   10-learning (9 px / 0.0008%, maxdelta 7) + 25-dark-login-focus
+#     (77 px / 0.0067%, maxdelta 5) + 29-quick-actions-hover (5 px /
+#     0.0004%, maxdelta 1) = the standing SUB-VISIBLE RASTERIZATION
+#     signatures (the documented environmental families — the hover
+#     captures and the focus-ring captures are their standing habitat).
+# No date-axis crossing this round (both the WH-52 and WH-53 captures
+#   render the same Nov data faces); no other environmental catches.
+#
+# -- prior re-base (WH-52, 2026-11-03) --------------------------------------
 #
 # The WH-52 round (the semantic-token migration round — the login Google
 #   button's --sem-* family cure + the parity-login hover widening):
 #   the TWENTY-THIRD cross-round byte comparison under the committed
 #   procedure — 29/34 byte-stable, FIVE movers ALL root-caused before
 #   this re-base (the same-round computed parity green — the battery's
-#   SEVENTEEN surfaces at 3,551+4 members, confirms every other face
+#   SEVENTEEN surfaces at 3,555 members, confirms every other face
 #   held):
 #   01-login + 13-mobile-login = THE CURE'S DELIBERATE FACES (the
 #     Google button's re-authored family: at-rest border #e9e6e0 + ink
@@ -53,7 +72,7 @@
 07-events.png 63f6e41213c3a3c0ff7f1b66aa95f659
 08-studyresources.png 66442104ebac81afca43628cb7a5ef53
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
-10-learning.png f5dca8016542c5746860359a3b55d2b5
+10-learning.png dabae56f29c9b90c9e142392bae841c5
 11-goals.png 56a0ae5483cdda64d2168932e8359983
 12-profile.png edb647d4bde50a717af5a88995e1a048
 13-mobile-login.png 597d96eed24ca1c3042beb686c580fb4
@@ -68,11 +87,11 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
+25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
 26-events-inline-form.png 6c762b6ec35285aa23e2dcdab7f99a21
 27-dark-mood-form.png 9f5ed7c954fc0d1070791b8473db8c5e
 28-routines-schedule-modal.png c35cad6f1c2cde945090b8973615075b
-29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
+29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
 30-tutorial-card-hover.png 43e0cf7a48f7117597bd50b2f1f8daaa
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
 32-mentalhealth-form-interior.png 435d9b6f0e9a4f3d67f62d30a6893439

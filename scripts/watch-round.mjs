@@ -89,7 +89,28 @@ const LEDGER = {
   // — 1,522 computed members) — verified the rendered face byte-held
   // through the double-axis move. WH-44: the css axis read STABLE at
   // CapATpwD for the second consecutive round.)
-  cssPath: "/static/index-DbZzBCYa.css",
+  // WH-53 re-base (round 42: a DOUBLE-AXIS move again — the second
+  // consecutive round on both axes): the SEVENTH css CONTENT change in
+  // the watch's history (DbZzBCYa -> xihcXjhm) + the js bundle moving
+  // to the TWENTY-SEVENTH distinct bundle (jFHbfiCi -> GX9h1ywM, read
+  // stable at both the round's first and final reads — no intra-round
+  // move this window). Unlike round 41's css move (which carried the
+  // Google button's --sem-* re-skin), THIS css move carried ZERO
+  // rendered-face change: the same-run digest read 15/15 MATCH and the
+  // round's standing battery — the FIFTEENTH full-width run, all
+  // SEVENTEEN surfaces green (login 38/38 + moodForm 20/20 + shell
+  // 61/61 + dashboard 105/105 + headers 192/192 + toolbars 114/114 +
+  // kpis 315/315 + routines 697/697 + tutorials 790/790 + profile
+  // 433/433 + account 146/146 + authviews 192/192 + listinteriors
+  // 88/88 + moodjourney 116/116 + calendar 92/92 + schedmodal 89/89 +
+  // moodtiles 67/67 — 3,555 computed members) — verified the rendered
+  // face byte-held through the double-axis move. The capture round
+  // (the 24th cross-round byte comparison) corroborated: 31/34
+  // byte-stable, the three movers all the standing sub-visible
+  // rasterization signatures. Re-based ONCE to the round's final read
+  // per the doctrine, born-verified on the quiet state: the re-run
+  // after this edit reads "assets stable" + the 15/15 digest).
+  cssPath: "/static/index-xihcXjhm.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -174,7 +195,7 @@ const LEDGER = {
   // ONCE to the round's final read per the doctrine, born-verified on
   // the quiet state: the re-run after this edit reads "assets stable"
   // + the 15/15 digest).
-  jsPath: "/static/index-jFHbfiCi.js",
+  jsPath: "/static/index-GX9h1ywM.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):
