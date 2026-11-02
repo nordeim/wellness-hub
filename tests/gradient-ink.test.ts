@@ -139,56 +139,81 @@ it("WH-21: the fixed-gradient white-ink table — every pair measured, all AA-fa
   }
 });
 
-it("WH-21: the mood tile's active pair — the reference's own blue→cyan + white ink, pinned AT its documented 2.43:1 (the parity doctrine, NOT a ≥4.5 assertion)", () => {
-  // The reference's own active mood tile (probed live, 2026-10-31): the
-  // FIXED blue→cyan gradient + white ink — its module-pair family, never
-  // the preset-themeable --primary. White on the worst stop (cyan-500)
-  // computes 2.43:1 — an AA failure for 14px text, but byte-identical to
-  // the reference's own selector (the parity doctrine, the preset-axis
-  // precedent): documented + pinned, NOT cured. Deviating would fork our
-  // mood selector's identity from the reference's own. The pin asserts
-  // the pair STAYS the reference's own stops AND the ratio stays pinned
-  // at the documented value — a change to either forces the PAD §11 row
-  // and this pin to move together.
-  // WH-26: the pair moved into the MOOD_FORM record (page-layout.ts) —
-  // the pin reads the RECORD + the page's consumption site (the WH-23
-  // body-slice doctrine). And per the F-1 lesson (a pin asserts the
-  // RENDERED LEAF, never the parent's arm): the active label's own
-  // text-white arm is pinned here too — the WH-21 form asserted the
-  // BUTTON's text-white while the label span's constant gray-700 rode
-  // over it for five rounds (the label is state-conditional since the
-  // WH-26 cure).
+it("WH-21/WH-51: the mood tiles' PER-MOOD active pairs — the reference's own five gradients + white ink, each pinned AT its documented worst-stop ratio (the parity doctrine, NOT a ≥4.5 assertion)", () => {
+  // The reference's active mood tiles carry a DISTINCT gradient pair per
+  // mood (probed live at WH-51 on all five tiles, clicked one at a time,
+  // closed via Cancel — the WH-26/34/50 surfaces had read the
+  // DEFAULT-selected Good tile only, and its blue→cyan pair was
+  // generalized onto all five states through twenty-six green rounds).
+  // White ink on each pair's worst stop (the preset-contrast doctrine):
+  // amazing (green→emerald) 2.28 · good (blue→cyan) 2.43 · okay
+  // (yellow→amber) 1.92 · low (orange→red) 2.80 · struggling (red→pink)
+  // 3.53 — ALL AA failures for 14px text, and every pair byte-identical
+  // to the reference's own selector (the parity doctrine): documented +
+  // pinned, NOT cured. The pin asserts each pair STAYS the reference's
+  // own stops AND each ratio stays pinned at its documented value — a
+  // change to either forces the PAD §11 row and this pin to move
+  // together.
+  // WH-26: the pairs moved into the MOOD_ACTIVE_GRADIENTS record
+  // (page-layout.ts, the ROUTINE_CATEGORY_GRADIENTS precedent) with
+  // MOOD_FORM.active reduced to the shared arms — the pin reads the
+  // RECORD + the page's consumption site (the WH-23 body-slice
+  // doctrine). And per the F-1 lesson (a pin asserts the RENDERED LEAF,
+  // never the parent's arm): the active label's own text-white arm is
+  // pinned here too — the WH-21 form asserted the BUTTON's text-white
+  // while the label span's constant gray-700 rode over it for five
+  // rounds (the label is state-conditional since the WH-26 cure).
   const layout = readFileSync(join(import.meta.dirname, "..", "src", "lib", "page-layout.ts"), "utf8");
   const page = readFileSync(join(import.meta.dirname, "..", "src", "app", "(app)", "mentalhealth", "mentalhealth-page.tsx"), "utf8");
   const mfBlock = layout.match(/export const MOOD_FORM = \{([\s\S]*?)\n\} as const;/);
   const mfActive = mfBlock?.[1]?.match(/active:\s*"([^"]*)"/)?.[1] ?? "";
   const mfLabelActive = mfBlock?.[1]?.match(/labelActive:\s*"([^"]*)"/)?.[1] ?? "";
-  const active = mfActive.match(/bg-gradient-to-br from-([a-z]+-\d+) to-([a-z]+-\d+) text-white/);
   expect(
-    active,
-    "the mood tile's active state must ride the reference's fixed gradient pair + white ink (from-blue-500 to-cyan-500 text-white — the module-pair family, never the preset-themeable primary)",
-  ).toBeTruthy();
+    /from-[a-z]+-\d+|to-[a-z]+-\d+/.test(mfActive),
+    "MOOD_FORM.active must carry the SHARED arms alone (text-white border-transparent shadow-lg scale-105) — the per-mood pairs live in MOOD_ACTIVE_GRADIENTS (the WH-51 F-1 cure)",
+  ).toBe(false);
   expect(
     mfLabelActive.includes("text-white"),
     "the active tile's RENDERED label must carry its own text-white arm (the F-1 lesson: the button's arm never reaches the label span — the constant gray-700 label rendered GRAY on the gradient through five green rounds)",
   ).toBe(true);
   expect(
-    page.includes("MOOD_FORM.labelActive : MOOD_FORM.labelInactive"),
-    "the page must consume the label's STATE-CONDITIONAL pair (the record + the consumption site — the body-slice doctrine)",
+    page.includes("cn(MOOD_FORM.active, MOOD_ACTIVE_GRADIENTS[m.value])"),
+    "the page must compose the active tile's class from the SHARED arms + the per-mood pair (the record + the consumption site — the body-slice doctrine)",
   ).toBe(true);
-  const r = worstStopRatio(v3(active![1]!, "the mood tile's from-stop"), v3(active![2]!, "the mood tile's to-stop"));
-  expect(
-    Math.abs(r - 2.43),
-    `white on the tile's worst stop must stay pinned at the documented 2.43:1 (measured ${r.toFixed(2)}:1) — the reference's own AA-failing form, mirrored per the parity doctrine`,
-  ).toBeLessThan(0.005);
-
-  // The lockstep: the PAD row must carry the mood tile's number.
+  const magBlock = layout.match(/export const MOOD_ACTIVE_GRADIENTS[^=]*=\s*\{([\s\S]*?)\n\};/);
+  expect(magBlock, "the MOOD_ACTIVE_GRADIENTS record must exist in page-layout.ts").toBeTruthy();
+  const MOOD_RATIOS: [string, string, string, number][] = [
+    ["amazing", "green-500", "emerald-500", 2.28],
+    ["good", "blue-500", "cyan-500", 2.43],
+    ["okay", "yellow-500", "amber-500", 1.92],
+    ["low", "orange-500", "red-500", 2.80],
+    ["struggling", "red-500", "pink-500", 3.53],
+  ];
   const pad = readFileSync(join(import.meta.dirname, "..", "Project_Architecture_Document.md"), "utf8");
   const row = pad.split("\n").find((l) => l.includes("Fixed-gradient white-ink contrast"));
-  expect(row, "the PAD §11 ledger must carry the fixed-gradient white-ink row (the mood tile rides the family row)").toBeTruthy();
+  expect(row, "the PAD §11 ledger must carry the fixed-gradient white-ink row (the mood tiles ride the family row)").toBeTruthy();
+  for (const [value, from, to, expected] of MOOD_RATIOS) {
+    const cls = magBlock?.[1]?.match(new RegExp(`${value}:\\s*"([^"]*)"`))?.[1] ?? "";
+    const g = cls.match(/bg-gradient-to-br from-([a-z]+-\d+) to-([a-z]+-\d+)/);
+    expect(
+      g,
+      `MOOD_ACTIVE_GRADIENTS.${value} must ride the reference's fixed pair (bg-gradient-to-br from-${from} to-${to} — the module-pair family, never the preset-themeable primary)`,
+    ).toBeTruthy();
+    expect(g![1], `the ${value} pair's from-stop must be ${from}`).toBe(from);
+    expect(g![2], `the ${value} pair's to-stop must be ${to}`).toBe(to);
+    const r = worstStopRatio(v3(g![1]!, `the ${value} tile's from-stop`), v3(g![2]!, `the ${value} tile's to-stop`));
+    expect(
+      Math.abs(r - expected),
+      `white on the ${value} tile's worst stop must stay pinned at the documented ${expected}:1 (measured ${r.toFixed(2)}:1) — the reference's own AA-failing form, mirrored per the parity doctrine`,
+    ).toBeLessThan(0.005);
+    expect(
+      row!.includes(`${value} ${expected.toFixed(2)}`),
+      `the PAD row must carry the ${value} tile's measured pair+ratio ADJACENT ("${value} ${expected.toFixed(2)}") — the ledger carries the full table, not a summary (the bare number alone is not a lockstep: 2.80/1.92/3.53 already name other pairs)`,
+    ).toBe(true);
+  }
   expect(
-    row!.includes("mood tile") && row!.includes("2.43"),
-    "the PAD row must name the mood tile and carry its measured 2.43",
+    row!.includes("mood tiles"),
+    "the PAD row must name the mood tiles' per-mood family (WH-51: the five-state selector's own pairs)",
   ).toBe(true);
 });
 

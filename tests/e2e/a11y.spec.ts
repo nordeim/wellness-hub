@@ -1002,7 +1002,10 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
 
   test("(f) the dark mood tiles — the active tile's scale property + gradient, the inactive border the pinned neutral-700", async ({ page }) => {
     // F-3's live leg (the WH-21 cure): the reference's mood selector is a
-    // block-stacked tile grid with the FIXED blue→cyan active pair — in
+    // block-stacked tile grid whose active state carries a PER-MOOD
+    // gradient pair (WH-51: the five-state selector's own five pairs; this
+    // leg reads the DEFAULT-selected Good tile, whose blue→cyan pair the
+    // standing surfaces already pin) — in
     // dark, the active tile's lift rides Tailwind v4's `scale` PROPERTY
     // (scale-105 compiles to `scale: 1.05`, NOT transform — the reference's
     // own matrix(1.05) is its v3-era pipeline), and the inactive border is

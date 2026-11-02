@@ -134,7 +134,25 @@ const LEDGER = {
   // ONCE to the round's final read per the doctrine, born-verified on
   // the quiet state: the re-run after this edit reads "assets stable"
   // + the 15/15 digest).
-  jsPath: "/static/index-OLDXOew4.js",
+  // WH-51 re-base (round 40: a MULTI-move round on the js axis — the
+  // reference cycled THREE bundles inside the round's window
+  // (OLDXOew4 -> CnKzudiR -> DktuqXUx -> CEYMtRjl, the TWENTY-FOURTH
+  // distinct bundle at the re-execution's final read — the
+  // active-development cadence at its fastest; the css axis STABLE at
+  // CapATpwD through every move, the SIXTH consecutive round). The
+  // same-run digest read 15/15 MATCH on EVERY new bundle, and the
+  // round's standing battery — the THIRTEENTH full-width run, all
+  // SEVENTEEN surfaces green (login 34/34 + moodForm 20/20 + shell
+  // 61/61 + dashboard 105/105 + headers 192/192 + toolbars 114/114 +
+  // kpis 315/315 + routines 697/697 + tutorials 790/790 + profile
+  // 433/433 + account 146/146 + authviews 192/192 + listinteriors
+  // 88/88 + moodjourney 116/116 + calendar 92/92 + schedmodal 89/89 +
+  // the SEVENTEENTH surface moodtiles 67/67 — 3,551 computed members)
+  // — verified the rendered face byte-held through the moves. Re-based
+  // ONCE to the re-execution's final read per the doctrine,
+  // born-verified on the quiet state: the re-run after this edit
+  // reads "assets stable" + the 15/15 digest).
+  jsPath: "/static/index-CEYMtRjl.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):

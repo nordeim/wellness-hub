@@ -13,7 +13,7 @@ import {
 } from "@/components/shared/page-parts";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD, TEXTAREA_FIELD, MOOD_FORM, FORM_BUTTONS, TAG_CHIP, MOOD_ENTRY_LIST } from "@/lib/page-layout";
+import { PAGE_THEMES, PAGE_KPI_GRIDS, STAT_CARD, MODULE_KPI, DIALOG_GROUP, BUTTON_CLASSES, FORM_CARD, TEXTAREA_FIELD, MOOD_FORM, MOOD_ACTIVE_GRADIENTS, FORM_BUTTONS, TAG_CHIP, MOOD_ENTRY_LIST } from "@/lib/page-layout";
 import { MOODS, moodMeta } from "@/lib/constants";
 import { averageEnergy, displayStreak, normalizeTags, parseJsonArray } from "@/lib/wellness";
 import { formatDate } from "@/lib/format";
@@ -144,7 +144,13 @@ export default function MentalHealthClientPage() {
                       aria-pressed={mood === m.value}
                       className={cn(
                         MOOD_FORM.tile,
-                        mood === m.value ? MOOD_FORM.active : MOOD_FORM.inactive,
+                        // WH-51 (F-1): the PER-MOOD active pair composes in
+                        // from MOOD_ACTIVE_GRADIENTS — the reference's
+                        // five-state selector (the standing surfaces had read
+                        // the DEFAULT-selected Good tile only)
+                        mood === m.value
+                          ? cn(MOOD_FORM.active, MOOD_ACTIVE_GRADIENTS[m.value])
+                          : MOOD_FORM.inactive,
                       )}
                     >
                       <span aria-hidden="true" className={cn("block", MOOD_FORM.icon)}>

@@ -244,7 +244,7 @@ it("WH-21 F-3: the mood selector rides the reference's block-stacked tile anatom
   const layoutSrc = readFileSync(join(import.meta.dirname, "..", "src", "lib", "page-layout.ts"), "utf8");
   const ANATOMY: [string, string][] = [
     ["p-4 rounded-2xl border-2 transition-all text-center", "the tile's own geometry (the reference's block-stacked tile, not a pill)"],
-    ["bg-gradient-to-br from-blue-500 to-cyan-500 text-white border-transparent shadow-lg scale-105", "the active tile (the reference's FIXED module pair + white ink — never the preset-themeable primary)"],
+    ["text-white border-transparent shadow-lg scale-105", "the active tile's SHARED arms (the pair moved to MOOD_ACTIVE_GRADIENTS at WH-51 — the per-mood family: amazing green→emerald, good blue→cyan, okay yellow→amber, low orange→red, struggling red→pink)"],
     ["border-gray-200 hover:border-gray-300 dark:border-neutral-700 dark:hover:border-neutral-600", "the inactive tile (the reference's faint gray arms + our dark twins)"],
     ["grid grid-cols-2 md:grid-cols-5 gap-3", "the tile grid (the reference's 2-col mobile / 5-col desktop form)"],
     ["text-4xl mb-2", "the emoji glyph (36px, block-stacked)"],
@@ -256,12 +256,29 @@ it("WH-21 F-3: the mood selector rides the reference's block-stacked tile anatom
     missing,
     "the mood selector must ride the reference's tile anatomy — every decoded member present in the MOOD_FORM record (the WH-21 F-3 cure; the 40px pill form was both an AA failure and the wrong theming model)",
   ).toEqual([]);
+  // WH-51 (F-1): the PER-MOOD active pairs — the five-state selector's own
+  // gradients (probed live on all five tiles; the standing pins had read
+  // the DEFAULT-selected Good tile only).
+  const mag = layoutSrc.match(/export const MOOD_ACTIVE_GRADIENTS[^=]*=\s*\{([\s\S]*?)\n\};/);
+  expect(mag, "the MOOD_ACTIVE_GRADIENTS record must exist in page-layout.ts (the WH-51 F-1 cure)").toBeTruthy();
+  for (const [value, pair] of [
+    ["amazing", "from-green-500 to-emerald-500"],
+    ["good", "from-blue-500 to-cyan-500"],
+    ["okay", "from-yellow-500 to-amber-500"],
+    ["low", "from-orange-500 to-red-500"],
+    ["struggling", "from-red-500 to-pink-500"],
+  ] as [string, string][]) {
+    expect(
+      mag?.[1]?.match(new RegExp(`${value}:\\s*"([^"]*)"`))?.[1]?.includes(`bg-gradient-to-br ${pair}`),
+      `MOOD_ACTIVE_GRADIENTS.${value} must carry the reference's decoded pair (bg-gradient-to-br ${pair})`,
+    ).toBe(true);
+  }
   // The page must consume the record's members (the record + the
   // consumption site — the WH-25 census doctrine: a class that lives in
   // the record but is never consumed is a dead arm).
   expect(
-    pageSrc.includes("MOOD_FORM.tile") && pageSrc.includes("MOOD_FORM.active : MOOD_FORM.inactive") && pageSrc.includes("MOOD_FORM.labelActive : MOOD_FORM.labelInactive"),
-    "the page must consume the MOOD_FORM record's tile/active/inactive/label members (the record + the consumption site)",
+    pageSrc.includes("MOOD_FORM.tile") && pageSrc.includes("cn(MOOD_FORM.active, MOOD_ACTIVE_GRADIENTS[m.value])") && pageSrc.includes("MOOD_FORM.inactive") && pageSrc.includes("MOOD_FORM.labelActive : MOOD_FORM.labelInactive"),
+    "the page must consume the MOOD_FORM record's tile/active+per-mood-pair/inactive/label members (the record + the consumption site)",
   ).toBe(true);
   // The old pill form must be gone.
   expect(pageSrc.includes("rounded-full border px-4"), "the old 40px rounded-full pill form must be retired (the reference ships tiles)").toBe(false);

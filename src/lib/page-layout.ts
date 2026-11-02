@@ -743,11 +743,32 @@ export const SR_CHIP = {
  *  5) with the Low/High row `flex justify-between text-xs text-gray-500
  *  mt-1`, and the Daily Reflection textarea at h-24 (96px — the
  *  gratitude field keeps the 60px stock form). */
+/** WH-51 (F-1): the mood tiles' PER-MOOD active gradients — the
+ *  reference's five-state selector decodes to a DISTINCT pair per mood
+ *  (probed live on all five tiles, clicked one at a time, closed via
+ *  Cancel; the standing surfaces read the DEFAULT-selected Good tile
+ *  only, and its blue→cyan pair rode all five states through
+ *  twenty-six green rounds). The ROUTINE_CATEGORY_GRADIENTS precedent:
+ *  value → fixed pair, never the preset-themeable --primary. All eight
+ *  stops carry their @theme v3 pins; the white-ink ratios are pinned in
+ *  tests/gradient-ink.test.ts (all AA-failing, reference-shared —
+ *  documented in PAD §11, not cured). */
+export const MOOD_ACTIVE_GRADIENTS: Record<string, string> = {
+  amazing: "bg-gradient-to-br from-green-500 to-emerald-500",
+  good: "bg-gradient-to-br from-blue-500 to-cyan-500",
+  okay: "bg-gradient-to-br from-yellow-500 to-amber-500",
+  low: "bg-gradient-to-br from-orange-500 to-red-500",
+  struggling: "bg-gradient-to-br from-red-500 to-pink-500",
+};
+
 export const MOOD_FORM = {
   label: "mb-4 block",
   grid: "grid grid-cols-2 md:grid-cols-5 gap-3",
   tile: "p-4 rounded-2xl border-2 transition-all text-center",
-  active: "bg-gradient-to-br from-blue-500 to-cyan-500 text-white border-transparent shadow-lg scale-105",
+  // WH-51 (F-1): the SHARED active arms alone — the per-mood gradient
+  // pair composes in from MOOD_ACTIVE_GRADIENTS (the record + the
+  // consumption site, the ROUTINE_CATEGORY_GRADIENTS precedent)
+  active: "text-white border-transparent shadow-lg scale-105",
   inactive: "border-gray-200 hover:border-gray-300 dark:border-neutral-700 dark:hover:border-neutral-600",
   icon: "text-4xl mb-2",
   labelActive: "text-sm font-medium text-white",

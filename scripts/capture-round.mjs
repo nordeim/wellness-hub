@@ -202,6 +202,13 @@ console.log("capture-24 write: the workout (stays through 29/30)");
 
 // 24 — dark exercise rows (context B is still dark)
 await pageB.goto(`${BASE}/Exercise`);
+// WH-51: wait for the JUST-WRITTEN row before snapping — the fixed 400ms
+// snap wait races the dev server's on-demand route compile after a
+// restart (this round's first run captured the zero-row state and fired
+// a false mover; the re-run read byte-stable). The row-only duration
+// text ("30 min" renders nowhere else on the page) is the deterministic
+// signal regardless of the compile state.
+await pageB.waitForSelector("text=30 min", { timeout: 8000 });
 await snap(pageB, "24-dark-exercise-rows");
 
 // the light flip back — 29/30 are LIGHT captures (this round's fix)

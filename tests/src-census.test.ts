@@ -2911,6 +2911,39 @@ it("WH-26: the form-interior census — the mood form's own family + the shared 
   if (!/mood === m\.value \? MOOD_FORM\.labelActive : MOOD_FORM\.labelInactive|labelActive : .*labelInactive/.test(mhSrc)) {
     failures.push("the mood tile's label class must be STATE-CONDITIONAL — the constant text-gray-700 label rendered GRAY on the blue gradient (the F-1 bug: the WH-21 pin asserted the button's arm, never the rendered label span)");
   }
+  // (c2) WH-51 (F-1): the PER-MOOD active gradients — the reference's
+  // five-state selector decodes to a DISTINCT pair per mood (probed live
+  // on all five tiles, clicked one at a time, closed via Cancel): the
+  // standing surfaces read the DEFAULT-selected Good tile only, so four
+  // of the five states shipped the wrong pair through twenty-six green
+  // rounds. The pairs live in MOOD_ACTIVE_GRADIENTS (the
+  // ROUTINE_CATEGORY_GRADIENTS precedent — value → fixed pair); the
+  // MOOD_FORM.active member carries the SHARED arms alone.
+  const MAG = layoutSrc.match(/export const MOOD_ACTIVE_GRADIENTS[^=]*=\s*\{([\s\S]*?)\n\};/);
+  if (!MAG) {
+    failures.push("the MOOD_ACTIVE_GRADIENTS record must exist in page-layout.ts (the WH-51 F-1 cure — the per-mood active pairs)");
+  } else {
+    const MOOD_PAIRS: [string, string][] = [
+      ["amazing", "from-green-500 to-emerald-500"],
+      ["good", "from-blue-500 to-cyan-500"],
+      ["okay", "from-yellow-500 to-amber-500"],
+      ["low", "from-orange-500 to-red-500"],
+      ["struggling", "from-red-500 to-pink-500"],
+    ];
+    for (const [value, pair] of MOOD_PAIRS) {
+      const pm = MAG[1]!.match(new RegExp(`${value}:\\s*"([^"]*)"`));
+      if (!pm || !pm[1]!.includes("bg-gradient-to-br") || !pm[1]!.includes(pair)) {
+        failures.push(`MOOD_ACTIVE_GRADIENTS.${value} must carry the reference's decoded pair (bg-gradient-to-br ${pair}) — read "${pm?.[1] ?? "—"}"`);
+      }
+    }
+  }
+  const mfActivePair = MF![1]!.match(/active:\s*"([^"]*)"/)?.[1] ?? "";
+  if (/from-[a-z]+-\d+|to-[a-z]+-\d+/.test(mfActivePair)) {
+    failures.push(`MOOD_FORM.active must carry the SHARED arms alone (text-white border-transparent shadow-lg scale-105) — the per-mood pair moved to MOOD_ACTIVE_GRADIENTS (read "${mfActivePair}")`);
+  }
+  if (!/MOOD_ACTIVE_GRADIENTS\[m\.value\]/.test(mhSrc)) {
+    failures.push("the page must compose the active tile as cn(MOOD_FORM.active, MOOD_ACTIVE_GRADIENTS[m.value]) — the per-mood pair's consumption site");
+  }
   // (d) the energy slider: the probed track + min=1 + the accent retirement
   const mfRange = MF![1].match(/range:\s*"([^"]*)"/)?.[1] ?? "";
   if (!mfRange.includes("h-2") || !mfRange.includes("bg-gray-200") || !mfRange.includes("appearance-none")) {
