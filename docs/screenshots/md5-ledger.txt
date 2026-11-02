@@ -1,36 +1,32 @@
-# docs/screenshots md5 ledger — re-based at WH-44 (2026-11-02), 34 files
+# docs/screenshots md5 ledger — re-based at WH-46 (2026-11-02), 34 files
 
-# The WH-44 round (the tenth parity surface round — the reference's
-# re-authored preset catalog cured + the four Profile face cures): the
-# FIFTEENTH cross-round byte comparison under the committed procedure —
-# 30/34 byte-stable, FOUR movers root-caused BEFORE this re-base:
-#   12-profile (11.902% of sampled px, maxdelta 247) + 31-profile-
-#     preferences (0.828%, maxdelta 154, first diff in the save-bar
-#     zone) = the DELIBERATE our-side face changes (the WH-44 F-1
-#     catalog cure re-authored 7 of the 8 preset pairs' swatches, and
-#     the F-3..F-6 cures changed the mode-card ink, the preset labels'
-#     block heights, the color inputs' radius and the save button's
-#     icon-less width — the Preferences capture carries the save bar);
-#   10-learning (0.001%, maxdelta 5) = the sub-visible rasterization
-#     family's newest member (the WH-43 29-hover class);
-#   25-dark-login-focus (0.007%, maxdelta 4) = the standing signature
-#     (the FIFTH consecutive round in the same family at the identical
-#     magnitude).
-# All 34 captures health-checked (29 desktop 1280x900 + 5 mobile
-# 390x844); the ledger re-based on the four new hashes; census MATCH
-# after the re-seed.
-# The WH-45 round (the eleventh parity surface round — the Account +
-# Preferences tabs, born-quiet; no src face change): the SIXTEENTH
-# cross-round byte comparison under the committed procedure — 33/34
-# byte-stable, ONE mover root-caused BEFORE this re-base:
-# 29-quick-actions-hover (5 px of 1,152,000 = 0.0004%, maxdelta 1, a
-# 6x6 region at the hover-scale icon's edge) = the sub-visible
-# rasterization standing signature (the WH-43 instance's identical
-# stats — 5px/maxdelta 1 at the same capture; the family's sixth
-# documented round). The computed parity green same-round (the
-# dashboard surface 105/105 + the watch digest 15/15) confirms the
-# rendered face held; the ledger re-based on the one new hash; census
-# MATCH after the re-seed.
+# The WH-46 round (the twelfth parity surface round — the login family's
+# forgot/sent/signup views, born-quiet): the SEVENTEENTH cross-round byte
+# comparison under the committed procedure — 27/34 byte-stable, SEVEN
+# movers ALL root-caused as ENVIRONMENTAL before this re-base (zero src
+# face change; the same-round computed parity green — the battery's
+# ELEVEN legs at 2,891 members + the watch digest 15/15 + the twelfth
+# surface's 192/192 — confirms the rendered face held):
+#   07-events (1.2757% of sampled px, maxdelta 124) + 26-events-inline-
+#     form (1.2792%, maxdelta 220) + 28-routines-schedule-modal's date
+#     band = the DATE AXIS — the UTC midnight crossed between the WH-45
+#     captures (Nov 1 23:5x UTC) and this round's (Nov 2): the events
+#     calendar's TODAY cell moved Nov 1 -> Nov 2 and every date default
+#     (the events form, the Schedule modal) rolled to 2026-11-02.
+#     Environmental by definition — the calendar renders today.
+#   27-dark-mood-form (10 sampled px, maxdelta 208) + 32-mentalhealth-
+#     form-interior (10 px, maxdelta 220) + 28's second region = the
+#     CARET-BLINK AXIS — the open forms' focused inputs carry blinking
+#     carets at (360,856)/(378,826); the capture timing caught different
+#     blink phases (the ~2px caret line appearing/disappearing — a
+#     nondeterministic capture-timing class, first documented here).
+#   25-dark-login-focus (20 px, maxdelta 4) = the standing signature
+#     VERBATIM (the neutral-edge phase shift in the input band — the
+#     fifth consecutive round); 29-quick-actions-hover (0 sampled px at
+#     2x sampling, byte-level only) = the standing rasterization
+#     signature's quietest form (the WH-43/45 5px/maxdelta-1 family).
+# No src face change this round (the count ladder flat at 375; the
+# round's code artifact is the parity script itself).
 
 01-login.png 0eb839b6997d2d0fb14ea1834f39bff8
 02-dashboard.png d9754490ed784a32688fcb6e0ba4ae9f
@@ -38,7 +34,7 @@
 04-exercise.png 8b8f3d2e1f4732384227794e2892bfa6
 05-mentalhealth.png 0de7e1d727c53703c302fc3c3fa10c52
 06-assignments.png 89a258070de2916fc4f00ca5eed6cb07
-07-events.png e6cc18e1f31c15e24d5e299e32cec187
+07-events.png 63f6e41213c3a3c0ff7f1b66aa95f659
 08-studyresources.png ddc38c2096b0868b7ba7203bb627aecd
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
 10-learning.png 82346c9dc003975fc8e31fd85394de9a
@@ -56,13 +52,13 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
-26-events-inline-form.png 6fee97e127497ef798f23be47967a28f
-27-dark-mood-form.png fedd2292bdac01420655969bcf6a7999
-28-routines-schedule-modal.png 0eb6d158a83917feeaee801d540ae1da
-29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
+25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
+26-events-inline-form.png 6c762b6ec35285aa23e2dcdab7f99a21
+27-dark-mood-form.png d839162031d8f6ea3317aa55235bc0fe
+28-routines-schedule-modal.png 8779cbfc8e467db3784ce47835e7f3c6
+29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
 30-tutorial-card-hover.png 02c457e32bc267e8073bbc4da48f27cd
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
-32-mentalhealth-form-interior.png 3edc7f80aa75b05a35051b273a06d4dd
+32-mentalhealth-form-interior.png 8efa6ce8d975483f92fe6ee86279ad40
 33-sr-form-interior.png 4485faec00fbf04f37ffda19916e2919
 34-mood-list-interior.png 00c9dfdef6d9eccd895c31969e6850ad
