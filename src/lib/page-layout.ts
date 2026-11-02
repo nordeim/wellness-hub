@@ -804,6 +804,16 @@ export const SCHEDULE_MODAL = {
   tile: "bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg dark:from-neutral-800/60 dark:to-neutral-900/60",
   tileDesc: "text-sm text-gray-700 mb-3 dark:text-gray-400",
   remember: "bg-white/80 p-3 rounded-lg dark:bg-neutral-800",
+  // WH-50 (F-1): the inset's INTERIOR — the reference's two-p text-xs
+  // family, decoded live (the label 12px/600 purple-700 mb-1 + the body
+  // 12px gray-700 = 76px; the raw 16px text node the WH-22 record
+  // shipped rendered 96px and shifted the whole ladder below by Δ20)
+  rememberLabel: "text-xs font-semibold text-purple-700 mb-1 dark:text-purple-400",
+  rememberBody: "text-xs text-gray-700 dark:text-gray-400",
+  // WH-50 (F-1b): the modal's field gap — the reference's Schedule modal
+  // fields ride mt-1 (4px, decoded live); the sibling inline forms keep
+  // their mt-2 (their captures byte-stable)
+  field: "mt-1",
   stepsLabel: "font-semibold mb-3",
   stepsList: "space-y-2",
   stepTile: "flex items-start gap-3 p-3 bg-gray-50 rounded-lg dark:bg-neutral-800/60",

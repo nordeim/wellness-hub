@@ -1,34 +1,28 @@
-# docs/screenshots md5 ledger — re-based at WH-48 (2026-11-02), 34 files
-
-# The WH-48 round (the fourteenth parity surface round — the MH page's
-# days-sub + delete-button Δ4 stack cured + the mood-journey surface
-# born): the NINETEENTH cross-round byte comparison under the committed
-# procedure — 29/34 byte-stable, FIVE movers ALL root-caused before this
-# re-base (the WH-44/47 precedent; the same-round computed parity green —
-# the battery's THIRTEEN legs + the fourteenth surface at 3,303 members,
-# incl. parity-moodform 20/20 + parity-moodjourney 116/116, confirms
-# every other face held):
-#   05-mentalhealth + 34-mood-list-interior = the WH-48 CURES' PRIMARY
-#     FACES — the changed band starts exactly at row 136 (the KPI grid's
-#     y): the days sub-line's 4px (text-xs now) shortens the KPI row and
-#     lifts the whole journey ladder 4px; the delete button's h-7 (28px)
-#     restores the reference's 28px labelRow line box. Both deliberate
-#     our-side face changes (80,310 px / 6.97% and 97,922 px / 8.50%,
-#     maxdelta 247 — the ladder shift rewrites whole rows).
-#   27-dark-mood-form (7,045 px / 0.61%, maxdelta 1, rows 7-899) +
-#     32-mentalhealth-form-interior (9,728 px / 0.84%, maxdelta 1) = the
-#     SUB-VISIBLE RASTERIZATION signature (the standing 29-quick-actions-
-#     hover family, the WH-43 instance's class — maxdelta 1 excludes the
-#     caret-blink axis [a visible caret would read maxdelta ~200]; the
-#     form interiors themselves are byte-pinned by parity-moodform 20/20
-#     + the form-interior census this round).
-#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, rows 562-682) =
-#     the standing dark-login-focus signature (the neutral-edge phase
-#     shift in the input band — the sixth consecutive round; the WH-46
-#     instance read 20 px/maxdelta 4).
-# No date-axis crossing this round (both the WH-47 and WH-48 captures
-# render Nov 2); no other environmental catches.
-
+# docs/screenshots md5 ledger — re-based at WH-50 (2026-11-02), 34 files
+#
+# The WH-50 round (the sixteenth parity surface round — the Schedule
+#   modal's Remember inset + field-gap cures + the parity-schedmodal
+#   surface born): the TWENTY-FIRST cross-round byte comparison under
+#   the committed procedure — 32/34 byte-stable, TWO movers ALL
+#   root-caused before this re-base (the WH-44/47/48 precedent; the
+#   same-round computed parity green — the battery's FIFTEEN legs + the
+#   sixteenth surface at 3,484 members, confirms every other face held):
+#   28-routines-schedule-modal = THE CURES' PRIMARY FACE (the F-1
+#     two-p Remember re-author [96px -> 76px] + the F-1b field-gap
+#     mt-2 -> mt-1 [Δ4 x 3 down the ladder] — the modal's whole content
+#     below the description tile shifted; parity-schedmodal 89/89 pins
+#     the cured face byte-identical to the reference's live read).
+#   29-quick-actions-hover (5 px / 0.0004%, maxdelta 1, y 326-330
+#     x 503-507) = the STANDING sub-visible rasterization signature
+#     (the WH-48 ledger's own family — byte-level only at 1x sampling;
+#     the hover-icon region's anti-aliasing variance, environmental).
+# No date-axis crossing this round (both the WH-49 and WH-50 captures
+#   render Nov 2); no other environmental catches.
+#
+# Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31,
+# WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
+# WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49.
+#
 01-login.png 0eb839b6997d2d0fb14ea1834f39bff8
 02-dashboard.png d9754490ed784a32688fcb6e0ba4ae9f
 03-routines.png 018a40ef34de3c99bc5c7ac7bc167445
@@ -56,8 +50,8 @@
 25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
 26-events-inline-form.png 6c762b6ec35285aa23e2dcdab7f99a21
 27-dark-mood-form.png 9f5ed7c954fc0d1070791b8473db8c5e
-28-routines-schedule-modal.png 8779cbfc8e467db3784ce47835e7f3c6
-29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
+28-routines-schedule-modal.png c35cad6f1c2cde945090b8973615075b
+29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
 30-tutorial-card-hover.png 69a0cee125cded7d042b51bb3ace6218
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
 32-mentalhealth-form-interior.png 435d9b6f0e9a4f3d67f62d30a6893439

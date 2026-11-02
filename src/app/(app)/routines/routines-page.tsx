@@ -301,7 +301,8 @@ export default function RoutinesClientPage() {
                   <p className={SCHEDULE_MODAL.tileDesc}>{scheduling.description}</p>
                   {scheduling.tipsForProcrastinators && (
                     <div className={SCHEDULE_MODAL.remember}>
-                      💪 Remember: {scheduling.tipsForProcrastinators}
+                      <p className={SCHEDULE_MODAL.rememberLabel}>💪 Remember:</p>
+                      <p className={SCHEDULE_MODAL.rememberBody}>{scheduling.tipsForProcrastinators}</p>
                     </div>
                   )}
                 </div>
@@ -326,7 +327,7 @@ export default function RoutinesClientPage() {
                     <Input
                       id="routine-date"
                       type="date"
-                      className="mt-2"
+                      className={SCHEDULE_MODAL.field}
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
                     />
@@ -336,7 +337,7 @@ export default function RoutinesClientPage() {
                     <Input
                       id="routine-time"
                       type="time"
-                      className="mt-2"
+                      className={SCHEDULE_MODAL.field}
                       value={time}
                       onChange={(e) => setTime(e.target.value)}
                     />
@@ -345,7 +346,7 @@ export default function RoutinesClientPage() {
                     <Label htmlFor="routine-notes">Personal Notes (Optional)</Label>
                     <textarea
                       id="routine-notes"
-                      className={TEXTAREA_FIELD}
+                      className={cn(TEXTAREA_FIELD, SCHEDULE_MODAL.field)}
                       placeholder="Any modifications or reminders for yourself?"
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}

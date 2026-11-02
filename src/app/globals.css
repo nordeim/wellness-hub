@@ -269,6 +269,11 @@
   --color-purple-100: #f3e8ff;
   --color-purple-500: #a855f7;
   --color-purple-600: #9333ea;
+  /* WH-50 (F-1): re-pinned with the Schedule modal's Remember-label dark
+     twin (dark:text-purple-400) — the WH-14 pins⇔usage equivalence; the
+     pin retired with the stat-card bar maps, the new usage brings it
+     back at its v3 value. */
+  --color-purple-400: #c084fc;
   --color-red-50: #fef2f2;
   --color-red-100: #fee2e2;
   --color-red-200: #fecaca;

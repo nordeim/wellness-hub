@@ -1801,6 +1801,20 @@ it("WH-22: the schedule-modal census — the Routines Schedule modal rides the r
     ["tile", "bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg"],
     ["tileDesc", "text-sm text-gray-700 mb-3"],
     ["remember", "bg-white/80 p-3 rounded-lg"],
+    // WH-50 (F-1): the Remember inset's INTERIOR — the reference's two-p
+    // text-xs family (decoded live: the label 12px/600 purple-700 mb-1 +
+    // the body 12px gray-700 — 76px total; the raw 16px text node the
+    // WH-22 record shipped renders 96px and shifts the whole ladder
+    // below by Δ20)
+    ["rememberLabel", "text-xs font-semibold text-purple-700 mb-1"],
+    ["rememberBody", "text-xs text-gray-700"],
+    // WH-50 (F-1b): the modal's field gap — the reference's Schedule
+    // modal fields ride mt-1 (4px, decoded live: date/time inputs +
+    // textarea all compute marginTop 4px); the mt-2 the WH-22 record
+    // generalized from the sibling forms renders 8px and stacks Δ4 per
+    // field down the ladder (the sibling inline forms keep mt-2 — their
+    // captures byte-stable)
+    ["field", "mt-1"],
     ["stepsLabel", "font-semibold mb-3"],
     ["stepsList", "space-y-2"],
     ["stepTile", "flex items-start gap-3 p-3 bg-gray-50 rounded-lg"],
@@ -1823,13 +1837,20 @@ it("WH-22: the schedule-modal census — the Routines Schedule modal rides the r
     failures.push(`SCHEDULE_MODAL.button must be the w-full module pair (read "${btn ?? "—"}")`);
   }
   // the dark superset twins on the tile/inks (the reference's light-only forms are its own broken-dark class)
-  for (const [member, twin] of [["tile", "dark:to-neutral-900"], ["remember", "dark:bg-"], ["stepTile", "dark:bg-"], ["tileDesc", "dark:text-gray-400"], ["stepDuration", "dark:text-gray-400"], ["stepDesc", "dark:text-gray-400"]] as [string, string][]) {
+  for (const [member, twin] of [["tile", "dark:to-neutral-900"], ["remember", "dark:bg-"], ["stepTile", "dark:bg-"], ["tileDesc", "dark:text-gray-400"], ["stepDuration", "dark:text-gray-400"], ["stepDesc", "dark:text-gray-400"], ["rememberLabel", "dark:text-purple-400"], ["rememberBody", "dark:text-gray-400"]] as [string, string][]) {
     const m = REC![1].match(new RegExp(`${member}:\\s*"([^"]*)"`));
     if (!m || !m[1]!.includes(twin)) failures.push(`SCHEDULE_MODAL.${member} must carry its dark superset twin (${twin})`);
   }
 
   // (b) the page consumes the record
   if (!pageSrc.includes("SCHEDULE_MODAL")) failures.push("routines-page.tsx must consume the SCHEDULE_MODAL record");
+  // WH-50 (F-1b): the modal's three fields consume the record's field
+  // gap (the two Inputs directly; the textarea via the tailwind-merge
+  // override of TEXTAREA_FIELD's mt-2)
+  const fieldUses = (pageSrc.match(/SCHEDULE_MODAL\.field\b/g) || []).length;
+  if (fieldUses !== 3) {
+    failures.push(`the Schedule modal's three fields must ride SCHEDULE_MODAL.field (read ${fieldUses} uses, expected 3)`);
+  }
   // (b2) the scroll cap — the reference's own (probed: maxHeight 90vh,
   // overflowY auto): without it the tall content pushes the primary below
   // the fold (caught live by the e2e leg's click timeout — the gate
