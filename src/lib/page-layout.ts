@@ -1049,8 +1049,14 @@ export const LOGIN_LAYOUT = {
     "relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-slate-200 to-slate-300 text-slate-900 shadow-lg sm:h-24 sm:w-24 dark:from-neutral-800 dark:to-neutral-900 dark:text-slate-300",
   title: "text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight dark:text-slate-100",
   subtitle: "text-slate-500 dark:text-slate-400 text-sm sm:text-base font-medium",
+  // WH-52 (F-1): the reference re-authored this button onto its --sem-*
+  // platform tokens (decoded live — the resolved values, not the class
+  // names, are the contract): the warm-gray border + near-black ink +
+  // the hover pair, all four pinned as our own @theme tokens (the
+  // LESSON-50 doctrine — never the nearest palette neighbor). The dark
+  // arms stay (our documented dark superset).
   google:
-    "flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3.5 font-medium text-slate-700 text-[16px] transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-slate-200 dark:hover:bg-neutral-700 dark:hover:border-neutral-600",
+    "flex w-full items-center justify-center gap-3 rounded-xl border border-google-border bg-white px-5 py-3.5 font-medium text-google-ink text-[16px] transition-all duration-200 hover:border-google-border-hover hover:bg-google-bg-hover hover:shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-slate-200 dark:hover:bg-neutral-700 dark:hover:border-neutral-600",
   googleIcon: "-ml-4 transition-transform duration-200",
   divider: "relative my-6",
   dividerLine: "shrink-0 h-[1px] w-full bg-slate-200 dark:bg-neutral-700",

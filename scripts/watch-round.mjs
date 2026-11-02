@@ -89,7 +89,7 @@ const LEDGER = {
   // — 1,522 computed members) — verified the rendered face byte-held
   // through the double-axis move. WH-44: the css axis read STABLE at
   // CapATpwD for the second consecutive round.)
-  cssPath: "/static/index-CapATpwD.css",
+  cssPath: "/static/index-DbZzBCYa.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -152,7 +152,29 @@ const LEDGER = {
   // ONCE to the re-execution's final read per the doctrine,
   // born-verified on the quiet state: the re-run after this edit
   // reads "assets stable" + the 15/15 digest).
-  jsPath: "/static/index-CEYMtRjl.js",
+  // WH-52 re-base (round 41: a DOUBLE-AXIS move — the round-20/27/28/30/
+  // 31/32 class): the SIXTH css CONTENT change in the watch's history
+  // and the FIRST since round 32 (CapATpwD -> DbZzBCYa) + the js axis
+  // moving TWICE in the round's window (CEYMtRjl -> CC9AG2Dw ->
+  // jFHbfiCi, the TWENTY-SIXTH distinct bundle at the final read —
+  // the intra-round move class). The css move carried the round's
+  // core: the reference's --sem-* platform-token migration re-skinned
+  // the login Google button (the F-1 cure — the login surface's 2
+  // members the ONLY drift in the 3,551-member battery + the widened
+  // hover members; every other face byte-held). The same-run digest
+  // read 15/15 MATCH on EVERY new bundle, and the round's standing
+  // battery — the FOURTEENTH full-width run, all SEVENTEEN surfaces
+  // green on the cured tree (login 38/38 widened + moodForm 20/20 +
+  // shell 61/61 + dashboard 105/105 + headers 192/192 + toolbars
+  // 114/114 + kpis 315/315 + routines 697/697 + tutorials 790/790 +
+  // profile 433/433 + account 146/146 + authviews 192/192 +
+  // listinteriors 88/88 + moodjourney 116/116 + calendar 92/92 +
+  // schedmodal 89/89 + moodtiles 67/67 — 3,555 computed members)
+  // — verified the rendered face byte-held through the moves. Re-based
+  // ONCE to the round's final read per the doctrine, born-verified on
+  // the quiet state: the re-run after this edit reads "assets stable"
+  // + the 15/15 digest).
+  jsPath: "/static/index-jFHbfiCi.js",
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):

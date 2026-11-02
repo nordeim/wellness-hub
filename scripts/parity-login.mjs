@@ -13,13 +13,17 @@
 //
 // PASS A (the reference — ZERO LOGINS: /login is the logged-out face,
 //   no session needed, no rate-limit budget spent): goto /login →
-//   settle on the h1 → the computed member read.
-// PASS B (our dev server — zero logins likewise): the same read.
-// Then the DIFF: every member compared ref-vs-ours, 34 members.
+//   settle on the h1 → the computed member read → the google HOVER read.
+// PASS B (our dev server — zero logins likewise): the same reads.
+// Then the DIFF: every member compared ref-vs-ours, 38 members.
 //
 // ZERO-INTERACTION doctrine (stronger than the moodForm's zero-write):
 // this probe performs NO clicks, NO logins, NO writes on EITHER app —
-// the surface is the logged-out card at rest; nothing needs opening.
+// the surface is the logged-out card at rest, plus (WH-52) ONE HOVER
+// on the google button (client-state only, nothing commits — lesson
+// 49's own doctrine applied to the net's root surface: the reference's
+// --sem-* migration re-authored the hover arms TOO, and no at-rest
+// member could see them).
 //
 // THE SERIALIZATION CLASSES (decoded live at WH-36 before this script
 // was written — a naive string diff would false-DRIFT on every one):
@@ -89,6 +93,12 @@ const MEMBERS = [
   "googleBorder",
   "googleColor",
   "googleBg",
+  // the google button's HOVER face (WH-52 — the --sem-* migration's
+  // hover arms; ONE hover, no clicks, zero-write held)
+  "googleHoverBorder",
+  "googleHoverBg",
+  "googleHoverColor",
+  "googleHoverShadow",
   // the divider
   "dividerLineBg",
   // the canvas-normalized alpha colors (class (a))
@@ -268,6 +278,29 @@ const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 const page = await ctx.newPage();
 
+/** WH-52: the google button's HOVER read — ONE hover (client-state
+ * only, zero-write held), then the computed hover face. The 400ms
+ * settle covers the button's own transition-all duration-200 on both
+ * apps; the shadow member reads PRESENCE (the layer values are the
+ * standing lesson-40 serialization class — the real-layers filter
+ * would be the cure if a real drift ever fires there). */
+const readGoogleHover = async (pageArg) => {
+  const btn = pageArg.locator("button", { hasText: /google/i }).first();
+  await btn.hover({ timeout: 8000 });
+  await pageArg.waitForTimeout(400);
+  return pageArg.evaluate(() => {
+    const g = Array.from(document.querySelectorAll("button")).find((b) => /google/i.test(b.textContent || ""));
+    if (!g) return { error: "no google button (hover read)" };
+    const cs = getComputedStyle(g);
+    return {
+      googleHoverBorder: cs.borderTopColor,
+      googleHoverBg: cs.backgroundColor,
+      googleHoverColor: cs.color,
+      googleHoverShadow: cs.boxShadow === "none" ? "none" : "shadow",
+    };
+  });
+};
+
 console.log("--- PASS A: the reference (zero logins — the logged-out face) ---");
 const ref = await probe(() => gotoApp(page, REF, "/login").then(() => readLoginFace(page)));
 if (ref.__error || ref.error) {
@@ -275,6 +308,13 @@ if (ref.__error || ref.error) {
   await browser.close();
   process.exit(1);
 }
+const refHover = await probe(() => readGoogleHover(page));
+if (refHover.__error || refHover.error) {
+  console.log(`PROBE-ERROR reference hover: ${refHover.__error || refHover.error}`);
+  await browser.close();
+  process.exit(1);
+}
+Object.assign(ref, refHover);
 console.log(`reference read: h1 "${ref.h1Text}" ${ref.h1Fs}/${ref.h1Fw}, card ${ref.cardW}x? r${ref.cardR}, inputs ${ref.inputH}x${ref.inputW} r${ref.inputR}, submit ${ref.submitH}px`);
 
 console.log("--- PASS B: our dev server (zero logins) ---");
@@ -284,6 +324,13 @@ if (ours.__error || ours.error) {
   await browser.close();
   process.exit(1);
 }
+const oursHover = await probe(() => readGoogleHover(page));
+if (oursHover.__error || oursHover.error) {
+  console.log(`PROBE-ERROR ours hover: ${oursHover.__error || oursHover.error}`);
+  await browser.close();
+  process.exit(1);
+}
+Object.assign(ours, oursHover);
 console.log(`ours read:      h1 "${ours.h1Text}" ${ours.h1Fs}/${ours.h1Fw}, card ${ours.cardW}x? r${ours.cardR}, inputs ${ours.inputH}x${ours.inputW} r${ours.inputR}, submit ${ours.submitH}px`);
 
 // ---------- the live-vs-live diff ----------

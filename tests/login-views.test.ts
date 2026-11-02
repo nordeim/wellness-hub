@@ -342,6 +342,41 @@ describe("session-96: the form-family walk remediation (the v4 space-y genus on 
     expect(L.label).not.toMatch(/\b(block|flex|inline-block)\b/);
   });
 
+  it("WH-52: the google member consumes the four --sem-* resolution tokens (the reference's semantic-token migration)", async () => {
+    const L = await loginLayout();
+    // The reference re-authored its Google button onto the Base44
+    // --sem-* token layer (decoded live 2026-11-03, zero-login — the
+    // css-content move's ONE rendered-face change): the resolved
+    // at-rest border #e9e6e0 / ink #0f0e0e + hover border #ddd8d2 /
+    // hover bg #f1eeea. NEITHER the retired slate family NOR the
+    // nearest palette neighbor is correct (stone-200 is #e7e5e4, NOT
+    // #e9e6e0) — LESSON 50: name values by their HEX, author
+    // non-palette values as @theme tokens, never the nearest
+    // palette neighbor.
+    const arms = L.google.split(/\s+/);
+    expect(arms).toContain("border-google-border");
+    expect(arms).toContain("text-google-ink");
+    expect(arms).toContain("hover:border-google-border-hover");
+    expect(arms).toContain("hover:bg-google-bg-hover");
+    // negatives: the retired slate family is gone
+    expect(arms).not.toContain("border-slate-200");
+    expect(arms).not.toContain("text-slate-700");
+    expect(arms).not.toContain("hover:border-slate-300");
+    expect(arms).not.toContain("hover:bg-slate-50");
+    // the dark twins stay (our documented dark superset — the
+    // explicit twins carry the dark rendering; the tokens are
+    // light-only by design)
+    expect(arms).toContain("dark:border-neutral-700");
+    expect(arms).toContain("dark:text-slate-200");
+    // the four tokens pinned at the reference's --sem-* resolutions
+    // (the literal-hex doctrine — @theme carries no var() chains)
+    const gcss = readOr("src/app/globals.css");
+    expect(gcss).toContain("--color-google-border: #e9e6e0;");
+    expect(gcss).toContain("--color-google-ink: #0f0e0e;");
+    expect(gcss).toContain("--color-google-border-hover: #ddd8d2;");
+    expect(gcss).toContain("--color-google-bg-hover: #f1eeea;");
+  });
+
   it("the signin column nests [google + divider + form] in ONE w-full block section (the reference's margin-collapsing wrap)", () => {
     const src = loginCardSrc();
     // the section: ONE w-full div wrapping the google button's own

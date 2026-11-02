@@ -168,6 +168,37 @@ const runPass = async (page, base) => {
   // wait, never a fixed timeout), then settle for the values.
   await page.waitForSelector("text=Workouts This Week", { timeout: 20000 });
   await page.waitForTimeout(900);
+  // WH-52 (F-2): the VALUE settle-poll — the reference's post-redeploy
+  // aggregate resolves the tile VALUES slower than the LABELS (the
+  // battery's intermittent ref-0 reads: the label wait fires, the
+  // fixed 900ms settle expires mid-resolution, the value reads its
+  // pre-resolution 0 — the same class the capture-24 row-wait cured at
+  // WH-51). Poll the four tile values until two consecutive reads
+  // agree (bounded at 6 tries), then read — a REAL data change still
+  // reads its stable value fast and drifts HONESTLY (the lesson-41
+  // doctrine: a data drift is a finding to decode, never a re-base).
+  {
+    let prev = "";
+    for (let i = 0; i < 6; i++) {
+      const vals = await page.evaluate(() => {
+        const vis = (el) => el && el.offsetParent !== null;
+        const read = (label) => {
+          const el = Array.from(document.querySelectorAll("p,span,div")).find(
+            (e) => vis(e) && e.childElementCount === 0 && e.textContent.trim() === label,
+          );
+          if (!el) return null;
+          const h3 = el.parentElement ? el.parentElement.querySelector("h3") : null;
+          return h3 ? h3.textContent.trim() : null;
+        };
+        return ["Workouts This Week", "Mood Entries", "Active Assignments", "Goals Completed"]
+          .map(read)
+          .join("|");
+      });
+      if (vals === prev && !vals.includes("null")) break;
+      prev = vals;
+      await page.waitForTimeout(1200);
+    }
+  }
 
   return await page.evaluate((labels) => {
     const vis = (el) => el && el.offsetParent !== null;

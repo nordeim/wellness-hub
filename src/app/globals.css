@@ -98,6 +98,18 @@
   --color-ink: #0a0a0a;
   --color-muted-ink: #737373;
 
+  /* WH-52 (F-1): the login Google button's family — the reference's
+     --sem-* platform-token resolutions (decoded live 2026-11-03, the
+     css-content move's ONE rendered-face change). Light-only tokens by
+     design: the member's explicit dark: twins carry the dark rendering
+     (our documented dark superset). LESSON 50: #e9e6e0 is NEITHER
+     slate-200 (#e2e8f0) NOR stone-200 (#e7e5e4) — non-palette values
+     get their OWN tokens, never the nearest palette neighbor. */
+  --color-google-border: #e9e6e0; /* --sem-border-light-default → rgb(233,230,224) */
+  --color-google-ink: #0f0e0e; /* --sem-text-icon-primary → rgb(15,14,14) */
+  --color-google-border-hover: #ddd8d2; /* --sem-border-default-default (hover) → rgb(221,216,210) */
+  --color-google-bg-hover: #f1eeea; /* --sem-surface-interactive-white-hover → rgb(241,238,234) */
+
   /* Shadow scale (session-9 S9-P0 — Tailwind v4 rename bug): v4 renamed
      the scale (v3 shadow-sm → v4 shadow-xs; v3 shadow → v4 shadow-sm), so
      v4's default `shadow-sm` compiles ONE STEP HEAVIER than the reference

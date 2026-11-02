@@ -1,4 +1,25 @@
-# docs/screenshots md5 ledger — re-based at WH-50 (2026-11-02), 34 files
+# docs/screenshots md5 ledger — re-based at WH-52 (2026-11-03), 34 files
+#
+# The WH-52 round (the semantic-token migration round — the login Google
+#   button's --sem-* family cure + the parity-login hover widening):
+#   the TWENTY-THIRD cross-round byte comparison under the committed
+#   procedure — 29/34 byte-stable, FIVE movers ALL root-caused before
+#   this re-base (the same-round computed parity green — the battery's
+#   SEVENTEEN surfaces at 3,551+4 members, confirms every other face
+#   held):
+#   01-login + 13-mobile-login = THE CURE'S DELIBERATE FACES (the
+#     Google button's re-authored family: at-rest border #e9e6e0 + ink
+#     #0f0e0e + the hover pair — the pixel bands are exactly the
+#     button's rects [368x54 desktop, 294x54 mobile] at maxdelta 71;
+#     parity-login 38/38 pins the cured face byte-identical to the
+#     reference's live read, hover members included).
+#   10-learning (33 px / 0.0029%, maxdelta 7) + 29-quick-actions-hover
+#     (4 px / 0.0003%, maxdelta 1) + 30-tutorial-card-hover (25 px /
+#     0.0022%, maxdelta 2) = the standing SUB-VISIBLE RASTERIZATION
+#     signatures (the documented environmental families — the hover
+#     captures are their standing habitat).
+#
+# -- prior re-base (WH-50, 2026-11-02) --------------------------------------
 #
 # The WH-50 round (the sixteenth parity surface round — the Schedule
 #   modal's Remember inset + field-gap cures + the parity-schedmodal
@@ -23,7 +44,7 @@
 # WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
 # WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49.
 #
-01-login.png 0eb839b6997d2d0fb14ea1834f39bff8
+01-login.png 5989c8ad3ca65aa07575a8801e023742
 02-dashboard.png d9754490ed784a32688fcb6e0ba4ae9f
 03-routines.png 018a40ef34de3c99bc5c7ac7bc167445
 04-exercise.png 8b8f3d2e1f4732384227794e2892bfa6
@@ -32,10 +53,10 @@
 07-events.png 63f6e41213c3a3c0ff7f1b66aa95f659
 08-studyresources.png 66442104ebac81afca43628cb7a5ef53
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
-10-learning.png 4c8ef4e95feae62e32a715674868c945
+10-learning.png f5dca8016542c5746860359a3b55d2b5
 11-goals.png 56a0ae5483cdda64d2168932e8359983
 12-profile.png edb647d4bde50a717af5a88995e1a048
-13-mobile-login.png 479e3bc95a4ca2465691d6b0c5669b90
+13-mobile-login.png 597d96eed24ca1c3042beb686c580fb4
 14-mobile-dashboard.png affcfc1c87b3b812456cdbd1974af759
 15-mobile-nav-open.png 4e787b6e77719931f5b490369f5fbc88
 16-mobile-drawer-nav-exercise.png a73a87cfcf49d4069ac94a30817ce513
@@ -51,8 +72,8 @@
 26-events-inline-form.png 6c762b6ec35285aa23e2dcdab7f99a21
 27-dark-mood-form.png 9f5ed7c954fc0d1070791b8473db8c5e
 28-routines-schedule-modal.png c35cad6f1c2cde945090b8973615075b
-29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
-30-tutorial-card-hover.png 69a0cee125cded7d042b51bb3ace6218
+29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
+30-tutorial-card-hover.png 43e0cf7a48f7117597bd50b2f1f8daaa
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
 32-mentalhealth-form-interior.png 435d9b6f0e9a4f3d67f62d30a6893439
 33-sr-form-interior.png 74ed140c9d101aa5fe537405ee3ded12

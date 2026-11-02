@@ -1608,10 +1608,33 @@ it("WH-19: the dark-pair completeness census — every chromatic arm of the logi
     "src/lib/login-reset.ts": ["LOGIN_SIGNUP_LAYOUT", "LOGIN_RESET_LAYOUT", "LOGIN_VERIFY_LAYOUT"],
   } as const;
   const CHROMA = "(?:white|black|slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)";
+  // WH-52: custom @theme color-token arms join the walk. The google
+  // cure introduced the FIRST custom-token arms in LOGIN_LAYOUT —
+  // without this widening they would silently escape the blanket (the
+  // ARM regex below matched only the named palette families). The
+  // dark-coverage rule for a custom arm is the twin OR THE TOKEN'S OWN
+  // .dark OVERRIDE — the semantic tokens' mechanism (--color-ring /
+  // --color-foreground flip in .dark; a custom arm consuming them is
+  // dark-safe by construction, no twin needed). The google tokens are
+  // light-only by design — their arms carry explicit dark twins.
+  const gcssAll = readFileSync(join(REPO_ROOT, "src/app/globals.css"), "utf8");
+  const customNames: string[] = [];
+  for (const m of gcssAll.matchAll(/(--color-[a-zA-Z0-9-]+)\s*:\s*[^;]+;/g)) {
+    customNames.push(m[1].replace("--color-", ""));
+  }
+  // longest-first so google-border-hover matches before google-border
+  const CUSTOM = customNames.sort((a, b) => b.length - a.length).join("|");
+  expect(customNames.length).toBeGreaterThan(10); // the walk found the tokens
+  const darkOverrides = new Set(
+    [...gcssAll.matchAll(/\.dark\s*\{[^}]*\}/g)]
+      .flatMap((b) => [...b[0].matchAll(/(--color-[a-zA-Z0-9-]+)\s*:/g)])
+      .map((m) => m[1].replace("--color-", "")),
+  );
   // An arm = optional variant chain + utility family + a chromatic scale
-  // value (or the white/black pair forms). Arms already dark-prefixed
-  // are the dark twins themselves — skipped.
-  const ARM = new RegExp(`((?:(?:hover|focus|focus-visible|active|disabled|placeholder|group-[a-z-]+|data-\\[[^\\]]+\\]):)*)(text|bg|border|from|via|to|ring|fill|stroke|outline|decoration|caret|accent|shadow)-(${CHROMA})(?:-\\d+)?`, "g");
+  // value (or the white/black pair forms) — OR, since WH-52, a custom
+  // @theme color-token name. Arms already dark-prefixed are the dark
+  // twins themselves — skipped.
+  const ARM = new RegExp(`((?:(?:hover|focus|focus-visible|active|disabled|placeholder|group-[a-z-]+|data-\\[[^\\]]+\\]):)*)(text|bg|border|from|via|to|ring|fill|stroke|outline|decoration|caret|accent|shadow)-(${CHROMA}|${CUSTOM})(?:-\\d+)?`, "g");
   const failures: string[] = [];
   for (const [file, records] of Object.entries(FILES)) {
     const src = readFileSync(join(REPO_ROOT, file), "utf8");
@@ -1624,10 +1647,14 @@ it("WH-19: the dark-pair completeness census — every chromatic arm of the logi
         if (arms.length === 0) continue; // not a color-bearing member
         for (const arm of arms) {
           // The arm's (variants, utility) head, e.g. "hover:bg-" or "placeholder:text-".
-          const head = arm.replace(new RegExp(`-(${CHROMA}).*$`), "-");
-          const twin = new RegExp(`dark:${head.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:${CHROMA})`);
-          if (!twin.test(cls)) {
-            failures.push(`${file} ${rec}.${member}: "${arm}" has no dark twin (no ${`dark:${head}…`} in the member)`);
+          const head = arm.replace(new RegExp(`-(${CHROMA}|${CUSTOM}).*$`), "-");
+          const twin = new RegExp(`dark:${head.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:${CHROMA}|${CUSTOM})`);
+          // A custom-token arm is dark-covered by the twin OR by its
+          // token's own .dark override (the flip mechanism).
+          const tokenName = customNames.find((n) => arm.endsWith(n));
+          const flipsInDark = tokenName !== undefined && darkOverrides.has(tokenName);
+          if (!twin.test(cls) && !flipsInDark) {
+            failures.push(`${file} ${rec}.${member}: "${arm}" has no dark twin (no ${`dark:${head}…`} in the member) and its token carries no .dark override`);
           }
         }
       }

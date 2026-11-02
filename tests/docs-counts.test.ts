@@ -57,7 +57,7 @@ const CANONICAL = {
   unitSuites: 26, // tests/*.test.ts (INCLUDING this suite — WH-37: +tests/seed-parity.test.ts, the demo-account data parity contract)
   e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 375, // `bun run test` total (WH-44: 373 + the wellness-domain preset-catalog parity contract + the src-census WH-44 face-cures census, the reference's re-authored preset catalog + the tenth-surface decode's four computed-face cures)
+  unitChecks: 376, // `bun run test` total (WH-52: 375 + the login-views WH-52 google family pin — the reference's --sem-* token migration; the src-census WH-19 custom-arm widening rode its existing block)
   e2eChecks: 72, // `CI=1 bun run test:e2e` total (WH-37: 71 + the demo-face leg, the seeded mood entry's rendered face)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
   // WH-18: ThemeBoot joined src/components/layout/ — the counts move with it.
