@@ -195,7 +195,25 @@ const LEDGER = {
   // ONCE to the round's final read per the doctrine, born-verified on
   // the quiet state: the re-run after this edit reads "assets stable"
   // + the 15/15 digest).
-  jsPath: "/static/index-GX9h1ywM.js",
+  jsPath: "/static/index-r0DWh4vL.js",
+  // WH-54 re-base (round 43: the js-axis move — the TWENTY-EIGHTH
+  // distinct bundle; the css axis STABLE at xihcXjhm for the second
+  // consecutive round). GX9h1ywM -> r0DWh4vL read at the round's first
+  // watch flight; the same-run computed digest read 15/15 MATCH on the
+  // new bundle, and the round's standing battery — the SIXTEENTH
+  // full-width run, all SEVENTEEN surfaces green (login 38/38 +
+  // moodForm 20/20 + shell 61/61 + dashboard 105/105 + headers 192/192
+  // + toolbars 114/114 + kpis 315/315 + routines 697/697 + tutorials
+  // 790/790 + profile 433/433 + account 146/146 + authviews 192/192 +
+  // listinteriors 88/88 + moodjourney 116/116 + calendar 92/92 +
+  // schedmodal 89/89 + moodtiles 67/67 — 3,555 computed members)
+  // — verified the rendered face byte-held through the move. The capture
+  // round (the 25th cross-round byte comparison) corroborated: 33/34
+  // byte-stable, the one mover (29-quick-actions-hover 5px maxdelta 1)
+  // the standing sub-visible rasterization signature. Re-based ONCE to
+  // the round's final read per the doctrine, born-verified on the quiet
+  // state: the re-run after this edit reads "assets stable" + the 15/15
+  // digest).
   cdnPipeline: true,
   frontendConfig: true,
   // The computed spot-check (the CDN companion — MATCH/DRIFT):
