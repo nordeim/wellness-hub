@@ -1,4 +1,33 @@
-# docs/screenshots md5 ledger — re-based at WH-58 (2026-11-03), 34 files
+# docs/screenshots md5 ledger — re-based at WH-59 (2026-11-03), 34 files
+#
+# The WH-59 round (the standing audit round — the fully-quiet watch
+#   [both axes stable: css xihcXjhm for the SEVENTH consecutive round +
+#   js C_KCpRIS, the round-45 final read, unchanged, the FOURTH
+#   fully-quiet read of the standing era] + the same-run digest 15/15
+#   + the full seventeen-surface battery 3,555/3,555 live-vs-live):
+#   the THIRTIETH cross-round byte comparison under the committed
+#   procedure — 32/34 byte-stable, TWO movers ALL root-caused before
+#   this re-base, each pixel-diffed against the git HEAD (WH-58)
+#   captures (the same-round computed parity green confirms every
+#   other face held):
+#   NO DATE-AXIS CROSSING this round either: the captures render the
+#     same Nov 3 faces as the WH-58 ledger (the round ran ~05:00 UTC —
+#     BEFORE the Nov 4 UTC midnight; the crossing expectation now
+#     lands between this ledger and WH-60's captures — root-caused on
+#     sight when it fires).
+#   24-dark-exercise-rows (5 px / 0.0004%, maxdelta 17, bbox 4x2) =
+#     the documented capture-24 WRITE-FACE habitat (the just-written
+#     workout row's moment — the WH-56/57/58 family, the identical
+#     parameters to its WH-58 record).
+#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 =
+#     the focused input's ring area) = the WH-20 focus-ring
+#     INTERPOLATION-TAIL habitat — the transition-all box-shadow
+#     settle's sub-visible tail state between runs; the IDENTICAL
+#     parameters to its WH-58 record (its second consecutive round as
+#     a mover, the same sub-visible signature).
+#
+# -- prior re-base (WH-58, 2026-11-03) --------------------------------------
+
 #
 # The WH-58 round (the standing audit round — the fully-quiet watch
 #   [both axes stable: css xihcXjhm for the SIXTH consecutive round +
@@ -203,8 +232,8 @@
 21-dark-signup.png 1105dcb0a18f044a6d72fe0f68e2e88c
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
-24-dark-exercise-rows.png 7a812f53f0e089991f2ae9bba910442f
-25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
+24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
+25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
 26-events-inline-form.png 8204d928ae78687e335b4d9e46656b47
 27-dark-mood-form.png 7e6d66055a8fd451fbd3fdd26329da6c
 28-routines-schedule-modal.png d3f4393e4a5438874b7bfe2490ffa14d
