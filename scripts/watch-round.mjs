@@ -110,7 +110,30 @@ const LEDGER = {
   // rasterization signatures. Re-based ONCE to the round's final read
   // per the doctrine, born-verified on the quiet state: the re-run
   // after this edit reads "assets stable" + the 15/15 digest).
-  cssPath: "/static/index-xihcXjhm.css",
+  // WH-60 re-base (round 49: a DOUBLE-AXIS move — the round-20/27/28/
+  // 30/31/32/41/42 class): the EIGHTH css CONTENT change in the
+  // watch's history and the FIRST since round 42 (xihcXjhm ->
+  // BVWWKVEJ — seven stable rounds between) + the js bundle moving to
+  // the THIRTIETH distinct bundle (C_KCpRIS -> CCUlq8S3, read stable
+  // at the round's final read). The css move carried ZERO app-face
+  // change — the round's bundle-rule diff (the lesson-30 walk's new
+  // instrument leg) read the delta PLATFORM-LIBRARY-ONLY: 33 added /
+  // 24 removed / 0 changed rules, every one a Base44 component-family
+  // class (the cmdk command-menu re-authoring, the --sem-* design
+  // tokens, the space-* spacing scale, the dialog sizing family) —
+  // zero wellness-module classes touched. The same-run digest read
+  // 15/15 MATCH on the new assets, and the round's standing battery —
+  // the TWENTY-SECOND full-width run, all SEVENTEEN surfaces green
+  // (login 38/38 + moodForm 20/20 + shell 61/61 + dashboard 105/105 +
+  // headers 192/192 + toolbars 114/114 + kpis 315/315 + routines
+  // 697/697 + tutorials 790/790 + profile 433/433 + account 146/146 +
+  // authviews 192/192 + listinteriors 88/88 + moodjourney 116/116 +
+  // calendar 92/92 + schedmodal 89/89 + moodtiles 67/67 — 3,555
+  // computed members) — verified the rendered face byte-held through
+  // the double-axis move. Re-based ONCE to the round's final read
+  // per the doctrine, born-verified on the quiet state: the re-run
+  // after this edit reads "assets stable" + the 15/15 digest).
+  cssPath: "/static/index-BVWWKVEJ.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -195,7 +218,20 @@ const LEDGER = {
   // ONCE to the round's final read per the doctrine, born-verified on
   // the quiet state: the re-run after this edit reads "assets stable"
   // + the 15/15 digest).
-  jsPath: "/static/index-C_KCpRIS.js",
+  jsPath: "/static/index-CCUlq8S3.js",
+  // WH-60 re-base (round 49: the DOUBLE-AXIS move — see the cssPath
+  // block above for the round's full record; the js axis moved to
+  // the THIRTIETH distinct bundle C_KCpRIS -> CCUlq8S3, the css axis
+  // moving xihcXjhm -> BVWWKVEJ [the EIGHTH css content change, the
+  // first since round 42 — seven stable rounds between]. The
+  // same-run computed digest read 15/15 MATCH on the new bundle, the
+  // full seventeen-surface battery walked the move at zero drift
+  // (3,555/3,555, the TWENTY-SECOND full-width run), and the bundle-
+  // rule diff read the css delta platform-library-only (33/24/0 —
+  // the cmdk/sem-token/space-scale families, zero app-face classes).
+  // Re-based ONCE to the round's final read per the doctrine,
+  // born-verified on the quiet state: the re-run after this edit
+  // reads "assets stable" + the 15/15 digest).
   // WH-56 re-base (round 45: the js-axis move — the TWENTY-NINTH
   // distinct bundle; the css axis STABLE at xihcXjhm for the FOURTH
   // consecutive round). r0DWh4vL -> C_KCpRIS read at the round's first
