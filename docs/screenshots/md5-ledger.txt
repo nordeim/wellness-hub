@@ -1,4 +1,43 @@
-# docs/screenshots md5 ledger — re-based at WH-60 (2026-11-03), 34 files
+# docs/screenshots md5 ledger — re-based at WH-61 (2026-11-03), 34 files
+#
+# The WH-61 round (the standing audit round — the watch round 50 read
+#   the js axis move TWICE in the round's window [CCUlq8S3 ->
+#   BFKdKLB4 -> 6xnUqbWf, the THIRTY-SECOND distinct bundle at the
+#   settled final read — the WH-52 intra-round move class; the css axis
+#   STABLE at BVWWKVEJ for the second consecutive round] + the
+#   same-run computed digest 15/15 MATCH on every bundle + the
+#   bundle-inventory diff read platform-chunk-hash rotation only
+#   [229/469 hunks ALL lazy-chunk hash strings — UserAppMain/
+#   MfaSettings/WebApp/status-banner/mixpanelUtils/... — zero
+#   wellness-module strings, identical sizes + href inventories] + the
+#   full seventeen-surface battery 3,555/3,555 live-vs-live):
+#   the THIRTY-SECOND cross-round byte comparison under the committed
+#   procedure — 31/34 byte-stable, THREE movers ALL root-caused before
+#   this re-base, each pixel-diffed against the git HEAD (WH-60)
+#   captures (the same-round computed parity green confirms every
+#   other face held):
+#   NO DATE-AXIS CROSSING this round either — a doctrine amendment:
+#     the round ran ~23:00 UTC Nov 3, BEFORE the Nov 4 UTC midnight
+#     (the browser-local todayIso() faces render Nov 3, the same faces
+#     as the WH-60 ledger) — the crossing expectation now lands between
+#     this ledger and WH-62's captures (the THIRD carry of the
+#     expectation; root-caused on sight when it finally fires).
+#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 =
+#     the focused input's ring area) = the WH-20 focus-ring
+#     INTERPOLATION-TAIL habitat — the IDENTICAL parameters to its
+#     WH-58/59/60 records (its FOURTH consecutive round as a mover, the
+#     same sub-visible signature).
+#   29-quick-actions-hover (5 px / 0.0004%, maxdelta 1, bbox 5x5) =
+#     the standing sub-visible RASTERIZATION signature (the
+#     maxdelta-1 family — the WH-58/59/60 records' identical
+#     parameters).
+#   30-tutorial-card-hover (17 px / 0.0015%, maxdelta 29, bbox 8x31) =
+#     the documented transient HOVER-FACE habitat (the WH-57 record:
+#     15 px / maxdelta 29 — byte-stable through WH-58/59/60, re-fired
+#     this round; the same maxdelta-29 family, the real-pointer
+#     hover-state's settle variance).
+
+# -- prior re-base (WH-60, 2026-11-03) --------------------------------------
 #
 # The WH-60 round (the standing audit round — the watch round 49 read
 #   the DOUBLE MOVE: css xihcXjhm -> BVWWKVEJ [the FIRST css content-hash
@@ -28,7 +67,7 @@
 #     the standing sub-visible RASTERIZATION signature (the
 #     maxdelta-1 family — the WH-58 record's identical parameters).
 #
-
+#
 # -- prior re-base (WH-59, 2026-11-03) --------------------------------------
 #
 # The WH-59 round (the standing audit round — the fully-quiet watch
@@ -266,12 +305,12 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
+25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
 26-events-inline-form.png 8204d928ae78687e335b4d9e46656b47
 27-dark-mood-form.png 7e6d66055a8fd451fbd3fdd26329da6c
 28-routines-schedule-modal.png d3f4393e4a5438874b7bfe2490ffa14d
-29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
-30-tutorial-card-hover.png 43e0cf7a48f7117597bd50b2f1f8daaa
+29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
+30-tutorial-card-hover.png f4bce837bbf76fe77c047b1eb9eb12ea
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
 32-mentalhealth-form-interior.png 1d76b9b548ac11f56effb7f0d827d3d4
 33-sr-form-interior.png 74ed140c9d101aa5fe537405ee3ded12

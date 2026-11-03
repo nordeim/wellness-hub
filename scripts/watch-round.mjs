@@ -218,7 +218,42 @@ const LEDGER = {
   // ONCE to the round's final read per the doctrine, born-verified on
   // the quiet state: the re-run after this edit reads "assets stable"
   // + the 15/15 digest).
-  jsPath: "/static/index-CCUlq8S3.js",
+  jsPath: "/static/index-6xnUqbWf.js",
+  // WH-61 re-base (round 50: the js-axis INTRA-ROUND move — the
+  // WH-52 class; the css axis STABLE at BVWWKVEJ for the SECOND
+  // consecutive round). The round's window read the js axis move
+  // TWICE: CCUlq8S3 -> BFKdKLB4 (the first flight) -> 6xnUqbWf (the
+  // born-verification flight, settled across THREE consecutive
+  // flights ~5 min apart — the THIRTY-SECOND distinct bundle at the
+  // final read). The same-run computed digest read 15/15 MATCH on
+  // EVERY bundle. The bundle-inventory diff (the WH-60 instrument
+  // leg, run on BOTH moves): each pair byte-differs only in
+  // lazy-loaded PLATFORM-CHUNK HASH strings (229 hunks CCUlq8S3-vs-
+  // BFKdKLB4, 469 rough hunks BFKdKLB4-vs-6xnUqbWf — UserAppMain/
+  // TotpSetupDialog/MfaSettings/WebApp/status-banner/mixpanelUtils/
+  // ... — the platform's chunk-hash rotation, zero wellness-module
+  // strings), identical sizes (100,538 B all three) + identical app
+  // href inventories — the WH-52/53/60 platform-move class, zero
+  // app-face change. The round's standing battery — the
+  // TWENTY-THIRD full-width run, all SEVENTEEN surfaces green (login
+  // 38/38 + moodForm 20/20 + shell 61/61 + dashboard 105/105 + headers
+  // 192/192 + toolbars 114/114 + kpis 315/315 + routines 697/697 +
+  // tutorials 790/790 + profile 433/433 + account 146/146 + authviews
+  // 192/192 + listinteriors 88/88 + moodjourney 116/116 + calendar
+  // 92/92 + schedmodal 89/89 + moodtiles 67/67 — 3,555 computed
+  // members) — verified the rendered face byte-held through the
+  // moves. The capture round (the 32nd cross-round byte comparison)
+  // corroborated: 31/34 byte-stable, the three movers ALL
+  // root-caused before the re-base (25 the WH-20 focus-ring
+  // interpolation-tail [fourth consecutive round, identical
+  // parameters] + 29 the maxdelta-1 rasterization family + 30 the
+  // documented transient hover-face habitat re-fired after three
+  // byte-stable rounds [the WH-57 maxdelta-29 family]); NO date-axis
+  // crossing — the round ran ~23:00 UTC Nov 3, before the Nov 4 UTC
+  // midnight, the browser-local faces still Nov 3. Re-based ONCE to
+  // the round's FINAL read per the WH-52 intra-round doctrine,
+  // born-verified on the quiet state: the re-run after this edit
+  // reads "assets stable" + the 15/15 digest).
   // WH-60 re-base (round 49: the DOUBLE-AXIS move — see the cssPath
   // block above for the round's full record; the js axis moved to
   // the THIRTIETH distinct bundle C_KCpRIS -> CCUlq8S3, the css axis
