@@ -195,7 +195,36 @@ const LEDGER = {
   // ONCE to the round's final read per the doctrine, born-verified on
   // the quiet state: the re-run after this edit reads "assets stable"
   // + the 15/15 digest).
-  jsPath: "/static/index-r0DWh4vL.js",
+  jsPath: "/static/index-C_KCpRIS.js",
+  // WH-56 re-base (round 45: the js-axis move — the TWENTY-NINTH
+  // distinct bundle; the css axis STABLE at xihcXjhm for the FOURTH
+  // consecutive round). r0DWh4vL -> C_KCpRIS read at the round's first
+  // watch flight; the same-run computed digest read 15/15 MATCH on the
+  // new bundle, and the round's standing battery — the EIGHTEENTH
+  // full-width run, all SEVENTEEN surfaces green (login 38/38 +
+  // moodForm 20/20 + shell 61/61 + dashboard 105/105 + headers 192/192
+  // + toolbars 114/114 + kpis 315/315 + routines 697/697 + tutorials
+  // 790/790 + profile 433/433 + account 146/146 + authviews 192/192 +
+  // listinteriors 88/88 + moodjourney 116/116 + calendar 92/92 +
+  // schedmodal 89/89 + moodtiles 67/67 — 3,555 computed members)
+  // — verified the rendered face byte-held through the move. The
+  // capture round (the 27th cross-round byte comparison) corroborated:
+  // 28/34 byte-stable, the six movers ALL root-caused before the
+  // re-base (the date-axis crossing class: the ledger's Nov 2 faces
+  // vs this round's Nov 3 faces on the todayIso()-defaulting date
+  // forms [07/26/27/28/32] + the standing sub-visible rasterization
+  // signature on 29; the intra-run write/hover habitats 24/30 read
+  // 32/34 byte-identical across consecutive runs). The round's own
+  // infrastructure deviations absorbed per the lesson-46 doctrine:
+  // ONE our-side post-login cold-compile race on the freshly
+  // restarted dev server (the batch-2 first flights — the auth-wall
+  // loop presentation, cured by the clean restart, the flights re-run
+  // clean) + ONE reference transient mid-round (two consecutive
+  // first-flight timeouts on a mis-keyed diagnostic URL — the URL
+  // itself the bug, the reference never down; the probe re-ran clean).
+  // Re-based ONCE to the round's final read per the doctrine,
+  // born-verified on the quiet state: the re-run after this edit
+  // reads "assets stable" + the 15/15 digest).
   // WH-54 re-base (round 43: the js-axis move — the TWENTY-EIGHTH
   // distinct bundle; the css axis STABLE at xihcXjhm for the second
   // consecutive round). GX9h1ywM -> r0DWh4vL read at the round's first
