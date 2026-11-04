@@ -133,7 +133,30 @@ const LEDGER = {
   // the double-axis move. Re-based ONCE to the round's final read
   // per the doctrine, born-verified on the quiet state: the re-run
   // after this edit reads "assets stable" + the 15/15 digest).
-  cssPath: "/static/index-BVWWKVEJ.css",
+  // WH-69 re-base (round 58: a DOUBLE-AXIS move — the round-20/27/28/
+  // 30/31/32/41/42/49/50 class): the NINTH css CONTENT change in the
+  // watch's history and the FIRST since round 49 (BVWWKVEJ ->
+  // D-0IF5pE — TEN stable rounds between) + the js bundle moving to
+  // the THIRTY-FOURTH distinct bundle (BL63jJGe -> D8Mh9heQ, the
+  // second consecutive js-moving round). The css move carried ZERO
+  // app-face change — the round's atom-level rule diff (the WH-60
+  // instrument leg) read the delta PLATFORM-UTILITY-ONLY: 19 added /
+  // 5 removed atoms, every one a Base44 platform class (the --sem-*
+  // semantic tokens, the group\/template reveal arms, the space-*
+  // spacing scale, the rtl helper) — zero wellness-module classes
+  // touched. The same-run digest read 15/15 MATCH on the new assets,
+  // and the round's standing battery — the THIRTY-FIRST full-width
+  // run, all SEVENTEEN surfaces green (login 38/38 + moodForm 20/20 +
+  // shell 61/61 + dashboard 105/105 + headers 192/192 + toolbars
+  // 114/114 + kpis 315/315 + routines 697/697 + tutorials 790/790 +
+  // profile 433/433 + account 146/146 + authviews 192/192 +
+  // listinteriors 88/88 + moodjourney 116/116 + calendar 92/92 +
+  // schedmodal 89/89 + moodtiles 67/67 — 3,555 computed members) —
+  // verified the rendered face byte-held through the double-axis
+  // move. Re-based ONCE to the round's final read per the doctrine,
+  // born-verified on the quiet state: the re-run after this edit
+  // reads "assets stable" + the 15/15 digest).
+  cssPath: "/static/index-D-0IF5pE.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -218,7 +241,43 @@ const LEDGER = {
   // ONCE to the round's final read per the doctrine, born-verified on
   // the quiet state: the re-run after this edit reads "assets stable"
   // + the 15/15 digest).
-  jsPath: "/static/index-BL63jJGe.js",
+  jsPath: "/static/index-DsWj__ul.js",
+  // WH-69 re-base (round 58: the js-axis INTRA-ROUND move — the
+  // WH-52/61 class; the css axis's own re-base recorded at cssPath
+  // above, read STABLE at D-0IF5pE across every flight of the round).
+  // The round's window read the js axis move TWICE: BL63jJGe ->
+  // D8Mh9heQ (the round's first flight — the THIRTY-FOURTH distinct
+  // bundle, walked by the full battery + the capture round) ->
+  // DsWj__ul (the born-verification flight, settled across THREE
+  // consecutive flights ~20 s apart — the THIRTY-FIFTH distinct
+  // bundle at the final read). The same-run computed digest read 15/15
+  // MATCH on EVERY bundle. The bundle-inventory diff (the WH-60/61
+  // instrument leg, run on BOTH pairs): each pair reads IDENTICAL
+  // sizes (100,534 B) with every differing string literal a chunk-path
+  // string (the first pair 492/492 — the static\/<name>-<hash>.js
+  // inventory + the .\/ relative import form + the two
+  // template-literal embeds; the second pair 466/466 — every one
+  // .js-referencing) + identical wellness-module string counts — the
+  // WH-52/53/60/61/68 platform-move class, zero app-face change. The
+  // round's standing battery — the THIRTY-FIRST full-width run, all
+  // SEVENTEEN surfaces green (login 38/38 + moodForm 20/20 + shell
+  // 61/61 + dashboard 105/105 + headers 192/192 + toolbars 114/114 +
+  // kpis 315/315 + routines 697/697 + tutorials 790/790 + profile
+  // 433/433 + account 146/146 + authviews 192/192 + listinteriors
+  // 88/88 + moodjourney 116/116 + calendar 92/92 + schedmodal 89/89 +
+  // moodtiles 67/67 — 3,555 computed members) — verified the rendered
+  // face byte-held through the moves. The capture round (the 40th
+  // cross-round byte comparison) corroborated: 33/34 byte-stable, the
+  // ONE mover root-caused before the re-base (29-quick-actions-hover
+  // the maxdelta-1 rasterization family [5px/0.0004%, maxdelta 1,
+  // bbox 5x5, a consecutive re-fire after WH-67/68]); NO date-axis
+  // crossing — the round ran ~09:38 UTC Nov 4, BEFORE the Nov 4 ->
+  // Nov 5 UTC midnight, and the WH-68 ledger already carries the Nov 4
+  // faces (its captures ~07:34 UTC Nov 4) — same-day faces, the WH-56
+  // mover class does not fire; the expectation carries to WH-70 (the
+  // SEVENTH carry of the cycle). Re-based ONCE to the round's FINAL
+  // read per the doctrine, born-verified on the quiet state: the
+  // re-run after this edit reads "assets stable" + the 15/15 digest).
   // WH-68 re-base (round 57: the js-axis SINGLE move — the WH-46/47
   // single-axis class; the css axis STABLE at BVWWKVEJ for the NINTH
   // consecutive round). The round's window read the js axis move
