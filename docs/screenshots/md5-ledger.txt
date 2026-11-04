@@ -1,4 +1,45 @@
-# docs/screenshots md5 ledger — re-based at WH-67 (2026-11-04), 34 files
+# docs/screenshots md5 ledger — re-based at WH-68 (2026-11-04), 34 files
+#
+# The WH-68 round (the standing audit round — the js-axis move watch
+#   [round 57: the js bundle /static/index-6xnUqbWf.js ->
+#   /static/index-BL63jJGe.js — the THIRTY-THIRD distinct bundle, the
+#   first js move since the WH-61 re-base, six stable rounds between;
+#   the css axis STABLE at BVWWKVEJ for the NINTH consecutive round]
+#   + the same-run computed digest 15/15 MATCH on the new bundle + the
+#   bundle-inventory diff [the WH-60/61 instrument leg]: the pair
+#   byte-differs only in lazy-loaded PLATFORM-CHUNK HASH strings
+#   (80 of 252 fixed windows — AuthContext/I18nProvider/base/AuthAPI/
+#   useFeatureFlags/... — the platform's chunk-hash rotation, zero
+#   wellness-module strings), IDENTICAL sizes (100,534 B both) +
+#   identical app href inventories — the WH-52/53/60/61 platform-move
+#   class, zero app-face change + the full seventeen-surface battery
+#   3,555/3,555 live-vs-live, the THIRTIETH full-width run): the
+#   THIRTY-NINTH cross-round byte comparison under the committed
+#   procedure — 32/34 byte-stable, TWO movers ALL root-caused before
+#   this re-base, each pixel-diffed against the git HEAD (WH-67)
+#   captures (the source is IDENTICAL to the WH-67 tree — zero git
+#   diff outside docs/screenshots and the watch ledger — the
+#   classification is the root cause, no cure required):
+#   NO DATE-AXIS CROSSING — the doctrine amendment (the WH-61 class,
+#     exactly as the intake reading predicted): this round ran ~07:34
+#     UTC Nov 4, BEFORE the Nov 4 -> Nov 5 UTC midnight, and the WH-67
+#     ledger already carries the Nov 4 faces (its captures ~03:49 UTC
+#     Nov 4) — same-day faces, so the session_131 tail's predicted
+#     re-fire did not land (its premise was the captures crossing the
+#     Nov 5 midnight); the expectation carries to WH-69's captures
+#     (the SIXTH carry of the cycle, the fifth having carried at
+#     WH-68).
+#   10-learning (9 px / 0.0008%, maxdelta 7, bbox 11x2) = the standing
+#     SUB-VISIBLE RASTERIZATION signature (the maxdelta-7 family, the
+#     WH-53/58/59/64/67 records' identical parameters; re-fired here
+#     after its WH-67 re-fire — a consecutive re-fire).
+#   29-quick-actions-hover (5 px / 0.0004%, maxdelta 1, bbox 5x5) =
+#     the standing SUB-VISIBLE RASTERIZATION signature (the
+#     maxdelta-1 family, the WH-58/60/61/63/64/65/66/67 records'
+#     identical parameters; re-fired here — a consecutive re-fire).
+#   25-dark-login-focus (the WH-20 focus-ring interpolation-tail
+#     habitat) held BYTE-STABLE for the third consecutive round.
+# -- prior re-base (WH-67, 2026-11-04) --------------------------------------
 #
 #
 # The WH-67 round (the standing audit round — the fully-quiet watch
@@ -309,46 +350,10 @@
 #     a mover, the same sub-visible signature).
 #
 
-# -- prior re-base (WH-58, 2026-11-03) --------------------------------------
-
-#
-# The WH-58 round (the standing audit round — the fully-quiet watch
-#   [both axes stable: css xihcXjhm for the SIXTH consecutive round +
-#   js C_KCpRIS, the round-45 final read, unchanged, the THIRD
-#   fully-quiet read of the standing era] + the same-run digest 15/15
-#   + the full seventeen-surface battery 3,555/3,555 live-vs-live):
-#   the TWENTY-NINTH cross-round byte comparison under the committed
-#   procedure — 30/34 byte-stable, FOUR movers ALL root-caused before
-#   this re-base, each pixel-diffed against the git HEAD (WH-57)
-#   captures (the same-round computed parity green confirms every
-#   other face held):
-#   NO DATE-AXIS CROSSING this round either: the captures render the
-#     same Nov 3 faces as the WH-57 ledger (the round ran ~03:50 UTC;
-#     the next UTC midnight crossing lands between this ledger and
-#     WH-59's captures — the re-fire expectation stands, root-caused
-#     on sight when it fires).
-#   10-learning (9 px / 0.0008%, maxdelta 7, bbox 11x2) = the
-#     standing SUB-VISIBLE RASTERIZATION signature (the identical
-#     parameters to its WH-53 9-px / WH-57 8-px / maxdelta-7 records).
-#   24-dark-exercise-rows (5 px / 0.0004%, maxdelta 17, bbox 4x2) =
-#     the documented capture-24 WRITE-FACE habitat (the just-written
-#     workout row's moment — the WH-56/WH-57 family).
-#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 =
-#     the focused input's ring area) = the WH-20 focus-ring
-#     INTERPOLATION-TAIL habitat — the transition-all box-shadow
-#     settle's sub-visible tail state between runs (maxdelta 5,
-#     invisible); the WH-20 lesson's own surface, first byte-move
-#     since the habitat was documented.
-#   29-quick-actions-hover (5 px / 0.0004%, maxdelta 1, bbox 5x5) =
-#     the standing sub-visible rasterization family (the WH-56
-#     record's own signature, maxdelta 1).
-#   30-tutorial-card-hover (a WH-57 mover) back to BYTE-STABLE — the
-#     hover-face habitat confirmed transient, as documented.
-#
 # Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31,
 # WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
 # WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49, WH-50,
-# WH-51, WH-52, WH-53, WH-54, WH-56, WH-57.
+# WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58.
 #
 #
 
@@ -361,7 +366,7 @@
 07-events.png e227ee40fc1c7c848d54cec57db158f9
 08-studyresources.png 66442104ebac81afca43628cb7a5ef53
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
-10-learning.png f5dca8016542c5746860359a3b55d2b5
+10-learning.png dabae56f29c9b90c9e142392bae841c5
 11-goals.png 56a0ae5483cdda64d2168932e8359983
 12-profile.png edb647d4bde50a717af5a88995e1a048
 13-mobile-login.png 597d96eed24ca1c3042beb686c580fb4
@@ -380,9 +385,10 @@
 26-events-inline-form.png 88c63352331af862271cf617d1030e92
 27-dark-mood-form.png 3220f93899b6f5a7c43b4d99cee9b2c0
 28-routines-schedule-modal.png e58ee334a61910a637bfd01f6a22113b
-29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
+29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
 30-tutorial-card-hover.png 43e0cf7a48f7117597bd50b2f1f8daaa
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
 32-mentalhealth-form-interior.png 0c05b007723b5e6857cf90d321a75498
 33-sr-form-interior.png 74ed140c9d101aa5fe537405ee3ded12
 34-mood-list-interior.png bbedb6b0578994263c76231b09090da5
+
