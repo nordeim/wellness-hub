@@ -179,8 +179,19 @@ design (the WH-55 through WH-68 precedents).
   re-aligned (WH-63=FIRST through WH-69=SEVENTH) and the WH-68 row's
   "between the WH-68 ledger's captures" reference corrected to the
   WH-67 ledger (the incoming prediction's actual premise).
-- The commit: `:fire: fix: WH-69 audit round — ...` on `main` only,
-  pushed via the SSH wrapper (`python3 docs/ssh_git_wrapper_v3.py
-  --key-file <key outside the repo> --remote
-  git@github.com:nordeim/wellness-hub.git`), the remote ref verified ==
-  local HEAD, the operator key shredded after.
+- The ship: the commit `42d20c2` on `main` only. **GitHub's SSH auth
+  THROTTLE (the round's one infrastructure deviation — a new class)**:
+  the wrapper's 3-connection burst (ls-remote pre-flight → push →
+  post-push verification) could not survive the throttle (one
+  authenticated connection succeeds, immediate follow-ups fail with
+  AuthenticationException on both `github.com:22` and
+  `ssh.github.com:443`; the cooldown grew from ~30 s to 20+ min over
+  the session; the key itself proven valid throughout). The ship
+  landed via the SINGLE-CONNECTION push inside a paced retry loop
+  (one connection per attempt, 240 s gaps, the SSH-free HTTPS
+  verification read between attempts), first paced attempt — every
+  wrapper safety property preserved (the key outside the repo at
+  0600, the explicit `HEAD:refs/heads/main` refspec, the
+  remote-verified == local-HEAD evidence, the key shredded after).
+  The runbook's Troubleshooting section carries the entry for the
+  next round.

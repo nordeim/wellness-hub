@@ -119,16 +119,43 @@ already matches every item.
    read (`DsWj__ul.js` / `D-0IF5pE.css`), born-verified by the re-run
    ("assets stable" + the 15/15 digest).
 
-6. **The round's own infrastructure deviations: NONE.** The dev server
-   held through both windows (restarted once between the battery's
-   window 1 and the capture phase per the lesson-46 doctrine, stopped
-   before the final gate), zero limiter trips either side, zero
-   transients in flight. The round's own procedure note: the md5
-   re-base script's first pass tripped its own structural assertion
-   (the re-bases list spans multiple lines; the sentinel lives on the
-   last continuation line) — the assertion did its job, the ledger was
+6. **The round's own infrastructure deviations: ONE at the ship.** The
+   dev server held through both windows (restarted once between the
+   battery's window 1 and the capture phase per the lesson-46 doctrine,
+   stopped before the final gate), zero limiter trips either side, zero
+   transients in flight. The round's procedure note: the md5 re-base
+   script's first pass tripped its own structural assertion (the
+   re-bases list spans multiple lines; the sentinel lives on the last
+   continuation line) — the assertion did its job, the ledger was
    restored from the pre-edit backup and the fixed script re-run; the
-   born-verification then read 34/34 clean. Neither source debt.
+   born-verification then read 34/34 clean. Neither source debt. **The
+   ship note: GitHub's SSH auth THROTTLE (a new infrastructure
+   class)** — the observed pattern: one authenticated connection
+   succeeds, immediate follow-ups fail with
+   `paramiko.ssh_exception.AuthenticationException` on BOTH
+   `github.com:22` and `ssh.github.com:443` (the key itself proven
+   valid — two authenticated remote reads early in the round + a
+   direct paramiko `auth_publickey` probe succeeded mid-block); the
+   cooldown between allowed connections grew through the session
+   (~30 s early, 5- and 20-minute quiet periods still rejected, the
+   window reopening ~40 min in). The wrapper's own 3-connection burst
+   shape (the ls-remote pre-flight → the push → the post-push
+   verification) structurally could not survive it — every wrapper
+   run died at its SECOND connection. The cure that landed the ship:
+   the SINGLE-CONNECTION push (`git push git@github.com:nordeim/
+   wellness-hub.git HEAD:refs/heads/main` under `GIT_SSH_COMMAND` over
+   the deployed paramiko shim + the operator key) inside a paced
+   retry loop (one connection per attempt, 240 s gaps, an SSH-FREE
+   HTTPS verification read between attempts — the public-repo
+   `git ls-remote https://github.com/nordeim/wellness-hub.git`),
+   landing on the first paced attempt; every wrapper safety property
+   preserved (the key outside the repo at 0600, the explicit
+   `HEAD:refs/heads/main` refspec, the remote-verified == local-HEAD
+   evidence, the key shredded after). The runbook's Troubleshooting
+   section carries the entry now — if the wrapper's push leg fails
+   with an auth exception right after a green pre-flight, do NOT
+   re-run the burst (each failure feeds the block); pause and use the
+   single-connection form.
 
 7. **The full gate green on the final tree** (see the session69 plan's
    execution record): lint 0/0 · tsc 0 · unit 376/376 (26 suites, the
@@ -156,9 +183,10 @@ already matches every item.
    seven rows re-aligned to the session-intake arithmetic (WH-63=FIRST
    through WH-69=SEVENTH, every ordinal now matching its session log's
    own intake line verbatim), the WH-68 row's ledger reference fixed
-   with them. The commit on `main` only, pushed via the SSH wrapper,
-   the remote ref verified == local HEAD, the operator key shredded
-   after.
+   with them. The commit on `main` only (`42d20c2`), pushed through
+   the throttle with the single-connection form (see item 6), the
+   remote ref verified == local HEAD over the SSH-free HTTPS read,
+   the operator key shredded after.
 
 ## Suggested next (WH-70)
 

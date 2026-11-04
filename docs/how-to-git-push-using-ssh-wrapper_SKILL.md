@@ -154,6 +154,26 @@ the wrapper normally — nothing else changes.
 
 ## Troubleshooting
 
+- **The wrapper's push leg fails with an auth exception right after a
+  green pre-flight (ls-remote OK, push `AuthenticationException`) —
+  GitHub's SSH auth THROTTLE (observed at WH-69, 2026-11-04)** — the
+  pattern: ONE authenticated connection succeeds, immediate follow-ups
+  fail with `AuthenticationException` on BOTH `github.com:22` and
+  `ssh.github.com:443`; the cooldown between allowed connections can
+  grow to 20+ minutes, and each failed attempt feeds the block. The
+  key itself is fine (prove it with a single direct paramiko
+  `auth_publickey` probe on a quiet line). The wrapper's 3-connection
+  burst (pre-flight → push → verification) structurally cannot survive
+  a tight throttle window — do NOT re-run the burst. The cure that
+  worked: the SINGLE-CONNECTION push (`git push
+  git@github.com:<org>/<repo>.git HEAD:refs/heads/main` under
+  `GIT_SSH_COMMAND` over the shim + key) inside a paced retry loop —
+  one connection per attempt, ≥240 s gaps, and the SSH-FREE HTTPS
+  verification read between attempts (`git ls-remote
+  https://github.com/<org>/<repo>.git refs/heads/main` — the
+  public-repo read needs no auth). Every wrapper safety property
+  preserved: key outside the repo at 0600, explicit refspec,
+  remote-verified == local-HEAD evidence, key shredded after.
 - **`no ssh binary on PATH`** — the wrapper's own preflight (step 0).
   Install an OpenSSH client, or deploy the Appendix A shim on PATH.
 - **`authentication pre-flight failed`** — the key is wrong, expired, or
