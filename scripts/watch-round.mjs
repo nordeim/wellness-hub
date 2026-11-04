@@ -197,7 +197,57 @@ const LEDGER = {
   // move. Re-based ONCE to the round's final read per the doctrine,
   // born-verified on the quiet state: the re-run after this edit
   // reads "assets stable" + the 15/15 digest).
-  cssPath: "/static/index-PQ9m1YkN.css",
+  // WH-71 re-base (round 60: the THIRD consecutive DOUBLE-AXIS move —
+  // AND the intra-round second double-axis move, the first round where
+  // BOTH axes moved TWICE in the round's window [the WH-52/61/69
+  // intra-round class, now on both axes]: the css axis PQ9m1YkN ->
+  // C9yocF_M at the round's first read [the ELEVENTH css content
+  // change, the THIRD consecutive css-moving round], then -> Bt66wgTd
+  // at the born-verification flight [the TWELFTH]; the js axis
+  // BT2PWZna -> DbT6cXt1 [the THIRTY-SEVENTH distinct bundle], then
+  // -> DyOb2xUE [the THIRTY-EIGHTH]). The same-run computed digest
+  // read 15/15 MATCH on EVERY generation (the round read, the
+  // battery's window, and the born-verification re-run). The
+  // instrument legs (the WH-60/61 doctrine) read BOTH pairs
+  // platform-only: pair 1's css atom-level rule diff read the delta
+  // PLATFORM-UTILITY-ONLY [161 added / 126 removed atoms — the --sem-*
+  // semantic token arms (the --table-sticky-fade -> --table-row-fill
+  // rename family, the --sem-shadow-scroll-edge token + its dark twin,
+  // the data-[state=active] tab family re-skinned from hard hex to
+  // --sem-* tokens), the --space-* scale arms, the
+  // z-[2147483000..002] max z-index trio, the sm:before reveal arms,
+  // the max-sm utilities, the aspect-[1344/734]/min-w-[960/1200px]/
+  // max-w-[80ch]/pt-[12vh]/!size-auto/rounded-[36px] arbitraries —
+  // zero wellness-module classes; the only wellness-ish regex hits
+  // are the data-[state=...] pseudo-state arms ("stat" matches
+  // "state"), a platform tab family] + pair 1's js bundle-inventory
+  // diff read PLATFORM-CHUNK-MASS-ROTATION + minor inventory change
+  // [469 added / 470 removed differing string literals, EVERY one a
+  // chunk-path string (the sonner toast CSS string byte-identical
+  // both sides); ~463 of ~810 chunk entries hash-rotated (810 ->
+  // 809); net THREE new platform stems (logoImageUtils,
+  // marketingOsRequestLog, useWorkspaceDirectConnect) / THREE removed
+  // (button, hover-card, useAppIntegrationsData) — every stem a
+  // Base44 platform feature, zero wellness-module names; sizes
+  // 100,777 -> 101,401 B, the +624 B = the hash-length differences
+  // across the rotated chunk-path literals + the net-new entries —
+  // verified by the full stem-set difference]; pair 2's css atom diff
+  // read PLATFORM-UTILITY-ONLY [5 added / 1 removed — max-w-[375px],
+  // lg:w-[min(440px,45%)], lg:border-s, lg:px-space-8; removed
+  // max-lg:items-center] + pair 2's js inventory diff read pure
+  // PLATFORM-CHUNK-HASH-ROTATION-ONLY [464 added / 464 removed, every
+  // one a chunk-path string; SIZE-IDENTICAL at 101,401 chars — the
+  // classic WH-52/53/60/61/68 rotation class] — ZERO app-face change
+  // through either move. The round's standing battery — the
+  // THIRTY-THIRD full-width run, all SEVENTEEN surfaces green
+  // (3,555/3,555, two first-flight transients absorbed + the
+  // documented dev-server limiter restart between window 1 and the
+  // capture phase) — verified the rendered face byte-held through the
+  // double-axis moves. Re-based ONCE to the round's FINAL read per
+  // the intra-round doctrine (the WH-52/61/69 precedent), born-
+  // verified on the quiet state: the re-run after this edit reads
+  // "assets stable" + the 15/15 digest).
+  cssPath: "/static/index-Bt66wgTd.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -282,7 +332,44 @@ const LEDGER = {
   // ONCE to the round's final read per the doctrine, born-verified on
   // the quiet state: the re-run after this edit reads "assets stable"
   // + the 15/15 digest).
-  jsPath: "/static/index-BT2PWZna.js",
+  jsPath: "/static/index-DyOb2xUE.js",
+  // WH-71 re-base (round 60: the THIRD consecutive double-axis round
+  // — AND the first round where the js axis moved TWICE PAIRED with
+  // the css axis moving TWICE [the intra-round move class on both
+  // axes, the WH-52/61/69 precedent]: BT2PWZna -> DbT6cXt1 at the
+  // round's first read [the THIRTY-SEVENTH distinct bundle], then ->
+  // DyOb2xUE at the born-verification flight [the THIRTY-EIGHTH];
+  // the css axis's own two moves recorded at cssPath above). The
+  // same-run computed digest read 15/15 MATCH on EVERY bundle. The
+  // bundle-inventory diff (the WH-60/61 instrument leg) read BOTH
+  // pairs platform-only: pair 1 read PLATFORM-CHUNK-MASS-ROTATION +
+  // minor inventory change — 469 added / 470 removed differing
+  // string literals, EVERY one a chunk-path string (the sonner toast
+  // CSS string byte-identical both sides; zero non-path either side)
+  // + ~463 of ~810 chunk entries hash-rotated (the mass-rotation
+  // class — every platform chunk rebuilt) + net THREE new platform
+  // stems (logoImageUtils, marketingOsRequestLog,
+  // useWorkspaceDirectConnect) / THREE removed (button, hover-card,
+  // useAppIntegrationsData) — sizes 100,777 -> 101,401 B (the +624 B
+  // = the hash-length differences across the rotated chunk-path
+  // literals + the net-new entries, verified by the full stem-set
+  // difference); pair 2 read pure PLATFORM-CHUNK-HASH-ROTATION-ONLY —
+  // 464 added / 464 removed, every one a chunk-path string,
+  // SIZE-IDENTICAL at 101,401 chars — the classic WH-52/53/60/61/68
+  // rotation class. ZERO app-face change through either move, no
+  // cure required. The same-run digest read 15/15; the round's
+  // battery walked the moves at 3,555/3,555 (the THIRTY-THIRD
+  // full-width run); the capture round (the 42nd byte comparison)
+  // read 32/34 with both movers root-caused as the standing
+  // sub-visible habitats (25-dark-login-focus the WH-20
+  // interpolation-tail family + 29-quick-actions-hover the
+  // maxdelta-1 rasterization family) and NO date-axis crossing
+  // (same-day Nov 4 faces — the round's captures landed ~23:05 UTC
+  // Nov 4, before the Nov 5 UTC midnight; the expectation carries to
+  // WH-72, the NINTH carry of the cycle). Re-based ONCE to the
+  // round's FINAL read per the intra-round doctrine, born-verified
+  // on BOTH outcomes (the firing state at the round read; the quiet
+  // state via the re-run — "assets stable" + the 15/15 digest).
   // WH-70 re-base (round 59: the js-axis move paired with the css
   // axis's own move — the double-axis class, the SECOND consecutive
   // double-axis round; the css axis's own re-base recorded at cssPath
