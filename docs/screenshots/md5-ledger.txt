@@ -1,5 +1,57 @@
-# docs/screenshots md5 ledger — re-based at WH-69 (2026-11-04), 34 files
+# docs/screenshots md5 ledger — re-based at WH-70 (2026-11-04), 34 files
 #
+# The WH-70 round (the standing audit round — the SECOND consecutive
+#   DOUBLE-AXIS platform move watch [round 59: the TENTH css CONTENT
+#   change in the watch's history, the SECOND consecutive css-moving
+#   round — D-0IF5pE -> PQ9m1YkN, read STABLE at PQ9m1YkN across
+#   every flight of the round + the js bundle moving to the
+#   THIRTY-SIXTH distinct bundle DsWj__ul -> BT2PWZna]) + the
+#   same-run computed digest 15/15 MATCH + the instrument legs (the
+#   WH-60/61 doctrine): the css atom-level rule diff read the delta
+#   PLATFORM-UTILITY-ONLY [4 added / 1 removed atoms — the
+#   !size-[14px] important-size utility, the basis-[280px]
+#   flex-basis arbitrary, the ring-fill-premium-primary +
+#   ring-sem-text-secondary --sem-* semantic ring tokens; removed the
+#   bg-[color:var(--sem-bg-subtle)] semantic bg utility — zero
+#   wellness-module classes] + the js bundle-inventory diff read
+#   PLATFORM-CHUNK-INVENTORY-CHANGE-ONLY [the size-DIFFERING class,
+#   unlike the WH-52/53/60/61/68/69 size-identical rotations: 473
+#   added / 468 removed differing string literals, EVERY one a
+#   chunk-path string, zero non-path either side + identical
+#   wellness-module string counts 8=8 + net FIVE new chunk entries —
+#   six new platform feature stems (composer, skillUsed,
+#   useSlashConnectors, InviteCollaboratorsModal,
+#   useWorkspaceMemberSuggestions, formatInviteError; removed
+#   projectLabel), sizes 100,534 -> 100,777 B, the +243 B = the
+#   net-new chunk-path literals + the __vite__mapDeps index
+#   renumbering + the lookup array's five new entries, verified by
+#   normalization] — zero app-face change, walked by the round's
+#   standing battery at zero drift (the THIRTY-SECOND full-width
+#   run, all SEVENTEEN surfaces green, 3,555/3,555, zero
+#   transients).
+#   The capture round (the 41st cross-round byte comparison): 33/34
+#   byte-stable, the ONE mover root-caused before the re-base,
+#   pixel-diffed against the git HEAD (WH-69) captures.
+#   NO DATE-AXIS CROSSING — the doctrine amendment (the WH-61 class,
+#     exactly as the intake reading predicted): this round ran ~13:20
+#     UTC Nov 4, BEFORE the Nov 4 -> Nov 5 UTC midnight, and the
+#     WH-69 ledger already carries the Nov 4 faces (its captures
+#     ~09:38 UTC Nov 4) — same-day faces, so the session_135 tail's
+#     predicted re-fire did not land (its premise was the captures
+#     crossing the Nov 5 midnight); the expectation carries to
+#     WH-71's captures (the EIGHTH carry of the cycle, the seventh
+#     having carried at WH-70).
+#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 =
+#     the focused input's ring area) = the WH-20 focus-ring
+#     INTERPOLATION-TAIL habitat — the IDENTICAL parameters to its
+#     WH-58/59/60/61/62/63/64 records (re-fired here after FOUR
+#     consecutive byte-stable rounds [WH-65 through WH-69] — the
+#     family's standing re-fire/byte-stable alternation).
+#   10-learning (the maxdelta-7 rasterization family) and
+#     29-quick-actions-hover (the maxdelta-1 rasterization family)
+#     BOTH held BYTE-STABLE this round (after the WH-69 re-fire /
+#     the WH-69 re-fire — the families' standing alternation).
+# -- prior re-base (WH-69, 2026-11-04) --------------------------------------
 # The WH-69 round (the standing audit round — the DOUBLE-AXIS platform
 #   move watch [round 58: the NINTH css CONTENT change in the watch's
 #   history and the FIRST since round 49 — BVWWKVEJ -> D-0IF5pE, TEN
@@ -338,41 +390,12 @@
 #     this round; the same maxdelta-29 family, the real-pointer
 #     hover-state's settle variance).
 
-# -- prior re-base (WH-60, 2026-11-03) --------------------------------------
-#
-# The WH-60 round (the standing audit round — the watch round 49 read
-#   the DOUBLE MOVE: css xihcXjhm -> BVWWKVEJ [the FIRST css content-hash
-#   move since the WH-39 re-base — seven stable rounds] + js C_KCpRIS ->
-#   CCUlq8S3, the same-run computed digest 15/15 MATCH on the new bundles
-#   + the full seventeen-surface battery 3,555/3,555 live-vs-live + the
-#   bundle-rule diff read platform-library-only [33 added / 24 removed /
-#   0 changed, the cmdk/sem-token/space-scale families — zero
-#   app-face classes]):
-#   the THIRTY-FIRST cross-round byte comparison under the committed
-#   procedure — 32/34 byte-stable, TWO movers ALL root-caused before
-#   this re-base, each pixel-diffed against the git HEAD (WH-59)
-#   captures (the same-round computed parity green confirms every
-#   other face held):
-#   NO DATE-AXIS CROSSING this round either: the captures render the
-#     same Nov 3 faces as the WH-59 ledger (the round ran ~22:40 UTC —
-#     BEFORE the Nov 4 UTC midnight; the crossing expectation now
-#     lands between this ledger and WH-61's captures — root-caused on
-#     sight when it fires).
-#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 =
-#     the focused input's ring area) = the WH-20 focus-ring
-#     INTERPOLATION-TAIL habitat — the transition-all box-shadow
-#     settle's sub-visible tail state between runs; the IDENTICAL
-#     parameters to its WH-58/59 records (its third consecutive round
-#     as a mover, the same sub-visible signature).
-#   29-quick-actions-hover (5 px / 0.0004%, maxdelta 1, bbox 5x5) =
-#     the standing sub-visible RASTERIZATION signature (the
-#     maxdelta-1 family — the WH-58 record's identical parameters).
 #
 #
 # Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31,
 # WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
 # WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49, WH-50,
-# WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59.
+# WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60.
 #
 #
 
@@ -400,7 +423,7 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
+25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
 26-events-inline-form.png 88c63352331af862271cf617d1030e92
 27-dark-mood-form.png 3220f93899b6f5a7c43b4d99cee9b2c0
 28-routines-schedule-modal.png e58ee334a61910a637bfd01f6a22113b

@@ -156,7 +156,48 @@ const LEDGER = {
   // move. Re-based ONCE to the round's final read per the doctrine,
   // born-verified on the quiet state: the re-run after this edit
   // reads "assets stable" + the 15/15 digest).
-  cssPath: "/static/index-D-0IF5pE.css",
+  // WH-70 re-base (round 59: a DOUBLE-AXIS move — the round-20/27/28/
+  // 30/31/32/41/49/50/58 class, the SECOND consecutive double-axis
+  // round): the TENTH css CONTENT change in the watch's history and
+  // the SECOND consecutive css-moving round (D-0IF5pE -> PQ9m1YkN) +
+  // the js bundle moving to the THIRTY-SIXTH distinct bundle
+  // (DsWj__ul -> BT2PWZna). The css move carried ZERO app-face
+  // change — the round's atom-level rule diff (the WH-60/61
+  // instrument leg) read the delta PLATFORM-UTILITY-ONLY: 4 added /
+  // 1 removed atoms, every one a Base44 platform class (the
+  // !size-[14px] important-size utility, the basis-[280px]
+  // flex-basis arbitrary, the ring-fill-premium-primary +
+  // ring-sem-text-secondary --sem-* semantic ring tokens; removed:
+  // the bg-[color:var(--sem-bg-subtle)] semantic bg utility) — zero
+  // wellness-module classes touched. The js pair's bundle-inventory
+  // diff read PLATFORM-CHUNK-INVENTORY-CHANGE-ONLY (the
+  // size-DIFFERING class, unlike the WH-52/53/60/61/68/69
+  // size-identical rotations): 473 added / 468 removed differing
+  // string literals, EVERY one a chunk-path string (zero non-path on
+  // either side) + identical wellness-module string counts (8=8) +
+  // net FIVE new chunk entries (six new platform feature stems —
+  // composer, skillUsed, useSlashConnectors,
+  // InviteCollaboratorsModal, useWorkspaceMemberSuggestions,
+  // formatInviteError, every one a Base44 platform feature; one
+  // removed: projectLabel), sizes 100,534 -> 100,777 B (+243 B =
+  // the net-new chunk-path literals + the __vite__mapDeps index
+  // renumbering + the chunk-name->path lookup array's five new
+  // entries — verified by normalizing all chunk-path forms and the
+  // mapDeps arrays: the remainders then differ only inside the
+  // lookup array's own structure) — zero app-face change. The
+  // same-run digest read 15/15 MATCH on the new assets, and the
+  // round's standing battery — the THIRTY-SECOND full-width run,
+  // all SEVENTEEN surfaces green (login 38/38 + moodForm 20/20 +
+  // shell 61/61 + dashboard 105/105 + headers 192/192 + toolbars
+  // 114/114 + kpis 315/315 + routines 697/697 + tutorials 790/790 +
+  // profile 433/433 + account 146/146 + authviews 192/192 +
+  // listinteriors 88/88 + moodjourney 116/116 + calendar 92/92 +
+  // schedmodal 89/89 + moodtiles 67/67 — 3,555 computed members) —
+  // verified the rendered face byte-held through the double-axis
+  // move. Re-based ONCE to the round's final read per the doctrine,
+  // born-verified on the quiet state: the re-run after this edit
+  // reads "assets stable" + the 15/15 digest).
+  cssPath: "/static/index-PQ9m1YkN.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -241,7 +282,54 @@ const LEDGER = {
   // ONCE to the round's final read per the doctrine, born-verified on
   // the quiet state: the re-run after this edit reads "assets stable"
   // + the 15/15 digest).
-  jsPath: "/static/index-DsWj__ul.js",
+  jsPath: "/static/index-BT2PWZna.js",
+  // WH-70 re-base (round 59: the js-axis move paired with the css
+  // axis's own move — the double-axis class, the SECOND consecutive
+  // double-axis round; the css axis's own re-base recorded at cssPath
+  // above). The round's window read the js axis move ONCE, stable at
+  // the new hash across the round's flights: DsWj__ul -> BT2PWZna
+  // (the THIRTY-SIXTH distinct bundle at the final read). The
+  // same-run computed digest read 15/15 MATCH on the new bundle. The
+  // bundle-inventory diff (the WH-60/61 instrument leg): the pair
+  // reads PLATFORM-CHUNK-INVENTORY-CHANGE-ONLY — 473 added / 468
+  // removed differing string literals, EVERY one a chunk-path string
+  // (zero non-path on either side; the static\/<name>-<hash>.js
+  // inventory + the .\/ relative import form + the template-literal
+  // embeds) + identical wellness-module string counts (8=8) + net
+  // FIVE new chunk entries (six new platform feature stems —
+  // composer, skillUsed, useSlashConnectors,
+  // InviteCollaboratorsModal, useWorkspaceMemberSuggestions,
+  // formatInviteError; one removed: projectLabel — every addition a
+  // Base44 platform feature, zero wellness-module names), sizes
+  // 100,534 -> 100,777 B (the size-DIFFERING class: the +243 B is
+  // the net-new chunk-path literals + the __vite__mapDeps index
+  // renumbering + the chunk-name->path lookup array's five new
+  // entries, verified by normalization) — the
+  // WH-52/53/60/61/68/69 platform-move class with feature growth,
+  // zero app-face change. The round's standing battery — the
+  // THIRTY-SECOND full-width run, all SEVENTEEN surfaces green
+  // (login 38/38 + moodForm 20/20 + shell 61/61 + dashboard
+  // 105/105 + headers 192/192 + toolbars 114/114 + kpis 315/315 +
+  // routines 697/697 + tutorials 790/790 + profile 433/433 +
+  // account 146/146 + authviews 192/192 + listinteriors 88/88 +
+  // moodjourney 116/116 + calendar 92/92 + schedmodal 89/89 +
+  // moodtiles 67/67 — 3,555 computed members) — verified the
+  // rendered face byte-held through the move. The capture round (the
+  // 41st cross-round byte comparison) corroborated: 33/34
+  // byte-stable, the ONE mover root-caused before the re-base
+  // (25-dark-login-focus the WH-20 focus-ring interpolation-tail
+  // habitat [77px/0.0067%, maxdelta 5, bbox 367x121, its identical
+  // recorded parameters; re-fired here after four consecutive
+  // byte-stable rounds — the family's standing
+  // re-fire/byte-stable alternation]); NO date-axis crossing — the
+  // round ran ~13:20 UTC Nov 4, BEFORE the Nov 4 -> Nov 5 UTC
+  // midnight, and the WH-69 ledger already carries the Nov 4 faces
+  // (its captures ~09:38 UTC Nov 4) — same-day faces, the WH-56
+  // mover class does not fire; the expectation carries to WH-71
+  // (the EIGHTH carry of the cycle). Re-based ONCE to the round's
+  // FINAL read per the doctrine, born-verified on the quiet state:
+  // the re-run after this edit reads "assets stable" + the 15/15
+  // digest).
   // WH-69 re-base (round 58: the js-axis INTRA-ROUND move — the
   // WH-52/61 class; the css axis's own re-base recorded at cssPath
   // above, read STABLE at D-0IF5pE across every flight of the round).
