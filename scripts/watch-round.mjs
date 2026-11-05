@@ -247,7 +247,27 @@ const LEDGER = {
   // the intra-round doctrine (the WH-52/61/69 precedent), born-
   // verified on the quiet state: the re-run after this edit reads
   // "assets stable" + the 15/15 digest).
-  cssPath: "/static/index-Bt66wgTd.css",
+  // WH-75 re-base (round 64, the css axis — the intra-round move class,
+  // the WH-52/61/69/71 precedent): the axis held at Bt66wgTd for the
+  // FIFTH consecutive round through the round's first read, then moved
+  // AT THE BORN-VERIFICATION FLIGHT of the pair-1 js re-base —
+  // Bt66wgTd -> wRLS_qWB, the THIRTEENTH css CONTENT change in the
+  // watch's history. The move carried ZERO app-face change — the
+  // round's atom-level rule diff (the WH-60/61 instrument leg) read
+  // the delta PLATFORM-UTILITY-ONLY: 3 added / 3 removed atoms
+  // (added: !size-space-3-5, bg-fill-standard-primary,
+  // ring-fill-standard-primary; removed: !size-[14px],
+  // bg-fill-premium-primary, ring-fill-premium-primary — the premium->
+  // standard fill-token rename family + the spacing-scale size swap;
+  // zero wellness-module classes) + the same-run computed digest read
+  // 15/15 MATCH on every generation (the round's first flight AND the
+  // born-verification flight) + the round's standing battery — the
+  // THIRTY-SEVENTH full-width run, all SEVENTEEN surfaces green at
+  // 3,555/3,555 — verified the rendered face byte-held through the
+  // moves. Re-based ONCE to the round's FINAL read per the
+  // intra-round doctrine, born-verified on the quiet state: the re-run
+  // after this edit reads "assets stable" + the 15/15 digest).
+  cssPath: "/static/index-wRLS_qWB.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -332,7 +352,41 @@ const LEDGER = {
   // ONCE to the round's final read per the doctrine, born-verified on
   // the quiet state: the re-run after this edit reads "assets stable"
   // + the 15/15 digest).
-  jsPath: "/static/index-DyOb2xUE.js",
+  // WH-75 re-base (round 64, the js axis — the intra-round move class,
+  // the WH-52/61/69/71 precedent, the axis moving TWICE in the round's
+  // window): the bundle moved for the FIRST time since the WH-71
+  // re-base — the axis having held through the rounds 61-63 three
+  // consecutive quiet reads — DyOb2xUE -> DqIZHgU- at the round's
+  // first read (the THIRTY-NINTH distinct bundle), then ->
+  // D7qeWGXk at the born-verification flight of the pair-1 re-base
+  // (the FORTIETH distinct bundle). BOTH pairs read platform-only: pair
+  // 1's bundle-inventory diff (the WH-60/61 instrument leg) read
+  // PLATFORM-CHUNK-MASS-ROTATION + minor inventory change [467 added /
+  // 465 removed differing string literals, EVERY one a chunk-path
+  // string (zero non-path on either side) + the wellness-term string
+  // sets reading 8=8 (every differing member a Base44 platform
+  // chunk-path rotation, zero wellness-module names) + ~462 of ~815
+  // chunk entries hash-rotated + net THREE new platform stems
+  // (channelConnectionWidgetConfig, createLocalStorageStore,
+  // companion-agent.bi) / ONE removed (is-renderable); sizes
+  // 101,401 -> 101,535 (+134)] + pair 2's inventory diff read pure
+  // PLATFORM-CHUNK-HASH-ROTATION-ONLY [465 added / 465 removed, every
+  // one a chunk-path string, ZERO stem changes, SIZE-IDENTICAL at
+  // 101,535 — the classic WH-52/53/60/61/68/71 rotation class] — ZERO
+  // app-face change through either move. The same-run computed digest
+  // read 15/15 MATCH on EVERY generation, and the round's standing
+  // battery — the THIRTY-SEVENTH full-width run, all SEVENTEEN surfaces
+  // green (login 38/38 + moodForm 20/20 + shell 61/61 + dashboard
+  // 105/105 + headers 192/192 + toolbars 114/114 + kpis 315/315 +
+  // routines 697/697 + tutorials 790/790 + profile 433/433 + account
+  // 146/146 + authviews 192/192 + listinteriors 88/88 + moodjourney
+  // 116/116 + calendar 92/92 + schedmodal 89/89 + moodtiles 67/67 —
+  // 3,555 computed members) — verified the rendered face byte-held
+  // through the moves. Re-based ONCE to the round's FINAL read (the
+  // pair-2 generation) per the intra-round doctrine, born-verified on
+  // the quiet state: the re-run after this edit reads "assets stable"
+  // + the 15/15 digest).
+  jsPath: "/static/index-D7qeWGXk.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both

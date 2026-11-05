@@ -1,4 +1,74 @@
-# docs/screenshots md5 ledger — re-based at WH-74 (2026-11-05), 34 files
+# docs/screenshots md5 ledger — re-based at WH-75 (2026-11-05), 34 files
+#
+# The WH-75 round (the standing audit round — the INTRA-ROUND
+#   double-axis platform-move watch [round 64, the WH-52/61/69/71
+#   class — the first round where an axis moved TWICE since WH-71:
+#   the js bundle moved at the round's first read — /static/index-
+#   DyOb2xUE.js -> /static/index-DqIZHgU-.js, the THIRTY-NINTH
+#   distinct bundle, the axis having held through the rounds 61-63
+#   three consecutive quiet reads; then BOTH axes moved at the pair-1
+#   re-base's own born-verification flight — css /static/index-
+#   Bt66wgTd.css -> /static/index-wRLS_qWB.css, the THIRTEENTH css
+#   CONTENT change in the watch's history (the axis having held FIVE
+#   consecutive rounds) + js /static/index-DqIZHgU-.js -> /static/
+#   index-D7qeWGXk.js, the FORTIETH distinct bundle]; the same-run
+#   computed digest 15/15 MATCH on EVERY generation; the instrument
+#   legs (the WH-60/61 doctrine) read BOTH pairs platform-only:
+#   pair 1's js bundle-inventory diff read PLATFORM-CHUNK-MASS-
+#   ROTATION + minor inventory change [467 added / 465 removed
+#   differing string literals, EVERY one a chunk-path string (zero
+#   non-path on either side) with the wellness-term string sets
+#   reading 8=8 (every differing member a Base44 platform chunk-path
+#   rotation, zero wellness-module names); ~462 of ~815 chunk
+#   entries hash-rotated; net THREE new platform stems
+#   (channelConnectionWidgetConfig, createLocalStorageStore,
+#   companion-agent.bi) / ONE removed (is-renderable); sizes
+#   101,401 -> 101,535 (+134)] + pair 2's js inventory diff read
+#   pure PLATFORM-CHUNK-HASH-ROTATION-ONLY [465 added / 465 removed,
+#   every one a chunk-path string, ZERO stem changes, SIZE-IDENTICAL
+#   at 101,535] + pair 2's css atom-level rule diff read the delta
+#   PLATFORM-UTILITY-ONLY [3 added / 3 removed atoms — added
+#   !size-space-3-5, bg-fill-standard-primary,
+#   ring-fill-standard-primary; removed !size-[14px],
+#   bg-fill-premium-primary, ring-fill-premium-primary: the premium->
+#   standard fill-token rename family + the spacing-scale size swap,
+#   zero wellness-module classes] — ZERO app-face change through
+#   either move; the watch ledger RE-BASED ONCE to the round's FINAL
+#   read (wRLS_qWB.css / D7qeWGXk.js), born-verified on the quiet
+#   state: the re-run reads "assets stable" + the 15/15 digest] +
+#   the standing battery's THIRTY-SEVENTH full-width run at
+#   3,555/3,555, all SEVENTEEN surfaces green on their FIRST
+#   flights — zero transients in the battery itself, zero limiter
+#   trips in the battery itself]).
+#   The capture round (the FORTY-SIXTH cross-round byte comparison):
+#   31/34 byte-stable, THREE movers root-caused before the re-base,
+#   pixel-diffed against the git HEAD (WH-74) captures. THE DATE-AXIS
+#   CARRIED — the WH-56 mover class did NOT fire (the THIRD carry
+#   expectation of the new cycle: the captures landed ~08:17 UTC Nov 5,
+#   same-day Nov 5 faces vs the WH-74 ledger's Nov 5 faces — no midnight
+#   crossed; the expectation carries to WH-76 if its captures run
+#   after ~00:00 UTC Nov 6).
+#   The THREE movers = the standing sub-visible habitats re-firing at
+#   their IDENTICAL recorded signatures:
+#   10-learning + 30-tutorial-card-hover (EACH 149 px / 0.0129%,
+#   maxdelta 2, bbox 191x169 at (719,666)-(909,834)) = the WH-72-born
+#     tutorial-thumbnail rasterization family, BOTH members re-firing
+#     TOGETHER at the IDENTICAL 149-pixel coordinates (inside one
+#     tutorial card's REMOTE Unsplash thumbnail's decoded content —
+#     the seed's images.unsplash.com re-serve re-encode family; fired
+#     at WH-72, byte-stable through WH-73/74, re-fired here — the
+#     family-level pair alternation holding the members together).
+#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 =
+#     the focused input's ring area) = the WH-20 focus-ring
+#     INTERPOLATION-TAIL habitat — the IDENTICAL parameters to its
+#     WH-71/72/73/74-family records (re-fired at WH-73, WH-74 and
+#     here — the THIRD consecutive re-fire; the family's standing
+#     alternation compressing to consecutive rounds).
+#   The source IDENTICAL to the WH-74 tree (zero git diff outside
+#     docs/screenshots — the classification is the root cause, no cure
+#     required).
+
+# -- prior re-base (WH-74, 2026-11-05) --------------------------------------
 #
 # The WH-74 round (the standing audit round — the QUIET watch on BOTH
 #   flights [round 63: both axes stable — css Bt66wgTd for the FOURTH
@@ -399,45 +469,10 @@
 #     documented transient-face alternation class; neither a mover
 #     this round.
 #
-# -- prior re-base (WH-65, 2026-11-04) --------------------------------------
-# The WH-65 round (the standing audit round — the fully-quiet watch
-#   [round 54: both axes stable — css BVWWKVEJ for the SIXTH consecutive
-#   round + js 6xnUqbWf, the WH-61 re-based final read, unchanged; the
-#   EIGHTH fully-quiet read of the standing era] + the same-run digest
-#   15/15 + the full seventeen-surface battery 3,555/3,555 live-vs-live):
-#   the THIRTY-SIXTH cross-round byte comparison under the committed
-#   procedure — 31/34 byte-stable, THREE movers ALL root-caused before
-#   this re-base, each pixel-diffed against the git HEAD (WH-64)
-#   captures (the source is IDENTICAL to the WH-64 tree — zero git
-#   diff outside docs/screenshots — the classification is the root
-#   cause, no cure required):
-#   NO DATE-AXIS CROSSING — the doctrine amendment (the WH-61 class,
-#     exactly as the intake reading predicted): this round ran ~02:30
-#     UTC Nov 4, BEFORE the Nov 4 -> Nov 5 UTC midnight, and the WH-64
-#     ledger already carries the Nov 4 faces (its captures ~01:50 UTC
-#     Nov 4) — same-day faces, so the session_125 tail's predicted
-#     re-fire did not land (its premise was the captures crossing the
-#     Nov 5 midnight); the expectation carries to WH-66's captures
-#     (the THIRD carry of the cycle).
-#   10-learning (9 px / 0.0008%, maxdelta 7, bbox 11x2) = the standing
-#     SUB-VISIBLE RASTERIZATION signature (the maxdelta-7 family, the
-#     WH-53/58/59/64 records' identical parameters; re-fired at WH-64
-#     and here — consecutive re-fires of the identical class).
-#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 =
-#     the focused input's ring area) = the WH-20 focus-ring
-#     INTERPOLATION-TAIL habitat — the IDENTICAL parameters to its
-#     WH-58/59/60/61/62/63/64 records (its EIGHTH consecutive round as
-#     a mover, the same sub-visible signature).
-#   29-quick-actions-hover (5 px / 0.0004%, maxdelta 1, bbox 5x5) = the
-#     standing SUB-VISIBLE RASTERIZATION signature (the maxdelta-1
-#     family, the WH-58/60/61/63/64 records' identical parameters;
-#     re-fired at WH-63/64 and here — consecutive re-fires of the
-#     identical class).
-#
 # Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31,
 # WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
 # WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49, WH-50,
-# WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61, WH-62, WH-63, WH-64.
+# WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61, WH-62, WH-63, WH-64, WH-65.
 #
 #
 
@@ -450,7 +485,7 @@
 07-events.png f63519c1aba725c2474e8caedcf2e150
 08-studyresources.png 66442104ebac81afca43628cb7a5ef53
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
-10-learning.png eeae15aea91d7d993db72781bb17791e
+10-learning.png dabae56f29c9b90c9e142392bae841c5
 11-goals.png 56a0ae5483cdda64d2168932e8359983
 12-profile.png edb647d4bde50a717af5a88995e1a048
 13-mobile-login.png 597d96eed24ca1c3042beb686c580fb4
@@ -465,12 +500,12 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
+25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
 26-events-inline-form.png d67c88ea5fad4949eedb6d5a4c0660ef
 27-dark-mood-form.png 59dfd43f0f45cf09b943dced63159ba8
 28-routines-schedule-modal.png be8cad816af71cedfa1f5438a411f374
 29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
-30-tutorial-card-hover.png f8aaa8fd7a33d0a3ba74596ab0a81a5b
+30-tutorial-card-hover.png 43e0cf7a48f7117597bd50b2f1f8daaa
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
 32-mentalhealth-form-interior.png 0245c4368a7a24ad06285000aa8f4c40
 33-sr-form-interior.png 74ed140c9d101aa5fe537405ee3ded12
