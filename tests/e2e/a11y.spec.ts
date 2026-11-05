@@ -1624,11 +1624,14 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
       const bareCards = cards.filter((c) => !c.hasImg);
       expect(videoCards.length, "exactly SIX templates carry the thumbnail zone (the reference's own split — the fields its seed carries)").toBe(6);
       expect(bareCards.length, "the five field-less templates render the bare face").toBe(5);
-      // WH-42: the first video card follows the reference's RE-ORDERED
-      // grid (the F-1 cure re-sequenced our seed to its live order —
-      // Focused Study Session moved 10→6, Creative Flow 6→7; the pin
-      // moves with the decoded reference, the drift guard working)
-      expect(videoCards[0]!.title, "the first video card is Focused Study Session (the reference's WH-42 grid order)").toBe("Focused Study Session");
+      // WH-76: the first video card follows the reference's SECOND
+      // re-ordered grid (the reorder cure re-sequenced our seed to its
+      // live order again — Creative Flow Session moved 6→5, Focused
+      // Study Session 5→9; the pin moves with the decoded reference,
+      // the drift guard working — the video-card sequence is now
+      // Creative Flow, Quick Productivity Reset, Energizing Morning
+      // Kickstart, Self-Care Sunday, Focused Study, Peaceful Evening)
+      expect(videoCards[0]!.title, "the first video card is Creative Flow Session (the reference's WH-76 grid order)").toBe("Creative Flow Session");
       for (const c of videoCards) {
         expect(c.cardGroup, `the video card must carry group (${c.title})`).toBe(true);
         expect(c.imgAlt, `the img alt carries the template name (${c.title})`).toBe(c.title);
@@ -1656,8 +1659,9 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
         const b = btns.find((x) => (x.getAttribute("aria-label") || "").startsWith("Watch Video:"));
         return b ? b.getAttribute("aria-label") : null;
       });
-      // WH-42: the first video card's name follows the reference's
-      // re-ordered grid (Focused Study Session since the F-1 cure)
-      expect(label, "the Watch Video button carries the aria-label superset").toBe("Watch Video: Focused Study Session");
+      // WH-76: the first video card's name follows the reference's
+      // second re-ordered grid (Creative Flow Session since the WH-76
+      // reorder cure)
+      expect(label, "the Watch Video button carries the aria-label superset").toBe("Watch Video: Creative Flow Session");
     });
   });

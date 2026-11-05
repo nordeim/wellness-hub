@@ -1066,16 +1066,44 @@ it("WH-14: the Tailwind source scan is pinned (the @source not directives — tr
   // stylesheet. The three exclusion directives pin the scan to authored
   // surfaces. Structural pin, the lockfile-resolution pin's config form:
   // if these lines are removed the census trips in the same run.
+  //
+  // WH-76 (F-2): the pin's own latent gap closed + the scripts/tests
+  // axes added. The WH-14 round excluded skills/, docs/ and
+  // src/**/*.md — but left scripts/ and tests/ scanned, and its
+  // "../**/*.md" directive (resolved against the CSS file's own src/app/
+  // directory) never actually covered the ROOT .md corpus the comment
+  // claimed (worklog/AGENTS/PAD sat in the scan set the whole time,
+  // harmless only because no root .md had yet quoted a CSS-breaking
+  // class token). The WH-76 watch re-base proved the exposure: its
+  // narrative — written into the TRACKED scripts/watch-round.mjs —
+  // quoted the reference's retired arbitrary-value utilities verbatim
+  // (the bg-[var(--sem-fill-default|standard-primary|surface-*)] pipe
+  // family), the v4 scanner accepted them as candidates, and the
+  // generated var() bodies are unparseable CSS — PostCSS failed the
+  // whole globals.css transform and EVERY route 500'd. The break landed
+  // AFTER the round's battery/captures had already flighted green (the
+  // narrative is written last, in the ledger re-base) — the latent-scan
+  // class at its most dangerous: a gate-green tree that cannot serve a
+  // single page. The three added directives complete the pin the WH-14
+  // comment always claimed: the scan now covers only src/, globals.css
+  // itself and the vendored tw-animate.css. Probe-verified live on the
+  // dev server (each leg isolated): scripts+tests excluded -> the 500
+  // cures; a probe pipe token appended to worklog.md -> the 500 returns
+  // (the root .md corpus WAS scanned — the latent WH-14 gap, now
+  // proven); the "../../*.md" directive added -> the 500 cures again.
   const gcss = readFileSync(join(REPO_ROOT, "src/app/globals.css"), "utf8");
   const required = [
     '@source not "../../skills";',
     '@source not "../../docs";',
     '@source not "../**/*.md";',
+    '@source not "../../scripts";',
+    '@source not "../../tests";',
+    '@source not "../../*.md";',
   ];
   const missing = required.filter((line) => !gcss.includes(line));
   expect(
     missing,
-    "the @source not directives are gone from globals.css — without them the tracked markdown corpus compiles back into the production stylesheet (the WH-14 71%-dead-weight class); remove an exclusion only together with this pin, in the same commit",
+    "the @source not directives are gone from globals.css — without them the tracked markdown corpus (and, since WH-76, the instrument narratives in scripts/ and tests/) compiles back into the production stylesheet (the WH-14 71%-dead-weight class + the WH-76 pipe-candidate parse-failure class that 500'd every route); remove an exclusion only together with this pin, in the same commit",
   ).toEqual([]);
 });
 

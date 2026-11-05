@@ -12,9 +12,34 @@
    strings), globals.css itself, and the vendored tw-animate.css. The app's
    own utility set is untouched — verified by selector-diff + the full gate
    + byte-stable captures (the WH-14 round). */
+/* WH-76 (F-2): the pin completed. The WH-14 round left scripts/ and
+   tests/ inside the scan set, and its src-scoped md glob (the
+   dot-dot-slash-star-star family) — resolved against THIS file's own
+   src/app directory — never actually covered the root .md corpus the
+   comment above claimed (worklog/AGENTS/PAD sat in the scan set the
+   whole time; harmless only because no root .md had yet quoted a
+   CSS-breaking class token). The exposure fired when the WH-76 watch
+   re-base wrote its instrument narrative into the TRACKED
+   scripts/watch-round.mjs, quoting the reference's retired bracketed
+   var() utilities verbatim (the --sem-* pipe family): the v4 scanner
+   accepted them as candidates, the generated var() bodies are
+   unparseable CSS, PostCSS failed the whole globals.css transform
+   and EVERY route 500'd — a gate-green tree (the narrative is written
+   last, after the battery/captures flight) that could not serve a
+   page. Probe-verified live on the dev server, each leg isolated:
+   the scripts+tests directives cure the 500; a probe pipe token
+   appended to worklog.md brings it back (the root corpus WAS
+   scanned); the root-md directive cures it again. Pinned by the
+   extended src-census WH-14 directive-list test. (Form note, learned
+   the hard way this round: a star-slash sequence inside a CSS comment
+   TERMINATES the comment early and leaks prose into live CSS — the
+   glob spellings stay out of comments for exactly that reason.) */
 @source not "../../skills";
 @source not "../../docs";
 @source not "../**/*.md";
+@source not "../../scripts";
+@source not "../../tests";
+@source not "../../*.md";
 
 /* Session-80 (M-80c2): the hover-variant un-wrap. Tailwind v4 compiles
    every `hover:` utility inside `@media (hover: hover)` — CSSOM-walked

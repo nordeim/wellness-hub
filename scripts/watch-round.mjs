@@ -267,7 +267,37 @@ const LEDGER = {
   // moves. Re-based ONCE to the round's FINAL read per the
   // intra-round doctrine, born-verified on the quiet state: the re-run
   // after this edit reads "assets stable" + the 15/15 digest).
-  cssPath: "/static/index-wRLS_qWB.css",
+  // WH-76 re-base (round 65, the css axis — the double-axis move class,
+  // the WH-52/61/69/70 precedent, PLUS the intra-round re-fire — the
+  // axis moved TWICE in the round's window): the axis moved at the
+  // round's first read — wRLS_qWB -> CCUAZokn, the FOURTEENTH css
+  // CONTENT change in the watch's history — then moved AGAIN at the
+  // second born-verification flight — CCUAZokn -> Cs31Ex97, the
+  // FIFTEENTH css CONTENT change (the round's FINAL read). BOTH moves
+  // carried ZERO app-face change — the round's atom-level rule diffs
+  // (the WH-60/61 instrument leg) read the deltas PLATFORM-UTILITY-ONLY:
+  // pair 1: 12 added / 26 removed atoms (removed: the --sem-*
+  // semantic-token utility retirement family — border-[color:var(--
+  // sem-border-default|secondary|border-standard)], the bg-[var(--
+  // sem-fill-default|standard-primary|surface-*)] family, the
+  // text-[color:var(--sem-text-*)]/text-[var(--sem-text-|fg-secondary)]
+  // family, the focus-visible ring pair, the group-hover text pairs;
+  // added: the marquee keyframes + animate-marquee pair, the
+  // bg-[color:var(--sem-fill-standard-light-default)] + neutral-200/950
+  // tokens, pe-6, motion-reduce:flex/!transform-none, sm:py-14, the
+  // group-hover --sem-text-icon-primary pair; zero wellness-module
+  // classes) + pair 3: ONE atom added (.sm:pt-space-2 — a platform
+  // spacing-scale utility), ZERO removed, sizes 922,779 -> 922,822
+  // (+43), zero wellness-module classes + the same-run computed digest
+  // read 15/15 MATCH on EVERY generation + the round's standing
+  // battery — the THIRTY-EIGHTH full-width run, all SEVENTEEN
+  // surfaces green at 3,555/3,555 (the routines/tutorials legs cured
+  // to the reference's grid re-order, everything else byte-held) —
+  // verified the rendered face byte-held through the moves. Re-based
+  // ONCE to the round's FINAL read (Cs31Ex97) per the intra-round
+  // doctrine, born-verified on the quiet state: the re-run after this
+  // edit reads "assets stable" + the 15/15 digest).
+  cssPath: "/static/index-Cs31Ex97.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -386,7 +416,58 @@ const LEDGER = {
   // pair-2 generation) per the intra-round doctrine, born-verified on
   // the quiet state: the re-run after this edit reads "assets stable"
   // + the 15/15 digest).
-  jsPath: "/static/index-D7qeWGXk.js",
+  // WH-76 re-base (round 65: the js axis moved THRICE in the round's
+  // window — the WH-52/61/69/71/75 intra-round class at its most
+  // active, paired with the css axis's own double move; the css
+  // axis's own re-base recorded at cssPath above): the round's window
+  // read the js axis move THREE times — D7qeWGXk -> DOP63f79 at the
+  // round's first read (the FORTY-FIRST distinct bundle), then ->
+  // Bt3yZ54q at the pair-1 re-base's own born-verification flight
+  // (the FORTY-SECOND), then -> -TayNEml at the pair-2 re-base's own
+  // born-verification flight (the FORTY-THIRD distinct bundle, the
+  // round's FINAL read). EVERY pair read platform-only: pair 1's
+  // bundle-inventory diff (the WH-60/61 instrument leg) read
+  // PLATFORM-CHUNK-MASS-ROTATION + minor inventory change — 489
+  // added / 485 removed differing string literals, EVERY one a
+  // chunk-path string (the first-read classifier's 14/13 "non-path"
+  // tokens were all dots-in-stem chunk paths — cant-radio.store,
+  // import-repo.bi, channel-onboarding.bi, app-publish.store,
+  // index.umd, usePublishBi.bi, kanban.bi, the companion-agent.bi
+  // WH-75 family — zero true non-path on either side) + net ELEVEN
+  // new platform stems (plan, action, DisabledControlTooltip,
+  // HubSpotContactModal, OAuthRedirectReturnHandler,
+  // userAppsSocketManager, CheckoutBackReturnHandler, tierVisibility,
+  // artifactView, agentWorking, workspaceRenewalDate) / SEVEN removed
+  // (BillingAPI, useGitHubGitRoutesMode, UserNotifications,
+  // useMyBuilderProfile, MenuLink, github, useTalkToSales — every
+  // stem a Base44 platform feature, zero wellness-module names) +
+  // chunk entries ~818 -> ~821; sizes 101,535 -> 101,795 chars
+  // (+260, the hash-length differences across the rotated chunk-path
+  // literals + the net-new entries); pair 2's inventory diff read
+  // pure PLATFORM-CHUNK-HASH-ROTATION-ONLY — 470 added / 471
+  // removed, every one a chunk-path string, ZERO non-path on either
+  // side, ZERO new stems / ONE removed (ClickSmall), chunk entries
+  // ~842 -> ~841, sizes 101,795 -> 101,751 chars (−44, the
+  // hash-length differences + the one removed entry); pair 3's
+  // inventory diff read pure PLATFORM-CHUNK-HASH-ROTATION-ONLY —
+  // 470 added / 470 removed, every one a chunk-path string, ZERO
+  // non-path, ZERO stem changes either direction, SIZE-NEAR-
+  // IDENTICAL at 101,751 -> 101,755 (+4) — the classic
+  // WH-52/53/60/61/68/71/75 rotation class — ZERO app-face change
+  // through any move, no cure required. The same-run digest read
+  // 15/15 MATCH on EVERY generation (the round's first flight AND
+  // both born-verification flights); the round's battery walked the
+  // moves at 3,555/3,555 (the THIRTY-EIGHTH full-width run, the
+  // routines/tutorials legs cured to the reference's grid
+  // re-order); the capture round (the 47th byte comparison) read
+  // 27/34 with the SEVEN movers root-caused (FIVE curable reorder
+  // faces + the two standing sub-visible habitats) and NO
+  // date-axis crossing (same-day Nov 5 faces — the FOURTH carry of
+  // the cycle, carrying to WH-77). Re-based ONCE to the round's
+  // FINAL read (the pair-3 generation) per the intra-round doctrine,
+  // born-verified on the quiet state: the re-run after this edit
+  // reads "assets stable" + the 15/15 digest.
+  jsPath: "/static/index--TayNEml.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both

@@ -192,9 +192,21 @@ test("events: the create form is an inline expanding card, not a modal (the refe
 test("reminders: create one, complete it", async ({ page }) => {
   await page.goto("/Reminders");
 
+  // WH-76: the datetime is COMPUTED, never pinned. The spec once filled
+  // the hard literal "2026-11-05T09:30" — a time-bomb that expired at
+  // 09:30 UTC on Nov 5 2026 (the WH-75 gate had run before that instant,
+  // so the suite read green there; this round's fresh-clone baseline ran
+  // after 14:23 UTC and the created reminder bucketed OVERDUE — the
+  // Upcoming tile stayed 0 and this spec failed RED twice in a row).
+  // +26h lands tomorrow at this wall-clock: far from midnight, far from
+  // the round's own window, and the local datetime-local format the
+  // #rm-when input reads (same idiom as the pastIso workout date below).
+  const when = new Date(Date.now() + 26 * 3600_000);
+  const whenIso = `${when.getFullYear()}-${String(when.getMonth() + 1).padStart(2, "0")}-${String(when.getDate()).padStart(2, "0")}T${String(when.getHours()).padStart(2, "0")}:${String(when.getMinutes()).padStart(2, "0")}`;
+
   await page.getByRole("button", { name: "New Reminder" }).click();
   await page.getByLabel("What should we remind you about?").fill("Study for Math exam");
-  await page.locator("#rm-when").fill("2026-11-05T09:30");
+  await page.locator("#rm-when").fill(whenIso);
   await page.getByRole("button", { name: "Create Reminder" }).click();
 
   await expect(page.getByText("Reminder set")).toBeVisible();
