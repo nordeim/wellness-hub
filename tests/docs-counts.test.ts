@@ -57,7 +57,7 @@ const CANONICAL = {
   unitSuites: 26, // tests/*.test.ts (INCLUDING this suite — WH-37: +tests/seed-parity.test.ts, the demo-account data parity contract)
   e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 376, // `bun run test` total (WH-52: 375 + the login-views WH-52 google family pin — the reference's --sem-* token migration; the src-census WH-19 custom-arm widening rode its existing block)
+  unitChecks: 377, // `bun run test` total (WH-77: 376 + the command-block count scan — the exhaustive stale-count cure, the SKILL §11 pre-ship block's 369/369; the WH-52 login-views family pin rode the same ladder)
   e2eChecks: 72, // `CI=1 bun run test:e2e` total (WH-37: 71 + the demo-face leg, the seeded mood entry's rendered face)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
   // WH-18: ThemeBoot joined src/components/layout/ — the counts move with it.
@@ -260,5 +260,45 @@ it("WH-5: no doc carries a known-wrong count form", () => {
   expect(
     hits,
     "stale count/claim forms still live in the doc set — cure the doc at the tree's truth (the census pins own the tree; this list owns the stale spellings)",
+  ).toEqual([]);
+});
+
+// ---- WH-77: live-tense command-block count annotations -----------------------
+
+// WH-77 (F-1): presence-of-truth cannot see a stale-but-legitimate
+// count. The SKILL §11 pre-ship block carried "369/369 (26 suites)" six
+// count-ladder moves after the tree left 369 behind — a LIVE-TENSE
+// command annotation (the copy-paste block an operator runs verbatim),
+// not history narration, so neither DOC_CLAIMS (the canonical 376 is
+// present elsewhere in the same file) nor FORBIDDEN_FORMS (369 was a
+// real count once) could see it. This scan is exhaustive over the
+// command-block form: every `bun run test` / `bun run test:e2e` line
+// that annotates an NNN/NNN result on the SAME line must carry the
+// CANONICAL total. History narration stays exempt by construction —
+// the pattern requires the command and the count annotation together.
+
+it("WH-77: command-block test-count annotations carry the canonical totals", () => {
+  const hits: string[] = [];
+  for (const doc of DOCS) {
+    const text = readDoc(doc);
+    // two live-tense forms: the fenced command block (`bun run test … #
+    // NNN/NNN`) and the PAD's backtick-arrow prose (`bun run test` →
+    // NNN/NNN). The suite annotation form ("377 checks, 26 suites")
+    // stays owned by DOC_CLAIMS — this scan owns only the NNN/NNN form.
+    // (plain groups, not named — the tsconfig target predates ES2018)
+    const re = /`?bun run test(:e2e)?`?[^#\n→]*(?:#|→)\s*(\d{2,4})\/(\d{2,4})/g;
+    for (const m of text.matchAll(re)) {
+      const isE2e = m[1] !== undefined;
+      const want = isE2e ? CANONICAL.e2eChecks : CANONICAL.unitChecks;
+      const line = m[0].replace(/\s+/g, " ").trim();
+      // m[1] is the optional :e2e group; the NNN/NNN pair is m[2]/m[3]
+      if (m[2] !== m[3]) hits.push(`${doc}: "${line}" — the pair is self-inconsistent`);
+      else if (Number(m[2]) !== want)
+        hits.push(`${doc}: "${line}" — stale count (canonical ${want}; the command block moves in the SAME commit as the count-ladder move)`);
+    }
+  }
+  expect(
+    hits,
+    "live-tense command-block count annotations must carry the canonical totals",
   ).toEqual([]);
 });

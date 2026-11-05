@@ -297,7 +297,26 @@ const LEDGER = {
   // ONCE to the round's FINAL read (Cs31Ex97) per the intra-round
   // doctrine, born-verified on the quiet state: the re-run after this
   // edit reads "assets stable" + the 15/15 digest).
-  cssPath: "/static/index-Cs31Ex97.css",
+  // WH-77 re-base (round 66, the css axis — the single-move class): the
+  // axis moved at the round's first read — Cs31Ex97 -> BSn5NNZl, the
+  // SIXTEENTH css CONTENT change in the watch's history — then HELD at
+  // the re-base's own born-verification flight (the round's FINAL
+  // read). The move carried ZERO app-face change — the round's
+  // atom-level rule diff (the WH-60/61 instrument leg) read the delta
+  // PLATFORM-UTILITY-ONLY: 8 added / 1 removed atoms, ZERO body
+  // changes, zero wellness-module classes (added: the arbitrary-variant
+  // heading-typography family — the descendant h1/h2/h3/h4
+  // font-semibold + h1 text-lg + h2 text-base set + the :is(h1..h4)
+  // mt-space-2 margin member + an h-[1800px] height utility; removed:
+  // the !shadow important-shadow utility) + the same-run computed
+  // digest read 15/15 MATCH on every generation (the round's first
+  // flight AND the born-verification flight) + the round's standing
+  // battery — the THIRTY-NINTH full-width run, all SEVENTEEN surfaces
+  // green at 3,555/3,555 — verified the rendered face byte-held through
+  // the move. Re-based ONCE to the round's FINAL read (BSn5NNZl),
+  // born-verified on the quiet state: the re-run after this edit reads
+  // "assets stable" + the 15/15 digest).
+  cssPath: "/static/index-BSn5NNZl.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -467,7 +486,44 @@ const LEDGER = {
   // FINAL read (the pair-3 generation) per the intra-round doctrine,
   // born-verified on the quiet state: the re-run after this edit
   // reads "assets stable" + the 15/15 digest.
-  jsPath: "/static/index--TayNEml.js",
+  // WH-77 re-base (round 66: the js axis moved TWICE in the round's
+  // window — the WH-52/61/69/71/75/76 intra-round class, paired with
+  // the css axis's own single move; the css axis's own re-base recorded
+  // at cssPath above): the round's window read the js axis move —
+  // -TayNEml -> BXRa7LsX at the round's first read (the FORTY-FOURTH
+  // distinct bundle), then -> CqEsEwKA at the re-base's own
+  // born-verification flight (the FORTY-FIFTH distinct bundle, the
+  // round's FINAL read). EVERY pair read platform-only: pair 1's
+  // bundle-inventory diff (the WH-60/61 instrument leg) read
+  // PLATFORM-CHUNK-HASH-ROTATION (the mass form) — 746 added / 739
+  // removed differing string literals, EVERY one a chunk-path string
+  // (the first-read classifier's 15/15 "non-path" tokens were all
+  // dots-in-stem RELATIVE chunk paths — the ./AuthContext-*.js, the
+  // I18nProvider-*.js, the vendor-react-*.js, the vendor-ui-*.js
+  // family, zero true non-path on either side) + ZERO stem changes
+  // (the 15-stem relative-path family IDENTICAL on both sides, only
+  // the hash suffixes rotated) + chunk entries ~890 -> ~897; sizes
+  // 101,755 -> 102,119 chars (+364, the hash-length differences
+  // across the rotated chunk-path literals + the net-new absolute
+  // entries); pair 2's inventory diff read pure PLATFORM-CHUNK-HASH-
+  // ROTATION-ONLY — 476 added / 476 removed, every one a chunk-path
+  // string (471 absolute + the 5-member relative family), ZERO stem
+  // changes either direction, SIZE-IDENTICAL at 102,119 chars (delta
+  // 0) — the classic WH-52/53/60/61/68/71 rotation class — ZERO
+  // app-face change through any move, no cure required. The same-run
+  // digest read 15/15 MATCH on EVERY generation (the round's first
+  // flight AND the born-verification flight); the round's battery
+  // walked the moves at 3,555/3,555 (the THIRTY-NINTH full-width run,
+  // every surface byte-held); the capture round (the 48th byte
+  // comparison) read 32/34 with the TWO movers root-caused (the
+  // 10-learning text-antialiasing band habitat + the standing 29
+  // maxdelta-1 rasterization family re-firing) and NO date-axis
+  // crossing (same-day Nov 5 faces — the FIFTH carry of the cycle,
+  // carrying to WH-78). Re-based ONCE to the round's FINAL read
+  // (CqEsEwKA) per the intra-round doctrine, born-verified on the
+  // quiet state: the re-run after this edit reads "assets stable" +
+  // the 15/15 digest.
+  jsPath: "/static/index-CqEsEwKA.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both

@@ -1,4 +1,76 @@
-# docs/screenshots md5 ledger — re-based at WH-76 (2026-11-05), 34 files
+# docs/screenshots md5 ledger — re-based at WH-77 (2026-11-05), 34 files
+
+# The WH-77 round (the standing audit round — the DOUBLE-AXIS
+#   platform-move watch with the INTRA-ROUND js re-fire [round 66, the
+#   WH-52/61/69/71/75/76 class]: the watch's first flight read BOTH
+#   axes moved — css /static/index-Cs31Ex97.css -> /static/index-
+#   BSn5NNZl.css, the SIXTEENTH css CONTENT change in the watch's
+#   history + js /static/index--TayNEml.js -> /static/index-BXRa7LsX.js,
+#   the FORTY-FOURTH distinct bundle; the re-base's own born-
+#   verification flight then read the js axis moved AGAIN —
+#   /static/index-BXRa7LsX.js -> /static/index-CqEsEwKA.js, the
+#   FORTY-FIFTH distinct bundle (the round's FINAL read) — while the
+#   css axis HELD. The instrument legs (the WH-60/61 doctrine) read
+#   EVERY pair platform-only: pair 1's js bundle-inventory diff read
+#   PLATFORM-CHUNK-HASH-ROTATION (the mass form) — 746 added / 739
+#   removed differing string literals, EVERY one a chunk-path string
+#   (the 15/15 "non-path" first-reads were all dots-in-stem RELATIVE
+#   chunk paths — the AuthContext/I18nProvider/axiosClient/i18n/
+#   errorReporting/native-mobile-app/toast/use-mobile/use-toast/
+#   useFeatureFlags/utils/dist/vendor-react/vendor-ui family, zero
+#   true non-path) with ZERO stem changes (the 15-stem relative-path
+#   family identical both sides, only the hash suffixes rotated);
+#   sizes 101,755 -> 102,119 (+364); pair 2's js inventory diff read
+#   pure PLATFORM-CHUNK-HASH-ROTATION-ONLY — 476 added / 476 removed,
+#   every one a chunk-path string, ZERO stem changes, SIZE-IDENTICAL
+#   at 102,119 (delta 0); the css atom-level rule diff read the delta
+#   PLATFORM-UTILITY-ONLY — 8 added / 1 removed atoms, ZERO body
+#   changes, zero wellness-module classes (added: the arbitrary-
+#   variant heading-typography family — the descendant h1/h2/h3/h4
+#   font-semibold + h1 text-lg + h2 text-base set + the :is(h1..h4)
+#   mt-space-2 margin member + an h-[1800px] height utility; removed:
+#   the !shadow important-shadow utility); the same-run computed
+#   digest 15/15 MATCH on EVERY generation] + the standing battery's
+#   THIRTY-NINTH full-width run at 3,555/3,555, all SEVENTEEN
+#   surfaces green on their FIRST flights [zero transients, zero
+#   limiter trips in the battery itself — the two verified-kill
+#   restarts at the window boundaries per the WH-74 amendment] +
+#   THE ROUND'S ONE CURE (the docs-counts lockstep gap presence-of-
+#   truth cannot see: wellness-hub_SKILL.md's pre-ship block still
+#   carried the stale 369/369 unit count six ladder moves after the
+#   tree left 369 behind — cured RED -> GREEN by the new exhaustive
+#   command-block count scan [tests/docs-counts.test.ts +1 check],
+#   the count ladder moving 376 -> 377 with every doc site in the
+#   SAME commit, the WH-10 F-2 arithmetic class closed at the source).
+#   The capture round (the FORTY-EIGHTH cross-round byte comparison):
+#   32/34 byte-stable, TWO movers root-caused before the re-base,
+#   pixel-diffed against the git HEAD (WH-76) captures (the app source
+#   is IDENTICAL to the WH-76 tree outside the docs/scripts/tests
+#   ladder — the classification is the root cause, no cure required):
+#   NO DATE-AXIS CROSSING (the FIFTH carry expectation of the new
+#     cycle, exactly as the intake reading predicted): the captures
+#     landed ~22:20 UTC Nov 5, same-day Nov 5 faces vs the WH-76
+#     ledger's Nov 5 faces — no midnight crossed; the expectation
+#     carries to WH-78 if its captures run after ~00:00 UTC Nov 6.
+#   10-learning (8 px / 0.0007%, maxdelta 7, bbox 11x3 at (328,170) —
+#     a gray-400 glyph band) = the standing SUB-VISIBLE RASTERIZATION
+#     signature (the maxdelta-7 family, the WH-53/58/59/64/67 records'
+#     class — the page-subtitle text-antialiasing band; the tutorials
+#     parity leg 790/790 + the headers leg 192/192 green THIS ROUND
+#     prove the grid sequence + every datum byte-held — the glyph-band
+#     class, NOT the reorder genus; re-fired after its WH-76 reorder
+#     face).
+#   29-quick-actions-hover (4 px / 0.0003%, maxdelta 1, bbox 6x6) =
+#     the standing SUB-VISIBLE RASTERIZATION signature (the maxdelta-1
+#     family, the WH-58/60/61/63/64/65/66/76 records; fired at WH-76's
+#     first capture, rested at its re-capture, re-fired here — the
+#     family's standing alternation continues).
+#   The TWO mover rows re-hashed to this round's final set; the source
+#   change this round is the docs ladder only (the SKILL count cure +
+#   the watch ledger re-base + this ledger) — the movers are the
+#   standing environmental classifications, no further cure required.
+
+# -- prior re-base (WH-76, 2026-11-05) --------------------------------------
 
 # The WH-76 round (the standing audit round — the DOUBLE-AXIS platform-
 #   move watch + THE REFERENCE'S GRID RE-ORDER [round 65, the first
@@ -535,44 +607,12 @@
 #     identical parameters; re-fired here — a consecutive re-fire).
 #   25-dark-login-focus (the WH-20 focus-ring interpolation-tail
 #     habitat) held BYTE-STABLE for the third consecutive round.
-# -- prior re-base (WH-67, 2026-11-04) --------------------------------------
-#
-#
-# The WH-67 round (the standing audit round — the fully-quiet watch
-#   [round 56: both axes stable — css BVWWKVEJ for the EIGHTH
-#   consecutive round + js 6xnUqbWf, the WH-61 re-based final read,
-#   unchanged; the TENTH fully-quiet read of the standing era] + the
-#   same-run digest 15/15 + the full seventeen-surface battery
-#   3,555/3,555 live-vs-live): the THIRTY-EIGHTH cross-round byte
-#   comparison under the committed procedure — 32/34 byte-stable, TWO
-#   movers ALL root-caused before this re-base, each pixel-diffed
-#   against the git HEAD (WH-66) captures (the source is IDENTICAL to
-#   the WH-66 tree — zero git diff outside docs/screenshots — the
-#   classification is the root cause, no cure required):
-#   NO DATE-AXIS CROSSING — the doctrine amendment (the WH-61 class,
-#     exactly as the intake reading predicted): this round ran ~03:49
-#     UTC Nov 4, BEFORE the Nov 4 -> Nov 5 UTC midnight, and the WH-66
-#     ledger already carries the Nov 4 faces (its captures ~03:12 UTC
-#     Nov 4) — same-day faces, so the session_129 tail's predicted
-#     re-fire did not land (its premise was the captures crossing the
-#     Nov 5 midnight); the expectation carries to WH-68's captures (the
-#     FIFTH carry of the cycle, the fourth having carried at WH-67).
-#   10-learning (9 px / 0.0008%, maxdelta 7, bbox 11x2) = the standing
-#     SUB-VISIBLE RASTERIZATION signature (the maxdelta-7 family, the
-#     WH-53/58/59/64 records' identical parameters; byte-stable at
-#     WH-66 after its WH-65 re-fire, re-fired here — the family's
-#     standing re-fire/byte-stable alternation).
-#   29-quick-actions-hover (5 px / 0.0004%, maxdelta 1, bbox 5x5) = the
-#     standing SUB-VISIBLE RASTERIZATION signature (the maxdelta-1
-#     family, the WH-58/60/61/63/64/65/66 records' identical
-#     parameters; re-fired here after the WH-65/66 records, a
-#     consecutive re-fire — the family's standing alternation).
 #
 #
 # Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31,
 # WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
 # WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49, WH-50,
-# WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61, WH-62, WH-63, WH-64, WH-65, WH-66.
+# WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61, WH-62, WH-63, WH-64, WH-65, WH-66, WH-67.
 #
 #
 
@@ -585,7 +625,7 @@
 07-events.png f63519c1aba725c2474e8caedcf2e150
 08-studyresources.png 66442104ebac81afca43628cb7a5ef53
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
-10-learning.png 81cfefad862ef50adf6269169c49273c
+10-learning.png 6a90216134614b89a297ede0a3ac237c
 11-goals.png 56a0ae5483cdda64d2168932e8359983
 12-profile.png edb647d4bde50a717af5a88995e1a048
 13-mobile-login.png 597d96eed24ca1c3042beb686c580fb4
@@ -604,7 +644,7 @@
 26-events-inline-form.png d67c88ea5fad4949eedb6d5a4c0660ef
 27-dark-mood-form.png 59dfd43f0f45cf09b943dced63159ba8
 28-routines-schedule-modal.png 4cdea6c6d6f01ecc4963e9f06907ce37
-29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
+29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
 30-tutorial-card-hover.png 5f4f2f9d6246bda707021afe3b774c9e
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
 32-mentalhealth-form-interior.png 0245c4368a7a24ad06285000aa8f4c40
