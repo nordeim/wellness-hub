@@ -1,5 +1,55 @@
-# docs/screenshots md5 ledger — re-based at WH-73 (2026-11-05), 34 files
+# docs/screenshots md5 ledger — re-based at WH-74 (2026-11-05), 34 files
 #
+# The WH-74 round (the standing audit round — the QUIET watch on BOTH
+#   flights [round 63: both axes stable — css Bt66wgTd for the FOURTH
+#   consecutive round + js DyOb2xUE, the WH-71 re-based final read,
+#   unchanged; the first flight ~01:21 UTC and the confirming re-flight
+#   ~03:56 UTC both reading the digest 15/15 MATCH; rounds 61-63 = THREE
+#   consecutive quiet reads on the same asset state — the cooling note
+#   holds; the quiet round is a reading, never a retirement, the WH-55
+#   precedent; NO watch ledger re-base] + the standing battery's
+#   THIRTY-SIXTH full-width run at 3,555/3,555, all SEVENTEEN surfaces
+#   green on their FIRST flights — zero transients in the battery itself,
+#   zero limiter trips either side]).
+#   The round's infrastructure note: the WORKSPACE RESET mid-round (the
+#   sandbox recycle class — the tool infrastructure failed ~01:22 UTC, the
+#   session restarted ~03:51 UTC): a fresh clone at the same HEAD
+#   (c4058d2) + bun install + the .env recreation + the chromium-1248
+#   restore (the stale-cache class' first re-fire since WH-71) + the full
+#   baseline gate re-run ALL GREEN on the fresh tree (lint 0/0 · tsc 0 ·
+#   unit 376/376 · build OK · smoke 14/14 · e2e 72/72 · mobile-nav 8/8).
+#   The capture round (the FORTY-FIFTH cross-round byte comparison):
+#   33/34 byte-stable, the ONE mover root-caused before the re-base,
+#   pixel-diffed against the git HEAD (WH-73) captures. THE DATE-AXIS
+#   CARRIED — the WH-56 mover class did NOT fire (the SECOND carry
+#   expectation of the new cycle: the captures landed ~04:07 UTC Nov 5,
+#   same-day Nov 5 faces vs the WH-73 ledger's Nov 5 faces — no midnight
+#   crossed; the expectation carries to WH-75 if its captures run after
+#   ~00:00 UTC Nov 6).
+#   The capture-phase procedure note (the lesson-46 amendment): the first
+#   capture attempt tripped OUR dev server's login limiter (the WH-42 F-4
+#   class) because the documented mid-battery restart had FAILED
+#   SILENTLY — pkill -f "bun run dev" does not match the child next dev
+#   process, the new server exited EADDRINUSE while the old server kept
+#   its consumed limiter state; the cure is the VERIFIED kill (match "next
+#   dev", confirm the port free, then restart + re-run). A restart that
+#   does not verify the kill is not a restart.
+#   The ONE mover = the standing sub-visible habitat, re-firing at its
+#   recorded signature:
+#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 =
+#     the focused input's ring area) = the WH-20 focus-ring
+#     INTERPOLATION-TAIL habitat — the IDENTICAL parameters to its
+#     WH-71/72/73-family records (re-fired at WH-73 and here; the
+#     family's standing alternation).
+#   29-quick-actions-hover BYTE-STABLE this round (the maxdelta-1
+#     rasterization family's other member — re-fired at WH-73, resting
+#     here — the alternation compressing to consecutive rounds on the
+#     family level while the individual members alternate).
+#   The source IDENTICAL to the WH-73 tree (zero git diff outside
+#     docs/screenshots — the classification is the root cause, no cure
+#     required).
+
+# -- prior re-base (WH-73, 2026-11-05) --------------------------------------
 # The WH-73 round (the standing audit round — the QUIET watch with ONE
 #   first-flight transient absorbed [round 62: both axes stable — css
 #   Bt66wgTd for the THIRD consecutive round + js DyOb2xUE, the WH-71
@@ -384,46 +434,10 @@
 #     re-fired at WH-63/64 and here — consecutive re-fires of the
 #     identical class).
 #
-# -- prior re-base (WH-64, 2026-11-04) --------------------------------------
-#
-# The WH-64 round (the standing audit round — the fully-quiet watch
-#   [round 53: both axes stable — css BVWWKVEJ for the FIFTH consecutive
-#   round + js 6xnUqbWf, the WH-61 re-based final read, unchanged; the
-#   SEVENTH fully-quiet read of the standing era] + the same-run digest
-#   15/15 + the full seventeen-surface battery 3,555/3,555 live-vs-live):
-#   the THIRTY-FIFTH cross-round byte comparison under the committed
-#   procedure — 31/34 byte-stable, THREE movers ALL root-caused before
-#   this re-base, each pixel-diffed against the git HEAD (WH-63)
-#   captures (the source is IDENTICAL to the WH-63 tree — zero git
-#   diff outside docs/screenshots — the classification is the root
-#   cause, no cure required):
-#   NO DATE-AXIS CROSSING — the doctrine amendment (the WH-61 class,
-#     exactly as the intake reading predicted): this round ran ~01:50
-#     UTC Nov 4, BEFORE the Nov 4 -> Nov 5 UTC midnight, and the WH-63
-#     ledger already carries the Nov 4 faces (its captures ~00:55 UTC
-#     Nov 4) — same-day faces, so the session_123 tail's predicted
-#     re-fire did not land (its premise was the captures crossing the
-#     Nov 5 midnight); the expectation carries to WH-65's captures
-#     (the SECOND carry of the cycle).
-#   10-learning (9 px / 0.0008%, maxdelta 7, bbox 11x2) = the standing
-#     SUB-VISIBLE RASTERIZATION signature (the maxdelta-7 family, the
-#     WH-53/58/59 records' identical parameters; byte-stable through
-#     WH-60/61/62/63, re-fired here — the WH-53 round's identical
-#     re-fire class after four byte-stable rounds).
-#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 =
-#     the focused input's ring area) = the WH-20 focus-ring
-#     INTERPOLATION-TAIL habitat — the IDENTICAL parameters to its
-#     WH-58/59/60/61/62/63 records (its SEVENTH consecutive round as a
-#     mover, the same sub-visible signature).
-#   29-quick-actions-hover (5 px / 0.0004%, maxdelta 1, bbox 5x5) = the
-#     standing SUB-VISIBLE RASTERIZATION signature (the maxdelta-1
-#     family, the WH-58/60/61/63 records' identical parameters;
-#     byte-stable at WH-59/62, re-fired at WH-63 and here).
-#
 # Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31,
 # WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
 # WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49, WH-50,
-# WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61, WH-62, WH-63.
+# WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61, WH-62, WH-63, WH-64.
 #
 #
 
@@ -451,7 +465,7 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
+25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
 26-events-inline-form.png d67c88ea5fad4949eedb6d5a4c0660ef
 27-dark-mood-form.png 59dfd43f0f45cf09b943dced63159ba8
 28-routines-schedule-modal.png be8cad816af71cedfa1f5438a411f374
@@ -461,5 +475,3 @@
 32-mentalhealth-form-interior.png 0245c4368a7a24ad06285000aa8f4c40
 33-sr-form-interior.png 74ed140c9d101aa5fe537405ee3ded12
 34-mood-list-interior.png bbedb6b0578994263c76231b09090da5
-
-
