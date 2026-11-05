@@ -1,5 +1,43 @@
-# docs/screenshots md5 ledger — re-based at WH-72 (2026-11-05), 34 files
+# docs/screenshots md5 ledger — re-based at WH-73 (2026-11-05), 34 files
 #
+# The WH-73 round (the standing audit round — the QUIET watch with ONE
+#   first-flight transient absorbed [round 62: both axes stable — css
+#   Bt66wgTd for the THIRD consecutive round + js DyOb2xUE, the WH-71
+#   re-based final read, unchanged; the first flight read a dashboard
+#   tiles-missing DRIFT — the data-loading race class — and the immediate
+#   re-flight read 15/15 MATCH clean, the documented
+#   first-flight-errors-are-infrastructure class; the quiet round is a
+#   reading, never a retirement, the WH-55 precedent; NO watch ledger
+#   re-base] + the standing battery's THIRTY-FIFTH full-width run at
+#   3,555/3,555, all SEVENTEEN surfaces green on their FIRST flights —
+#   zero transients in the battery itself, zero limiter trips either
+#   side, the documented mid-battery dev-server restart running per the
+#   lesson-46 doctrine]).
+#   The capture round (the 44th cross-round byte comparison): 32/34
+#   byte-stable, BOTH movers root-caused before the re-base,
+#   pixel-diffed against the git HEAD (WH-72) captures. THE DATE-AXIS
+#   CARRIED — the WH-56 mover class did NOT fire (the FIRST carry
+#   expectation of the new cycle: the round started ~00:44 UTC Nov 5
+#   and its captures landed ~00:57 UTC Nov 5, same-day Nov 5 faces vs
+#   the WH-72 ledger's Nov 5 faces — no midnight crossed; the
+#   expectation carries to WH-74, the SECOND carry of the new cycle).
+#   The TWO movers = the standing sub-visible habitats, both re-firing
+#   at (or one pixel off) their recorded signatures:
+#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 =
+#     the focused input's ring area) = the WH-20 focus-ring
+#     INTERPOLATION-TAIL habitat — the IDENTICAL parameters to its
+#     WH-71/72-family records (byte-stable at WH-72, re-fired here;
+#     the family's standing alternation compressing to near-consecutive
+#     rounds).
+#   29-quick-actions-hover (5 px / 0.0004%, maxdelta 1, bbox 6x6) =
+#     the standing SUB-VISIBLE RASTERIZATION signature (the maxdelta-1
+#     family — one pixel off its 4px/bbox-5x5 WH-71 record; byte-stable
+#     at WH-72, re-fired here).
+#   The source IDENTICAL to the WH-72 tree (zero git diff outside
+#     docs/screenshots — the classification is the root cause, no cure
+#     required).
+
+# -- prior re-base (WH-72, 2026-11-05) --------------------------------------
 # The WH-72 round (the standing audit round — the FULLY-QUIET watch
 #   [round 61: both axes stable — css Bt66wgTd for the SECOND consecutive
 #   round + js DyOb2xUE, the WH-71 re-based final read, unchanged; the
@@ -382,40 +420,10 @@
 #     family, the WH-58/60/61/63 records' identical parameters;
 #     byte-stable at WH-59/62, re-fired at WH-63 and here).
 #
-# -- prior re-base (WH-63, 2026-11-04) --------------------------------------
-#
-# The WH-63 round (the standing audit round — the fully-quiet watch
-#   [round 52: both axes stable — css BVWWKVEJ for the FOURTH consecutive
-#   round + js 6xnUqbWf, the WH-61 re-based final read, unchanged; the
-#   SIXTH fully-quiet read of the standing era] + the same-run digest
-#   15/15 + the full seventeen-surface battery 3,555/3,555 live-vs-live):
-#   the THIRTY-FOURTH cross-round byte comparison under the committed
-#   procedure — 32/34 byte-stable, TWO movers ALL root-caused before
-#   this re-base, each pixel-diffed against the git HEAD (WH-62)
-#   captures (the source is IDENTICAL to the WH-62 tree — zero git
-#   diff outside docs/screenshots — the classification is the root
-#   cause, no cure required):
-#   NO DATE-AXIS CROSSING — the doctrine amendment (the WH-61 class):
-#     this round ran ~00:55 UTC Nov 4, BEFORE the Nov 4 -> Nov 5 UTC
-#     midnight, and the WH-62 ledger already carries the Nov 4 faces
-#     (its captures ~00:08 UTC Nov 4) — same-day faces, so the
-#     session_121 tail's predicted re-fire did not land (its premise
-#     was the captures crossing the Nov 5 midnight); the expectation
-#     carries to WH-64's captures (the FIRST carry of the new cycle).
-#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 =
-#     the focused input's ring area) = the WH-20 focus-ring
-#     INTERPOLATION-TAIL habitat — the IDENTICAL parameters to its
-#     WH-58/59/60/61/62 records (its SIXTH consecutive round as a
-#     mover, the same sub-visible signature).
-#   29-quick-actions-hover (5 px / 0.0004%, maxdelta 1, bbox 5x5) =
-#     the standing SUB-VISIBLE RASTERIZATION signature (the maxdelta-1
-#     family, the WH-58/60/61 records' identical parameters;
-#     byte-stable at WH-59/62, re-fired here).
-#
 # Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31,
 # WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
 # WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49, WH-50,
-# WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61, WH-62.
+# WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61, WH-62, WH-63.
 #
 #
 
@@ -443,11 +451,11 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
+25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
 26-events-inline-form.png d67c88ea5fad4949eedb6d5a4c0660ef
 27-dark-mood-form.png 59dfd43f0f45cf09b943dced63159ba8
 28-routines-schedule-modal.png be8cad816af71cedfa1f5438a411f374
-29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
+29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
 30-tutorial-card-hover.png f8aaa8fd7a33d0a3ba74596ab0a81a5b
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
 32-mentalhealth-form-interior.png 0245c4368a7a24ad06285000aa8f4c40
