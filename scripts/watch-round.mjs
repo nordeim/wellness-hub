@@ -316,7 +316,28 @@ const LEDGER = {
   // the move. Re-based ONCE to the round's FINAL read (BSn5NNZl),
   // born-verified on the quiet state: the re-run after this edit reads
   // "assets stable" + the 15/15 digest).
-  cssPath: "/static/index-BSn5NNZl.css",
+  // WH-81 re-base (round 70: BOTH axes moved at the round's first read
+  // — the css axis BSn5NNZl -> Bx9xPHC1, the SEVENTEENTH css CONTENT
+  // change in the watch's history, paired with the js axis move
+  // B83bBhZf -> Dd6vzWqe, the FORTY-SEVENTH distinct bundle — the
+  // double-axis class). The move carried ZERO computed drift — the
+  // same-run computed digest read 15/15 MATCH (the mobile header +
+  // the full drawer battery inside: escape + unlock + grow-auto-close
+  // all pass) + the round's standing battery — the FORTY-THIRD
+  // full-width run, the fifteen non-reorder surfaces green with the
+  // two reorder legs the round's finding (the reference re-ordered
+  // BOTH content grids, the WH-42/43 class's third firing — cured
+  // RED->GREEN with the seed's seventeen sortOrder renumbers, the
+  // legs re-flighted 697/697 + 790/790) — verified the rendered face
+  // byte-held through the moves, and the capture round (the 52nd
+  // byte comparison) read 28/34 with the SIX movers root-caused (the
+  // five reorder faces + the 29 maxdelta-1 family re-fire) and NO
+  // date-axis crossing (same-day Nov 6 faces — the THIRD carry of
+  // the cycle, the re-arm moving to the Nov 6 -> Nov 7 crossing).
+  // Re-based ONCE to the round's FINAL read (Bx9xPHC1) per the
+  // intra-round doctrine, born-verified on the quiet state: the
+  // re-run after this edit reads "assets stable" + the 15/15 digest.
+  cssPath: "/static/index-Bx9xPHC1.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -539,7 +560,28 @@ const LEDGER = {
   // (B83bBhZf) per the intra-round doctrine, born-verified on the
   // quiet state: the re-run after this edit reads "assets stable" +
   // the 15/15 digest.
-  jsPath: "/static/index-B83bBhZf.js",
+  // WH-81 re-base (round 70: the js axis moved ONCE in the round's
+  // window — B83bBhZf -> Dd6vzWqe, the FORTY-SEVENTH distinct bundle,
+  // PAIRED with the css axis move BSn5NNZl -> Bx9xPHC1 — the
+  // double-axis class): the same-run computed digest read 15/15
+  // MATCH (the mobile header + drawer battery inside), the round's
+  // battery walked the moves (the fifteen non-reorder surfaces green
+  // on their first flights + the two reorder legs the round's finding
+  // — the reference re-ordered BOTH content grids, the WH-42/43
+  // class's third firing, cured RED->GREEN with the seed's seventeen
+  // sortOrder renumbers + the re-authored grid-order pins, the legs
+  // re-flighted 697/697 + 790/790), and the capture round (the 52nd
+  // byte comparison) read 28/34 with the SIX movers root-caused (the
+  // five reorder faces — 03-routines + 18-dark-routines + 10-learning
+  // + 30-tutorial-card-hover + the 28 schedmodal's .first() anchor
+  // opening the NEW family-B first template — + the 29 maxdelta-1
+  // family's re-fire after its WH-79/80 rest) and NO date-axis
+  // crossing (same-day Nov 6 faces — the THIRD carry of the cycle,
+  // the re-arm moving to the Nov 6 -> Nov 7 crossing, carrying to
+  // WH-82). Re-based ONCE to the round's FINAL read (Dd6vzWqe) per
+  // the intra-round doctrine, born-verified on the quiet state: the
+  // re-run after this edit reads "assets stable" + the 15/15 digest.
+  jsPath: "/static/index-Dd6vzWqe.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both

@@ -1178,7 +1178,7 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
       });
 
     const resting = await readCard();
-    expect(resting, "the first seeded tutorial card must render").toBeTruthy();
+    expect(resting, "the named seeded tutorial card must render (position-agnostic — the WH-81 reorder moved it to third)").toBeTruthy();
     expect(resting!.cardGroup, "the card must carry the group class (the reveal family's scope)").toBe(true);
     expect(resting!.btnOpacity, "the Watch Now button is INVISIBLE at rest (opacity-0 — the reference's reveal family)").toBe("0");
     expect(resting!.overlayBg, "the cover scrim is TRANSPARENT at rest (bg-black/0 — Tailwind v4 computes the alpha token in oklab, the WH-21 lesson)").toBe("oklab(0 0 0 / 0)");
@@ -1624,14 +1624,15 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
       const bareCards = cards.filter((c) => !c.hasImg);
       expect(videoCards.length, "exactly SIX templates carry the thumbnail zone (the reference's own split — the fields its seed carries)").toBe(6);
       expect(bareCards.length, "the five field-less templates render the bare face").toBe(5);
-      // WH-76: the first video card follows the reference's SECOND
+      // WH-81: the first video card follows the reference's THIRD
       // re-ordered grid (the reorder cure re-sequenced our seed to its
-      // live order again — Creative Flow Session moved 6→5, Focused
-      // Study Session 5→9; the pin moves with the decoded reference,
-      // the drift guard working — the video-card sequence is now
-      // Creative Flow, Quick Productivity Reset, Energizing Morning
-      // Kickstart, Self-Care Sunday, Focused Study, Peaceful Evening)
-      expect(videoCards[0]!.title, "the first video card is Creative Flow Session (the reference's WH-76 grid order)").toBe("Creative Flow Session");
+      // live order again — Focused Study Session moved 10→6 and now
+      // leads the video family; the pin moves with the decoded
+      // reference, the drift guard working — the video-card sequence
+      // is now Focused Study, Creative Flow, Energizing Morning
+      // Kickstart, Self-Care Sunday, Quick Productivity Reset,
+      // Peaceful Evening)
+      expect(videoCards[0]!.title, "the first video card is Focused Study Session (the reference's WH-81 grid order)").toBe("Focused Study Session");
       for (const c of videoCards) {
         expect(c.cardGroup, `the video card must carry group (${c.title})`).toBe(true);
         expect(c.imgAlt, `the img alt carries the template name (${c.title})`).toBe(c.title);
@@ -1644,13 +1645,13 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
       // the REVEAL — a REAL pointer on the first video card (the (h)
       // doctrine: synthetic mouseenter never sets :hover)
       const cardLoc = page
-        .getByText("Creative Flow Session", { exact: true })
+        .getByText("Focused Study Session", { exact: true })
         .locator("xpath=ancestor::*[contains(@class,'rounded')][1]")
         .first();
       await cardLoc.scrollIntoViewIfNeeded();
       await cardLoc.hover();
       await page.waitForTimeout(600); // the settle doctrine
-      const after = (await readCards()).find((c) => c.title === "Creative Flow Session")!;
+      const after = (await readCards()).find((c) => c.title === "Focused Study Session")!;
       expect(after.overlayOpacity, "the reveal overlay fades IN on card hover (the whole scrim + button family)").toBe("1");
       // the button's accessible name (our aria-label superset — the
       // reference's own button is unlabeled; the axe net needs a name)
@@ -1659,9 +1660,9 @@ test.describe("a11y net — the interaction states (the WH-20 widening)", () => 
         const b = btns.find((x) => (x.getAttribute("aria-label") || "").startsWith("Watch Video:"));
         return b ? b.getAttribute("aria-label") : null;
       });
-      // WH-76: the first video card's name follows the reference's
-      // second re-ordered grid (Creative Flow Session since the WH-76
+      // WH-81: the first video card's name follows the reference's
+      // third re-ordered grid (Focused Study Session since the WH-81
       // reorder cure)
-      expect(label, "the Watch Video button carries the aria-label superset").toBe("Watch Video: Creative Flow Session");
+      expect(label, "the Watch Video button carries the aria-label superset").toBe("Watch Video: Focused Study Session");
     });
   });

@@ -84,17 +84,19 @@ describe("WH-37 F-2: the demo-account data parity contract", () => {
   });
 });
 
-// WH-76: the reference RE-ORDERED its eleven-template grid a second time
-// (the WH-42 class re-firing — the battery's live ORDER member caught the
-// move: the set + per-template data byte-equal, only the SEQUENCE moved).
-// Decode-settled this round (the parity leg's landscape.order member + a
-// dedicated decode probe, two same-round reads identical). New sequence:
-// the 5-Minute Energizer now leads; Calm Evening ↔ Self-Care Reset swap;
-// Focused Study slides to position 10 (index 9); Creative Flow + Quick
-// Productivity move up; positions 3/8/9/11 (Pomodoro, Kickstart, Sunday,
-// Wind-Down) held.
+// WH-81: the reference RE-ORDERED its eleven-template grid a THIRD
+// time (the WH-42 class re-firing — the battery's live ORDER member
+// caught the move again: the set + per-template data byte-equal, only
+// the SEQUENCE moved). Decode-settled this round (the parity leg's
+// landscape.order member, two same-round reads identical). New
+// sequence: 10-Minute Home Workout now leads; 5-Minute Morning
+// Energizer second (the head pair swap); Self-Care Sunday Reset ↔ Calm
+// Evening Wind-Down swap (positions 4/5); Focused Study Session slides
+// 10→6 and Creative Flow 7→7 while Quick Productivity Reset moves
+// 7→10 (the middle reshuffle); positions 3/8/9/11 (Pomodoro, Kickstart,
+// Sunday, Wind-Down) held.
 describe("WH-42 F-1: the seeded template grid-order contract", () => {
-  it("the ROUTINE_TEMPLATES sortOrder sequence mirrors the reference's live grid order (re-decoded 2026-11-05, the WH-76 reorder)", () => {
+  it("the ROUTINE_TEMPLATES sortOrder sequence mirrors the reference's live grid order (re-decoded 2026-11-06, the WH-81 reorder)", () => {
     // slice to the ROUTINE_TEMPLATES array (the tutorials follow it)
     const marker = SEED.indexOf("const ROUTINE_TEMPLATES");
     expect(marker, "the seed carries the ROUTINE_TEMPLATES array").toBeGreaterThan(0);
@@ -110,16 +112,16 @@ describe("WH-42 F-1: the seeded template grid-order contract", () => {
     // the sortOrder-sorted sequence == the reference's live grid order
     const byOrder = [...pairs].sort((a, b) => a.sortOrder - b.sortOrder).map((p) => p.key);
     expect(byOrder).toEqual([
-      "5_minute_morning_energizer",
       "10_minute_home_workout",
+      "5_minute_morning_energizer",
       "the_pomodoro_power_study_session",
-      "calm_evening_wind_down",
       "self_care_sunday_reset",
+      "calm_evening_wind_down",
+      "focused_study_session",
       "creative_flow_session",
-      "quick_productivity_reset",
       "energizing_morning_kickstart",
       "self_care_sunday",
-      "focused_study_session",
+      "quick_productivity_reset",
       "peaceful_evening_wind_down",
     ]);
   });
@@ -183,21 +185,22 @@ describe("WH-42 F-1: the seeded template grid-order contract", () => {
   });
 });
 
-// WH-76: the tutorial grid RE-ORDERED a second time (the WH-43 class
-// re-firing — the exact same class the WH-42/43 rounds cured for both
-// grids: the SET is identical (all twelve titles + per-title data
-// byte-equal), only the SEQUENCE moved — the head reshuffled again:
-// Overcoming Procrastination now leads, Building Morning second, Tiny
-// Habits third, Science of Motivation fourth, Self-Compassion fifth;
-// positions 7-8 (Meal Prep, Better Habits) held again; the tail
-// reshuffled: Mindfulness ninth, Effective Study tenth, Yoga eleventh,
-// Time Management twelfth). Decode-settled this round (the parity
-// leg's per-card drift members + a dedicated decode probe, two
-// same-round reads identical). The live pin is the ORDER member in
-// scripts/parity-tutorials.mjs; this is the offline guard that keeps
-// the seed from silently regressing between rounds.
+// WH-81: the tutorial grid RE-ORDERED a THIRD time (the WH-43 class
+// re-firing — the exact same class the WH-42/43 + WH-76 rounds cured
+// for both grids: the SET is identical (all twelve titles + per-title
+// data byte-equal), only the SEQUENCE moved — the head reshuffled
+// again: The Power of Tiny Habits now leads, Self-Compassion for
+// Perfectionists second, Overcoming Procrastination third, Building
+// Morning Routines fourth, Beating Decision Fatigue fifth, The Science
+// of Motivation sixth; positions 7-8 (Meal Prep, Better Habits) held
+// AGAIN; the tail reshuffled: 10-Minute Morning Yoga Flow ninth,
+// Mindfulness tenth, Time Management eleventh, Effective Study
+// twelfth). Decode-settled this round (the parity leg's per-card drift
+// members, three same-round reads identical). The live pin is the
+// ORDER member in scripts/parity-tutorials.mjs; this is the offline
+// guard that keeps the seed from silently regressing between rounds.
 describe("WH-43 F-1: the seeded tutorial grid-order contract", () => {
-  it("the TUTORIALS sortOrder sequence mirrors the reference's live grid order (re-decoded 2026-11-05, the WH-76 reorder)", () => {
+  it("the TUTORIALS sortOrder sequence mirrors the reference's live grid order (re-decoded 2026-11-06, the WH-81 reorder)", () => {
     const marker = SEED.indexOf("const TUTORIALS");
     expect(marker, "the seed carries the TUTORIALS array").toBeGreaterThan(0);
     const body = SEED.slice(marker, SEED.indexOf("];", marker));
@@ -212,18 +215,18 @@ describe("WH-43 F-1: the seeded tutorial grid-order contract", () => {
     // the sortOrder-sorted sequence == the reference's live grid order
     const byOrder = [...pairs].sort((a, b) => a.sortOrder - b.sortOrder).map((p) => p.key);
     expect(byOrder).toEqual([
+      "the_power_of_tiny_habits",
+      "self_compassion_for_perfectionists",
       "overcoming_procrastination_the_2_minute_rule",
       "building_morning_routines_that_actually_stick",
-      "the_power_of_tiny_habits",
-      "the_science_of_motivation",
-      "self_compassion_for_perfectionists",
       "beating_decision_fatigue",
+      "the_science_of_motivation",
       "healthy_meal_prep_guide",
       "building_better_habits",
-      "mindfulness_meditation_for_anxiety",
-      "effective_study_techniques",
       "10_minute_morning_yoga_flow",
+      "mindfulness_meditation_for_anxiety",
       "time_management_mastery",
+      "effective_study_techniques",
     ]);
   });
 });
