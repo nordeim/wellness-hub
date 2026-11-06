@@ -1,0 +1,50 @@
+I'll start by refreshing the workspace and reviewing the repository.
+The workspace SURVIVED the recycle this time — the tree is clean at 4817efe (the session_154 transcript commit on the WH-77 ship b4e30dc). The git pull is a fast-forward of docs/session_154.md only. This round is WH-78 (watch round 67).
+The core docs are large (AGENTS 139KB, PAD 256KB, SKILL 176KB, worklog 744KB) — I'll read the small ones directly and delegate the four huge files to parallel exploration agents while I set up the environment.
+All four doc reviews are back: the watch ledger baseline (BSn5NNZl.css / CqEsEwKA.js), the round conventions (the battery's 17 surfaces / 3,555 members / two-window split, the canonical 34-file capture procedure, the ship runbook), the docs ladder requirements, and the WH-78 standing expectations — the date-axis SIXTH carry re-fires if the captures cross ~00:00 UTC Nov 6. One doc-gap candidate found: the SKILL Appendix-B Screenshots row still says 01-16.
+The environment check: node_modules intact, chromium-1248 cache present, .env present with its AUTH_SECRET. Running the install verification + db push/seed/census.
+Census MATCH. Now the baseline gate — the fast legs first.
+Lint 0/0 · tsc 0. Now the unit suite.
+Unit 377/377 · 26 suites — the ladder FLAT at the WH-77 total. Now the build.
+Build OK. Now the smoke ladder.
+Smoke 14/14 — the SEO legs green. Now the full e2e suite.
+**Baseline gate FULLY GREEN at the WH-77 ship state**: lint 0/0 · tsc 0 · unit 377/377 · build OK · smoke 14/14 · e2e 72/72 · census MATCH · bun audit zero. The operator's standing checklist items all re-verified along the way (.env db contract, .env.example, vitest/playwright configs, sitemap/robots/manifest, the six @source not directives, the eslint skills-exclude). Dev server up (login 200, root 307). It's 23:55 UTC Nov 5 — the date-axis crossing is 5 minutes out; the captures will cross it.
+**Watch round 67 reads QUIET**: both axes STABLE at the WH-77 re-based values (BSn5NNZl.css / CqEsEwKA.js, cdn true, cfg true), the digest 15/15 MATCH, the mobile drawer battery green inside the watch. Per the WH-55 precedent: a reading, never a retirement — no watch-ledger re-base. Now the battery: zero-login legs first.
+Login 38/38 · authviews 192/192. Now window 1 — the seven sessioned surfaces.
+Window 1 all green (moodForm 20 · shell 61 · dashboard 105 · headers 192 · toolbars 114 · kpis 315 · routines 697). 8 reference logins spent — and we've crossed 00:00 UTC Nov 6. Now the verified-kill dev-server restart (the WH-74 amendment) while the reference limiter window ages.
+Dev server restarted clean (process matched, port free, server live). While waiting out the limiter window, I'll audit the doc-gap candidate — the SKILL Appendix-B rows.
+The finding is precise: THREE stale rows in the same drift genus (the Screenshots row's `docs/screenshots/01-16` claim vs the live 34-file set; the mobile-testing row's `13-16` sub-range omitting 19-dark-mobile-nav-open; the session-log row's "WH-1/WH-2 at the head" moving-target pointer). The cure design: a live-truth capture-set range scan in the docs-counts pin (the "what the tree can count, this pin computes live" doctrine) — RED at birth on the two stale range claims. Writing the RED test now.
+**RED is exact** — the new scan trips on precisely the two stale range claims (`01-16` + `13-16`), and the new split claim's absence confirms the GREEN target. Holding the GREEN for after the captures, per the round order. Meanwhile the pixel-diff and byte-compare scratch scripts are prepared (session-local, outside the repo).
+The limiter window has aged out. Window 2 now — the eight sessioned surfaces.
+**THE BATTERY IS FULLY GREEN — the FORTIETH full-width run: 3,555/3,555, all seventeen surfaces, zero transients, zero limiter trips.** Now the capture round: verified-kill restart, fresh seed, the canonical 34-file procedure.
+34 captures landed at ~00:20 UTC Nov 6 — AFTER the midnight crossing (the WH-77 ledger's faces are Nov 5). Census MATCH after re-seed. Now the FORTY-NINTH byte comparison.
+**27/34 byte-stable, SEVEN movers** — five are the expected date-axis family (07, 26, 27, 28, 32), 29 is the standing maxdelta-1 family, and 24-dark-exercise-rows is NOT in the expected set. Pixel-diffing all seven against git HEAD.
+The five date-axis movers confirm at EXACTLY the WH-62-record parameters (07-events the identical 14,604 px / bbox 161x96; the trio at bbox 8x10; 26's todayIso() band) — **the "5"→"6" re-fire has landed**. 29 matches its standing family. 24's diff is 5 px / maxdelta 17 / bbox 4x2 — unclassified. Root-causing it: sampling the region shape.
+The 24 region is a solid orange block with dark diagonal cut-ins — the diff sits exactly on the orange-element-to-dark-background anti-aliased corner boundary. History check: 24 moved once before (WH-52, an 11.78% timing race, cured by the row-wait) — this is NOT that class (the row rendered fully; 0.0004% not 11.78%). **Classification: a NEW sub-visible rasterization instance — the orange KPI-corner edge family's first firing.** No cure required; the source is identical outside the tests/docs ladder.
+Now the GREEN cure — the three SKILL rows first, then the count-ladder move 377 → 378 across every doc site (CANONICAL, README ×4, AGENTS ×2, CLAUDE ×2, PAD ×4 + the §8.1 infra row 169 → 170, SKILL ×2).
+**GREEN — 378/378**, the ladder moved in lockstep. Now the md5 ledger re-base — writing the script with the WH-70 structural assertions.
+**MD5 ledger re-based at WH-78, born-verified 34/34 ZERO MOVERS** — the structural assertions green on the first pass (the WH-70 guardrails standing ready). Now the docs ladder: the session78 plan, the session_155 log, the worklog WH-78 entry, the AGENTS round-67 record, the PAD §11 rows.
+Docs ladder complete. Now the full gate on the final tree — the docs-counts pin must re-verify after all doc edits.
+**The scan caught MY OWN round record** — the AGENTS round-67 narration quoted the retired claim in the `docs/screenshots/NN-NN` path form (the F-2 lesson class: quoting claim forms into scanned corpora). The guardrail worked exactly as designed. Curing the narration to the short-form claim (never weakening the guardrail) and noting the trip in the plan + the session log.
+Narration cured. Re-running the gate's unit leg.
+Unit 378/378 with docs-counts green (12 tests in the suite). Now build + smoke.
+Build OK · smoke 14/14. Now the e2e suite + census + audit.
+**FULL GATE GREEN on the final tree**: lint 0/0 · tsc 0 · unit 378/378 · build OK · smoke 14/14 · e2e 72/72 · census MATCH · bun audit zero. Closing the plan's checkboxes and reviewing the change-set (13 modified + 2 new).
+Change-set verified. One final live check — the F-2 insurance: verified-kill dev-server restart on the final tree + the built CSS pipe-rule check.
+Dev server clean on the final tree (login 200, root 307) and the built CSS pipe-rule-FREE. Now the ship: the round commit, then the SSH-wrapper push.
+Committed as 827e797. Now the SSH wrapper — the operator key materialized outside the repo (0600, fingerprint verified), the paramiko shim already on PATH.
+Dry-run green with the explicit --remote (the WH-75 lesson) — clean fast-forward to nordeim/wellness-hub. Real push now.
+**Push verified**: remote `refs/heads/main @ 827e797` == local HEAD, the GitHub commit page 200, the operator key shredded, the tree clean. Shutting down the dev server per the round convention and closing out with this transcript.
+
+The **WH-78 standing audit round is complete and shipped** (`827e797` on main, pushed via the SSH wrapper, remote verified, key shredded).
+
+**What happened this round:**
+
+1. **Intake & baseline** — the survived workspace (the first non-fresh-clone round since WH-74) verified as the exact WH-77 ship state: baseline gate fully green (377 unit · 72 e2e · 14 smoke · census MATCH · audit zero), confirming docs↔code alignment.
+2. **Watch round 67** — the QUIET read: both axes stable at the WH-77 re-based values, the computed digest 15/15 MATCH (the mobile drawer battery inside), no watch-ledger re-base per the WH-55 precedent.
+3. **Parity battery** — all **17 surfaces, 3,555/3,555 members green** live-vs-live across two reference login windows, zero transients, zero limiter trips; the mobile-nav drawer family double-pinned (parity-shell 61/61 + the e2e battery inside the 72).
+4. **Captures** — the FORTY-NINTH byte comparison (27/34): **the date-axis re-fire finally landed** (the SIXTH carry expectation resolved — the captures crossed the Nov 5→Nov 6 UTC midnight, the WH-56 mover class firing all five members at the WH-62-record parameters), plus the 29 standing maxdelta-1 family and a NEW sub-visible rasterization instance (the 24 orange KPI-corner edge family's first firing, root-caused and classified); the md5 ledger re-based and born-verified 34/34.
+5. **The round's cure (TDD RED→GREEN)** — found and fixed the SKILL Appendix-B set-claims drift (the retired `01-16` sixteen-file claim, the `13-16` sub-range, the stale head pointer), adding the exhaustive capture-set range scan to the docs-counts pin; the count ladder moved **377 → 378** with every doc site in lockstep — and the new scan enforced its own exemption convention live once (catching the round record's first-draft path-form quote; the narration cured, the guardrail never weakened).
+6. **Ship** — full gate green on the final tree (lint 0/0 · tsc 0 · unit 378/378 · build · smoke 14/14 · e2e 72/72 · census MATCH · audit zero · CSS pipe-rule-free), complete docs ladder (session78 plan, session_155 log, worklog, AGENTS round-67 record, PAD §11 rows), committed and pushed.
+
+Your standing checklist items (.env db contract, vitest/playwright configs, sitemap/SEO, mobile nav, Tailwind v4 pins, .env.example) were all re-verified green along the way. **Next step (WH-79)**: watch round 68 — the date-axis re-arms on the Nov 6 → Nov 7 crossing (the "6"→"7" glyph family expected only if the captures cross ~00:00 UTC Nov 7); the 24 orange-corner instance's alternation begins; the 10-learning maxdelta-7 family due to re-fire after its rest.
