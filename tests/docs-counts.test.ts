@@ -57,7 +57,7 @@ const CANONICAL = {
   unitSuites: 26, // tests/*.test.ts (INCLUDING this suite — WH-37: +tests/seed-parity.test.ts, the demo-account data parity contract)
   e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 379, // `bun run test` total (WH-79: 378 + the frontmatter-freshness scan — the exhaustive stale-metadata cure, the SKILL's last_updated stamp must carry the newest docs/plans date; the WH-77/WH-78 scans rode the same ladder)
+  unitChecks: 380, // `bun run test` total (WH-80: 379 + the sixth-doc claims scan — the exhaustive stale-doc cure, DEPLOYMENT.md's operational claims; the WH-77/78/79 scans rode the same ladder)
   e2eChecks: 72, // `CI=1 bun run test:e2e` total (WH-37: 71 + the demo-face leg, the seeded mood entry's rendered face)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
   // WH-18: ThemeBoot joined src/components/layout/ — the counts move with it.
@@ -388,4 +388,94 @@ it("WH-79: the SKILL frontmatter freshness stamp carries the newest plan date", 
     stamp,
     `the SKILL freshness stamp is stale — the docs/plans round ledger on disk says ${newest}; the stamp is a validated-through claim and moves in the SAME commit as the round that ships`,
   ).toBe(newest);
+});
+
+// ---- WH-80: the sixth-doc claims — docs/DEPLOYMENT.md --------------------------
+
+// WH-80 (F-1): presence-of-truth cannot see a doc the pin never reads.
+// docs/DEPLOYMENT.md is REFERENCED from README ("the details live in
+// docs/DEPLOYMENT.md") and carries OPERATIONAL claims an operator acts
+// on — but the DOCS set above covers only the five companion docs, so
+// DEPLOYMENT.md rode outside every scan and shipped five stale claims:
+// (1) the ORBITAL name slip at three sites — the sibling-project
+// copy-paste genus the repo's own docs/web-app-codebase-evaluation-
+// report.md documented in the siblings ("zero-balance/DEPLOYMENT.md
+// says 'ORBITAL ships…' — copy-paste artifact from sibling project");
+// (2) §1's "29 API route files (41 verb handlers)" vs the tree's 31
+// files / 48 handlers; (3) §3's PRE-session-169/170 AUTH_SECRET row
+// ("shorter values fall back to the insecure dev constant… instead of
+// the run-time error an absent value raises") — the shipping boot gate
+// (src/lib/boot-env.ts, pinned by tests/boot-env.test.ts + smoke leg
+// 13) refuses to boot on a missing OR short secret, the opposite
+// operational posture; (4) §6's health example `{"status":"ok",...}`
+// vs the live `{"ok":true,"data":{"status":"healthy","db":"up"}}`.
+// This scan reads DEPLOYMENT.md's four claim forms: the sibling-name
+// forbidden forms (case-insensitive — a sibling project's name can
+// never be legitimate here), the route-count claim COMPUTED LIVE from
+// the recursive src/app/api walk (tree drift trips the pin), the
+// AUTH_SECRET row's fail-hard form ("refuses to boot" — the boot
+// gate's own message vocabulary), and the health example's live shape
+// ("healthy"). History narration stays exempt by construction: the
+// scan reads only DEPLOYMENT.md, whose four claim forms are all
+// live-tense operational claims, never round narration.
+
+it("WH-80: DEPLOYMENT.md carries the tree's live operational claims", () => {
+  const text = readFileSync(join(REPO_ROOT, "docs", "DEPLOYMENT.md"), "utf8");
+  const hits: string[] = [];
+
+  // (1) The sibling-name forms — a sibling project's app name can never
+  // be legitimate in this repo's deployment doc (the app is Wellness
+  // Hub everywhere else in the doc set).
+  for (const m of text.matchAll(/[Oo][Rr][Bb][Ii][Tt][Aa][Ll]/g)) {
+    hits.push(`the sibling-project name form "${m[0]}" — the app is Wellness Hub`);
+  }
+
+  // (2) The route-count claim, computed live: every "NN API route files
+  // (NN verb handlers)" sentence must carry the recursive walk's truth.
+  const routeFiles: string[] = [];
+  collectFiles(join(REPO_ROOT, "src", "app", "api"), routeFiles, (name) => name === "route.ts");
+  let verbHandlers = 0;
+  for (const file of routeFiles) {
+    const src = readFileSync(file, "utf8");
+    verbHandlers += (src.match(/export async function (?:GET|POST|PUT|PATCH|DELETE)\b/g) ?? []).length;
+  }
+  for (const m of text.matchAll(/(\d+) API route files \((\d+) verb handlers\)/g)) {
+    const line = m[0];
+    if (Number(m[1]) !== routeFiles.length || Number(m[2]) !== verbHandlers) {
+      hits.push(
+        `"${line}" — stale counts (the tree carries ${routeFiles.length} route files / ${verbHandlers} verb handlers; the claim moves in the SAME commit as any route change)`,
+      );
+    }
+  }
+
+  // (3) The AUTH_SECRET row must carry the fail-hard form — the boot
+  // gate's own vocabulary (boot-env.ts: "the server refuses to boot").
+  const secretRow = text
+    .split("\n")
+    .find((line) => line.startsWith("| `AUTH_SECRET`"));
+  if (secretRow === undefined) {
+    hits.push("the AUTH_SECRET table row is missing from §3");
+  } else if (!secretRow.includes("refuses to boot")) {
+    hits.push(
+      `the AUTH_SECRET row does not carry the fail-hard form — the shipping boot gate refuses to boot on a missing OR short secret in production (src/lib/boot-env.ts, smoke leg 13); the row says: ${secretRow.replace(/\s+/g, " ").trim()}`,
+    );
+  }
+
+  // (4) The health example must carry the live shape — session-36 moved
+  // the status off "ok" (the honest-503 cure) and the envelope wraps it.
+  const healthLine = text
+    .split("\n")
+    .find((line) => line.includes("/api/health"));
+  if (healthLine === undefined) {
+    hits.push("the /api/health verification example is missing from §6");
+  } else if (!healthLine.includes("healthy")) {
+    hits.push(
+      `the /api/health example carries a stale shape — the live endpoint answers {"ok":true,"data":{"status":"healthy","db":"up"}}; the line says: ${healthLine.replace(/\s+/g, " ").trim()}`,
+    );
+  }
+
+  expect(
+    hits,
+    "docs/DEPLOYMENT.md (the sixth doc, referenced from README) must carry the tree's live operational claims",
+  ).toEqual([]);
 });

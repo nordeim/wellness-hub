@@ -523,7 +523,23 @@ const LEDGER = {
   // (CqEsEwKA) per the intra-round doctrine, born-verified on the
   // quiet state: the re-run after this edit reads "assets stable" +
   // the 15/15 digest.
-  jsPath: "/static/index-CqEsEwKA.js",
+  // WH-80 re-base (round 69: the js axis moved ONCE in the round's
+  // window — CqEsEwKA -> B83bBhZf, the FORTY-SIXTH distinct bundle,
+  // with the css axis STABLE at BSn5NNZl): the same-run computed
+  // digest read 15/15 MATCH (the mobile header + drawer battery
+  // inside), the round's battery walked the move at 3,555/3,555
+  // (the FORTY-SECOND full-width run, every surface green on its
+  // first flight, zero transients), and the capture round (the 51st
+  // byte comparison) read 31/34 with the THREE movers root-caused
+  // (the 10-learning maxdelta-7 family's re-fire after its two rests
+  // + the 25 habitat's third fire + the 30 brown-edge instance's
+  // second) and NO date-axis crossing (same-day Nov 6 faces — the
+  // SECOND carry of the cycle, the re-arm moving to the Nov 6 ->
+  // Nov 7 crossing). Re-based ONCE to the round's FINAL read
+  // (B83bBhZf) per the intra-round doctrine, born-verified on the
+  // quiet state: the re-run after this edit reads "assets stable" +
+  // the 15/15 digest.
+  jsPath: "/static/index-B83bBhZf.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both

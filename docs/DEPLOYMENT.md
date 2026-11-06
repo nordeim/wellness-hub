@@ -1,7 +1,7 @@
 # Deployment Guide
 
-ORBITAL ships as a single Next.js **standalone** build with a SQLite file
-database — one process, zero external services. This guide covers the
+Wellness Hub ships as a single Next.js **standalone** build with a SQLite
+file database — one process, zero external services. This guide covers the
 supported production paths and the environment contract.
 
 ## 1. Build
@@ -11,7 +11,7 @@ bun install
 bun run build          # next build + standalone assembly (.next/standalone)
 ```
 
-The build compiles the page shell and the 29 API route files (41 verb handlers), then copies
+The build compiles the page shell and the 31 API route files (48 verb handlers), then copies
 `.next/static` and `public/` into `.next/standalone/` (see the `build`
 script in `package.json`). `next.config.ts` pins `outputFileTracingRoot` to
 the repo root — keep it; the standalone trace depends on it.
@@ -39,8 +39,8 @@ TLS at the app process if you must run without the flag.
 | Variable | Required | Purpose |
 |----------|----------|---------|
 | `DATABASE_URL` | Yes | SQLite connection string. See §4. |
-| `AUTH_SECRET` | **Yes in production** | HMAC secret for session cookies. Generate with `openssl rand -hex 32`. Must be at least 16 characters — shorter values fall back to the insecure dev constant (with a server warning) instead of the run-time error an absent value raises. Never ship the dev constant. |
-| `NEXT_PUBLIC_SITE_URL` | Recommended | Canonical public origin, used for metadata URLs and `sitemap.xml` (e.g. `https://orbital.example.com`). |
+| `AUTH_SECRET` | **Yes in production** | HMAC secret for session cookies. Generate with `openssl rand -hex 32`. Must be at least 16 characters — in production the server refuses to boot on a missing OR short secret (the boot gate in `src/lib/boot-env.ts`, wired through `src/instrumentation.ts`; dev/test fall back to the insecure dev constant with a warning). Never ship the dev constant. |
+| `NEXT_PUBLIC_SITE_URL` | Recommended | Canonical public origin, used for metadata URLs and `sitemap.xml` (e.g. `https://wellness-hub.example.com`). |
 
 ## 4. Database location (§4 — the `.env.example` reference)
 
@@ -59,7 +59,7 @@ TLS at the app process if you must run without the flag.
 
 2. **Absolute `file:` URL (recommended for production).**
    ```
-   DATABASE_URL="file:/var/lib/orbital/custom.db"
+   DATABASE_URL="file:/var/lib/wellness-hub/custom.db"
    ```
    Absolute paths pass through untouched — immune to any working-directory
    ambiguity across service managers, containers, or cron wrappers. Point
@@ -93,7 +93,7 @@ bun run build
 ## 6. Verification checklist
 
 ```bash
-curl -s https://your-host/api/health          # {"status":"ok",...}
+curl -s https://your-host/api/health          # {"ok":true,"data":{"status":"healthy","db":"up"}}
 bun run lint && bun run typecheck && bun run test
 bun run gate                                  # the one-command gate (local)
 bun run test:e2e                              # Playwright suite (local)
