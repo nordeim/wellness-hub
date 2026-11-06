@@ -57,7 +57,7 @@ const CANONICAL = {
   unitSuites: 26, // tests/*.test.ts (INCLUDING this suite — WH-37: +tests/seed-parity.test.ts, the demo-account data parity contract)
   e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 378, // `bun run test` total (WH-78: 377 + the capture-set range scan — the exhaustive stale-set cure, the SKILL Appendix-B Screenshots row's retired 01-16 claim; the WH-77 command-block count scan rode the same ladder)
+  unitChecks: 379, // `bun run test` total (WH-79: 378 + the frontmatter-freshness scan — the exhaustive stale-metadata cure, the SKILL's last_updated stamp must carry the newest docs/plans date; the WH-77/WH-78 scans rode the same ladder)
   e2eChecks: 72, // `CI=1 bun run test:e2e` total (WH-37: 71 + the demo-face leg, the seeded mood entry's rendered face)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
   // WH-18: ThemeBoot joined src/components/layout/ — the counts move with it.
@@ -349,4 +349,43 @@ it("WH-78: capture-set range claims carry the live screenshots range", () => {
     hits,
     "docs/screenshots range claims must carry the live set range",
   ).toEqual([]);
+});
+
+// ---- WH-79: the SKILL frontmatter freshness stamp -----------------------------
+
+// WH-79 (F-1): presence-of-truth cannot see a stale METADATA claim. The
+// SKILL frontmatter carried `last_updated: 2026-11-03` through TWO rounds
+// that materially edited the SKILL body (WH-77, 2026-11-05: the pre-ship
+// command-annotation cure; WH-78, 2026-11-06: the three Appendix-B row
+// cures + the two count-ladder sites) — a live-tense freshness claim that
+// went false at WH-77 and stayed false through WH-78, invisible to
+// DOC_CLAIMS (no canonical date pin), FORBIDDEN_FORMS (the old date was a
+// real date once — history, never a never-true form) and every census.
+// The tree-computable truth for "when was the skill last validated": the
+// docs/plans/ round ledger — every round ships exactly one dated plan
+// (YYYY-MM-DD-sessionNN-remediation-plan.md), so the NEWEST plan date is
+// the current round's date. The stamp's semantics upgrade from
+// "content-changed date" (unpinnable — a flat-SKILL round legitimately
+// touches nothing) to "validated-through date" (pinnable): it carries the
+// newest plan's date, moving in the SAME commit as every round that
+// ships. History narration stays exempt by construction — the scan reads
+// only the frontmatter `last_updated:` line, never the body.
+
+it("WH-79: the SKILL frontmatter freshness stamp carries the newest plan date", () => {
+  const planDates = readdirSync(join(REPO_ROOT, "docs", "plans"))
+    .map((name) => (/^(\d{4}-\d{2}-\d{2})-.*\.md$/.exec(name) ?? [])[1])
+    .filter((date) => date !== undefined);
+  expect(planDates.length, "docs/plans carries dated plan files").toBeGreaterThan(0);
+  const newest = planDates.sort()[planDates.length - 1];
+
+  const skill = readDoc("wellness-hub_SKILL.md");
+  const stamp = (/^last_updated:\s*(\d{4}-\d{2}-\d{2})\s*$/m.exec(skill) ?? [])[1];
+  expect(
+    stamp,
+    "the SKILL frontmatter carries a parseable last_updated stamp (YYYY-MM-DD)",
+  ).toBeDefined();
+  expect(
+    stamp,
+    `the SKILL freshness stamp is stale — the docs/plans round ledger on disk says ${newest}; the stamp is a validated-through claim and moves in the SAME commit as the round that ships`,
+  ).toBe(newest);
 });
