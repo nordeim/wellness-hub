@@ -57,13 +57,17 @@ const CANONICAL = {
   unitSuites: 26, // tests/*.test.ts (INCLUDING this suite — WH-37: +tests/seed-parity.test.ts, the demo-account data parity contract)
   e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 377, // `bun run test` total (WH-77: 376 + the command-block count scan — the exhaustive stale-count cure, the SKILL §11 pre-ship block's 369/369; the WH-52 login-views family pin rode the same ladder)
+  unitChecks: 378, // `bun run test` total (WH-78: 377 + the capture-set range scan — the exhaustive stale-set cure, the SKILL Appendix-B Screenshots row's retired 01-16 claim; the WH-77 command-block count scan rode the same ladder)
   e2eChecks: 72, // `CI=1 bun run test:e2e` total (WH-37: 71 + the demo-face leg, the seeded mood entry's rendered face)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
   // WH-18: ThemeBoot joined src/components/layout/ — the counts move with it.
   layoutComponents: 8, // modules under src/components/layout/
   tsxFiles: 46, // src/**/*.tsx
   clientFiles: 27, // .tsx files headed "use client"
+  // WH-78: the capture-set census — the faces on disk own the set.
+  screenshotFaces: 34, // docs/screenshots/NN-*.png capture faces (WH-29's committed 34-file procedure)
+  screenshotDesktop: 29, // at 1280×900 (scripts/capture-round.mjs owns the split)
+  screenshotMobile: 5, // at 390×844
 } as const;
 
 /** Count spellings that can never be true of this tree — each one is a
@@ -136,6 +140,7 @@ const DOC_CLAIMS: Record<(typeof DOCS)[number], string[]> = {
     "z-10", // the z-map's true header row (F-4)
     `${CANONICAL.smokeChecks}/${CANONICAL.smokeChecks}`,
     `11 templates / 50 steps / 12 tutorials / 8 badges`,
+    `${CANONICAL.screenshotDesktop} desktop (1280×900) + ${CANONICAL.screenshotMobile} mobile (390×844)`,
   ],
 } as const;
 
@@ -300,5 +305,48 @@ it("WH-77: command-block test-count annotations carry the canonical totals", () 
   expect(
     hits,
     "live-tense command-block count annotations must carry the canonical totals",
+  ).toEqual([]);
+});
+
+// ---- WH-78: the capture-set range claims ---------------------------------------
+
+// WH-78 (F-1): presence-of-truth cannot see a stale SET claim either.
+// The SKILL Appendix-B Screenshots row still carried `docs/screenshots/
+// 01-16` — "12 desktop + 4 mobile" — eleven rounds after WH-29 committed
+// the canonical 34-file capture procedure (29 desktop + 5 mobile), and
+// the §17 mobile-testing row's `docs/screenshots/13-16` sub-range omitted
+// the fifth mobile face (19-dark-mobile-nav-open, born with the WH-30
+// dark set). Neither DOC_CLAIMS (the split was claimed nowhere) nor
+// FORBIDDEN_FORMS (16 was a real count once; 13-16 a real sub-range)
+// could see either. This scan is exhaustive over the RANGE-CLAIM form:
+// every `docs/screenshots/NN-NN` claim in the five docs must carry the
+// LIVE set range, computed from the capture faces on disk — the census
+// owns the set, the Appendix-B Screenshots row owns the description,
+// and a face added or retired by a future capture procedure moves
+// CANONICAL + every claim in the SAME commit. History narration stays
+// exempt by construction: it names faces by file (the 29-quick-actions-
+// hover form), never by the path+range claim form.
+
+it("WH-78: capture-set range claims carry the live screenshots range", () => {
+  const faces = readdirSync(join(REPO_ROOT, "docs", "screenshots"))
+    .filter((name) => /^\d{2}-.*\.png$/.test(name));
+  expect(faces.length, "docs/screenshots capture faces").toBe(CANONICAL.screenshotFaces);
+  expect(
+    CANONICAL.screenshotDesktop + CANONICAL.screenshotMobile,
+    "the desktop/mobile split must sum to the face census",
+  ).toBe(CANONICAL.screenshotFaces);
+  const nums = faces.map((name) => Number(name.slice(0, 2)));
+  const range = `${String(Math.min(...nums)).padStart(2, "0")}-${String(Math.max(...nums)).padStart(2, "0")}`;
+  const hits: string[] = [];
+  for (const doc of DOCS) {
+    const text = readDoc(doc);
+    for (const m of text.matchAll(/docs\/screenshots\/\d{2}-\d{2}/g)) {
+      if (m[0] !== `docs/screenshots/${range}`)
+        hits.push(`${doc}: "${m[0]}" — stale range (the live set is ${range}; a capture-procedure change moves CANONICAL + every claim in the SAME commit)`);
+    }
+  }
+  expect(
+    hits,
+    "docs/screenshots range claims must carry the live set range",
   ).toEqual([]);
 });
