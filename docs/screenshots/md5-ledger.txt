@@ -1,5 +1,67 @@
-# docs/screenshots md5 ledger — re-based at WH-86 (2026-11-07), 34 files
+# docs/screenshots md5 ledger — re-based at WH-87 (2026-11-07), 34 files
 
+# The WH-87 round (the standing audit round — the DOUBLE-AXIS watch + THE
+#   FOURTH CONTENT-GRID REORDER [round 76: BOTH axes moved at the round's
+#   first read — css /static/index-Bx9xPHC1.css -> /static/index-BYRIvMx2.css,
+#   the EIGHTEENTH css CONTENT change in the watch's history + js
+#   /static/index-Dd6vzWqe.js -> /static/index-62HqrPs4.js, the FORTY-EIGHTH
+#   distinct bundle, then -> /static/index-IYL2plGx.js at the final read, the
+#   FORTY-NINTH — the WH-44/76 intra-round class; the instrument legs (the
+#   WH-60/61 doctrine) read the pair platform-only: the css atom-level rule
+#   diff PLATFORM-UTILITY-ONLY (0 added / 4 removed atoms — the
+#   .group/template bracketed-variant focus-within/hover family; zero
+#   wellness-module classes) + the js bundle-inventory diff
+#   PLATFORM-CHUNK-HASH-ROTATION-ONLY (487 added / 487 removed, every one a
+#   chunk-path string, zero non-path; sizes 102,349 -> 102,353); the
+#   computed digest 15/15 MATCH on every generation; the watch ledger
+#   RE-BASED ONCE to the round's FINAL read (BYRIvMx2.css / IYL2plGx.js),
+#   born-verified on the quiet state]: the reference RE-ORDERED BOTH CONTENT
+#   GRIDS (the WH-42/43/76/81 class's FOURTH firing — the set and every
+#   per-item datum byte-equal, only the SEQUENCE moved): the battery's live
+#   ORDER members caught it (routines 639/697 + tutorials 719/790 on their
+#   first flights), decode-settled (a dedicated zero-write probe + the
+#   parity legs' landscape.order members, same-round reads identical), the
+#   CURE = the seed's SEVENTEEN sortOrder renumbers + the grid-order pins
+#   re-authored + the a11y video-card order pins moved (the first video card
+#   Focused Study Session -> Creative Flow Session), the legs re-flighted
+#   697/697 + 790/790 + schedmodal 89/89 — the FORTY-NINTH full-width
+#   battery run green at 3,555/3,555 across all SEVENTEEN surfaces — and
+#   the FIFTY-EIGHTH cross-round byte comparison read 28/34 with SIX
+#   movers: the captures landed ~22:08 UTC Nov 7, SAME-DAY Nov 7 faces vs
+#   the WH-86 ledger's Nov 7 faces (no midnight crossed) — the date-axis
+#   family CARRIED, the NINTH expectation of the cycle (the "7"→"8" glyph
+#   re-arm fires only past ~00:00 UTC Nov 8), the FOUR non-reorder
+#   date-bearing faces byte-held (07-events + 26-events-inline-form +
+#   27-dark-mood-form + 32-mentalhealth-form-interior). The SIX movers =
+#   FIVE reorder faces + ONE standing environmental family, all re-based +
+#   root-caused + pixel-diffed against the git HEAD (WH-86) captures:
+#   03-routines (98,390 px / 8.5408% / maxdelta 248 / bbox 960x660 at
+#   (288,240)) + 18-dark-routines (98,294 px / 8.5325% / maxdelta 238) =
+#   the routine grid's new card sequence — the reorder cure's own face in
+#   light and dark.
+#   10-learning (359,678 px / 31.2220% / maxdelta 252 / bbox 960x648 at
+#   (288,252)) + 30-tutorial-card-hover (354,623 px / 30.7832% / maxdelta
+#   252) = the tutorial grid's new card sequence — the reorder cure's own
+#   face; the 30's hover now sits on the NEW first card (the rasterization
+#   family's signature beneath the dominant reorder face).
+#   28-routines-schedule-modal (229,933 px / 19.9595% / maxdelta 255 /
+#   bbox 960x829 at (288,71)) = the capture procedure's .first() "Use This
+#   Template" anchor now opens the NEW first template (5-Minute Morning
+#   Energizer, 3 steps) instead of the old first (10-Minute Home Workout,
+#   5 steps) — the reorder cure's own modal face.
+#   ...+ the ONE standing environmental family:
+#   29-quick-actions-hover (5 px / 0.0004% / maxdelta 1 / bbox 5x5 at
+#   (503,326)) = the maxdelta-1 rasterization family RE-FIRING at its
+#   EXACT recorded signature (fired WH-76/77/78/81/82/84, rested
+#   WH-85/86 — the family's standing alternation).
+#   The source DID change this round (the seed reorder cure + the pins +
+#   this ledger + the watch re-base) — the five reorder faces are the
+#   reorder cure's own face; the 29 habitat carries its standing
+#   classification; no further cure required. The date-axis re-arms on
+#   the Nov 7 → Nov 8 crossing, carrying to WH-88 if its captures run
+#   after ~00:00 UTC Nov 8.
+
+# -- prior re-base (WH-86, 2026-11-07) --------------------------------------
 # The WH-86 round (the standing audit round — the QUIET WATCH + THE
 #   FOCUS-RING/GLYPH-BAND PAIR RE-FIRE [round 75: both axes STABLE at the
 #   WH-81 re-based ledger — css /static/index-Bx9xPHC1.css + js
@@ -485,153 +547,24 @@
 #   change this round is the docs ladder only (the SKILL count cure +
 #   the watch ledger re-base + this ledger) — the movers are the
 #   standing environmental classifications, no further cure required.
-# -- prior re-base (WH-76, 2026-11-05) --------------------------------------
-
-# The WH-76 round (the standing audit round — the DOUBLE-AXIS platform-
-#   move watch + THE REFERENCE'S GRID RE-ORDER [round 65, the first
-#   round with a real parity cure since the standing era's quiet run
-#   began]: the watch's first flight read BOTH axes moved — css
-#   /static/index-wRLS_qWB.css -> /static/index-CCUAZokn.css, the
-#   FOURTEENTH css CONTENT change in the watch's history + js
-#   /static/index-D7qeWGXk.js -> /static/index-DOP63f79.js, the
-#   FORTY-FIRST distinct bundle; the instrument legs (the WH-60/61
-#   doctrine) read BOTH platform-only — the js bundle-inventory diff
-#   read PLATFORM-CHUNK-MASS-ROTATION + minor inventory change [489
-#   added / 485 removed differing string literals, EVERY one a
-#   chunk-path string (the 14/13 "non-path" first-reads were
-#   dots-in-stem chunk paths — cant-radio.store, import-repo.bi, the
-#   companion-agent.bi family — the WH-75 stem family); net ELEVEN
-#   new platform stems (plan, action, DisabledControlTooltip,
-#   HubSpotContactModal, OAuthRedirectReturnHandler,
-#   userAppsSocketManager, CheckoutBackReturnHandler, tierVisibility,
-#   artifactView, agentWorking, workspaceRenewalDate) / SEVEN removed
-#   (BillingAPI, useGitHubGitRoutesMode, UserNotifications,
-#   useMyBuilderProfile, MenuLink, github, useTalkToSales); sizes
-#   101,535 -> 101,795 (+260)]; the css atom-level rule diff read
-#   PLATFORM-UTILITY-ONLY [12 added / 26 removed atoms — the
-#   --sem-* semantic-token utility retirement family out (border/
-#   surface/text-token atoms), the marquee + motion-reduce +
-#   neutral-token family in; zero wellness-module classes]; the
-#   same-run computed digest 15/15 MATCH] + THE REFERENCE RE-ORDERED
-#   BOTH CONTENT GRIDS (the WH-42/43 class re-firing): the routine-
-#   template grid (11) + the tutorial grid (12) — the SET and every
-#   per-item datum byte-equal, only the SEQUENCE moved (routines: the
-#   5-Minute Energizer now leads, Calm Evening <-> Self-Care Reset
-#   swap, Focused Study slides to index 9, Creative Flow + Quick
-#   Productivity move up; tutorials: Overcoming Procrastination now
-#   leads, the head 1-5 reshuffled, positions 7-8 held again, the
-#   tail 9-12 reshuffled) — the battery's live ORDER members caught it
-#   (routines 639/697 + tutorials 719/790 on their first flights);
-#   decode-settled (the parity legs' landscape.order + per-card drift
-#   members + a dedicated decode probe, two same-round reads
-#   identical); the CURE: the seed's SEVENTEEN sortOrder renumbers +
-#   the seed-parity order pins re-authored in the same RED->GREEN
-#   change; the legs re-flighted 697/697 + 790/790] + the standing
-#   battery's THIRTY-EIGHTH full-width run at 3,555/3,555, all
-#   SEVENTEEN surfaces green [TWO limiter trips absorbed via the
-#   WH-74 verified-kill amendment — the WH-42 F-4 class, the round's
-#   diagnostic re-runs burning the login budget; both restarts
-#   verified: the next dev process matched, the port confirmed free,
-#   the server confirmed live] + the round's e2e TIME-BOMB cure (the
-#   reminders spec's hard-coded datetime 2026-11-05T09:30 expired at
-#   09:30 UTC Nov 5 — the baseline gate read 71/72 RED twice; the
-#   computed +26h datetime form green; the WH-75 gate had run before
-#   the expiry instant]) + the round's THIRD cure, landed at the session's
-#   own completion pass (F-2): THE TAILWIND SCAN-PIN COMPLETED — the
-#   watch re-base's own instrument narrative (written into the TRACKED
-#   scripts/watch-round.mjs, the ledger-re-base phase that runs AFTER
-#   the battery/captures flight) quoted the reference's retired
-#   bracketed var() utilities verbatim — the --sem-* pipe family — and
-#   the v4 auto-content scanner accepted them as arbitrary-value
-#   candidates whose generated var() bodies are unparseable CSS:
-#   PostCSS failed the whole globals.css transform and EVERY route
-#   500'd on a tree whose gate had already read green (the latent-scan
-#   class at its most dangerous). The cure: three @source not
-#   directives added (scripts/ + tests/ + the repo-root .md corpus —
-#   the WH-14 pin's own latent gap: its src-scoped md glob never
-#   covered the root corpus its comment claimed, PROVEN live by a
-#   probe token appended to worklog.md re-breaking the server), each
-#   leg isolated on the live dev server; pinned by the extended
-#   src-census WH-14 directive-list test (RED -> GREEN); a second form
-#   lesson absorbed in the same cure — a star-slash sequence inside a
-#   CSS comment TERMINATES it early and leaks prose into live CSS.
-#   The full gate re-ran ALL GREEN on the final tree (lint 0/0 + tsc 0
-#   + unit 376/376 + build OK with the built CSS verified pipe-rule-
-#   FREE + smoke 14/14 + e2e 72/72 — the full suite's first post-
-#   reorder flight caught the a11y spec's stale WH-42-era video-card
-#   order pin (videoCards[0] + the aria-label first-button read, both
-#   moved to Creative Flow Session per the decoded grid — the reorder
-#   cure's completion, the pin-moving doctrine's third site)).
-#   The capture round (the FORTY-SEVENTH cross-round byte comparison):
-#   the round's first capture (~15:25 UTC) read 27/34 byte-stable,
-#   SEVEN movers root-caused before the re-base, pixel-diffed against
-#   the git HEAD (WH-75) captures; the POST-CURE VERIFICATION
-#   RE-CAPTURE (the canonical unmodified procedure, ~16:55 UTC) is the
-#   round's FINAL canonical set on disk — it reproduced the first
-#   capture byte-exactly on 33/34 (all five reorder faces + the 25
-#   habitat's fired state byte-identical) — the F-2 scan-pin cure
-#   moved ZERO pixels, the WH-14 byte-stability doctrine met. THE
-#   DATE-AXIS CARRIED — the WH-56 mover class did NOT fire (the FOURTH
-#   carry expectation of the new cycle: both captures landed same-day
-#   Nov 5 vs the WH-75 ledger's Nov 5 faces — no midnight crossed; the
-#   expectation carries to WH-77 if its captures run after ~00:00 UTC
-#   Nov 6). The FINAL movers accounting: SIX committed movers = FIVE
-#   CURABLE (the
-#   reorder cure's own face, consistent with this round's source
-#   change — the seed sortOrders + the e2e spec):
-#   03-routines (98,390 px / 8.5408% / maxdelta 248 / bbox 960x660 at
-#     (288,240)) + 18-dark-routines (98,294 px / 8.5325% / maxdelta
-#     238 / the same bbox) = the routine grid's card sequence — the
-#     reorder face in light and dark.
-#   10-learning (359,678 px / 31.2220% / maxdelta 252 / bbox 960x648
-#     at (288,252)) + 30-tutorial-card-hover (354,623 px / 30.7832% /
-#     maxdelta 252 / the same bbox) = the tutorial grid's card
-#     sequence — the reorder face; the 30's hover now sits on the NEW
-#     first card (the rasterization family's signature beneath the
-#     dominant reorder face).
-#   28-routines-schedule-modal (229,956 px / 19.9615% / maxdelta 255 /
-#     bbox 960x829) = the capture procedure's .first() "Use This
-#     Template" anchor now opens the NEW first template (5-Minute
-#     Morning Energizer, 3 steps) instead of the old first (10-Minute
-#     Home Workout, 5 steps) — the reorder cure's own modal face.
-#   ...+ the ONE standing committed habitat (the second habitat's
-#   round-trip recorded below, not a committed mover):
-#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 =
-#     the focused input's ring area) = the WH-20 focus-ring
-#     INTERPOLATION-TAIL habitat — the IDENTICAL parameters to its
-#     WH-71/72/73/74/75-family records (the FOURTH consecutive
-#     re-fire), byte-STABLE across both of this round's captures.
-#   ...+ 29-quick-actions-hover's INTRA-ROUND ROUND-TRIP (the
-#   intermittent class, the ledger's own sixth-member lesson): the
-#   maxdelta-1 rasterization family FIRED at the round's first
-#   capture (5 px / 0.0004%, bbox 5x5 — its recorded signature) but
-#   RESTED at the post-cure re-capture, landing byte-identical to the
-#   WH-75 bytes — the committed diff carries NO 29 change and this
-#   ledger's 29 row carries the quiet-state (WH-75-identical) hash;
-#   the family's alternation continues, the classification standing.
-#   The source DID change this round (the seed reorder cure + the e2e
-#   specs + this ledger + the watch re-base + the globals.css scan-pin
-#   + the census pin) — the five curable movers are the reorder cure's
-#   own face; the 25 habitat carries its standing classification; no
-#   further cure required.
 
 # Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31,
 #   WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
 #   WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49, WH-50,
 #   WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61,
-#   WH-62, WH-63, WH-64, WH-65, WH-66, WH-67, WH-68, WH-69, WH-70, WH-72, WH-73, WH-74, WH-75, WH-76.
+#   WH-62, WH-63, WH-64, WH-65, WH-66, WH-67, WH-68, WH-69, WH-70, WH-72, WH-73, WH-74, WH-75, WH-76, WH-77.
 #
 #
 01-login.png 5989c8ad3ca65aa07575a8801e023742
 02-dashboard.png d9754490ed784a32688fcb6e0ba4ae9f
-03-routines.png 018a40ef34de3c99bc5c7ac7bc167445
+03-routines.png 832d0915e2fffd05995f6c7c651e8652
 04-exercise.png 8b8f3d2e1f4732384227794e2892bfa6
 05-mentalhealth.png 4433d34ea50f148bb06b612513dcbae2
 06-assignments.png 89a258070de2916fc4f00ca5eed6cb07
 07-events.png e0cef83d1e9587659fce267c18c63d57
 08-studyresources.png 66442104ebac81afca43628cb7a5ef53
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
-10-learning.png eeae15aea91d7d993db72781bb17791e
+10-learning.png 81cfefad862ef50adf6269169c49273c
 11-goals.png 56a0ae5483cdda64d2168932e8359983
 12-profile.png edb647d4bde50a717af5a88995e1a048
 13-mobile-login.png 597d96eed24ca1c3042beb686c580fb4
@@ -639,7 +572,7 @@
 15-mobile-nav-open.png 4e787b6e77719931f5b490369f5fbc88
 16-mobile-drawer-nav-exercise.png a73a87cfcf49d4069ac94a30817ce513
 17-dark-dashboard.png a1fd57709c79b485dd00abdfc96e95fc
-18-dark-routines.png bf642f3519daedb040b832edcf06ec1e
+18-dark-routines.png 4e7337ea98d2468f1eaf01d6567167ab
 19-dark-mobile-nav-open.png f06d822330b0a527922b3560d12642ef
 20-dark-login.png 9ad84a98f04c63d08f37ab668388484f
 21-dark-signup.png 1105dcb0a18f044a6d72fe0f68e2e88c
@@ -649,9 +582,9 @@
 25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
 26-events-inline-form.png d39557b8441acf6733155905fb71ec6f
 27-dark-mood-form.png bc76c5fa4e07a8ce6b0ef15a947fdc82
-28-routines-schedule-modal.png 6d0c28c7c5dfb05211a8437c8573b09c
-29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
-30-tutorial-card-hover.png f8aaa8fd7a33d0a3ba74596ab0a81a5b
+28-routines-schedule-modal.png e142219cb3fbdd6dc05602a387d2ad25
+29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
+30-tutorial-card-hover.png 5f4f2f9d6246bda707021afe3b774c9e
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
 32-mentalhealth-form-interior.png f760d23d4a8e7b92c076dbf2e81c4518
 33-sr-form-interior.png 74ed140c9d101aa5fe537405ee3ded12

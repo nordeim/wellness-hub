@@ -337,7 +337,51 @@ const LEDGER = {
   // Re-based ONCE to the round's FINAL read (Bx9xPHC1) per the
   // intra-round doctrine, born-verified on the quiet state: the
   // re-run after this edit reads "assets stable" + the 15/15 digest.
-  cssPath: "/static/index-Bx9xPHC1.css",
+  // WH-87 re-base (round 76: BOTH axes moved at the round's first read
+  // — the css axis Bx9xPHC1 -> BYRIvMx2, the EIGHTEENTH css CONTENT
+  // change in the watch's history, paired with the js axis move
+  // Dd6vzWqe -> 62HqrPs4, the FORTY-EIGHTH distinct bundle — the
+  // double-axis class, the js axis then moving AGAIN intra-round to
+  // IYL2plGx at the round's final read, the FORTY-NINTH). The moves
+  // carried ONE real face change — the reference re-ordered BOTH
+  // content grids (the WH-42/43/76/81 class's FOURTH firing) — plus
+  // platform-only asset churn: the instrument legs (the WH-60/61
+  // doctrine) read the css atom-level rule diff PLATFORM-UTILITY-ONLY
+  // (0 added / 4 removed atoms — the .group/template bracketed-variant
+  // focus-within/hover family; zero wellness-module classes) and the
+  // js bundle-inventory diff PLATFORM-CHUNK-HASH-ROTATION-ONLY (487
+  // added / 487 removed differing string literals, EVERY one a
+  // chunk-path string, zero non-path either side; sizes 102,349 ->
+  // 102,353 = +4). The same-run computed digest read 15/15 MATCH on
+  // every generation. The round's battery — the FORTY-NINTH full-width
+  // run — walked the moves: the fifteen non-reorder surfaces green on
+  // their first flights + the two reorder legs the round's finding
+  // (routines 639/697 + tutorials 719/790), decode-settled (a dedicated
+  // zero-write probe + the parity legs' landscape.order members,
+  // same-round reads identical), cured RED->GREEN with the seed's
+  // SEVENTEEN sortOrder renumbers + the re-authored grid-order pins +
+  // the a11y video-card order pins moved (the first video card Focused
+  // Study Session -> Creative Flow Session), the legs re-flighted
+  // 697/697 + 790/790 + schedmodal 89/89 — 3,555/3,555 across all
+  // SEVENTEEN surfaces. The capture round (the FIFTY-EIGHTH byte
+  // comparison) read 28/34 with the SIX movers root-caused +
+  // pixel-diffed against the git HEAD (WH-86) captures: the FIVE
+  // reorder faces (03-routines 98,390 px / 8.5408% / maxdelta 248 +
+  // 18-dark-routines 98,294 px / 8.5325% / maxdelta 238 + 10-learning
+  // 359,678 px / 31.2220% / maxdelta 252 + 30-tutorial-card-hover
+  // 354,623 px / 30.7832% / maxdelta 252 + the 28 schedmodal's .first()
+  // anchor opening the NEW first template 5-Minute Morning Energizer
+  // — every one at its EXACT WH-76 signature) + the 29 maxdelta-1
+  // rasterization family's re-fire after its WH-85/86 rest (5 px /
+  // 0.0004% / bbox 5x5 at (503,326), its recorded signature) — and NO
+  // date-axis crossing (the captures landed ~22:08 UTC Nov 7, same-day
+  // Nov 7 faces vs the WH-86 ledger's Nov 7 faces; the NINTH carry
+  // expectation of the cycle, the re-arm moving to the Nov 7 -> Nov 8
+  // crossing, carrying to WH-88). Re-based ONCE to the round's FINAL
+  // read (BYRIvMx2) per the intra-round doctrine, born-verified on the
+  // quiet state: the re-run after this edit reads "assets stable" +
+  // the 15/15 digest.
+  cssPath: "/static/index-BYRIvMx2.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -581,7 +625,25 @@ const LEDGER = {
   // WH-82). Re-based ONCE to the round's FINAL read (Dd6vzWqe) per
   // the intra-round doctrine, born-verified on the quiet state: the
   // re-run after this edit reads "assets stable" + the 15/15 digest.
-  jsPath: "/static/index-Dd6vzWqe.js",
+  // WH-87 re-base (round 76: the js axis moved at the round's first
+  // read — Dd6vzWqe -> 62HqrPs4, the FORTY-EIGHTH distinct bundle —
+  // then AGAIN intra-round to IYL2plGx at the final read, the
+  // FORTY-NINTH, the WH-44/76 intra-round class; the css axis's own
+  // Bx9xPHC1 -> BYRIvMx2 move recorded at cssPath above — the
+  // double-axis class). The same-run computed digest read 15/15 MATCH
+  // on EVERY bundle (the mobile header + drawer battery inside), the
+  // instrument legs read the pair platform-only (the bundle-inventory
+  // diff: PLATFORM-CHUNK-HASH-ROTATION-ONLY — 487 added / 487 removed,
+  // every literal a chunk-path string, zero non-path, sizes 102,349
+  // -> 102,353), and the round's battery + capture round verified the
+  // rendered face through the moves (the ONE face change = the
+  // reference's own content-grid reorder, cured RED->GREEN at
+  // 697/697 + 790/790 + 89/89; the byte comparison's movers all at
+  // their recorded signatures). Re-based ONCE to the round's FINAL
+  // read (IYL2plGx) per the intra-round doctrine, born-verified on the
+  // quiet state: the re-run after this edit reads "assets stable" +
+  // the 15/15 digest.
+  jsPath: "/static/index-IYL2plGx.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both
