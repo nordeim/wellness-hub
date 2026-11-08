@@ -1,5 +1,56 @@
-# docs/screenshots md5 ledger — re-based at WH-88 (2026-11-08), 34 files
+# docs/screenshots md5 ledger — re-based at WH-89 (2026-11-08), 34 files
 
+# The WH-89 round (the standing audit round — the QUIET WATCH + THE
+#   DATE-AXIS RE-FIRE THAT LANDED [round 78: both axes STABLE at
+#   the WH-87 re-based ledger — css /static/index-BYRIvMx2.css + js
+#   /static/index-IYL2plGx.js, cdn true, cfg true — the THIRD
+#   consecutive quiet round on the re-based assets; the quiet read a
+#   reading, never a retirement, NO watch-ledger re-base; the
+#   computed digest 15/15 MATCH on the same run with the mobile
+#   header + the full drawer battery inside the digest — escape +
+#   unlock + grow-auto-close all pass]: the FIFTY-FIRST full-width
+#   battery run green at 3,555/3,555 on ALL SEVENTEEN surfaces'
+#   FIRST flights — ZERO drifts, ZERO transients, ZERO limiter trips
+#   on BOTH apps — and the SIXTIETH cross-round byte comparison read
+#   27/34 with SEVEN movers: the captures landed ~00:52 UTC Nov 8,
+#   CROSSING the Nov 7 → Nov 8 midnight the WH-88 ledger's Nov 7
+#   faces don't share, so the ELEVENTH carry expectation RESOLVED AS
+#   THE RE-FIRE — the date-axis family fired ALL FIVE members at the
+#   family's recorded forms: 07-events 14,700 px / 1.2760% / maxdelta
+#   46 (the calendar's today-cell gradient move: Nov 7 Saturday
+#   row-1 last column → Nov 8 Sunday row-2 first column, 7,195 px
+#   per cell, both cells cluster-verified; Nov 1 / Nov 14
+#   neighboring cells byte-held) + 26-events-inline-form 8,945 px /
+#   0.7765% / maxdelta 245 (the same calendar cluster, the second
+#   today cell viewport-truncated at the 900px bottom, + the inline
+#   form's todayIso() date-default glyph band at rows 437-446) + the
+#   "7"→"8" glyph trio at its glyph-specific count — 27-dark-mood-
+#   form 75 px / maxdelta 226 + 28-routines-schedule-modal 75 px /
+#   maxdelta 245 + 32-mentalhealth-form-interior 75 px / maxdelta
+#   245, each bbox 8x10 (the WH-78 firing's trio recorded 60-61 px
+#   on the "5"→"6" pair — the count is glyph-specific, the bbox and
+#   habitat the family's). The OTHER TWO movers: 19-dark-mobile-nav-
+#   open (the WH-82/85 mid-paint transient class — the whole-face
+#   first flight re-captured BYTE-STABLE at the ledger hash, the
+#   WH-85 precedent applied; the row KEEPS its hash, the on-disk
+#   file replaced with the clean re-capture) + 29-quick-actions-
+#   hover (4 px / 0.0003% / maxdelta 1 / bbox 5x5 at (503,326) —
+#   the standing maxdelta-1 rasterization family at its recorded
+#   signature, the bbox + maxdelta EXACT and the pixel count at the
+#   at-or-one-off form of its recorded 5 px, re-firing after its
+#   WH-88 rest). RESTING:
+#   10-learning (the glyph band, after its WH-88 re-fire) +
+#   25-dark-login-focus (the focus-ring habitat, after its WH-88
+#   re-fire) + 24 (the orange-corner family) + 30 (the brown-edge
+#   family). ZERO limiter trips (the pacing-note discipline held:
+#   the verified-kill dev-server restart at the battery→capture
+#   boundary). The source did NOT change this round (the docs ladder
+#   only) — the movers are the standing environmental
+#   classifications, no cure required. The date-axis re-arms on the
+#   Nov 8 → Nov 9 crossing, carrying to WH-90 if its captures run
+#   after ~00:00 UTC Nov 9.
+
+# -- prior re-base (WH-88, 2026-11-08) --------------------------------------
 # The WH-88 round (the standing audit round — the QUIET WATCH + THE
 #   GLYPH-BAND/FOCUS-RING PAIR RE-FIRE [round 77: both axes STABLE at
 #   the WH-87 re-based ledger — css /static/index-BYRIvMx2.css + js
@@ -473,60 +524,12 @@
 #   same commit. The movers are the standing environmental
 #   classifications — no further cure required.
 
-# -- prior re-base (WH-78, 2026-11-06) --------------------------------------
-
-# The WH-78 round (the standing audit round — the QUIET watch + THE
-#   DATE-AXIS RE-FIRE THAT FINALLY LANDED [round 67: both axes STABLE
-#   at the WH-77 re-based reads — css /static/index-BSn5NNZl.css + js
-#   /static/index-CqEsEwKA.js — the quiet read a reading, never a
-#   retirement, NO watch-ledger re-base; the computed digest 15/15
-#   MATCH on the same run]): the FORTIETH full-width battery run green
-#   at 3,555/3,555 (all SEVENTEEN surfaces on their first flights,
-#   zero transients, zero limiter trips, the two verified-kill
-#   dev-server restarts at the window boundaries), and the FORTY-
-#   NINTH cross-round byte comparison read 27/34 with SEVEN movers —
-#   the SIXTH carry expectation RESOLVED AS THE RE-FIRE: the captures
-#   landed ~00:20 UTC Nov 6, crossing the Nov 5 -> Nov 6 midnight the
-#   WH-77 ledger's Nov 5 faces don't share, so the WH-56 date-axis
-#   mover class fired ALL FIVE members at the WH-62-record parameters
-#   — 07-events 14,604 px / 1.2677% / maxdelta 136 / bbox 161x96 at
-#   (650,260), the calendar's today-ring + the upcoming filter's
-#   new Date() cluster; 26-events-inline-form 14,665 px / 1.2730% /
-#   maxdelta 245, the inline form's todayIso() date-default glyph
-#   band + the calendar cluster; and the single-digit day-of-month
-#   glyph "5"->"6" trio — 27-dark-mood-form 60 px / maxdelta 226 +
-#   28-routines-schedule-modal 61 px + 32-mentalhealth-form-interior
-#   61 px, each bbox 8x10 / maxdelta 226-245, the glyph family at
-#   its glyph-specific count. The OTHER TWO movers: 29-quick-actions-
-#   hover 5 px / 0.0004% / maxdelta 1 / bbox 5x5 at (503,326) — the
-#   standing maxdelta-1 rasterization family re-firing (fired WH-76 +
-#   WH-77, the alternation continuing) — and 24-dark-exercise-rows
-#   5 px / 0.0004% / maxdelta 17 / bbox 4x2 at (292,245) — a NEW
-#   sub-visible rasterization instance, the orange KPI-corner
-#   anti-aliased edge family's first firing (the diff sits exactly on
-#   the orange-element-to-dark-background corner boundary; NOT the
-#   WH-52 timing-race class — the workout row rendered fully, the
-#   row-wait cure holding). RESTING this round: 10-learning (the
-#   maxdelta-7 glyph-band family, fired at WH-77) + 25-dark-login-
-#   focus (the WH-20 interpolation-tail habitat, byte-stable). The
-#   app source identical to the WH-77 tree outside the tests/docs
-#   ladder. The round's cure (F-1, TDD RED->GREEN): the SKILL
-#   Appendix-B set-claims cure — the Screenshots row's retired 01-16
-#   sixteen-file claim cured to the live 01-34 set (29 desktop +
-#   5 mobile) + the mobile-testing row's 13-16 sub-range cured + the
-#   session-log row's stale head pointer cured — pinned by the NEW
-#   WH-78 capture-set range scan in tests/docs-counts.test.ts (every
-#   docs/screenshots/NN-NN range claim must carry the live set), the
-#   count ladder moving 377 -> 378 with CANONICAL + every doc site in
-#   the same commit. The movers are the standing environmental
-#   classifications + the expected date-axis class — no further cure
-#   required.
 
 # Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31,
 #   WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
 #   WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49, WH-50,
 #   WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61,
-#   WH-62, WH-63, WH-64, WH-65, WH-66, WH-67, WH-68, WH-69, WH-70, WH-72, WH-73, WH-74, WH-75, WH-76, WH-77.
+#   WH-62, WH-63, WH-64, WH-65, WH-66, WH-67, WH-68, WH-69, WH-70, WH-72, WH-73, WH-74, WH-75, WH-76, WH-77, WH-78.
 #
 #
 01-login.png 5989c8ad3ca65aa07575a8801e023742
@@ -535,7 +538,7 @@
 04-exercise.png 8b8f3d2e1f4732384227794e2892bfa6
 05-mentalhealth.png 4433d34ea50f148bb06b612513dcbae2
 06-assignments.png 89a258070de2916fc4f00ca5eed6cb07
-07-events.png e0cef83d1e9587659fce267c18c63d57
+07-events.png 19d2b4ad1fc0da198d8e669e730a5a22
 08-studyresources.png 66442104ebac81afca43628cb7a5ef53
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
 10-learning.png 6a90216134614b89a297ede0a3ac237c
@@ -554,12 +557,12 @@
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
 25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
-26-events-inline-form.png d39557b8441acf6733155905fb71ec6f
-27-dark-mood-form.png bc76c5fa4e07a8ce6b0ef15a947fdc82
-28-routines-schedule-modal.png e142219cb3fbdd6dc05602a387d2ad25
-29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
+26-events-inline-form.png 132ae424de72ec18e802075272a99ab9
+27-dark-mood-form.png 44a07aebc95eb036fcad67b9a0a73727
+28-routines-schedule-modal.png f04886609ee2f189518a4f9afc9ac9c3
+29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
 30-tutorial-card-hover.png 5f4f2f9d6246bda707021afe3b774c9e
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
-32-mentalhealth-form-interior.png f760d23d4a8e7b92c076dbf2e81c4518
+32-mentalhealth-form-interior.png 76fdfa1e5fc92d44312f976e47d29527
 33-sr-form-interior.png 74ed140c9d101aa5fe537405ee3ded12
 34-mood-list-interior.png bbedb6b0578994263c76231b09090da5
