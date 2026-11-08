@@ -1,4 +1,54 @@
-# docs/screenshots md5 ledger — re-based at WH-89 (2026-11-08), 34 files
+# docs/screenshots md5 ledger — re-based at WH-90 (2026-11-08), 34 files
+# The WH-90 round (the standing audit round — the QUIET WATCH + THE
+#   THEME-RESIDUE CURE [round 79: both axes STABLE at the WH-87
+#   re-based ledger — css /static/index-BYRIvMx2.css + js
+#   /static/index-IYL2plGx.js, cdn true, cfg true — the FOURTH
+#   consecutive quiet round on the re-based assets; the quiet read a
+#   reading, never a retirement, NO watch-ledger re-base; the
+#   computed digest 15/15 MATCH on the same run with the mobile
+#   header + the full drawer battery inside the digest — escape +
+#   unlock + grow-auto-close all pass]: the round's finding + cure —
+#   the F-1 THEME-RESIDUE class, the WH-25 clean-account doctrine's
+#   gap on the theme axis: the WH-89 surgical 19 re-capture's dark
+#   flip (the round's LAST prefs write, 00:55:56 UTC Nov 8) survived
+#   the re-seed on the UserPrefs row the seed's wipe never touched,
+#   and this round's parity battery read our DARK computed tokens
+#   against the reference's LIGHT faces (moodForm 3 + shell 5 false
+#   drifts, every value the .dark token family) — cured RED→GREEN:
+#   the seed's demo-UserPrefs reset + the capture procedure's
+#   themeMode guard (tests/clean-account.test.ts, 2 pins) + the live
+#   re-seed + the false-drift legs re-verified green (20/20 + 61/61),
+#   the count ladder 380 → 382 (27 suites). The battery — the
+#   FIFTY-SECOND full-width run across two reference login windows
+#   (the verified-kill dev-server restart at the boundary): ALL
+#   SEVENTEEN surfaces green, 3,555/3,555 computed members
+#   live-vs-live, ZERO real drifts (the eight false drifts the F-1
+#   residue's own face, cured + re-verified), ZERO limiter trips on
+#   BOTH apps. The capture round — the SIXTY-FIRST cross-round byte
+#   comparison 33/34 with ONE mover: the captures landed ~02:31-33
+#   UTC Nov 8, SAME-DAY Nov 8 faces vs the WH-89 ledger's Nov 8
+#   faces (no midnight crossed) — the date-axis family CARRIED (the
+#   TWELFTH expectation of the cycle; the "8"→"9" glyph family
+#   re-arms past ~00:00 UTC Nov 9, carrying to WH-91), the FIVE
+#   date-bearing faces byte-held (07-events + 26-events-inline-form +
+#   27-dark-mood-form + 28-routines-schedule-modal +
+#   32-mentalhealth-form-interior). The ONE mover =
+#   25-dark-login-focus re-firing at its EXACT recorded signature
+#   (77 px / 0.0067% / maxdelta 5 / bbox 367x121 at (457,562) — the
+#   WH-20 focus-ring interpolation-tail habitat; fired
+#   WH-76/79/80/82/83/84/85/88, rested WH-87/89); RESTING: 10 + 19 +
+#   24 + 29 + 30. ZERO limiter trips (the pacing-note discipline
+#   held: the verified-kill dev-server restart at the battery→capture
+#   boundary + the reference limiter aged across it). The ledger
+#   re-based at WH-90 (the ONE mover row re-hashed: 25; the WH-89
+#   block demoted to prior narration; the WH-79 block retired — its
+#   number rolled onto the re-bases list), the structural assertions
+#   green on the FIRST pass (the WH-70 doctrine), born-verified
+#   34/34 ZERO MOVERS. The date-axis re-arms on the Nov 8 → Nov 9
+#   crossing, carrying to WH-91 if its captures run after ~00:00 UTC
+#   Nov 9.
+
+# -- prior re-base (WH-89, 2026-11-08) ---------------------------------------------------
 
 # The WH-89 round (the standing audit round — the QUIET WATCH + THE
 #   DATE-AXIS RE-FIRE THAT LANDED [round 78: both axes STABLE at
@@ -474,62 +524,11 @@
 #   CANONICAL + every doc site in the same commit. The movers are the
 #   standing environmental classifications — no further cure required.
 
-# -- prior re-base (WH-79, 2026-11-06) --------------------------------------
-
-# The WH-79 round (the standing audit round — the QUIET watch + THE
-#   FRONTMATTER-FRESHNESS CURE [round 68: both axes STABLE at the
-#   WH-77 re-based reads — css /static/index-BSn5NNZl.css + js
-#   /static/index-CqEsEwKA.js — the quiet read a reading, never a
-#   retirement, NO watch-ledger re-base; the computed digest 15/15
-#   MATCH on the same run]): the FORTY-FIRST full-width battery run
-#   green at 3,555/3,555 (all SEVENTEEN surfaces green — ONE transient
-#   absorbed: parity-kpis' first flight read 5/10, the lesson-45
-#   reproduce-before-curing doctrine applied, the immediate re-run
-#   315/315 MATCH, an infrastructure transient, not a reference move;
-#   zero limiter trips, the verified-kill dev-server restart at the
-#   window boundary), and the FIFTIETH cross-round byte comparison
-#   read 31/34 with THREE movers — NO DATE-AXIS CROSSING (the FIRST
-#   carry expectation of the new cycle: the captures landed ~01:51
-#   UTC Nov 6, same-day Nov 6 faces vs the WH-78 ledger's Nov 6 faces
-#   — no midnight crossed; the expectation carries to WH-80 if its
-#   captures run after ~00:00 UTC Nov 7). The THREE movers, all
-#   root-caused + pixel-diffed against the git HEAD (WH-78) captures
-#   (the app source IDENTICAL to the WH-78 tree outside the tests/docs
-#   ladder):
-#   24-dark-exercise-rows (5 px / 0.0004%, maxdelta 17, bbox 4x2 at
-#     (292,245)) = the orange KPI-corner anti-aliased edge family
-#     RE-FIRING at its EXACT WH-78-record parameters — the family's
-#     second firing, the alternation now standing.
-#   25-dark-login-focus (77 px / 0.0067%, maxdelta 5, bbox 367x121 at
-#     (457,562)) = the WH-20 focus-ring interpolation-tail habitat
-#     RE-FIRING at its EXACT WH-76-record parameters (fired WH-76,
-#     rested WH-77 + WH-78, re-fires here).
-#   30-tutorial-card-hover (17 px / 0.0015%, maxdelta 40, bbox 8x31 at
-#     (618,638)) = a NEW sub-visible rasterization instance — the
-#     tutorial-card hover thumbnail's brown-edge anti-aliasing band
-#     (the near-white d1-4 cluster + the brown d10-40 cluster on the
-#     thumbnail's light-to-brown boundary; NOT the WH-76 reorder genus
-#     — that read 354,623 px; the tutorials parity leg 790/790 green
-#     the same round proves the grid + every datum byte-held).
-#   RESTING this round: 10-learning (the maxdelta-7 family, resting a
-#   second consecutive round after its WH-77 fire) + 29-quick-actions-
-#   hover (the maxdelta-1 family resting after its WH-76/77/78 triple).
-#   The round's cure (F-1, TDD RED->GREEN): the SKILL frontmatter
-#   freshness cure — the last_updated stamp (stale at 2026-11-03
-#   through the two SKILL-editing rounds WH-77 + WH-78) cured to the
-#   live plan-ledger date + pinned by the NEW WH-79 frontmatter-
-#   freshness scan in tests/docs-counts.test.ts (the stamp carries the
-#   newest docs/plans date — a validated-through claim), the count
-#   ladder moving 378 -> 379 with CANONICAL + every doc site in the
-#   same commit. The movers are the standing environmental
-#   classifications — no further cure required.
-
-
 # Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31,
 #   WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
 #   WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49, WH-50,
 #   WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61,
-#   WH-62, WH-63, WH-64, WH-65, WH-66, WH-67, WH-68, WH-69, WH-70, WH-72, WH-73, WH-74, WH-75, WH-76, WH-77, WH-78.
+#   WH-62, WH-63, WH-64, WH-65, WH-66, WH-67, WH-68, WH-69, WH-70, WH-72, WH-73, WH-74, WH-75, WH-76, WH-77, WH-78, WH-79.
 #
 #
 01-login.png 5989c8ad3ca65aa07575a8801e023742
@@ -556,7 +555,7 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
+25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
 26-events-inline-form.png 132ae424de72ec18e802075272a99ab9
 27-dark-mood-form.png 44a07aebc95eb036fcad67b9a0a73727
 28-routines-schedule-modal.png f04886609ee2f189518a4f9afc9ac9c3

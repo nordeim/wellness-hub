@@ -54,10 +54,10 @@ const CANONICAL = {
   models: 15, // prisma/schema.prisma `^model` declarations
   apiRouteFamilies: 15, // directories under src/app/api/
   uiModules: 6, // .tsx modules under src/components/ui/
-  unitSuites: 26, // tests/*.test.ts (INCLUDING this suite — WH-37: +tests/seed-parity.test.ts, the demo-account data parity contract)
+  unitSuites: 27, // tests/*.test.ts (INCLUDING this suite — WH-90: +tests/clean-account.test.ts, the theme-axis clean-account contract)
   e2eSpecs: 6, // tests/e2e/*.spec.ts
   // Run-only totals — update with every doc site in the same commit:
-  unitChecks: 380, // `bun run test` total (WH-80: 379 + the sixth-doc claims scan — the exhaustive stale-doc cure, DEPLOYMENT.md's operational claims; the WH-77/78/79 scans rode the same ladder)
+  unitChecks: 382, // `bun run test` total (WH-90: 380 + the clean-account theme-axis pins — the seed's demo-UserPrefs reset + the capture guard; the WH-80 sixth-doc scan and the WH-77/78/79 scans rode the same ladder)
   e2eChecks: 72, // `CI=1 bun run test:e2e` total (WH-37: 71 + the demo-face leg, the seeded mood entry's rendered face)
   smokeChecks: 14, // scripts/smoke-test.sh ladder
   // WH-18: ThemeBoot joined src/components/layout/ — the counts move with it.

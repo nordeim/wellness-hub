@@ -477,6 +477,20 @@ async function main() {
   await db.reminder.deleteMany();
   await db.goal.deleteMany();
 
+  // WH-90 (F-1): the demo account's preference state — the theme-axis
+  // extension of the clean-account contract. A capture procedure's dark
+  // flip (the WH-89 surgical 19 re-capture's context-B reproduction) used
+  // to ride through the re-seed on the UserPrefs row this wipe never
+  // touched, and the next round's parity battery read dark computed
+  // tokens against the reference's light faces. Deleting the demo row
+  // lets the prefs seam's lazy create (GET /api/prefs) restore the schema
+  // defaults — themeMode "light", the stock preset pair — so `bun run
+  // db:seed` restores the clean account the WH-25 doctrine promises.
+  // Pinned by tests/clean-account.test.ts.
+  await db.userPrefs.deleteMany({
+    where: { user: { email: "sepnetflix2023@outlook.com" } },
+  });
+
   // ---- demo user (UPSERT-BY-EMAIL — ids stay stable across re-seeds) ----
   const demo = await db.user.upsert({
     where: { email: "sepnetflix2023@outlook.com" },

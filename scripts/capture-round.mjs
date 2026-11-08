@@ -63,6 +63,21 @@ const snap = async (page, name) => {
     process.exit(1);
   }
   console.log(`clean account asserted: badgesEarned=0`);
+  // WH-90 (F-1): the theme-axis sibling — a dark flip left on the demo
+  // account's UserPrefs (the WH-89 surgical 19 re-capture's residue)
+  // used to ride the re-seed into the light set and corrupt every light
+  // capture. The seed now resets the row; this guard fails closed if a
+  // dirty theme state ever reaches the procedure anyway.
+  const mode = await page.evaluate(async () => {
+    const r = await fetch("/api/prefs");
+    const j = await r.json();
+    return j.data?.themeMode;
+  });
+  if (mode !== "light") {
+    console.error(`CAPTURE-STATE DOCTRINE FAILED: themeMode=${mode} — re-seed and re-run`);
+    process.exit(1);
+  }
+  console.log(`clean account asserted: themeMode=light`);
   await ctx.close();
 }
 
