@@ -1,4 +1,58 @@
-# docs/screenshots md5 ledger — re-based at WH-92 (2026-11-08), 34 files
+# docs/screenshots md5 ledger — re-based at WH-93 (2026-11-09), 34 files
+# The WH-93 round (the standing audit round — the JS-AXIS WATCH + THE
+#   DATE-AXIS RE-FIRE [round 82: the js axis MOVED —
+#   /static/index-QLQDltYS.js -> /static/index-C5r-NJye.js, the FIFTY-SECOND
+#   distinct bundle, the second consecutive js-axis move; the css axis HELD
+#   at /static/index-CD4jDvim.css, the SEVENTEENTH css form standing, cdn
+#   true, cfg true; the login geometry MATCH and the computed digest 15/15
+#   MATCH on the SAME RUN against the NEW bundle — the mobile header + the
+#   full drawer battery inside the digest, escape + unlock + grow-auto-close
+#   all pass; the watch ledger re-based this round (the js entry),
+#   born-verified on BOTH states per the WH-34 doctrine]: NO code cure — the
+#   js-axis redeployment carried no rendered-face change, the battery's own
+#   proof. The battery — the FIFTY-FIFTH full-width run across two reference
+#   login windows (the verified-kill dev-server restart at the boundary +
+#   the reference limiter aged across it): ALL SEVENTEEN surfaces green —
+#   3,555/3,555 computed members live-vs-live, ZERO drifts, ZERO limiter
+#   trips (login 38/38 + authviews 192/192 + moodForm 20/20 + shell 61/61 +
+#   dashboard 105/105 + headers 192/192 + toolbars 114/114 + kpis 315/315 +
+#   profile 433/433 + account 146/146 + listinteriors 88/88 + moodjourney
+#   116/116 + calendar 92/92 + moodtiles 67/67 + routines 697/697 +
+#   tutorials 790/790 + schedmodal 89/89) — the account leg green on its
+#   SECOND flight after one transient script crash on the first (146/146
+#   re-verified; the crash spent no parity finding). The capture round — the
+#   SIXTY-FOURTH cross-round byte comparison 28/34 with SIX movers: the
+#   captures landed ~00:44-45 UTC Nov 9, Nov 9 faces vs the WH-92 ledger's
+#   Nov 8 faces — the date-axis family's FIFTEENTH expectation of the cycle
+#   FIRED (the "8"->"9" glyph flip, the re-fire, the WH-89 precedent class;
+#   the FIVE date-bearing faces: 07-events (14,604 px / 1.2677% / maxdelta
+#   136 / bbox 161x96 at (312,364) — the calendar card's date cells) +
+#   26-events-inline-form (3,091 px / 0.2683% / maxdelta 245 / bbox 161x463
+#   at (312,437) — the events form's date value region) + the THREE
+#   8x10-glyph movers 27-dark-mood-form (71 px / 0.0062% / maxdelta 226 /
+#   bbox 8x10 at (360,855)) + 28-routines-schedule-modal (71 px / 0.0062% /
+#   maxdelta 245 / bbox 8x10 at (377,801)) + 32-mentalhealth-form-interior
+#   (71 px / 0.0062% / maxdelta 245 / bbox 8x10 at (360,855)) — the date
+#   input's "9" glyph) + the SIXTH mover = 25-dark-login-focus at its EXACT
+#   recorded signature (77 px / 0.0067% / maxdelta 5 / bbox 367x121 at
+#   (457,562) — the WH-20 focus-ring interpolation-tail habitat; fired
+#   WH-76/79/80/82/83/84/85/88/90/91/92), all six root-caused +
+#   pixel-diffed against the git HEAD (WH-92) captures (the app source
+#   unchanged — the zero-drift battery + the git tree's own proof; the
+#   events bboxes the calendar card + the form date region, the three
+#   8x10 bboxes the date glyph). RESTING: 19 + 24 + 29. The clean-account
+#   guards' FOURTH standing flight GREEN inside the procedure (badgesEarned=0
+#   + themeMode=light both asserted before the light set — the fail-closed
+#   design); ZERO limiter trips (the pacing-note discipline held: the
+#   verified-kill dev-server restart at the battery->capture boundary). The
+#   ledger re-based at WH-93 (the SIX mover rows re-hashed: 07 + 25 + 26 +
+#   27 + 28 + 32; the WH-92 block demoted to prior narration; the WH-82
+#   block retired — its number rolled onto the re-bases list), the
+#   structural assertions green (the WH-70 doctrine), born-verified 34/34
+#   ZERO MOVERS. The date-axis re-arms on the Nov 9 -> Nov 10 crossing,
+#   carrying to WH-94.
+
+# -- prior re-base (WH-92, 2026-11-08) ---------------------------------------------------------
 # The WH-92 round (the standing audit round — the DOUBLE-AXIS WATCH +
 #   THE FIFTH CONTENT-GRID REORDER CURE [round 81: BOTH AXES MOVED — the
 #   first double-axis move since WH-87, ending the five-round quiet
@@ -512,57 +566,7 @@
 #   crossing, carrying to WH-84 if its captures run after ~00:00 UTC
 #   Nov 8.
 
-# -- prior re-base (WH-82, 2026-11-07) --------------------------------------
-# The WH-82 round (the standing audit round — the QUIET WATCH + THE
-#   DATE-AXIS FIRED [round 71: both axes STABLE at the WH-81 re-based
-#   ledger — css /static/index-Bx9xPHC1.css + js /static/index-Dd6vzWqe.js,
-#   cdn true, cfg true — the quiet read a reading, never a retirement, NO
-#   watch-ledger re-base; the computed digest 15/15 MATCH on the same run
-#   with the mobile header + the full drawer battery inside the digest —
-#   escape + unlock + grow-auto-close all pass]): the FORTY-FOURTH
-#   full-width battery run green at 3,555/3,555 on ALL SEVENTEEN surfaces'
-#   FIRST flights — ZERO drifts, zero reference-limiter trips, the
-#   verified-kill dev-server restart at the window boundary — and the
-#   FIFTY-THIRD cross-round byte comparison read 27/34 with SEVEN movers,
-#   the round's armed expectation FIRED: the captures landed ~00:19 UTC
-#   Nov 7, PAST the Nov 6 -> Nov 7 midnight crossing (the date-axis
-#   re-armed at WH-81 carrying to WH-82), moving the FIVE date-bearing
-#   faces — 07-events (14,604 px / 1.2677% / maxdelta 46 / bbox
-#   (735,260)-(896,356) = the calendar's gradient today-cell moving
-#   Nov 6 -> Nov 7) + 26-events-inline-form (14,677 px / 1.2740% /
-#   maxdelta 245 / bbox (360,437)-(896,872) = the inline form's
-#   Date-input "6"->"7" glyph at x=360-367 + the same today-cell region
-#   behind) + 27-dark-mood-form + 28-routines-schedule-modal +
-#   32-mentalhealth-form-interior (the three 73-px / 8x10 glyph instances
-#   at (360,855)/(377,801)/(360,855)) — deterministic across both capture
-#   runs (byte-identical md5s); the date-invariant faces byte-held (the
-#   dashboard trio 02/14/17 capturing before the capture-24 write, the
-#   journey faces 05/34 on the seeded demo entry's FIXED 2026-10-29 date,
-#   24 on the capture-24 write's FIXED 2026-10-21 date). The TWO standing
-#   alternation families: 29-quick-actions-hover re-firing at its
-#   signature parameters (4 px / maxdelta 1 / bbox 5x5 at (503,326);
-#   fired WH-76/77/78/81) + 25-dark-login-focus re-firing at its EXACT
-#   recorded signature (77 px / 0.0067% / maxdelta 5 / bbox 367x121 at
-#   (457,562); fired WH-76/79/80, rested WH-81). RESTING this round:
-#   24-dark-exercise-rows (the orange KPI-corner family) + 30-tutorial-
-#   card-hover (the WH-79-born brown-edge family, after its WH-81
-#   subsumption by the reorder face). ONE transient absorbed:
-#   19-dark-mobile-nav-open's first-run face read a whole-face mid-paint
-#   rendering race (no drawer edge + a 1px white band at y=60); the
-#   lesson-45 reproduction re-run read byte-stable at the LEDGER hash —
-#   an infrastructure transient, not a reference move, NO re-base for 19
-#   (the run-2 face IS the WH-81 face). ONE own-limiter trip absorbed
-#   (the capture's second login at the 11th localhost login after the
-#   battery's 9 — OUR limiter; the verified-kill restart + the canonical
-#   re-run). NO CODE CURE — the count ladder FLAT at 380; the docs
-#   ladder: the session82 plan + the session_167 log + the worklog WH-82
-#   entry + the AGENTS round-71 record + the PAD §11 rows + the SKILL
-#   frontmatter stamp moved 2026-11-06 -> 2026-11-07 (the WH-79
-#   freshness contract, the same commit as the plan). The date-axis
-#   re-arms on the Nov 7 -> Nov 8 crossing, carrying to WH-83 if its
-#   captures run after ~00:00 UTC Nov 8.
-
-# Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31, WH-81.
+# Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31, WH-81, WH-82.
 #   WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
 #   WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49, WH-50,
 #   WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61,
@@ -575,7 +579,7 @@
 04-exercise.png 8b8f3d2e1f4732384227794e2892bfa6
 05-mentalhealth.png 4433d34ea50f148bb06b612513dcbae2
 06-assignments.png 89a258070de2916fc4f00ca5eed6cb07
-07-events.png 19d2b4ad1fc0da198d8e669e730a5a22
+07-events.png 65c125d4eb2b12b959dc809bac6db694
 08-studyresources.png 66442104ebac81afca43628cb7a5ef53
 09-reminders.png 0007948abeb142ac05bfc7ed2465dbb3
 10-learning.png eeae15aea91d7d993db72781bb17791e
@@ -593,14 +597,15 @@
 22-dark-reset-password.png 29f552b532d446bc247bbae49b8f7bfc
 23-dark-404.png 428eb4899caa206e513434b913b96d5a
 24-dark-exercise-rows.png d0da7bf5319afef927ad5006d61f9620
-25-dark-login-focus.png 26cc4e63163c76a92b7833c456ac7a8f
-26-events-inline-form.png 132ae424de72ec18e802075272a99ab9
-27-dark-mood-form.png 44a07aebc95eb036fcad67b9a0a73727
-28-routines-schedule-modal.png 2f610b269da17511af896f0d7638b809
+25-dark-login-focus.png 7e5c1a33ee8babbc70140b3ac571875f
+26-events-inline-form.png d36fdc29946fa09424904f8c33e57733
+27-dark-mood-form.png 820df7144176b4b690e5a2a361bae3d0
+28-routines-schedule-modal.png 89a12b625eb411dc4cea596e2024a080
 29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
 30-tutorial-card-hover.png f8aaa8fd7a33d0a3ba74596ab0a81a5b
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
-32-mentalhealth-form-interior.png 76fdfa1e5fc92d44312f976e47d29527
+32-mentalhealth-form-interior.png de67a6d5661b4f7223c5587ef2b564bc
 33-sr-form-interior.png 74ed140c9d101aa5fe537405ee3ded12
 34-mood-list-interior.png bbedb6b0578994263c76231b09090da5
+
 

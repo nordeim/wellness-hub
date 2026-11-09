@@ -681,7 +681,25 @@ const LEDGER = {
   // (QLQDltYS) per the intra-round doctrine, born-verified on the
   // quiet state: the re-run after this edit reads "assets stable" +
   // the 15/15 digest.
-  jsPath: "/static/index-QLQDltYS.js",
+  // WH-93 re-base (round 82: the js axis MOVED —
+  // /static/index-QLQDltYS.js -> /static/index-C5r-NJye.js, the FIFTY-SECOND
+  // distinct bundle, the second consecutive js-axis move; the css axis HELD
+  // at CD4jDvim — the SEVENTEENTH css form standing, recorded at cssPath
+  // above, a quiet round on the css axis: a reading, never a retirement,
+  // NO cssPath re-base). The same-run computed digest read 15/15 MATCH on
+  // the NEW bundle (the mobile header + the full drawer battery inside —
+  // escape + unlock + grow-auto-close all pass), and the round's battery
+  // + capture round verified the rendered face through the move (the
+  // FIFTY-FIFTH full-width run: ALL SEVENTEEN surfaces green,
+  // 3,555/3,555 computed members, ZERO drifts, ZERO limiter trips — the
+  // js-axis redeployment carried no rendered-face change; the byte
+  // comparison's SIX movers all environmental: the FIVE date-bearing
+  // faces of the Nov 8 -> Nov 9 "8"->"9" glyph re-fire + the 25
+  // focus-ring interpolation tail at its recorded signature; NO code
+  // cure). Re-based to the round's read (C5r-NJye), born-verified on
+  // the quiet state: the re-run after this edit reads "assets stable" +
+  // the 15/15 digest.
+  jsPath: "/static/index-C5r-NJye.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both
