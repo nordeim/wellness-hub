@@ -699,7 +699,30 @@ const LEDGER = {
   // cure). Re-based to the round's read (C5r-NJye), born-verified on
   // the quiet state: the re-run after this edit reads "assets stable" +
   // the 15/15 digest.
-  jsPath: "/static/index-C5r-NJye.js",
+  // WH-97 re-base (watch round 86: the js axis MOVED TWICE INTRA-ROUND —
+  // the WH-52/61/69/71 precedent class: /static/index-C5r-NJye.js ->
+  // /static/index-Da-aqpTu.js at the round's first read (the FIFTY-THIRD
+  // distinct bundle), then -> /static/index-C7ULD4QH.js at the
+  // born-verification flight (the FIFTY-FOURTH); the css axis HELD at
+  // /static/index-CD4jDvim.css — the EIGHTEENTH css form standing, a
+  // quiet round on the css axis: a reading, never a retirement, NO
+  // cssPath re-base. The same-run computed digest read 15/15 MATCH on
+  // EVERY bundle (one mid-deploy second run read 14/15 on the transient;
+  // the three consecutive flights after — runs 3/4/5 — all read 15/15
+  // on the FINAL bundle, the mobile header + the full drawer battery
+  // inside — escape + unlock + grow-auto-close all pass), and the
+  // round's battery + capture round verified the rendered face through
+  // the moves (the FIFTY-NINTH full-width run: ALL SEVENTEEN surfaces
+  // green, 3,555/3,555 computed members, ZERO drifts, ZERO limiter
+  // trips — the js-axis redeployments carried no rendered-face change;
+  // the SIXTY-EIGHTH byte comparison's FOUR movers all environmental:
+  // the 25 focus-ring tail + the 29 dither class at their recorded
+  // signatures + the NEW paired 10/30 thumbnail-decode dither inside
+  // the Learning card-2 IMG; NO code cure). Re-based ONCE to the
+  // round's FINAL read (C7ULD4QH) per the intra-round doctrine,
+  // born-verified on the quiet state: the re-run after this edit reads
+  // "assets stable" + the 15/15 digest.
+  jsPath: "/static/index-C7ULD4QH.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both
