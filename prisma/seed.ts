@@ -76,7 +76,7 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     tipsForProcrastinators: "Tell yourself you're just doing the warm-up. Once you start moving, your body will want to continue. And if you stop after 2 minutes? That's still better than nothing!",
     videoUrl: null,
     thumbnail: null,
-    sortOrder: 1,
+    sortOrder: 0,
     steps: [
         { title: "Warm-up: Jumping jacks", duration: "2 min", description: "Get your heart rate up" },
         { title: "20 squats", duration: "2 min", description: "Focus on form" },
@@ -97,7 +97,7 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     tipsForProcrastinators: "Keep a water bottle by your bed so you literally just have to reach for it. The key is starting SUPER small—once you're up and moving, the rest flows naturally!",
     videoUrl: null,
     thumbnail: null,
-    sortOrder: 0,
+    sortOrder: 1,
     steps: [
         { title: "Drink a glass of water", duration: "1 min", description: "Rehydrate after sleep" },
         { title: "2-minute stretch", duration: "2 min", description: "Simple stretches in bed or standing" },
@@ -135,7 +135,7 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     tipsForProcrastinators: "Pick ONE thing from this list. Just one. Even cleaning your desk for 5 minutes counts. Progress over perfection!",
     videoUrl: null,
     thumbnail: null,
-    sortOrder: 4,
+    sortOrder: 3,
     steps: [
         { title: "Clean your space", duration: "15 min", description: "Clear desk, make bed, tidy room" },
         { title: "Meal prep for Monday", duration: "15 min", description: "Prepare something easy" },
@@ -155,7 +155,7 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     tipsForProcrastinators: "Start with JUST putting your phone away. That's the hardest part. The rest will feel easier once you're not scrolling mindlessly.",
     videoUrl: null,
     thumbnail: null,
-    sortOrder: 3,
+    sortOrder: 4,
     steps: [
         { title: "Put phone on Do Not Disturb", duration: "1 min", description: "Reduce blue light exposure" },
         { title: "Light stretching or yoga", duration: "10 min", description: "Release physical tension" },
@@ -175,7 +175,7 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     tipsForProcrastinators: "Commit to just ONE 25-minute block. Tell yourself you can stop after. Usually you'll want to continue! The hardest part is starting. 📚",
     videoUrl: "https://youtube.com/watch?v=example-study",
     thumbnail: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800",
-    sortOrder: 9,
+    sortOrder: 5,
     steps: [
         { title: "Gather all materials", duration: "5 min", description: "Books, notes, laptop, snacks, water" },
         { title: "Deep work block 1", duration: "25 min", description: "Pure focus on hardest task first (Pomodoro)" },
@@ -197,7 +197,7 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     tipsForProcrastinators: "Give yourself permission to make 'bad' art. The goal is process, not product. Just showing up is creative success! 🎨",
     videoUrl: "https://youtube.com/watch?v=example-creative",
     thumbnail: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800",
-    sortOrder: 5,
+    sortOrder: 6,
     steps: [
         { title: "Set up inspiring space", duration: "5 min", description: "Good lighting, music, materials ready" },
         { title: "Warm-up exercise", duration: "10 min", description: "Doodle, free write, improvise—no rules" },
@@ -260,7 +260,7 @@ const ROUTINE_TEMPLATES: SeedTemplate[] = [
     tipsForProcrastinators: "This is your procrastination escape hatch! When stuck, do this routine instead of scrolling. It breaks the paralysis. 🚀",
     videoUrl: "https://youtube.com/watch?v=example-reset",
     thumbnail: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800",
-    sortOrder: 6,
+    sortOrder: 9,
     steps: [
         { title: "Brain dump", duration: "3 min", description: "Write down everything in your head" },
         { title: "Pick ONE thing", duration: "2 min", description: "What's the smallest next step?" },
@@ -302,7 +302,7 @@ const TUTORIALS: SeedTutorial[] = [
     thumbnail: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800",
     duration: "16:30",
     difficulty: "beginner",
-    sortOrder: 2,
+    sortOrder: 0,
   },
   {
     key: "self_compassion_for_perfectionists",
@@ -313,7 +313,7 @@ const TUTORIALS: SeedTutorial[] = [
     thumbnail: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800",
     duration: "14:15",
     difficulty: "beginner",
-    sortOrder: 4,
+    sortOrder: 1,
   },
   {
     key: "overcoming_procrastination_the_2_minute_rule",
@@ -324,7 +324,7 @@ const TUTORIALS: SeedTutorial[] = [
     thumbnail: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800",
     duration: "8:45",
     difficulty: "beginner",
-    sortOrder: 0,
+    sortOrder: 2,
   },
   {
     key: "building_morning_routines_that_actually_stick",
@@ -335,7 +335,7 @@ const TUTORIALS: SeedTutorial[] = [
     thumbnail: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
     duration: "12:20",
     difficulty: "beginner",
-    sortOrder: 1,
+    sortOrder: 3,
   },
   {
     key: "beating_decision_fatigue",
@@ -346,7 +346,7 @@ const TUTORIALS: SeedTutorial[] = [
     thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800",
     duration: "10:50",
     difficulty: "intermediate",
-    sortOrder: 5,
+    sortOrder: 4,
   },
   {
     key: "the_science_of_motivation",
@@ -357,7 +357,7 @@ const TUTORIALS: SeedTutorial[] = [
     thumbnail: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800",
     duration: "18:40",
     difficulty: "intermediate",
-    sortOrder: 3,
+    sortOrder: 5,
   },
   {
     key: "healthy_meal_prep_guide",
@@ -390,7 +390,7 @@ const TUTORIALS: SeedTutorial[] = [
     thumbnail: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800",
     duration: "10:23",
     difficulty: "beginner",
-    sortOrder: 10,
+    sortOrder: 8,
   },
   {
     key: "mindfulness_meditation_for_anxiety",
@@ -401,7 +401,7 @@ const TUTORIALS: SeedTutorial[] = [
     thumbnail: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
     duration: "15:00",
     difficulty: "beginner",
-    sortOrder: 8,
+    sortOrder: 9,
   },
   {
     key: "time_management_mastery",
@@ -412,7 +412,7 @@ const TUTORIALS: SeedTutorial[] = [
     thumbnail: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800",
     duration: "22:10",
     difficulty: "intermediate",
-    sortOrder: 11,
+    sortOrder: 10,
   },
   {
     key: "effective_study_techniques",
@@ -423,7 +423,7 @@ const TUTORIALS: SeedTutorial[] = [
     thumbnail: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800",
     duration: "18:45",
     difficulty: "beginner",
-    sortOrder: 9,
+    sortOrder: 11,
   },
 ];
 

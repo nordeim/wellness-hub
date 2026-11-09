@@ -84,19 +84,21 @@ describe("WH-37 F-2: the demo-account data parity contract", () => {
   });
 });
 
-// WH-87: the reference RE-ORDERED its eleven-template grid a FOURTH
-// time (the WH-42/76 class re-firing — the battery's live ORDER member
-// caught the move again: the set + per-template data byte-equal, only
-// the SEQUENCE moved). Decode-settled this round (a dedicated zero-write
-// probe + the parity leg's landscape.order member, same-round reads
-// identical). New sequence: 5-Minute Morning Energizer now leads;
-// 10-Minute Home Workout second (the head pair swap back); Calm Evening
-// Wind-Down ↔ Self-Care Sunday Reset swap (positions 4/5); Creative Flow
-// slides 7→6 and Quick Productivity Reset 10→7 while Focused Study
-// Session moves 6→10 (the middle reshuffle); positions 3/8/9/11
-// (Pomodoro, Kickstart, Sunday, Wind-Down) held.
+// WH-92: the reference RE-ORDERED its eleven-template grid a FIFTH
+// time (the WH-42/76/87 class re-firing — the parity leg's live ORDER
+// member caught the move again: the set + per-template data byte-equal,
+// only the SEQUENCE moved, every drifted member's value reappearing at
+// its swapped position on the other side). Decode-settled this round
+// (the parity leg's landscape.order member + the per-card drift
+// members, same-round reads). New sequence: 10-Minute Home Workout
+// leads again (the head pair swapping back to the WH-81 form);
+// Self-Care Sunday Reset ↔ Calm Evening Wind-Down swap back
+// (positions 4/5); Focused Study Session moves 10→6 while Creative
+// Flow slides 6→7 and Quick Productivity Reset 7→10 (the middle
+// reshuffling back toward the WH-81 form); positions 3/8/9/11
+// (Pomodoro, Kickstart, Sunday, Wind-Down) held AGAIN.
 describe("WH-42 F-1: the seeded template grid-order contract", () => {
-  it("the ROUTINE_TEMPLATES sortOrder sequence mirrors the reference's live grid order (re-decoded 2026-11-07, the WH-87 reorder)", () => {
+  it("the ROUTINE_TEMPLATES sortOrder sequence mirrors the reference's live grid order (re-decoded 2026-11-08, the WH-92 reorder)", () => {
     // slice to the ROUTINE_TEMPLATES array (the tutorials follow it)
     const marker = SEED.indexOf("const ROUTINE_TEMPLATES");
     expect(marker, "the seed carries the ROUTINE_TEMPLATES array").toBeGreaterThan(0);
@@ -112,16 +114,16 @@ describe("WH-42 F-1: the seeded template grid-order contract", () => {
     // the sortOrder-sorted sequence == the reference's live grid order
     const byOrder = [...pairs].sort((a, b) => a.sortOrder - b.sortOrder).map((p) => p.key);
     expect(byOrder).toEqual([
-      "5_minute_morning_energizer",
       "10_minute_home_workout",
+      "5_minute_morning_energizer",
       "the_pomodoro_power_study_session",
-      "calm_evening_wind_down",
       "self_care_sunday_reset",
+      "calm_evening_wind_down",
+      "focused_study_session",
       "creative_flow_session",
-      "quick_productivity_reset",
       "energizing_morning_kickstart",
       "self_care_sunday",
-      "focused_study_session",
+      "quick_productivity_reset",
       "peaceful_evening_wind_down",
     ]);
   });
@@ -185,23 +187,26 @@ describe("WH-42 F-1: the seeded template grid-order contract", () => {
   });
 });
 
-// WH-87: the tutorial grid RE-ORDERED a FOURTH time (the WH-43/76
-// class re-firing — the exact same class the WH-42/43 + WH-76 + WH-81
-// rounds cured for both grids: the SET is identical (all twelve titles +
-// per-title data byte-equal), only the SEQUENCE moved — the head
-// reshuffled again: Overcoming Procrastination now leads, Building
-// Morning Routines second, The Power of Tiny Habits third, The Science
-// of Motivation fourth, Self-Compassion for Perfectionists fifth,
-// Beating Decision Fatigue sixth; positions 7-8 (Meal Prep, Better
-// Habits) held AGAIN; the tail reshuffled: Mindfulness ninth, Effective
-// Study Techniques tenth, 10-Minute Morning Yoga Flow eleventh, Time
-// Management twelfth). Decode-settled this round (a dedicated zero-write
-// probe + the parity leg's per-card drift members, same-round reads
-// identical). The live pin is the ORDER member in
-// scripts/parity-tutorials.mjs; this is the offline guard that keeps
-// the seed from silently regressing between rounds.
+// WH-92: the tutorial grid RE-ORDERED a FIFTH time (the WH-43/76/87
+// class re-firing — the exact same class the WH-42/43 + WH-76 + WH-81 +
+// WH-87 rounds cured for both grids: the SET is identical (all twelve
+// titles + per-title data byte-equal — every card's img/duration/
+// description/chip data moved WITH its title), only the SEQUENCE moved:
+// the head reshuffled again — The Power of Tiny Habits now leads,
+// Self-Compassion for Perfectionists second, Overcoming Procrastination
+// third, Building Morning Routines fourth; Beating Decision Fatigue ↔
+// The Science of Motivation swap (positions 5/6); positions 7-8 (Meal
+// Prep, Better Habits) held AGAIN; the tail reshuffled: 10-Minute
+// Morning Yoga Flow ninth, Mindfulness tenth, Time Management Mastery
+// eleventh, Effective Study Techniques twelfth). Decode-settled this
+// round (the parity leg's per-card drift members — img.src/dur.text/
+// title.text/desc.text/chip1.* — the live pins that caught the move;
+// the leg's own ORDER member reads "?" placeholders on the reference's
+// tutorial-card DOM and cannot see a reorder; this suite is the
+// offline guard that keeps the seed from silently regressing between
+// rounds).
 describe("WH-43 F-1: the seeded tutorial grid-order contract", () => {
-  it("the TUTORIALS sortOrder sequence mirrors the reference's live grid order (re-decoded 2026-11-07, the WH-87 reorder)", () => {
+  it("the TUTORIALS sortOrder sequence mirrors the reference's live grid order (re-decoded 2026-11-08, the WH-92 reorder)", () => {
     const marker = SEED.indexOf("const TUTORIALS");
     expect(marker, "the seed carries the TUTORIALS array").toBeGreaterThan(0);
     const body = SEED.slice(marker, SEED.indexOf("];", marker));
@@ -216,18 +221,18 @@ describe("WH-43 F-1: the seeded tutorial grid-order contract", () => {
     // the sortOrder-sorted sequence == the reference's live grid order
     const byOrder = [...pairs].sort((a, b) => a.sortOrder - b.sortOrder).map((p) => p.key);
     expect(byOrder).toEqual([
+      "the_power_of_tiny_habits",
+      "self_compassion_for_perfectionists",
       "overcoming_procrastination_the_2_minute_rule",
       "building_morning_routines_that_actually_stick",
-      "the_power_of_tiny_habits",
-      "the_science_of_motivation",
-      "self_compassion_for_perfectionists",
       "beating_decision_fatigue",
+      "the_science_of_motivation",
       "healthy_meal_prep_guide",
       "building_better_habits",
-      "mindfulness_meditation_for_anxiety",
-      "effective_study_techniques",
       "10_minute_morning_yoga_flow",
+      "mindfulness_meditation_for_anxiety",
       "time_management_mastery",
+      "effective_study_techniques",
     ]);
   });
 });

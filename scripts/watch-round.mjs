@@ -381,7 +381,26 @@ const LEDGER = {
   // read (BYRIvMx2) per the intra-round doctrine, born-verified on the
   // quiet state: the re-run after this edit reads "assets stable" +
   // the 15/15 digest.
-  cssPath: "/static/index-BYRIvMx2.css",
+  // WH-92 re-base (round 81: the css axis MOVED — the SEVENTEENTH css
+  // content change /static/index-BYRIvMx2.css -> /static/index-CD4jDvim.css
+  // — PAIRED with the js axis move IYL2plGx -> CW9_z2dx, the first
+  // double-axis move since WH-87, ending the five-round quiet streak;
+  // the same-run computed digest read 15/15 MATCH on the new assets
+  // (the mobile header + drawer battery inside), and the round's
+  // battery walked the moves — the FIFTY-FOURTH full-width run: the
+  // fifteen non-reorder surfaces green on their first flights + the
+  // two grid legs the round's finding (the FIFTH content-grid reorder,
+  // the WH-42/43/76/81/87 class re-firing on BOTH grids — the SET
+  // byte-equal, only the SEQUENCE moved), cured RED->GREEN with the
+  // seed's SEVENTEEN sortOrder renumbers + the re-authored grid-order
+  // pins + the a11y video-card order pin moved (the first video card
+  // Creative Flow Session -> Focused Study Session), the legs
+  // re-flighted 697/697 + 790/790 — the battery effectively
+  // 3,555/3,555. Re-based ONCE to the round's FINAL read (CD4jDvim)
+  // per the intra-round doctrine, born-verified on the quiet state:
+  // the re-run after this edit reads "assets stable" + the 15/15
+  // digest.
+  cssPath: "/static/index-CD4jDvim.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -643,7 +662,26 @@ const LEDGER = {
   // read (IYL2plGx) per the intra-round doctrine, born-verified on the
   // quiet state: the re-run after this edit reads "assets stable" +
   // the 15/15 digest.
-  jsPath: "/static/index-IYL2plGx.js",
+  // WH-92 re-base (round 81: the js axis MOVED —
+  // /static/index-IYL2plGx.js -> /static/index-CW9_z2dx.js, the
+  // FIFTIETH distinct bundle — PAIRED with the css axis's own
+  // BYRIvMx2 -> CD4jDvim move recorded at cssPath above — the first
+  // double-axis move since WH-87, ending the five-round quiet streak;
+  // then the js axis moved AGAIN intra-round at the re-base's own
+  // born-verification flight — CW9_z2dx -> QLQDltYS, the FIFTY-FIRST
+  // distinct bundle, the WH-44/76 intra-round class; the css axis held
+  // at CD4jDvim through the round's final read). The same-run computed
+  // digest read 15/15 MATCH on EVERY bundle (the mobile header +
+  // drawer battery inside), and the round's battery + capture round
+  // verified the rendered face through the moves (the TWO face changes
+  // = the reference's own FIFTH content-grid reorder on both grids,
+  // cured RED->GREEN at 697/697 + 790/790; the byte comparison's five
+  // movers all the reorder cure's own rendered faces at their WH-81
+  // family signatures). Re-based ONCE to the round's FINAL read
+  // (QLQDltYS) per the intra-round doctrine, born-verified on the
+  // quiet state: the re-run after this edit reads "assets stable" +
+  // the 15/15 digest.
+  jsPath: "/static/index-QLQDltYS.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both
