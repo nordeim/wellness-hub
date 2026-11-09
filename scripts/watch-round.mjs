@@ -400,7 +400,34 @@ const LEDGER = {
   // per the intra-round doctrine, born-verified on the quiet state:
   // the re-run after this edit reads "assets stable" + the 15/15
   // digest.
-  cssPath: "/static/index-CD4jDvim.css",
+  // WH-98 re-base (watch round 87: BOTH AXES MOVED TWICE INTRA-ROUND —
+  // the WH-71 both-axes-twice class, the first since round 60: the
+  // round's first read — css /static/index-CD4jDvim.css -> /static/
+  // index-B7INj5W8.css (the NINETEENTH css content change, ending the
+  // three-round quiet css streak) PAIRED with the js move C7ULD4QH ->
+  // CvdSKjj0 (the FIFTY-FIFTH distinct bundle), the second double-axis
+  // move in three rounds (the WH-92/70 class); then the
+  // born-verification flight after the md5-ledger re-base read BOTH
+  // MOVED AGAIN — css B7INj5W8 -> /static/index-a762OGh_.css (the
+  // TWENTIETH css form) + js CvdSKjj0 -> /static/index-BRjocVCb.js
+  // (the FIFTY-SIXTH distinct bundle); the stability re-read read the
+  // SAME a762OGh_/BRjocVCb pair — the reference redeploying actively
+  // mid-round, three deployments inside the window. The same-run
+  // computed digest read 15/15 MATCH on EVERY read (all four flights,
+  // both moved pairs — the mobile header + the full drawer battery
+  // inside — escape + unlock + grow-auto-close all pass), and the
+  // round's battery + capture round verified the rendered face through
+  // the moves (the SIXTIETH full-width run: ALL SEVENTEEN surfaces
+  // green, 3,555/3,555 computed members, ZERO drifts, on the first
+  // moved pair; the SIXTY-NINTH byte comparison's FOUR movers all
+  // environmental: the EXACT WH-97 quartet — the 25 focus-ring tail
+  // (its fifteenth firing) + the 29 dither class (its third
+  // capture-axis firing) + the paired 10/30 thumbnail-decode dither
+  // (its second firing); NO code cure). Re-based ONCE to the round's
+  // FINAL read (a762OGh_) per the intra-round doctrine, born-verified
+  // on the quiet state: the re-run after this edit reads "assets
+  // stable" + the 15/15 digest.
+  cssPath: "/static/index-a762OGh_.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -722,7 +749,29 @@ const LEDGER = {
   // round's FINAL read (C7ULD4QH) per the intra-round doctrine,
   // born-verified on the quiet state: the re-run after this edit reads
   // "assets stable" + the 15/15 digest.
-  jsPath: "/static/index-C7ULD4QH.js",
+  // WH-98 re-base (watch round 87: the js axis MOVED TWICE INTRA-ROUND —
+  // /static/index-C7ULD4QH.js -> /static/index-CvdSKjj0.js at the
+  // round's first read (the FIFTY-FIFTH distinct bundle), then ->
+  // /static/index-BRjocVCb.js at the born-verification flight (the
+  // FIFTY-SIXTH — the WH-97/52/61/69/71 intra-round class firing
+  // PAIRED with the css axis's own second move, the WH-71
+  // both-axes-twice class, recorded at cssPath above — three reference
+  // deployments inside the round window); the stability re-read read
+  // the SAME BRjocVCb. The same-run computed digest read 15/15 MATCH
+  // on EVERY read (all four flights, both moved pairs — the mobile
+  // header + the full drawer battery inside — escape + unlock +
+  // grow-auto-close all pass), and the round's battery + capture round
+  // verified the rendered face through the move (the SIXTIETH
+  // full-width run: ALL SEVENTEEN surfaces green, 3,555/3,555
+  // computed members, ZERO drifts, on the first moved pair — the
+  // redeployments carried no rendered-face change; the SIXTY-NINTH
+  // byte comparison's FOUR movers all environmental: the EXACT WH-97
+  // quartet — the 25 focus-ring tail + the 29 dither class + the
+  // paired 10/30 thumbnail-decode dither; NO code cure). Re-based
+  // ONCE to the round's FINAL read (BRjocVCb) per the intra-round
+  // doctrine, born-verified on the quiet state: the re-run after this
+  // edit reads "assets stable" + the 15/15 digest.
+  jsPath: "/static/index-BRjocVCb.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both
