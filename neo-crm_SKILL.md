@@ -413,7 +413,9 @@ bun install
 cp .env.example .env          # then set AUTH_SECRET: openssl rand -hex 32
 bun run db:push               # creates <repo>/db/custom.db from the schema
 bun run db:seed               # idempotent demo workspace, reseeded IN PLACE
-bun run dev                   # http://localhost:3000  (log tee'd to dev.log)
+bun run dev                   # http://localhost:3000  (redirect output
+                              # outside the repo if you want a log — a tee'd
+                              # in-tree dev.log fires the WH-94 reload loop)
 ```
 
 Demo login (mirrors the reference app): `sepnetflix2023@outlook.com` /
@@ -1028,7 +1030,9 @@ the raw contract (`.env`) and re-assert the intended rule.
 | Chart blank | all-zero data | by design — empty-state fallback; verify the API slice feeds it |
 | Prisma "table does not exist" | push/seed landed elsewhere | `bun run db:push` (wrapper) then verify `ls -la db/` |
 
-General tools: `dev.log` (tee'd), `agent-browser` for headless UI checks
+General tools: the dev server's stdout (redirect it outside the repo
+when a log is wanted — never tee into the watched tree, the WH-94 F-1 class),
+`agent-browser` for headless UI checks
 at both widths, `bunx playwright show-trace test-results/*/trace.zip`,
 and `curl` against the envelope (`{"ok":true,"data":…}`) for API truth.
 

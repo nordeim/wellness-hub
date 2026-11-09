@@ -3852,3 +3852,37 @@ it("WH-30: the footer-retirement census — the reference carries NO footer, our
     "the footer retirement must hold — the WH-30 cure (the reference's pages simply end)",
   ).toEqual([]);
 });
+
+// WH-94 (F-1): the dev-script hygiene census. The battery's window-1 first
+// flight collapsed on every our-side logged-in leg: the `next dev … | tee
+// dev.log` script wrote the server's own request log INTO the watched repo
+// tree, Turbopack's watcher saw every write, and every logged request fired
+// a `[Fast Refresh] rebuilding` FULL PAGE RELOAD — each reload logging more
+// requests, a self-sustaining loop (detached-element click loops, wiped form
+// values pre-submit, aborted login POSTs, navigations that never settle —
+// and three googleHover* FALSE parity drifts that dissolved on the clean
+// no-tee flight, verified BOTH ways per the WH-34 doctrine). The dev
+// server's output belongs to the CALLER: redirect outside the tree when a
+// log is wanted; the script itself must never write into it.
+it("WH-94: the dev-script hygiene census — the dev server never writes its log into the watched tree (the tee'd dev.log Fast-Refresh reload loop)", () => {
+  const pkg = JSON.parse(readFileSync(join(REPO_ROOT, "package.json"), "utf8"));
+  const dev = String(pkg.scripts?.dev ?? "");
+  const failures: string[] = [];
+  if (!/next dev/.test(dev)) {
+    failures.push('the dev script must boot the dev server ("next dev -p 3000")');
+  }
+  if (/\btee\b/.test(dev)) {
+    failures.push(
+      "the dev script must not tee its output — a log file written inside the watched tree fires a Turbopack Fast Refresh full-reload on every logged request (the WH-94 F-1 self-sustaining reload loop)",
+    );
+  }
+  if (/[>|]\s*\S*\.log\b/.test(dev)) {
+    failures.push(
+      "the dev script must not redirect output into an in-tree *.log file — the caller redirects outside the tree when a log is wanted",
+    );
+  }
+  expect(
+    failures,
+    "the dev-script hygiene must hold — the WH-94 cure (the log writes belong to the caller, never the watched tree)",
+  ).toEqual([]);
+});
