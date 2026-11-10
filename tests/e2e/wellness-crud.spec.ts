@@ -295,8 +295,10 @@ test("routines: schedule a template into My Routines", async ({ page }) => {
 
   // WH-42: the picker is TEXT-SCOPED, never positional — the reference
   // re-ordered its template grid (the WH-42 F-1 cure re-sequenced our
-  // seed to match) and `.first()` now opens the FIRST card in the
-  // reference's order ("10-Minute Home Workout"), not family-A. The
+  // seed to match; the grid re-ordered again at WH-76/81/87/92/99 — the
+  // first card is "5-Minute Morning Energizer" in the WH-99 order) and
+  // `.first()` opens the FIRST card in the reference's CURRENT order,
+  // not necessarily family-A. The
   // test's intent is to schedule the 3-step family-A template (the (q)
   // leg's sibling contract); the (q) leg's own filter pattern, applied
   // here verbatim.

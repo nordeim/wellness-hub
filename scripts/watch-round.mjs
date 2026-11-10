@@ -427,7 +427,25 @@ const LEDGER = {
   // FINAL read (a762OGh_) per the intra-round doctrine, born-verified
   // on the quiet state: the re-run after this edit reads "assets
   // stable" + the 15/15 digest.
-  cssPath: "/static/index-a762OGh_.css",
+  // WH-99 re-base (watch round 88: BOTH AXES MOVED at the round's first
+  // read — css /static/index-a762OGh_.css -> /static/index-DCGdpI_Z.css
+  // (the TWENTY-FIRST css content change) PAIRED with the js move
+  // BRjocVCb -> DbKsT80e (the FIFTY-SEVENTH distinct bundle) — the
+  // THIRD consecutive double-axis round; the first read's computed
+  // digest 14/15 (the dashboard DATA-tile mid-resolution transient,
+  // the WH-97 precedent class), the immediate re-read 15/15 MATCH on
+  // the same moved pair, the stability read holding it. The round's
+  // battery + capture round verified the rendered face through the
+  // move (the SIXTY-FIRST full-width run: ALL SEVENTEEN surfaces green
+  // after the round's OWN cure — the reference's SIXTH content-grid
+  // reorder, the seed's sortOrder renumbers for BOTH grids, the two
+  // grid legs re-flighted 697/697 + 790/790; the SEVENTIETH byte
+  // comparison's SIX movers: five the cure movers + the 29 dither
+  // class at its EXACT recorded signature, its FOURTH consecutive
+  // capture-axis firing). Re-based to the round's read (DCGdpI_Z) per
+  // the intra-round doctrine, born-verified on the quiet state: the
+  // re-run after this edit reads "assets stable" + the 15/15 digest.
+  cssPath: "/static/index-DCGdpI_Z.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -771,7 +789,21 @@ const LEDGER = {
   // ONCE to the round's FINAL read (BRjocVCb) per the intra-round
   // doctrine, born-verified on the quiet state: the re-run after this
   // edit reads "assets stable" + the 15/15 digest.
-  jsPath: "/static/index-BRjocVCb.js",
+  // WH-99 re-base (watch round 88: the js axis PAIRED with the css move
+  // — /static/index-BRjocVCb.js -> /static/index-DbKsT80e.js, the
+  // FIFTY-SEVENTH distinct bundle, the THIRD consecutive double-axis
+  // round; the digest 15/15 MATCH on the same moved pair [the first
+  // read's 14/15 the dashboard DATA-tile mid-resolution transient,
+  // the WH-97 precedent class, green on the immediate re-read]; the
+  // round's battery + capture round verified the rendered face
+  // through the move — the SIXTY-FIRST full-width run green after the
+  // round's OWN cure [the SIXTH content-grid reorder, the two grid
+  // legs re-flighted 697/697 + 790/790]; the SEVENTIETH byte
+  // comparison's SIX movers: five the cure movers + the 29 dither
+  // class). Re-based to the round's read (DbKsT80e) per the
+  // intra-round doctrine, born-verified on the quiet state: the
+  // re-run after this edit reads "assets stable" + the 15/15 digest.
+  jsPath: "/static/index-DbKsT80e.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both
