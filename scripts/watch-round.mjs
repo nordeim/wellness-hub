@@ -466,8 +466,51 @@ const LEDGER = {
   // same-day CARRY; NO code cure). Re-based to the round's read
   // (D49r5QUD) per the doctrine, born-verified on the quiet state:
   // the re-run after this edit reads "assets stable" + the 15/15
+  // WH-101 re-base (watch round 90: BOTH AXES MOVED — css
+  // /static/index-DCGdpI_Z.css -> /static/index-D49r5QUD.css, the
+  // TWENTY-SECOND css content change, PAIRED with the js move
+  // DbKsT80e -> CLTGB0m1 — the FOURTH consecutive double-axis round,
+  // the WH-92/98/70/99 class; the login geometry MATCH and the
+  // computed digest 15/15 MATCH on the moved pair — the mobile header
+  // + the full drawer battery inside the digest, escape + unlock +
+  // grow-auto-close all pass). The round's battery + capture round
+  // verified the rendered face through the move (the SIXTY-THIRD
+  // full-width run: ALL SEVENTEEN surfaces green at 3,555/3,555 —
+  // ONE transient re-flighted green [the headers leg's second flight
+  // 155/192 mid-round, the assets verified STABLE at the moved pair
+  // by the zero-login asset probe, the immediate re-flight 192/192,
+  // the WH-93/97 transient class]; the SEVENTY-SECOND byte
+  // comparison's TWO movers both at their EXACT recorded
+  // environmental signatures — the 29 canvas-dither class's SIXTH
+  // consecutive capture-axis firing + the 24 orange KPI-corner
+  // family re-firing; the five date-bearing faces byte-held — the
+  // same-day CARRY; NO code cure). Re-based to the round's read
+  // (D49r5QUD) per the doctrine, born-verified on the quiet state:
+  // the re-run after this edit reads "assets stable" + the 15/15
   // digest.
-  cssPath: "/static/index-D49r5QUD.css",
+  // WH-102 re-base (watch round 91: BOTH AXES MOVED — css
+  // /static/index-D49r5QUD.css -> /static/index-DEFEQ-tO.css, the
+  // TWENTY-THIRD css content change, PAIRED with the js move
+  // CLTGB0m1 -> 2uaVBUQu — the FIFTY-NINTH distinct bundle, the
+  // FIFTH consecutive double-axis round, the WH-92/98/70/99/101
+  // class; the login geometry MATCH and the computed digest 15/15
+  // MATCH on the moved pair — the mobile header + the full drawer
+  // battery inside the digest, escape + unlock + grow-auto-close
+  // all pass). The round's battery + capture round verified the
+  // rendered face through the move (the SIXTY-FOURTH full-width
+  // run: ALL SEVENTEEN surfaces green at 3,555/3,555 — ZERO drifts,
+  // ZERO transients, ZERO limiter trips, the two grid legs green
+  // 697/697 + 790/790 — the WH-99 reorder cure holds through the
+  // redeploy; the SEVENTY-THIRD byte comparison's THREE movers all
+  // at their EXACT recorded environmental signatures — the 25
+  // focus-ring tail's SIXTEENTH firing + the 10 SVG-circle edge
+  // dither's second + the 24 orange KPI-corner family's third
+  // consecutive; the five date-bearing faces byte-held — the
+  // same-day CARRY; NO code cure). Re-based to the round's read
+  // (DEFEQ-tO) per the doctrine, born-verified on the quiet state:
+  // the re-run after this edit reads "assets stable" + the 15/15
+  // digest.
+  cssPath: "/static/index-DEFEQ-tO.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -843,7 +886,24 @@ const LEDGER = {
   // the round's read (CLTGB0m1) per the doctrine, born-verified on
   // the quiet state: the re-run after this edit reads "assets
   // stable" + the 15/15 digest.
-  jsPath: "/static/index-CLTGB0m1.js",
+  // WH-102 re-base (watch round 91: BOTH AXES MOVED — the js axis
+  // /static/index-CLTGB0m1.js -> /static/index-2uaVBUQu.js, the
+  // FIFTY-NINTH distinct bundle, PAIRED with the css move
+  // D49r5QUD -> DEFEQ-tO — the FIFTH consecutive double-axis round,
+  // the WH-92/98/70/99/101 class; the login geometry MATCH and the
+  // computed digest 15/15 MATCH on the moved pair; the round's
+  // battery + capture round verified the rendered face through the
+  // move — the SIXTY-FOURTH full-width run green at 3,555/3,555
+  // [ZERO drifts, ZERO transients, ZERO limiter trips]; the
+  // SEVENTY-THIRD byte comparison's THREE movers all at their EXACT
+  // recorded environmental signatures [the 25 focus-ring tail's
+  // SIXTEENTH firing + the 10 SVG-circle edge dither's second + the
+  // 24 orange KPI-corner family's third consecutive]; the two grid
+  // legs green 697/697 + 790/790 — the WH-99 reorder cure holds
+  // through the redeploy). Re-based to the round's read (2uaVBUQu)
+  // per the doctrine, born-verified on the quiet state: the re-run
+  // after this edit reads "assets stable" + the 15/15 digest.
+  jsPath: "/static/index-2uaVBUQu.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both
