@@ -957,7 +957,36 @@ const LEDGER = {
   // Re-based to the round's read (BdHnCkUB) per the doctrine,
   // born-verified on the quiet state: the re-run after this edit
   // reads "assets stable" + the 15/15 digest.
-  jsPath: "/static/index-BdHnCkUB.js",
+  // WH-107 re-base (watch round 96: the js axis MOVED ALONE —
+  // /static/index-BdHnCkUB.js -> /static/index-XTAoxhzo.js, the
+  // SIXTY-FIRST distinct bundle, while the css axis HELD at
+  // /static/index-Ba28FBHx.css — the single-axis class, the WH-93
+  // precedent; the three-round quiet window the WH-104/105/106
+  // watches read closed at the round's redeploy; the login geometry
+  // MATCH and the computed digest 15/15 MATCH on the SAME RUN — the
+  // mobile header + the full drawer battery inside the digest, escape
+  // + unlock + grow-auto-close all pass, every data-bearing member
+  // green on its FIRST flight; the lesson-30 walk's instrument leg —
+  // the bundle-inventory diff [the WH-60/61 instrument form], the old
+  // bundle fetched live against the new one — reads the delta
+  // PLATFORM-LIBRARY-ONLY: 511 added / 511 removed string literals,
+  // every one a chunk-path string [504 static/* + 7 ./* platform-
+  // module references — axiosClient, AuthContext, i18n, I18nProvider,
+  // errorReporting, useFeatureFlags, SubdomainContext — every
+  // platform chunk rebuilt, the mass-rotation class], ZERO
+  // wellness-domain strings moved — a platform rebuild, ZERO
+  // app-face change; the round's battery + capture round verified the
+  // rendered face through the move — the SIXTY-NINTH full-width run
+  // green at 3,555/3,555 on ALL SEVENTEEN surfaces [ZERO drifts,
+  // ZERO transients, ZERO limiter trips; window 1's moodform leg
+  // re-flighted green after a session-local driver case-mismatch
+  // crash — a probe-infrastructure misspending, zero parity finding;
+  // the two grid legs green 697/697 + 790/790 — the WH-99 reorder
+  // cure holds through the redeploy]). Re-based to the round's read
+  // (XTAoxhzo) per the doctrine, born-verified on the quiet state:
+  // the re-run after this edit reads "assets stable" + the 15/15
+  // digest.
+  jsPath: "/static/index-XTAoxhzo.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both
