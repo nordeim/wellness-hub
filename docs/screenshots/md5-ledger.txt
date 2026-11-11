@@ -1,71 +1,68 @@
-# docs/screenshots md5 ledger — re-based at WH-104 (2026-11-11), 34 files
-# -- prior re-base (WH-103, 2026-11-11) -------------------------------------
-# The WH-103 round (the standing audit round — THE SIXTH-CONSECUTIVE
+# docs/screenshots md5 ledger — re-based at WH-105 (2026-11-11), 34 files
+# -- prior re-base (WH-104, 2026-11-11) -------------------------------------
 # The WH-104 round (the standing audit round — THE QUIET WATCH + THE
-#   SAME-DAY DATE-AXIS CARRY [watch round 93: BOTH AXES STABLE at the
-#   WH-103 re-based ledger — css /static/index-Ba28FBHx.css + js
-#   /static/index-BdHnCkUB.js, cdn true, cfg true — the FIRST quiet read
-#   on the re-based pair, after SIX consecutive double-axis rounds
-#   (the WH-92/98/70/99/101/102/103 class), the reference did NOT
-#   redeploy inside the round window; the login geometry MATCH and the
-#   computed digest 15/15 MATCH on the SAME RUN — the mobile header +
-#   the full drawer battery inside the digest, escape + unlock +
-#   grow-auto-close all pass, every data-bearing member green on its
-#   FIRST flight (the WH-103 mentalHealth mid-load transient did NOT
-#   re-fire: Total Entries 1 / 5.0/10 / streak 1 / the Your Journey
-#   list all read green); the quiet watch a READING, never a
-#   retirement — NO watch-ledger re-base on either axis]: the
-#   SIXTY-SIXTH full-width battery run green at 3,555/3,555 across
+# The WH-105 round (the standing audit round — THE SECOND CONSECUTIVE
+#   QUIET WATCH + THE SAME-DAY DATE-AXIS CARRY [watch round 94: BOTH
+#   AXES STABLE at the WH-103 re-based ledger — css
+#   /static/index-Ba28FBHx.css + js /static/index-BdHnCkUB.js, cdn
+#   true, cfg true — the SECOND quiet read on the re-based pair,
+#   extending the platform-quiet window the WH-104 quiet watch opened
+#   after the SIX-consecutive double-axis run (the
+#   WH-92/98/70/99/101/102/103 class), the reference did NOT redeploy
+#   inside the round window; the login geometry MATCH and the computed
+#   digest 15/15 MATCH on the SAME RUN — the mobile header + the full
+#   drawer battery inside the digest, escape + unlock + grow-auto-close
+#   all pass, every data-bearing member green on its FIRST flight (the
+#   mentalHealth data-trio green on the first read: Total Entries 1 /
+#   5.0/10 / streak 1 / the Your Journey list — the WH-103 transient
+#   class did not re-fire in either round); the quiet watch a READING,
+#   never a retirement — NO watch-ledger re-base on either axis]: the
+#   SIXTY-SEVENTH full-width battery run green at 3,555/3,555 across
 #   all SEVENTEEN surfaces' FIRST flights across the two windows —
 #   ZERO drifts, ZERO transients, ZERO limiter trips (window 1: login
 #   38 + authviews 192 + moodForm 20 + shell 61 + dashboard 105 +
 #   headers 192 + toolbars 114 + kpis 315 — 1,037; window 2: profile
 #   433 + account 146 + listinteriors 88 + moodjourney 116 + calendar
 #   92 + moodtiles 67 + schedmodal 89 + routines 697 + tutorials 790 —
-#   2,518; the two grid legs green — the WH-99 reorder cure holds;
-#   every dev-server flight rode the session-local lifetime-owning
-#   driver with OS fd-passthrough stdio + a pre-boot stale-port check
-#   + a route warm-up + the leg output file-redirected) — and the
-#   SEVENTY-FIFTH cross-round byte comparison read TWO movers, ZERO
-#   app-source (the git tree carrying exactly the round's intended
-#   diff): 19-dark-mobile-nav-open the WH-82 mid-paint rendering-race
-#   class (the whole-face first flight landed mid-paint — 329,160 px /
-#   100% / maxdelta 249 / the full 390x844 canvas; the immediate
-#   lesson-45 reproduction — the exact phase-5 state re-walked — read
-#   byte-stable AT the ledger hash f06d8223 on 3/3 takes: an
-#   infrastructure transient, NO re-base for 19, the ledger bytes
-#   restored on disk) + 25-dark-login-focus at its EXACT recorded
-#   signature (77 px / 0.0067% / maxdelta 5 / bbox 367x121 at
-#   (457,562) — the WH-20 focus-ring interpolation-tail habitat, its
-#   SEVENTEENTH recorded firing); the date-axis family's TWENTY-SIXTH
-#   expectation reads CARRY — the captures landed ~02:45 UTC Nov 11,
-#   SAME-DAY Nov 11 faces: the FIVE date-bearing faces (07-events +
-#   26-events-inline-form + 27-dark-mood-form + 28-routines-schedule-
-#   modal + 32-mentalhealth-form-interior) all byte-held; RESTING:
-#   10 + 24 + 29 + 30 (the SVG-circle edge dither, the orange
-#   KPI-corner family, the canvas-dither family, the paired
-#   thumbnail-decode family); the clean-account guards' FIFTEENTH
-#   standing flight GREEN inside the procedure (badgesEarned=0 +
-#   themeMode=light, the fail-closed design); census MATCH after]:
-#   the md5 ledger re-based at WH-104 per the WH-70
-#   structural-assertion doctrine (assertions green BEFORE the write
-#   on the FIRST pass: 34 rows, the ONE mover verified
-#   disk-vs-ledger, the 33 stable rows byte-held — 19 restored to the
-#   ledger bytes after the reproduction, the head line, the WH-102
-#   one-line prior, the WH-103 block, the WH-90 block, the list line;
-#   the ONE mover row [25] re-hashed, the WH-103 block demoted to
-#   the one-line prior, the WH-90 block retired — its number rolled
-#   onto the re-bases list), born-verified 34/34 ZERO MOVERS. NO CODE
-#   CURE — the count ladder FLAT at 383/27; the docs ladder: the
-#   session104 plan (+ its execution record) + the session_233 log +
-#   the worklog WH-104 entry (the 105th) + the AGENTS round-93 record
-#   + the PAD §11 rows (the two WH-104 rows: the quiet-watch row +
-#   the same-day-carry row — the phrase-collision check clean before
-#   the insert); the SKILL frontmatter stamp stays 2026-11-11 (the
-#   same-date session104 plan, the WH-79 freshness contract). The
-#   date-axis family carries SAME-DAY Nov 11 faces, re-arming past
-#   ~00:00 UTC Nov 12 on the "11"->"12" ONE-GLYPH flip, carrying to
-#   WH-105 if its captures run after ~00:00 UTC Nov 12.
+#   2,518; every dev-server flight rode the session-local
+#   lifetime-owning driver with OS fd-passthrough stdio + a pre-boot
+#   stale-port check + a route warm-up + the leg output
+#   file-redirected) — and the SEVENTY-SIXTH cross-round byte
+#   comparison read ONE mover, ZERO app-source (the git tree carrying
+#   exactly the round's intended diff): 29-quick-actions-hover at its
+#   EXACT recorded dither signature (5 px / 0.0004% / maxdelta 1 /
+#   bbox 5x5 at (503,326) — the WH-39 canvas-dither family, its
+#   SEVENTH capture-axis firing, re-firing after the three-round rest
+#   WH-102/103/104 closed on the six-consecutive run); the date-axis
+#   family's TWENTY-SEVENTH expectation reads CARRY — the captures
+#   landed ~03:07 UTC Nov 11, SAME-DAY Nov 11 faces: the FIVE
+#   date-bearing faces (07-events + 26-events-inline-form +
+#   27-dark-mood-form + 28-routines-schedule-modal +
+#   32-mentalhealth-form-interior) all byte-held; RESTING: 10 + 19 +
+#   24 + 25 + 30 (the SVG-circle edge dither, the mid-paint transient
+#   class, the orange KPI-corner family, the focus-ring tail after its
+#   seventeenth at WH-104, the paired thumbnail-decode family); the
+#   clean-account guards' SIXTEENTH standing flight GREEN inside the
+#   procedure (badgesEarned=0 + themeMode=light, the fail-closed
+#   design); census MATCH after]: the md5 ledger re-based at WH-105
+#   per the WH-70 structural-assertion doctrine (assertions green
+#   BEFORE the write on the FIRST pass: 34 rows, the ONE mover
+#   verified disk-vs-ledger, the 33 stable rows byte-held, the head
+#   line, the WH-103 one-line prior, the WH-104 block, the WH-91
+#   block, the list line; the ONE mover row [29] re-hashed, the WH-104
+#   block demoted to the one-line prior, the WH-91 block retired —
+#   its number rolled onto the re-bases list), born-verified 34/34
+#   ZERO MOVERS. NO CODE CURE — the count ladder FLAT at 383/27; the
+#   docs ladder: the session105 plan (+ its execution record) + the
+#   session_236 log + the worklog WH-105 entry (the 106th) + the
+#   AGENTS round-94 record + the PAD §11 rows (the two WH-105 rows:
+#   the quiet-watch row + the same-day-carry row — the
+#   phrase-collision check clean before the insert); the SKILL
+#   frontmatter stamp stays 2026-11-11 (the same-date session105
+#   plan, the WH-79 freshness contract). The date-axis family carries
+#   SAME-DAY Nov 11 faces, re-arming past ~00:00 UTC Nov 12 on the
+#   "11"->"12" ONE-GLYPH flip, carrying to WH-106 if its captures run
+#   after ~00:00 UTC Nov 12.
 # -- prior re-base (WH-95, 2026-11-09) --------------------------------------
 # The WH-95 round (the standing audit round — the QUIET WATCH + THE
 #   DITHER-TAIL RE-BASE [round 84: both axes STABLE at the WH-93 re-based
@@ -275,56 +272,7 @@
 #   date-axis re-arms on the Nov 8 -> Nov 9 crossing, carrying to
 #   WH-93 if its captures run after ~00:00 UTC Nov 9.
 
-# -- prior re-base (WH-91, 2026-11-08) ---------------------------------------------------------
-# The WH-91 round (the standing audit round — the QUIET WATCH [round
-#   80: both axes STABLE at the WH-90 re-based ledger — css
-#   /static/index-BYRIvMx2.css + js /static/index-IYL2plGx.js, cdn true,
-#   cfg true — the FIFTH consecutive quiet round on the re-based
-#   assets; the quiet read a reading, never a retirement, NO
-#   watch-ledger re-base; the computed digest 15/15 MATCH on the same
-#   run with the mobile header + the full drawer battery inside the
-#   digest — escape + unlock + grow-auto-close all pass]: NO code cure
-#   — the standing tree verified, the round a pure watch + battery +
-#   capture walk). The battery — the FIFTY-THIRD full-width run across
-#   two reference login windows (the verified-kill dev-server restart
-#   at the boundary + the reference limiter aged across it): ALL
-#   SEVENTEEN surfaces green on their FIRST flights, 3,555/3,555
-#   computed members live-vs-live, ZERO drifts, ZERO limiter trips on
-#   BOTH apps (login 38/38 + authviews 192/192 + moodForm 20/20 +
-#   shell 61/61 + dashboard 105/105 + headers 192/192 + toolbars
-#   114/114 + kpis 315/315 + profile 433/433 + account 146/146 +
-#   listinteriors 88/88 + moodjourney 116/116 + calendar 92/92 +
-#   moodtiles 67/67 + routines 697/697 + tutorials 790/790 + schedmodal
-#   89/89) — the F-1 theme-residue cure's first full-width battery
-#   AFTER its landing round, every logged-in leg green on the first
-#   flight (the cure holding). The capture round — the SIXTY-SECOND
-#   cross-round byte comparison 33/34 with ONE mover: the captures
-#   landed ~03:39-40 UTC Nov 8, SAME-DAY Nov 8 faces vs the WH-90
-#   ledger's Nov 8 faces (no midnight crossed) — the date-axis family
-#   CARRIED (the THIRTEENTH expectation of the cycle; the "8"->"9"
-#   glyph family re-arms past ~00:00 UTC Nov 9, carrying to WH-92),
-#   the FIVE date-bearing faces byte-held (07-events +
-#   26-events-inline-form + 27-dark-mood-form + 28-routines-schedule-
-#   modal + 32-mentalhealth-form-interior). The ONE mover =
-#   25-dark-login-focus re-firing at its EXACT recorded signature (77
-#   px / 0.0067% / maxdelta 5 / bbox 367x121 at (457,562) — the WH-20
-#   focus-ring interpolation-tail habitat; fired
-#   WH-76/79/80/82/83/84/85/88/90/91; this flight's byte form landed
-#   on the WH-89 flight's own form — the tail's bimodal landing class);
-#   RESTING: 10 + 19 + 24 + 29 + 30. The clean-account guards' SECOND
-#   standing flight GREEN inside the procedure (badgesEarned=0 +
-#   themeMode=light both asserted before the light set); ZERO limiter
-#   trips (the pacing-note discipline held: the verified-kill
-#   dev-server restart at the battery->capture boundary + the
-#   reference limiter aged across it). The ledger re-based at WH-91
-#   (the ONE mover row re-hashed: 25; the WH-90 block demoted to prior
-#   narration; the WH-80 block retired — its number rolled onto the
-#   re-bases list), the structural assertions green on the FIRST pass
-#   (the WH-70 doctrine), born-verified 34/34 ZERO MOVERS. The
-#   date-axis re-arms on the Nov 8 -> Nov 9 crossing, carrying to
-#   WH-92 if its captures run after ~00:00 UTC Nov 9.
-
-# Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31, WH-81, WH-82, WH-83, WH-84, WH-85, WH-86, WH-87, WH-88, WH-89, WH-90, WH-95, WH-97, WH-98, WH-99, WH-100, WH-101, WH-102, WH-103.
+# Prior re-bases: WH-29 (the committed procedure born), WH-30, WH-31, WH-81, WH-82, WH-83, WH-84, WH-85, WH-86, WH-87, WH-88, WH-89, WH-90, WH-91, WH-95, WH-97, WH-98, WH-99, WH-100, WH-101, WH-102, WH-103, WH-104.
 #   WH-32, WH-33, WH-34, WH-35, WH-36, WH-37, WH-38, WH-39, WH-40, WH-41,
 #   WH-42, WH-43, WH-44, WH-45, WH-46, WH-47, WH-48, WH-49, WH-50,
 #   WH-51, WH-52, WH-53, WH-54, WH-56, WH-57, WH-58, WH-59, WH-60, WH-61,
@@ -359,7 +307,7 @@
 26-events-inline-form.png 924691f4ddadea8a128a3bb3b6720bcf
 27-dark-mood-form.png d0140f105bf82877db17f31afb39f046
 28-routines-schedule-modal.png 238a4bb5ef76fed8cde5ec926fea2f8e
-29-quick-actions-hover.png d253d5d8e2ee76b81606f79a619bf6b0
+29-quick-actions-hover.png 792d09f0d591644f1a8c0060df125341
 30-tutorial-card-hover.png 59084af65303f7f4002322880b912bd2
 31-profile-preferences.png a0ff16bb4b47124ea8ee436890e611ef
 32-mentalhealth-form-interior.png c7cc87b928ab1af2675350adf52d13d3
