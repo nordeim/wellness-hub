@@ -510,7 +510,36 @@ const LEDGER = {
   // (DEFEQ-tO) per the doctrine, born-verified on the quiet state:
   // the re-run after this edit reads "assets stable" + the 15/15
   // digest.
-  cssPath: "/static/index-DEFEQ-tO.css",
+  // WH-103 re-base (watch round 92: BOTH AXES MOVED — css
+  // /static/index-DEFEQ-tO.css -> /static/index-Ba28FBHx.css, the
+  // TWENTY-FOURTH css content change, PAIRED with the js move
+  // 2uaVBUQu -> BdHnCkUB — the SIXTIETH distinct bundle, the SIXTH
+  // consecutive double-axis round, the WH-92/98/70/99/101/102
+  // class; the login geometry MATCH; the first flight's computed
+  // digest 14/15 — the mentalHealth data-trio mid-load transient,
+  // the WH-93/97 three-signal class: the immediate re-read — the
+  // demo state INTACT at the recorded values (Total Entries 1 /
+  // 5.0/10 / streak 1 / the Your Journey row); the sandwiching
+  // surfaces green on the same flight; the re-flight 15/15 MATCH
+  // on the moved pair — the mobile header + the full drawer
+  // battery inside the digest, escape + unlock + grow-auto-close
+  // all pass). The round's battery + capture round verified the
+  // rendered face through the move (the SIXTY-FIFTH full-width
+  // run: ALL SEVENTEEN surfaces green at 3,555/3,555 on their
+  // FIRST flights — ZERO drifts, ZERO transients, ZERO limiter
+  // trips, the two grid legs green 697/697 + 790/790 — the WH-99
+  // reorder cure holds through the redeploy; the SEVENTY-FOURTH
+  // byte comparison's SEVEN movers: the FIVE date-bearing faces
+  // at the family's recorded forms — the TWENTY-FIFTH expectation
+  // RESOLVED AS THE RE-FIRE on the "10"->"11" flip (07-events
+  // 14,604 px + 26-events-inline-form 3,088 px + the 68-px
+  // date-digit trio at bbox 8x10) — plus the 10 SVG-circle edge
+  // dither's third + the 24 orange KPI-corner family's fourth
+  // consecutive, both at their EXACT recorded signatures; NO code
+  // cure). Re-based to the round's read (Ba28FBHx) per the
+  // doctrine, born-verified on the quiet state: the re-run after
+  // this edit reads "assets stable" + the 15/15 digest.
+  cssPath: "/static/index-Ba28FBHx.css",
   // WH-44 re-base (round 33: the EIGHTEENTH bundle
   // /static/index-DrgN_FlZ.js -> /static/index-BgVoVawV.js, then the
   // NINETEENTH /static/index-BA3Eznmu.js firing during the re-base's own
@@ -903,7 +932,32 @@ const LEDGER = {
   // through the redeploy). Re-based to the round's read (2uaVBUQu)
   // per the doctrine, born-verified on the quiet state: the re-run
   // after this edit reads "assets stable" + the 15/15 digest.
-  jsPath: "/static/index-2uaVBUQu.js",
+  // WH-103 re-base (watch round 92: the js axis
+  // /static/index-2uaVBUQu.js -> /static/index-BdHnCkUB.js, the
+  // SIXTIETH distinct bundle, PAIRED with the css move
+  // DEFEQ-tO -> Ba28FBHx — the SIXTH consecutive double-axis
+  // round, the WH-92/98/70/99/101/102 class; the login geometry
+  // MATCH; the first flight's computed digest 14/15 — the
+  // mentalHealth data-trio mid-load transient, the WH-93/97
+  // three-signal class (the immediate re-read — the demo state
+  // INTACT; the sandwiching surfaces green; the re-flight 15/15
+  // MATCH on the moved pair); the round's battery + capture round
+  // verified the rendered face through the move — the SIXTY-FIFTH
+  // full-width run green at 3,555/3,555 on ALL SEVENTEEN
+  // surfaces' FIRST flights [ZERO drifts, ZERO transients, ZERO
+  // limiter trips]; the SEVENTY-FOURTH byte comparison's SEVEN
+  // movers — the FIVE date-bearing faces at the family's recorded
+  // forms [the TWENTY-FIFTH expectation RESOLVED AS THE RE-FIRE on
+  // the "10"->"11" flip: 07-events 14,604 px + 26-events-inline-
+  // form 3,088 px + the 68-px date-digit trio at bbox 8x10] + the
+  // 10 SVG-circle edge dither's third + the 24 orange
+  // KPI-corner family's fourth consecutive, both at their EXACT
+  // recorded signatures; the two grid legs green 697/697 +
+  // 790/790 — the WH-99 reorder cure holds through the redeploy).
+  // Re-based to the round's read (BdHnCkUB) per the doctrine,
+  // born-verified on the quiet state: the re-run after this edit
+  // reads "assets stable" + the 15/15 digest.
+  jsPath: "/static/index-BdHnCkUB.js",
   // WH-71 re-base (round 60: the THIRD consecutive double-axis round
   // — AND the first round where the js axis moved TWICE PAIRED with
   // the css axis moving TWICE [the intra-round move class on both
