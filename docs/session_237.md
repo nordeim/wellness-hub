@@ -1,0 +1,146 @@
+# Session 237 — the WH-105 working transcript (the working log of the session that shipped WH-105)
+
+The round opened ~02:41 UTC Nov 11 on the SURVIVING workspace (the
+WH-98/101/104 surviving class): one `git pull` fast-forward
+`a33154a..8a74367`, one file: `docs/session_235.md` — the WH-104
+session tree surviving intact, with node_modules, the chromium-1248 +
+chromium-headless-shell-1248 binaries, the `.env` with its fresh
+AUTH_SECRET, and `db/custom.db` (custom.db + e2e.db + smoke.db) all
+standing from the WH-103/104 intake. `bun run db:census` re-verified
+the seed contract standing (users=1 templates=11 steps=50
+tutorials=12 badges=8 + the demo mood entry; MATCH).
+
+The five core docs read and validated (README + CLAUDE directly; the
+AGENTS/PAD/SKILL mega-docs through targeted structural reads — the
+round-records chain at 72, the §11 round-rows sub-table, the
+frontmatter stamp at 2026-11-11, the docs-counts contract); the four
+driving docs (session_234 + the session104 plan + the worklog +
+session_235) validated against the tree at HEAD `8a74367`; the commits
+since the WH-99 code cure audited DOCS-ONLY (the standing tree is the
+WH-99-cured tree). The round's structural targets mapped before any
+edit: the AGENTS round-records chain (the Round 93 record's position +
+the Round 86 tail anchor, the chain asserted at 72 before the insert),
+the PAD §11 round-rows sub-table (the insertion point after the
+WH-104 pair), the docs-counts pin contract (the WH-79 stamp rule: the
+same-date session105 plan keeps the stamp at 2026-11-11), and the
+ledger/worklog/capture script interfaces.
+
+The operator checklist re-verified live, item by item: the `.env`
+`DATABASE_URL="file:../db/custom.db"` with `db/` at the repo root
+(census MATCH), the tracked `.env.example` (bidirectional, keys
+MATCH), the vitest config (node environment, `*.test.ts` only) + the
+playwright config (the isolated port, the e2e db PINNED at
+`file:../db/e2e.db`, the storageState auth strategy), the
+sitemap/robots/manifest route handlers (smoke leg 12), the
+mobile-navigation e2e battery (re-verified green inside both e2e gate
+runs of the round), the six Tailwind v4 `@source not` directives + the
+`@custom-variant hover` + `@custom-variant dark` pins + the
+`--shadow-sm`/`--blur-sm` re-pins in `globals.css`, the WH-94
+dev-script cure (`next dev -p 3000`, no tee), and the eslint
+skills-exclude.
+
+The baseline gate ALL GREEN on the surviving tree — lint 0/0 · tsc 0 ·
+unit 383/383 (27 suites) · build OK · smoke 14/14 · e2e 72/72 · census
+MATCH · bun audit zero · the built CSS pipe-rule-FREE.
+
+Watch round 94 ran (`node scripts/watch-round.mjs`): THE SECOND
+CONSECUTIVE QUIET WATCH — both axes STABLE at the WH-103 re-based
+ledger (css `/static/index-Ba28FBHx.css` + js
+`/static/index-BdHnCkUB.js`, cdn true, cfg true) — the SECOND quiet
+read on the re-based pair, extending the platform-quiet window the
+WH-104 quiet watch opened after the SIX-consecutive double-axis run;
+the reference did NOT redeploy inside the round window. The login
+geometry MATCH and the computed digest read **15/15 MATCH on the same
+run** — the mobile header + the full drawer battery inside the digest
+(escape + unlock + grow-auto-close all pass), every data-bearing
+member green on its FIRST flight (the mentalHealth data-trio green on
+the first read: Total Entries 1 / 5.0/10 / streak 1 / the Your Journey
+list — the WH-103 transient class did not re-fire in either round).
+The quiet watch a READING, never a retirement — NO watch-ledger
+re-base on either axis (the WH-100 doctrine).
+
+The battery rode the session-local lifetime-owning driver written for
+the round (the WH-96/98/100/102 lessons verbatim: boot → warm-up →
+legs → kill inside one call; the pre-boot stale-port check; the
+dev-server stdio fd-passthrough into a log file; the leg output
+FILE-REDIRECTED — the child's fd 1 IS the leg log file; a try/catch
+per leg). Window 1 (eight legs): ALL GREEN on their FIRST flights —
+login 38/38 + authviews 192/192 + moodForm 20/20 + shell 61/61 +
+dashboard 105/105 + headers 192/192 + toolbars 114/114 + kpis 315/315
+(1,037 members). Window 2 (nine legs, after the reference limiter aged
+across the boundary): ALL GREEN on their FIRST flights — profile
+433/433 + account 146/146 + listinteriors 88/88 + moodjourney 116/116
++ calendar 92/92 + moodtiles 67/67 + schedmodal 89/89 + routines
+697/697 + tutorials 790/790 (2,518 members). **The SIXTY-SEVENTH
+full-width battery: 3,555/3,555, ZERO drifts, ZERO transients, ZERO
+limiter trips** — all seventeen legs green on their first flights,
+every RESULT line printed green from the file-backed log (the WH-100
+F-1(b) cure held).
+
+The capture round (the canonical 34-file procedure on the
+fd-passthrough dev server after a fresh seed, the driver owning the
+server lifetime in capture mode): the clean-account guards' SIXTEENTH
+standing flight GREEN (badgesEarned=0 + themeMode=light), all 34 faces
+in ONE clean run, census MATCH after.
+
+The byte comparison (a session-local forensics pass over the md5
+ledger, the any-channel-delta metric): **ONE mover, 33 stable**. The
+five date-bearing faces byte-HELD — the date-axis family's
+TWENTY-SEVENTH expectation reads CARRY (the captures landed ~03:07 UTC
+Nov 11, same-day Nov 11 faces). The mover: 29-quick-actions-hover at
+its EXACT recorded dither signature (5 px / 0.0004% / maxdelta 1 /
+bbox 5x5 at (503,326) — the WH-39 canvas-dither family, its SEVENTH
+capture-axis firing, re-firing after the three-round rest
+WH-102/103/104 closed on the six-consecutive run). RESTING: 10 + 19 +
+24 + 25 + 30 (the SVG-circle edge dither family, the mid-paint
+transient class, the orange KPI-corner family, the focus-ring tail
+after its seventeenth at WH-104, the paired thumbnail-decode family).
+
+The ledger re-base: the md5 ledger re-based at WH-105 behind the
+WH-70 structural-assertion doctrine (assertions green BEFORE the write
+on the FIRST pass: 34 rows; the ONE mover verified disk-vs-ledger;
+the 33 stable rows byte-held; the head line; the WH-103 one-line
+prior; the WH-104 block; the WH-91 block; the list line). The edits:
+the head line → "re-based at WH-105 (2026-11-11), 34 files"; the top
+header → "prior re-base (WH-104, 2026-11-11)"; the WH-103 one-liner
+replaced by the WH-104 one-liner (its block's opening line, verbatim);
+the WH-105 full block written; the WH-91 block retired; the list
+gained WH-91 (sorted insert) + WH-104 (appended); the mover row [29]
+re-hashed. Born-verified 34/34 ZERO MOVERS; the watch ledger
+UNTOUCHED (the quiet round).
+
+The docs ladder: the session105 plan drafted early (the house
+pattern — the plan settles structure before the battery completes),
+its WP-1/WP-2 checkboxes closed as the work landed, then WP-3..WP-9
+closed + the execution record appended; the phrase-collision check
+clean on every drafted block BEFORE its insert (the forbidden forms);
+the SKILL frontmatter stamp staying 2026-11-11 (the same-date
+session105 plan, the WH-79 freshness contract — the docs-counts pin
+re-run green with the plan on disk); the session_236 round summary
+written; the worklog WH-105 entry prepended (the 106th); the AGENTS
+round-94 record inserted after the Round 93 record (the chain 72 → 73,
+asserted before the insert); the PAD §11 two WH-105 rows inserted
+after the WH-104 pair (asserted before the insert). The docs-counts
+pin green through every doc edit (14/14; the unit suite re-run inside
+the final gate with the pin in the run).
+
+The full gate ALL GREEN on the final tree: lint 0/0 · tsc 0 · unit
+383/383 (27 suites) · build OK · smoke 14/14 · e2e 72/72 (the
+mobile-nav battery inside the ladder) · census MATCH · bun audit zero
+· the built CSS pipe-rule-FREE.
+
+The ship: the round commit `d2f534e` (7 files — the mover PNG, the
+re-based md5 ledger, the session105 plan, the session_236 summary, the
+worklog entry, the AGENTS round-94 record, the PAD §11 rows) staged in
+the house style (`:memo: docs:` — the no-code-cure round prefix),
+pushed through the SSH wrapper with the explicit
+`--remote git@github.com:nordeim/wellness-hub.git` (the paramiko shim
+on PATH — the Appendix A form, surviving from the WH-103/104 rounds;
+the operator key materialized outside the repo at 0600, its ed25519
+fingerprint verified, never printed in any log), the dry-run green
+(`8a74367..d2f534e` ready), the real push `8a74367..d2f534e HEAD ->
+main`, the remote ref verified twice (the wrapper's own post-push
+verification + the SSH-free HTTPS read == local HEAD), the tracking
+ref synced, and the operator key shredded after (overwritten with
+random bytes, then removed). This session_237 working transcript
+rides the follow-up commit per the house pattern.
